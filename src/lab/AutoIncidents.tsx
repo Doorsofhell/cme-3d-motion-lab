@@ -75,6 +75,8 @@ export function autoIssueURL(item:AutoIncident):string{
 }
 export function useAutoIncidentQueue(context:TestContext,onLog:(s:string)=>void){
  const [items,setItems]=useState<AutoIncident[]>(initial);
+ const queueRef=useRef(items);
+ queueRef.current=items;
  const latestContext=useRef(context);
  latestContext.current=context;
  const latestLog=useRef(onLog);
@@ -83,13 +85,11 @@ export function useAutoIncidentQueue(context:TestContext,onLog:(s:string)=>void)
   const description=cap(detail||title,1800);
   if(!description)return;
   const payload={category,title:cap(title,125),details:description,context:structuredClone(latestContext.current)};
-  let inserted=false;
-  setItems(previous=>{
-   const next=registerIncident(previous,payload,new Date().toISOString());
-   inserted=next!==previous;
-   return next;
-  });
-  if(inserted)latestLog.current('Signalement automatique : '+title);
+  const updated=registerIncident(queueRef.current,payload,new Date().toISOString());
+  if(updated===queueRef.current)return;
+  queueRef.current=updated;
+  setItems(updated);
+  latestLog.current('Signalement automatique : '+title);
  },[]);
  useEffect(()=>{
   try{localStorage.setItem(KEY,JSON.stringify(items));}catch{/* private or storage full */}
@@ -105,7 +105,8 @@ export function useAutoIncidentQueue(context:TestContext,onLog:(s:string)=>void)
    }
    const target=event.target;
    if(target instanceof HTMLScriptElement||target instanceof HTMLLinkElement||target instanceof HTMLImageElement){
-    record('asset','Échec de chargement d’une ressource',target.src||target.href||'URL inconnue');
+    const source=target instanceof HTMLLinkElement?target.href:target.src;
+    record('asset','Échec de chargement d’une ressource',source||'URL inconnue');
    }
   }
   function onRejection(event:PromiseRejectionEvent){
