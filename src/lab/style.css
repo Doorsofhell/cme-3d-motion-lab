@@ -180,3 +180,15 @@ select{width:100%;min-width:0;background:#1b2b3e;border:1px solid #344c60;border
 .incidentPhotoActions>a{background:#5edbca;color:#082d35;border:0;font-weight:750}
 .incidentPhotoInfo{font-size:10px!important;color:#86e3ce!important}
 @media(max-width:760px){.branding .cmeVersion{font-size:9px;margin-left:0}.incidentPhoto img{max-height:145px}.incidentPhotoHead span{font-size:9px}}
+
+/* CME-3D 0.6.2: bottom navigation and engine comparison */
+.labTabs{order:99;margin-top:auto;z-index:15;min-height:48px;flex-shrink:0}
+.labTabs button{min-width:0;white-space:normal;line-height:1.15}
+.engineComparison{flex:1;min-height:0;overflow-y:auto;padding:16px 12px 22px;color:#d9e8f2}
+.engineComparison h2{font-size:20px;margin:0 0 12px}
+.engineComparison p{line-height:1.5}
+.engineComparisonGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0}
+.engineComparisonGrid article{border:1px solid #304758;border-radius:12px;padding:16px;background:#142236}
+.engineComparisonGrid h3{margin:0 0 10px;color:#60d6c7}
+.engineComparisonNote{font-size:13px;color:#adc1d2}
+@media(max-width:600px){.labTabs{min-height:55px;padding-bottom:env(safe-area-inset-bottom)}.labTabs button{font-size:11px;padding:6px 2px}.engineComparisonGrid{grid-template-columns:1fr}.engineComparison{padding:10px 4px 14px}}
