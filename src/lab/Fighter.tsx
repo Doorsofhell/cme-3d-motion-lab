@@ -54,6 +54,36 @@ function applyFitnessStyle(root:Object3D){
   mesh.material=Array.isArray(mesh.material)?styled:styled[0];
  });
 }
+/** Original graphic-novel rendering: anatomically faithful 3D geometry with bold ink-like contrast. */
+function applyComicStyle(root:Object3D){
+ root.traverse(o=>{
+  const mesh=o as Mesh;
+  if(!mesh.isMesh)return;
+  const materials=Array.isArray(mesh.material)?mesh.material:[mesh.material];
+  const styled=materials.map(base=>{
+   const old=base as MeshStandardMaterial;
+   const name=(old.name+' '+mesh.name).toLowerCase();
+   const skin=/f021_|m018_|body|head|peau|visage/.test(name);
+   const gloves=/gant|cuir-gant/.test(name);
+   const top=/haut-|brassiere/.test(name);
+   const shorts=/short-|ceinture-/.test(name);
+   const shoes=/chaussure/.test(name);
+   const trim=/liseré-/.test(name);
+   const color=skin?'#f4e2d1':gloves?'#a92937':top?'#243e65':shorts?'#17283f':shoes?'#dce3ec':trim?'#e5b965':'#dce2e9';
+   const material=new MeshToonMaterial({
+    name:old.name+'-graphic-novel',color:new Color(color),
+    map:skin?(old.map??null):null,
+    gradientMap:fitnessGradient,normalMap:old.normalMap??null,
+    normalScale:old.normalScale?.clone(),vertexColors:old.vertexColors,
+    side:top?DoubleSide:old.side,transparent:old.transparent,
+    opacity:old.opacity,alphaTest:old.alphaTest
+   });
+   old.dispose();
+   return material;
+  });
+  mesh.material=Array.isArray(mesh.material)?styled:styled[0];
+ });
+}
 export function Fighter({actor,outfit,technique,playback,skeleton,quality,renderStyle,onReport,onReady}:{
  actor:'mma-kadir'|'mma-amara';outfit:string;technique:string;playback:RefObject<Playback>;skeleton:boolean;
  quality:Quality;renderStyle:RenderStyle;onReport:(r:RigReport)=>void;onReady:()=>void;
@@ -69,6 +99,7 @@ export function Fighter({actor,outfit,technique,playback,skeleton,quality,render
   enhanceHumanMaterial(s,quality==='performance');
   attachOutfit(s,clothes.scene,quality==='performance');
   if(renderStyle==='fitness')applyFitnessStyle(s);
+  if(renderStyle==='comic')applyComicStyle(s);
   return s;
  },[gltf.scene,clothes.scene,renderStyle,quality]);
  const rig=useMemo(()=>new CoachRig(scene),[scene]);
