@@ -4,7 +4,9 @@ import {OrbitControls} from '@react-three/drei';
 import {ACESFilmicToneMapping,NoToneMapping,SRGBColorSpace} from 'three';
 import {Fighter} from './Fighter';
 import rawTechniques from './techniques.json';
-import {IncidentReporter,IssueTracker,type TestContext} from './Issues';
+import {IncidentReporter,IssueTracker,useKnownIssues,type TestContext} from './Issues';
+import {unresolvedDrafts} from './IssueLinks';
+import {buildFullReport,useSessionJournal} from './SessionReport';
 import {useAutoIncidentQueue,type AutoCategory} from './AutoIncidents';
 import './style.css';
 
@@ -108,31 +110,40 @@ export function App(){
  const [debug,setDebug]=useState(false),[catalogOpen,setCatalogOpen]=useState(false),[query,setQuery]=useState(''),[allCatalog,setAllCatalog]=useState(false);
  const [metrics,setMetrics]=useState<Metrics>(emptyMetrics);
  const [messages,setMessages]=useState<string[]>([]);
- const onLog=useCallback((message:string)=>{setMessages(a=>[(new Date()).toLocaleTimeString('fr-FR')+'  '+message,...a].slice(0,40));},[]);
+ const [reportText,setReportText]=useState('');
+ const journal=useSessionJournal();
+ const known=useKnownIssues();
+ const onLog=useCallback((message:string)=>{journal.record(/ERREUR|JS :|PROMISE/i.test(message)?'error':'debug',message);setMessages(a=>[(new Date()).toLocaleTimeString('fr-FR')+'  '+message,...a].slice(0,40));},[journal.record]);
  const outfit=discipline==='bjj'&&nogi?'bjj-nogi':discipline;
  const currentTechniques=useMemo(()=>techniques.filter(t=>t.disciplines.includes(discipline)),[discipline]);
  const palette=useMemo(()=>techniques.filter(t=>(allCatalog||t.disciplines.includes(discipline))&&
    ((t.name+' '+t.id+' '+t.category).toLocaleLowerCase('fr-FR').includes(query.toLocaleLowerCase('fr-FR')))),[discipline,query,allCatalog]);
- const onMetrics=useCallback((m:Metrics)=>setMetrics(m),[]);
+ const onMetrics=useCallback((m:Metrics)=>{journal.measure(m);setMetrics(m);},[journal.measure]);
  const techniqueLabel=techniques.find(t=>t.motion===technique)?.name??technique;
  const selectTechnique=(motion:string)=>{reset();setTechnique(motion);setCatalogOpen(false);onLog('Technique : '+motion);};
  const incidentContext:TestContext={actor:actor==='mma-amara'?'Amara':'Kadir',discipline,outfit,technique,renderStyle,quality,userAgent:navigator.userAgent,diagnostics:JSON.stringify({report,metrics,messages},null,2)};
  const {items:autoDrafts,record:autoRecord,dismiss:autoDismiss,clear:autoClear}=useAutoIncidentQueue(incidentContext,onLog);
+ const pendingDrafts=useMemo(()=>unresolvedDrafts(autoDrafts,known.issues),[autoDrafts,known.issues]);
+ const playback=useRef<Playback>({progress:0,playing:false,speed:.5});
  const exportReport=useCallback(()=>{
-  const data={createdAt:new Date().toISOString(),app:'CME-3D',userAgent:navigator.userAgent,actor,discipline,outfit,
-  renderStyle,technique,techniqueLabel,playing,speed,quality,report,metrics,logs:messages};
-  navigator.clipboard.writeText(JSON.stringify(data,null,2)).then(()=>onLog('Rapport copié')).catch(()=>onLog('Copie refusée : accès presse-papiers'));
- },[actor,discipline,outfit,renderStyle,technique,techniqueLabel,playing,speed,quality,report,metrics,messages,onLog]);
+  journal.record('debug','Export du rapport intégral de la session vers ChatGPT');
+  const text=buildFullReport(journal.snapshot(),incidentContext,autoDrafts,metrics,report,playback.current,
+   known.issues.map(x=>({number:x.number,state:x.state,title:x.title,url:x.html_url})));
+  if(navigator.clipboard?.writeText){
+   void navigator.clipboard.writeText(text).then(()=>onLog('Rapport complet copié : '+text.length+' caractères'))
+    .catch(()=>{setReportText(text);onLog('Presse-papiers indisponible : rapport affiché pour sélection manuelle');});
+  }else setReportText(text);
+ },[journal.record,journal.snapshot,incidentContext,autoDrafts,metrics,report,known.issues,onLog]);
  useEffect(()=>{
   const fail=(e:ErrorEvent)=>onLog('JS : '+String(e.message).slice(0,180));
   const reject=(e:PromiseRejectionEvent)=>onLog('PROMISE : '+String(e.reason).slice(0,180));
   window.addEventListener('error',fail);window.addEventListener('unhandledrejection',reject);
   return()=>{window.removeEventListener('error',fail);window.removeEventListener('unhandledrejection',reject);};
  },[onLog]);
- const playback=useRef<Playback>({progress:0,playing:false,speed:.5});
  playback.current.playing=playing;playback.current.speed=speed;
  const seek=useCallback((p:number)=>{playback.current.progress=p;setProgress(p);},[]);
- const onReport=useCallback((r:RigReport)=>{setReport(r);if(!r.techniqueFound)autoRecord('motion','Mouvement indisponible','Aucune animation correspondante : '+technique+' pour la discipline '+discipline);},[autoRecord,technique,discipline]);
+ const lastRigLogged=useRef('');
+ const onReport=useCallback((r:RigReport)=>{setReport(r);const signature=[r.bones,r.techniqueFound,r.source].join('|');if(lastRigLogged.current!==signature){journal.record('rig','Rig analysé : '+r.bones+' os, mouvement '+(r.techniqueFound?'disponible':'introuvable'),{technique,discipline,source:r.source});lastRigLogged.current=signature;}if(!r.techniqueFound)autoRecord('motion','Mouvement indisponible','Aucune animation correspondante : '+technique+' pour la discipline '+discipline);},[autoRecord,technique,discipline,journal.record]);
  useEffect(()=>{if(!playing)return;const i=window.setInterval(()=>setProgress(playback.current.progress),150);return()=>window.clearInterval(i);},[playing]);
  const slowFpsSince=useRef<number|null>(null);
  useEffect(()=>{
@@ -146,7 +157,7 @@ export function App(){
    <div className="branding"><span className="brandDot">C</span><div><strong>CME<span>–3D</span> <small>LAB</small></strong><p>Laboratoire · Tests A/B</p></div></div>
    <div className="headerActions"><span className="liveTag"><i/> Moteur local</span><button className="iconButton" title="Console de débogage" aria-label="Console de débogage" aria-expanded={debug} onClick={()=>setDebug(v=>!v)}>⌘</button><button className="iconButton" title="Réglages avancés" aria-label="Réglages avancés" aria-expanded={extra} onClick={()=>setExtra(v=>!v)}>⚙</button></div>
   </header>
-  <nav className="labTabs" aria-label="Onglets de CME-3D"><button className={tab==='lab'?'selected':''} aria-current={tab==='lab'?'page':undefined} onClick={()=>{setTab('lab');setDebug(false);}}>Laboratoire</button><button className={tab==='tracking'?'selected':''} aria-current={tab==='tracking'?'page':undefined} onClick={()=>{setTab('tracking');setDebug(false);}}>Suivi des corrections{autoDrafts.length>0&&<span className="autoTabCount">{autoDrafts.length}</span>}</button></nav>
+  <nav className="labTabs" aria-label="Onglets de CME-3D"><button className={tab==='lab'?'selected':''} aria-current={tab==='lab'?'page':undefined} onClick={()=>{journal.record('navigation','Ouverture onglet Laboratoire');setTab('lab');setDebug(false);}}>Laboratoire</button><button className={tab==='tracking'?'selected':''} aria-current={tab==='tracking'?'page':undefined} onClick={()=>{journal.record('navigation','Ouverture Suivi des corrections');void known.refresh();setTab('tracking');setDebug(false);}}>Suivi des corrections{pendingDrafts.length>0&&<span className="autoTabCount">{pendingDrafts.length}</span>}</button></nav>
   <div className="labContent" style={{display:tab==='lab'?'contents':'none'}}>
   <section className="quickBar" aria-label="Sélection de test">
    <label><span>Coach</span><select aria-label="Coach" value={actor} onChange={e=>{reset();setActor(e.target.value as Actor);}}><option value="mma-amara">Amara</option><option value="mma-kadir">Kadir</option></select></label>
@@ -170,14 +181,14 @@ export function App(){
     {discipline==='bjj'&&<button className="outfitToggle" aria-label="Changer tenue BJJ" onClick={()=>{reset();setNogi(x=>!x);}}>{nogi?'No-gi':'Gi'}</button>}
    </div>
   </section>
-  <section className="bottomDebug" aria-label="Debug et incident"><button className="bottomDebugTrigger" onClick={()=>setDebug(x=>!x)} aria-expanded={debug}><span className="debugDot"/> <strong>Debug en direct</strong> <span className="miniMetrics">{metrics.fps||'–'} FPS · {metrics.webgl} · {autoDrafts.length} à examiner</span><span className="expandSymbol">{debug?'⌃':'⌄'}</span></button><button className="incidentButton" onClick={()=>{setDebug(false);setIncidentOpen(true);}}>⚑ Signaler</button></section>
+  <section className="bottomDebug" aria-label="Debug et incident"><button className="bottomDebugTrigger" onClick={()=>setDebug(x=>!x)} aria-expanded={debug}><span className="debugDot"/> <strong>Debug en direct</strong> <span className="miniMetrics">{metrics.fps||'–'} FPS · {metrics.webgl} · {pendingDrafts.length} à examiner</span><span className="expandSymbol">{debug?'⌃':'⌄'}</span></button><button className="incidentButton" onClick={()=>{setDebug(false);setIncidentOpen(true);}}>⚑ Signaler</button></section>
   <section className="diagnostics" aria-label="Diagnostics">
    <span><i className={report?.techniqueFound?'good':'bad'}/> {report?.techniqueFound?'Mouvement prêt ✓':'Motion à vérifier'}</span>
    <span>Rig : {report?.bones??'–'} os</span><span>{metrics.fps||'–'} FPS · {metrics.drawCalls} appels</span>
    <span className="footnote">IA locale expérimentale : entraînement validé en attente</span>
   </section>
   </div>
-  {tab==='tracking'&&<IssueTracker drafts={autoDrafts} onDismiss={autoDismiss} onClear={autoClear}/>}
+  {tab==='tracking'&&<IssueTracker drafts={pendingDrafts} onDismiss={autoDismiss} onClear={autoClear} onCopyReport={exportReport} {...known}/>}
   {tab==='lab'&&catalogOpen&&<div className="paletteBackdrop" onClick={()=>setCatalogOpen(false)}>
     <section className="catalogPalette" role="dialog" aria-label="Catalogue complet des techniques" onClick={e=>e.stopPropagation()}>
       <div className="paletteTitle"><strong>Techniques · {palette.length} / {techniques.length}</strong><button aria-label="Fermer le catalogue" onClick={()=>setCatalogOpen(false)}>×</button></div>
@@ -186,11 +197,11 @@ export function App(){
     </section>
    </div>}
   {tab==='lab'&&debug&&<aside className="debugPanel" role="region" aria-label="Console de débogage">
-   <div className="debugTitle"><strong>⌘ Diagnostic · CME-3D</strong><div><button onClick={exportReport}>Copier rapport</button><button aria-label="Fermer la console" onClick={()=>setDebug(false)}>×</button></div></div>
+   <div className="debugTitle"><strong>⌘ Diagnostic · CME-3D</strong><div><button onClick={exportReport}>Copier rapport complet</button><button aria-label="Fermer la console" onClick={()=>setDebug(false)}>×</button></div></div>
    <div className="debugGrid"><span>WebGL <b>{metrics.webgl}</b></span><span>FPS <b>{metrics.fps}</b></span><span>Draw calls <b>{metrics.drawCalls}</b></span><span>Triangles <b>{metrics.triangles.toLocaleString('fr-FR')}</b></span><span>Textures <b>{metrics.textures}</b></span><span>Géométries <b>{metrics.geometries}</b></span><span>DPR <b>{metrics.dpr.toFixed(2)}</b></span><span>Rig <b>{report?.bones??'–'} os</b></span></div>
    <div className="debugSubject"><strong>{actor==='mma-amara'?'Amara':'Kadir'} · {discipline}</strong><span>Tenue : {outfit}</span><span>Style : {renderStyle} · {quality}</span><span>Mouvement : {technique} · {report?.techniqueFound?'résolu':'non trouvé'}</span></div>
    <div className="debugLog"><strong>Événements et erreurs</strong>{messages.length?messages.map((x,i)=><p key={i}>{x}</p>):<p>Aucun événement anormal signalé</p>}</div>
-   <div className="debugFootnote">{autoDrafts.length} anomalie(s) sauvegardée(s) localement. Aucun envoi automatique. <button className="debugReview" onClick={()=>{setDebug(false);setTab('tracking');}}>Examiner les signalements ↗</button> FPS mesurés dans la boucle Three.js.</div>
+   <div className="debugFootnote">{pendingDrafts.length} anomalie(s) à soumettre (hors tickets existants). Aucun envoi automatique. <button className="debugReview" onClick={()=>{setDebug(false);setTab('tracking');}}>Examiner les signalements ↗</button> FPS mesurés dans la boucle Three.js.</div>
   </aside>}
   {tab==='lab'&&extra&&<aside className="advanced" role="region" aria-label="Informations du banc d'essai"><button className="close" onClick={()=>setExtra(false)} aria-label="Fermer">×</button><h2>Banc d’essai · CME-3D</h2><p>Le rendu et les techniques utilisent des poses articulées et un moteur de mouvements intégrés dans CME-3D.</p><p>Comparaison des rendus Ultra-réaliste et Animation fitness en un clic, sur la même animation. Le module neuronal historique est expérimental, entraîné sur des données synthétiques : aucune amélioration biomécanique par IA n’est encore revendiquée.</p><p>La prochaine étape sera un correcteur temporel léger quantifié (ONNX Runtime WASM), entraîné et évalué sur un jeu de mouvements de combat adapté au modèle.</p><p>Un seul écran, sans défilement vertical. Aucune transmission cloud pendant l’animation.</p></aside>}
   {tab==='lab'&&incidentOpen&&<IncidentReporter context={incidentContext} onClose={()=>setIncidentOpen(false)}/>}
