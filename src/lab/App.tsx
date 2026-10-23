@@ -6,6 +6,7 @@ import {Fighter} from './Fighter';
 import rawTechniques from './techniques.json';
 import {IncidentReporter,IssueTracker,type TestContext} from './Issues';
 import {useAutoIncidentQueue,type AutoCategory} from './AutoIncidents';
+import {watchWebGLContext} from './webglRecovery';
 import './style.css';
 
 type Actor='mma-kadir'|'mma-amara';
@@ -58,6 +59,7 @@ function Viewer({actor,discipline,technique,quality,renderStyle,playback,skeleto
 }){
  const [ready,setReady]=useState(false),[error,setError]=useState<string|null>(null),[slow,setSlow]=useState(false);
  const [retry,setRetry]=useState(0);
+ const canvasRef=useRef<(HTMLCanvasElement & {cmeCleanup?:()=>void})|null>(null);
  // Crucial fix: a load timeout is never displayed after the model has rendered.
  useEffect(()=>{
   if(ready||error)return;
@@ -67,12 +69,23 @@ function Viewer({actor,discipline,technique,quality,renderStyle,playback,skeleto
  const onReady=useCallback(()=>{setReady(true);setSlow(false);onLog('Coach et tenue décodés, rig initialisé');},[onLog]);
  const gl=useMemo(()=>({alpha:false,antialias:quality!=='performance',powerPreference:'default' as const}),[quality]);
  const onCreated=useCallback(({gl:renderer}:{gl:{domElement:HTMLCanvasElement}})=>{
-  const canvas=renderer.domElement;
-  const lost=(e:Event)=>{e.preventDefault();onLog('ERREUR : contexte WebGL perdu');onIncident('webgl','Perte du contexte graphique WebGL','Le contexte WebGL a été perdu pendant le rendu du coach '+actor);setError('Contexte graphique perdu : réinitialise le moteur.');};
-  canvas.addEventListener('webglcontextlost',lost);
-  (canvas as HTMLCanvasElement & {cmeCleanup?:()=>void}).cmeCleanup=()=>canvas.removeEventListener('webglcontextlost',lost);
+  const canvas=renderer.domElement as HTMLCanvasElement & {cmeCleanup?:()=>void};
+  // A remount/retry must not keep handlers on the old canvas.
+  canvasRef.current?.cmeCleanup?.();
+  canvasRef.current=canvas;
+  canvas.cmeCleanup=watchWebGLContext(canvas,{
+   onLost:()=>{
+    onLog('ERREUR : contexte WebGL perdu, restauration attendue');
+    onIncident('webgl','Perte du contexte graphique WebGL','Le contexte WebGL a été perdu pendant le rendu du coach '+actor);
+    setError('Contexte graphique perdu : restauration automatique en cours. Relancer si nécessaire.');
+   },
+   onRestored:()=>{
+    onLog('Contexte WebGL restauré par le navigateur');
+    setError(previous=>previous?.startsWith('Contexte graphique perdu')?null:previous);
+   }
+  });
  },[onLog,onIncident,actor]);
- useEffect(()=>()=>{document.querySelectorAll('canvas').forEach(c=>(c as HTMLCanvasElement&{cmeCleanup?:()=>void}).cmeCleanup?.());},[]);
+ useEffect(()=>()=>{canvasRef.current?.cmeCleanup?.();canvasRef.current=null;},[]);
  const dpr=quality==='performance'?1:quality==='balanced'?(mobile()?1.1:1.35):(mobile()?1.4:1.6);
  return <div className="viewer">
    <ErrorBoundary key={retry} onError={message=>{setError(message);onIncident('javascript','Erreur du composant de rendu 3D',message);}}>
