@@ -14,6 +14,7 @@ import {IncidentReporter,IssueTracker,useKnownIssues,type TestContext} from './I
 import {unresolvedDrafts} from './IssueLinks';
 import {buildFullReport,useSessionJournal} from './SessionReport';
 import {useAutoIncidentQueue,type AutoCategory} from './AutoIncidents';
+import {autoClearEnabled,setAutoClearEnabled,clearApplicationCache} from './cachePolicy';
 import './style.css';
 
 type Actor='mma-kadir'|'mma-amara';
@@ -165,7 +166,9 @@ export function App(){
  const [progress,setProgress]=useState(0),[playing,setPlaying]=useState(false),[speed,setSpeed]=useState(.5);
  const [report,setReport]=useState<RigReport|null>(null);
  const [extra,setExtra]=useState(false);
- const [tab,setTab]=useState<'lab'|'tracking'|'comparison'>('lab');
+ const [tab,setTab]=useState<'lab'|'tracking'|'comparison'|'options'>('lab');
+ const [clearCacheOnOpen,setClearCacheOnOpen]=useState(autoClearEnabled);
+ const [cacheMessage,setCacheMessage]=useState('');
  const [catalogMode,setCatalogMode]=useState<'techniques'|'sequences'>('techniques');
  const [comparisonSnapshot,setComparisonSnapshot]=useState<string|null>(null);
  const [incidentOpen,setIncidentOpen]=useState(false);
@@ -264,6 +267,12 @@ export function App(){
    <span className="footnote">IA locale expérimentale : entraînement validé en attente</span>
   </section>
   </div>
+  {tab==='options'&&<section className="cmeOptions" aria-label="Options CME-3D">
+   <h2>Options du laboratoire</h2>
+   <label className="cacheOption"><input type="checkbox" checked={clearCacheOnOpen} onChange={e=>{const enabled=e.target.checked;setClearCacheOnOpen(enabled);setAutoClearEnabled(enabled);setCacheMessage(enabled?'Vidage automatique activé pour chaque ouverture.':'Vidage automatique désactivé.');}}/><span><strong>Vider automatiquement le cache à chaque ouverture</strong><small>Activé par défaut. Supprime les caches CME-3D et désactive son service worker avant le chargement du moteur. Les préférences locales sont conservées.</small></span></label>
+   <button className="resetButton" onClick={()=>{void clearApplicationCache().then(({caches,workers})=>setCacheMessage(caches+' cache(s) supprimé(s), '+workers+' service worker(s) désenregistré(s).')).catch(()=>setCacheMessage('Nettoyage impossible dans ce navigateur.'));}}>Vider le cache maintenant</button>
+   {cacheMessage&&<p role="status">{cacheMessage}</p>}
+  </section>}
   {tab==='tracking'&&<IssueTracker drafts={pendingDrafts} onDismiss={autoDismiss} onClear={autoClear} onCopyReport={exportReport} {...known}/>}
   {tab==='comparison'&&<ComparisonPanel metrics={metrics} report={report} snapshot={comparisonSnapshot} actor={actor==='mma-amara'?'Amara':'Kadir'} discipline={discipline} technique={techniqueLabel} renderStyle={renderStyle} onOpenLab={()=>setTab('lab')} onCopyReport={exportReport}/>}
   {tab==='lab'&&catalogOpen&&<div className="paletteBackdrop" onClick={()=>setCatalogOpen(false)}>
@@ -287,6 +296,7 @@ export function App(){
    <button className={tab==='lab'?'selected':''} aria-current={tab==='lab'?'page':undefined} onClick={()=>{journal.record('navigation','Ouverture Laboratoire');setTab('lab');setDebug(false);}}>Laboratoire</button>
    <button className={tab==='tracking'?'selected':''} aria-current={tab==='tracking'?'page':undefined} onClick={()=>{journal.record('navigation','Ouverture Suivi des corrections');void known.refresh();setTab('tracking');setDebug(false);}}>Incidents{pendingDrafts.length>0&&<span className="autoTabCount">{pendingDrafts.length}</span>}</button>
    <button className={tab==='comparison'?'selected':''} aria-current={tab==='comparison'?'page':undefined} onClick={openComparison}>Comparatif 3D</button>
+   <button className={tab==='options'?'selected':''} aria-current={tab==='options'?'page':undefined} onClick={()=>setTab('options')}>Options</button>
   </nav>
  </main>;
 }
