@@ -1,5 +1,7 @@
 import {useCallback,useEffect,useRef,useState} from 'react';
 import type {TestContext} from './Issues';
+import {correlationId} from './SessionReport';
+import {ID_MARKER} from './IssueLinks';
 
 export type AutoCategory='javascript'|'promise'|'asset'|'webgl'|'loading'|'motion'|'performance';
 export interface AutoIncident {
@@ -42,9 +44,11 @@ function initial():AutoIncident[]{
 export function autoIssueURL(item:AutoIncident):string{
  const url=new URL('https://github.com/Doorsofhell/cme-3d-motion-lab/issues/new');
  const details=cap(item.details,1400);
+ const trackingKey=correlationId(item.fingerprint);
  const context=item.context;
  const body=[
- ISSUE_MARKER,'## Anomalie détectée automatiquement','',
+ ISSUE_MARKER,ID_MARKER+trackingKey,'## Anomalie détectée automatiquement','',
+ '- Référence de suivi : '+trackingKey,
  '- Catégorie : '+KEYWORDS[item.category],
  '- Première détection : '+item.firstSeen,
  '- Dernière détection : '+item.lastSeen,
