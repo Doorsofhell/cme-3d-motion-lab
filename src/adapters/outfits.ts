@@ -61,13 +61,13 @@ export function attachOutfit(body:Object3D,outfit:Object3D,lowCost=false):{garme
   }
  }
  return {garments:garments.length,hiddenVertices};
+}
 /**
  * Real-world skin response: preserve the source colour/normal maps while using
  * subdued broad specular highlights and micro-bump. Skin is neither chrome nor
  * satin; fabric/leather have their own, distinct response.
  * The source geometry remains unchanged: no fabricated facial detail.
  */
-}
 export function enhanceHumanMaterial(scene:Object3D,lowCost=false):void{
  scene.traverse(o=>{
   const mesh=o as Mesh;

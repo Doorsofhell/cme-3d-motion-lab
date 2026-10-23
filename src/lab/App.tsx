@@ -29,6 +29,7 @@ class ErrorBoundary extends Component<{children:ReactNode;onError:(message:strin
  state={failed:false};static getDerivedStateFromError(){return {failed:true};}
  componentDidCatch(e:Error){this.props.onError(e.message||'Erreur 3D');}
  render(){return this.state.failed?null:this.props.children;}
+}
 /** Subtle fake contact shadow: one plane rather than an expensive shadow-map on Android. */
 function StudioContact({renderStyle}:{renderStyle:RenderStyle}){
  const texture=useMemo(()=>{
@@ -49,7 +50,6 @@ function StudioContact({renderStyle}:{renderStyle:RenderStyle}){
   <planeGeometry args={[2.15,1.40]}/>
   <meshBasicMaterial map={texture} transparent opacity={renderStyle==='fitness'?.38:.52} depthWrite={false} toneMapped={false}/>
  </mesh>;
-}
 }
 function Lights({quality,renderStyle}:{quality:Quality;renderStyle:RenderStyle}){
  const {gl}=useThree();
