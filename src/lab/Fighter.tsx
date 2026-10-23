@@ -10,7 +10,8 @@ import {restoreReferencePose} from './restorePose';
 import type {Playback,Quality,RenderStyle,RigReport} from './App';
 import {attachOutfit,enhanceHumanMaterial} from '../adapters/outfits';
 /** Original fitness-coaching aesthetic: simplified materials, not BetterMe assets. */
-const fitnessGradient=new DataTexture(new Uint8Array([82,136,200,250]),4,1,RedFormat,UnsignedByteType);
+// Six restrained tonal steps help reveal contours without flat shading.
+const fitnessGradient=new DataTexture(new Uint8Array([65,102,145,186,223,251]),6,1,RedFormat,UnsignedByteType);
 fitnessGradient.magFilter=NearestFilter;
 fitnessGradient.minFilter=NearestFilter;
 fitnessGradient.needsUpdate=true;
@@ -35,6 +36,9 @@ function applyFitnessStyle(root:Object3D){
     color:new Color(palette),
     map:skin?(old.map??null):null,
     gradientMap:fitnessGradient,
+    normalMap:old.normalMap??null,
+    normalScale:old.normalScale?.clone(),
+    vertexColors:old.vertexColors,
     side:old.side,
     transparent:old.transparent,
     opacity:old.opacity,

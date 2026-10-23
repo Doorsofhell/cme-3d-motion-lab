@@ -4,7 +4,8 @@ import {OrbitControls} from '@react-three/drei';
 import {ACESFilmicToneMapping,NoToneMapping,SRGBColorSpace} from 'three';
 import {Fighter} from './Fighter';
 import {CME_APP_VERSION} from './buildInfo';
-import {captureFighterImage,type SnapshotContext} from './Screenshot';
+import {captureFighterImage} from './Screenshot';
+import {watchWebGLContext} from './webglRecovery';
 import rawTechniques from './techniques.json';
 import {IncidentReporter,IssueTracker,useKnownIssues,type TestContext} from './Issues';
 import {unresolvedDrafts} from './IssueLinks';
@@ -62,24 +63,41 @@ function Viewer({actor,discipline,technique,quality,renderStyle,playback,skeleto
 }){
  const [ready,setReady]=useState(false),[error,setError]=useState<string|null>(null),[slow,setSlow]=useState(false);
  const [retry,setRetry]=useState(0);
- // Crucial fix: a load timeout is never displayed after the model has rendered.
+ const canvasRef=useRef<(HTMLCanvasElement & {cmeCleanup?:()=>void})|null>(null);
+ const captureContext=useRef({actor,discipline,technique,renderStyle});
+ captureContext.current={actor,discipline,technique,renderStyle};
+ useEffect(()=>{setReady(false);setSlow(false);},[actor,discipline,renderStyle]);
+ // Timeout never appears once a coach is ready.
  useEffect(()=>{
   if(ready||error)return;
   const id=window.setTimeout(()=>{setSlow(true);onIncident('loading','Chargement 3D anormalement long','Coach '+actor+', tenue '+discipline+' : aucun signal de fin de chargement après 24 secondes');},24000);
   return()=>window.clearTimeout(id);
  },[ready,error,retry,actor,discipline,onIncident]);
  const onReady=useCallback(()=>{setReady(true);setSlow(false);onLog('Coach et tenue décodés, rig initialisé');},[onLog]);
- const gl=useMemo(()=>({alpha:false,antialias:quality!=='performance',powerPreference:'default' as const}),[quality]);
+ // Retain one GPU context when users change render style, coach or outfit.
+ const gl=useMemo(()=>({alpha:false,antialias:!mobile(),powerPreference:'default' as const}),[]);
  const onCreated=useCallback(({gl:renderer,scene:argumentsScene,camera:argumentsCamera}:Parameters<NonNullable<React.ComponentProps<typeof Canvas>['onCreated']>>[0])=>{
   const canvas=renderer.domElement;
-  onCaptureReady(()=>captureFighterImage(canvas,()=>{renderer.render(argumentsScene,argumentsCamera);},{
-   actor:actor==='mma-amara'?'Amara':'Kadir',discipline,technique,renderStyle,progress:playback.current.progress
-  }));
-  const lost=(e:Event)=>{e.preventDefault();onLog('ERREUR : contexte WebGL perdu');onIncident('webgl','Perte du contexte graphique WebGL','Le contexte WebGL a été perdu pendant le rendu du coach '+actor);setError('Contexte graphique perdu : réinitialise le moteur.');};
-  canvas.addEventListener('webglcontextlost',lost);
-  (canvas as HTMLCanvasElement & {cmeCleanup?:()=>void}).cmeCleanup=()=>canvas.removeEventListener('webglcontextlost',lost);
- },[onLog,onIncident,actor,discipline,technique,renderStyle,playback,onCaptureReady]);
- useEffect(()=>()=>{document.querySelectorAll('canvas').forEach(c=>(c as HTMLCanvasElement&{cmeCleanup?:()=>void}).cmeCleanup?.());},[]);
+  onCaptureReady(()=>{const current=captureContext.current;return captureFighterImage(canvas,()=>{renderer.render(argumentsScene,argumentsCamera);},{
+   actor:current.actor==='mma-amara'?'Amara':'Kadir',discipline:current.discipline,technique:current.technique,
+   renderStyle:current.renderStyle,progress:playback.current.progress
+  });});
+  canvasRef.current?.cmeCleanup?.();
+  const activeCanvas=canvas as HTMLCanvasElement & {cmeCleanup?:()=>void};
+  canvasRef.current=activeCanvas;
+  activeCanvas.cmeCleanup=watchWebGLContext(activeCanvas,{
+   onLost:()=>{
+    onLog('WebGL perdu pendant l’utilisation : récupération en cours');
+    onIncident('webgl','Perte du contexte graphique WebGL','Contexte WebGL perdu pendant une session active');
+    setError('Contexte graphique perdu : restauration automatique attendue. Relancer si nécessaire.');
+   },
+   onRestored:()=>{
+    onLog('Contexte WebGL restauré automatiquement');
+    setError(v=>v?.startsWith('Contexte graphique perdu')?null:v);
+   }
+  });
+ },[onLog,onIncident,playback,onCaptureReady]);
+ useEffect(()=>()=>{canvasRef.current?.cmeCleanup?.();canvasRef.current=null;},[]);
  const dpr=quality==='performance'?1:quality==='balanced'?(mobile()?1.1:1.35):(mobile()?1.4:1.6);
  return <div className="viewer">
    <ErrorBoundary key={retry} onError={message=>{setError(message);onIncident('javascript','Erreur du composant de rendu 3D',message);}}>
@@ -175,7 +193,7 @@ export function App(){
   </section>
   <section className="stage" aria-label="Vue de test 3D">
    <div className="stageTitle"><span>{actor==='mma-amara'?'AMARA':'KADIR'} <em>· {renderStyle==='fitness'?'Animation fitness':'Ultra-réaliste'}</em></span><span className="stagePill">MOTION / IK</span></div>
-   <Viewer key={actor+outfit+quality+renderStyle} actor={actor} discipline={outfit} quality={quality} renderStyle={renderStyle} technique={technique} playback={playback} skeleton={skeleton} onReport={onReport} onMetrics={onMetrics} onLog={onLog} onIncident={autoRecord} onCaptureReady={setScreenshotHandler}/>
+   <Viewer actor={actor} discipline={outfit} quality={quality} renderStyle={renderStyle} technique={technique} playback={playback} skeleton={skeleton} onReport={onReport} onMetrics={onMetrics} onLog={onLog} onIncident={autoRecord} onCaptureReady={setScreenshotHandler}/>
    <div className="stageBottom"><span>{report?report.bones+' os · '+(report.techniqueFound?'Technique disponible':'Garde de secours'):'Initialisation du rig'}</span><span>{report?('Tenue '+outfit+' ✓'):'Chargement'}</span></div>
   </section>
   <section className="transport" aria-label="Commandes d'animation">
