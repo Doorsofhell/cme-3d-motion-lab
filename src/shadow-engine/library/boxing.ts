@@ -162,11 +162,13 @@ function hook(a: Author, side: 'L' | 'R', target: 'chin' | 'body'): Motion {
   hit[side === 'L' ? 'handL' : 'handR'] = hand;
   const wind = edit(g, (d) => {
     const h = side === 'L' ? d.handL : d.handR;
+    // Keep the fist close to its guard during the loading phase. The old wind-up
+    // sent it 0.22 * scale outside the shoulder, producing an exaggerated loop
+    // (especially visible on the rear hook in the Muay Thai stance).
+    // Drive the hook with the hips and torso instead of drawing a wide arm circle.
+    const guardHand = h.space === 'world' ? h.pos : a.toWorld(g, h.pos);
     h.space = 'world';
-    const sh = a.shoulder(g, side);
-    // v0.29: the fist opens further to the side, for a wider arc that stays as fast at impact with the shorter,
-    // 90° bent arm of the hit pose
-    h.pos = v3(sh.x + 0.22 * sg * s, T.y + 0.02 * s, sh.z + 0.22 * s);
+    h.pos = add(guardHand, { x: 0.07 * sg * s, z: 0.05 * s, y: body ? -0.05 * s : 0 });
     h.pole = v3(sg, body ? -0.4 : 0.05, -0.2);
     h.pron = body ? 0.1 : 0.7;
     d.pelvis.yaw += deg(-10 * sg);
