@@ -1,7 +1,7 @@
 import {Suspense,Component,useCallback,useEffect,useMemo,useRef,useState,type ReactNode,type RefObject} from 'react';
 import {Canvas,useThree,useFrame} from '@react-three/fiber';
 import {OrbitControls} from '@react-three/drei';
-import {ACESFilmicToneMapping,NoToneMapping,SRGBColorSpace} from 'three';
+import {ACESFilmicToneMapping,NeutralToneMapping,SRGBColorSpace,CanvasTexture} from 'three';
 import {Fighter} from './Fighter';
 import {CME_APP_VERSION} from './buildInfo';
 import {captureFighterImage} from './Screenshot';
@@ -29,17 +29,49 @@ class ErrorBoundary extends Component<{children:ReactNode;onError:(message:strin
  state={failed:false};static getDerivedStateFromError(){return {failed:true};}
  componentDidCatch(e:Error){this.props.onError(e.message||'Erreur 3D');}
  render(){return this.state.failed?null:this.props.children;}
+/** Subtle fake contact shadow: one plane rather than an expensive shadow-map on Android. */
+function StudioContact({renderStyle}:{renderStyle:RenderStyle}){
+ const texture=useMemo(()=>{
+  const canvas=document.createElement('canvas');canvas.width=128;canvas.height=128;
+  const context=canvas.getContext('2d');
+  if(context){
+   const gradient=context.createRadialGradient(64,64,0,64,64,63);
+   gradient.addColorStop(0,'rgba(0,0,0,.55)');
+   gradient.addColorStop(.23,'rgba(0,0,0,.42)');
+   gradient.addColorStop(.56,'rgba(0,0,0,.14)');
+   gradient.addColorStop(1,'rgba(0,0,0,0)');
+   context.fillStyle=gradient;context.fillRect(0,0,128,128);
+  }
+  return new CanvasTexture(canvas);
+ },[]);
+ useEffect(()=>()=>texture.dispose(),[texture]);
+ return <mesh rotation={[-Math.PI/2,0,0]} position={[0,.007,0]}>
+  <planeGeometry args={[2.15,1.40]}/>
+  <meshBasicMaterial map={texture} transparent opacity={renderStyle==='fitness'?.38:.52} depthWrite={false} toneMapped={false}/>
+ </mesh>;
+}
 }
 function Lights({quality,renderStyle}:{quality:Quality;renderStyle:RenderStyle}){
  const {gl}=useThree();
- useEffect(()=>{gl.outputColorSpace=SRGBColorSpace;gl.toneMapping=quality==='performance'?NoToneMapping:ACESFilmicToneMapping;gl.toneMappingExposure=1.1;},[gl,quality]);
- const bright=quality!=='performance'; const fitness=renderStyle==='fitness';
+ const fitness=renderStyle==='fitness';
+ useEffect(()=>{
+  gl.outputColorSpace=SRGBColorSpace;
+  gl.toneMapping=fitness?ACESFilmicToneMapping:NeutralToneMapping;
+  gl.toneMappingExposure=fitness?1.04:.94;
+ },[gl,fitness]);
  return <>
-  <hemisphereLight args={['#fffdf4',fitness?'#e4e6e7':'#6b7c96',fitness?1.7:bright?1.05:1.3]}/>
-  <directionalLight position={[2.4,4,3.3]} intensity={fitness?1.7:bright?2.45:2.1} castShadow={quality==='detail'&&!mobile()} shadow-mapSize={[1024,1024]} />
-  <directionalLight position={[-3,2,1.8]} intensity={.75} color={fitness?'#ffffff':'#d7e3ff'}/>
-  <directionalLight position={[0,3,-3]} intensity={fitness?.85:1.35} color="#d5f0fa"/>
-  <mesh rotation={[-Math.PI/2,0,0]} position={[0,-.04,0]} receiveShadow><planeGeometry args={[8,8]}/><meshStandardMaterial color={fitness?'#e2ebe9':'#263444'} roughness={.95}/></mesh>
+  <hemisphereLight args={fitness?['#fffdf5','#e4e6e7',1.5]:['#fffaf4','#919aa2',1.42]}/>
+  <directionalLight position={[2.1,3.7,3.3]} intensity={fitness?1.65:2.05}
+   color={fitness?'#ffffff':'#fff7f1'} castShadow={quality==='detail'&&!mobile()} shadow-mapSize={[1024,1024]}/>
+  <directionalLight position={[-3.1,1.8,2.2]} intensity={fitness?.78:.83} color={fitness?'#ffffff':'#cadff3'}/>
+  <directionalLight position={[0.8,2.6,-2.6]} intensity={fitness?.64:1.20} color={fitness?'#f4f8fa':'#f2f5ff'}/>
+  <directionalLight position={[-1,4.5,-1]} intensity={fitness?.25:.33} color="#fff6ea"/>
+  <directionalLight position={[.3,1.8,4.5]} intensity={fitness?.25:.36} color="#f9fbfc"/>
+  <mesh rotation={[-Math.PI/2,0,0]} position={[0,-.013,0]} receiveShadow>
+   <planeGeometry args={[8,8]}/>
+   <meshStandardMaterial color={fitness?'#d7dce0':'#313940'} roughness={1} metalness={0}/>
+  </mesh>
+  <StudioContact renderStyle={renderStyle}/>
  </>;
 }
 function PerfProbe({onMetrics}:{onMetrics:(metrics:Metrics)=>void}){
@@ -101,11 +133,11 @@ function Viewer({actor,discipline,technique,quality,renderStyle,playback,skeleto
  const dpr=quality==='performance'?1:quality==='balanced'?(mobile()?1.1:1.35):(mobile()?1.4:1.6);
  return <div className="viewer">
    <ErrorBoundary key={retry} onError={message=>{setError(message);onIncident('javascript','Erreur du composant de rendu 3D',message);}}>
-    <Canvas key={quality+'-'+retry} gl={gl} onCreated={onCreated} dpr={dpr} shadows={quality==='detail'&&!mobile()} camera={{position:[0,1.56,3.5],fov:34}} frameloop="always">
-     <color attach="background" args={[renderStyle==='fitness'?'#eaf0ed':'#101c2b']}/>
+    <Canvas key={retry} gl={gl} onCreated={onCreated} dpr={dpr} shadows={quality==='detail'&&!mobile()} camera={{position:[0,1.54,3.07],fov:34}} frameloop="always">
+     <color attach="background" args={[renderStyle==='fitness'?'#e7eeef':'#1d252c']}/>
      <Lights quality={quality} renderStyle={renderStyle}/>
      <PerfProbe onMetrics={onMetrics}/>
-     {renderStyle==='fitness'?null:<gridHelper args={[7,14,'#304357','#223244']}/>}
+
      <Suspense fallback={null}>
       <Fighter actor={actor} outfit={discipline} technique={technique} playback={playback} skeleton={skeleton} quality={quality} renderStyle={renderStyle} onReady={onReady} onReport={onReport}/>
      </Suspense>

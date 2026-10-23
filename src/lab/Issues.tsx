@@ -19,7 +19,7 @@ export function stageForIssue(issue:IssueData):{progress:number;stage:string;don
  if(issue.state==='closed')return {progress:100,stage:'Terminé',done:true};
  const labels=issue.labels.map(l=>typeof l==='string'?l:l.name).map(x=>x.toLowerCase());
  const states:[string,number,string][]=[
-  ['cme:validation',75,'Vérification'],
+  ['cme:validation',75,'Validation sur Android'],
   ['cme:correctif',50,'Correction'],
   ['cme:diagnostic',25,'Diagnostic'],
   ['cme:reproduction',10,'Reproduction']
@@ -110,7 +110,7 @@ export function useKnownIssues(){
  const refresh=useCallback(async()=>{
   setLoading(true);
   try{
-   const res=await fetch(API+'?state=all&per_page=100&sort=updated&direction=desc',{headers:{Accept:'application/vnd.github+json'},cache:'no-store'});
+   const res=await fetch(API+'?state=all&per_page=100&sort=updated&direction=desc&refresh='+Date.now(),{headers:{Accept:'application/vnd.github+json','Cache-Control':'no-cache'},cache:'no-store'});
    if(!res.ok)throw new Error('HTTP '+res.status+(res.status===403?' · quota de consultation GitHub':''));
    const data=await res.json() as IssueData[];
    setIssues(data.filter(x=>!x.pull_request&&((x.body??'').includes(MARKER)||x.title.startsWith('[CME-3D]'))).sort((a,b)=>a.number-b.number));

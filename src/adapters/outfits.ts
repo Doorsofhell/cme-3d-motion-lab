@@ -11,8 +11,16 @@ export function maskBody(pos:ArrayLike<number>,indices:ArrayLike<number>,keys:Se
 function material(original:Material,lowCost=false):Material{
  const m=original as MeshStandardMaterial;if(m.map){m.map.colorSpace=SRGBColorSpace;m.map.anisotropy=lowCost?2:4;}
  if(m.normalMap)m.normalMap.anisotropy=lowCost?2:4;const sheen=Number(m.userData?.css_sheen??0),coat=Number(m.userData?.css_coat??0);
- if(lowCost||(!sheen&&!coat))return m.clone();
- return new MeshPhysicalMaterial({color:m.color,map:m.map,normalMap:m.normalMap,roughness:m.roughness,metalness:0,vertexColors:m.vertexColors,sheen,sheenRoughness:.45,sheenColor:m.color.clone().lerp(m.color.clone().set('#ffffff'),.4),clearcoat:coat,clearcoatRoughness:.35});
+ if(lowCost)return m.clone();
+ // Respect original fabric maps; restrained studio specular prevents plastic-looking uniforms.
+ return new MeshPhysicalMaterial({
+  name:m.name,color:m.color.clone(),map:m.map??null,normalMap:m.normalMap??null,
+  roughness:Math.max(.47,m.roughness),metalness:0,vertexColors:m.vertexColors,side:m.side,
+  sheen:Math.min(.22,Math.max(.035,sheen)),sheenRoughness:.78,
+  sheenColor:m.color.clone().lerp(m.color.clone().set('#ffffff'),.12),
+  clearcoat:Math.min(.18,Math.max(0,coat)),clearcoatRoughness:.52,
+  specularIntensity:.38
+ });
 }
 /** Rebind the discipline outfit to the real fighter's original bones; clone geometry to avoid skin poke-through. */
 export function attachOutfit(body:Object3D,outfit:Object3D,lowCost=false):{garments:number;hiddenVertices:number}{
@@ -53,16 +61,56 @@ export function attachOutfit(body:Object3D,outfit:Object3D,lowCost=false):{garme
   }
  }
  return {garments:garments.length,hiddenVertices};
+/**
+ * Real-world skin response: preserve the source colour/normal maps while using
+ * subdued broad specular highlights and micro-bump. Skin is neither chrome nor
+ * satin; fabric/leather have their own, distinct response.
+ * The source geometry remains unchanged: no fabricated facial detail.
+ */
 }
 export function enhanceHumanMaterial(scene:Object3D,lowCost=false):void{
- scene.traverse(o=>{const mesh=o as Mesh;if(!mesh.isMesh)return;mesh.frustumCulled=false;mesh.castShadow=!lowCost;mesh.receiveShadow=!lowCost;
-  const m=mesh.material as MeshStandardMaterial;if(!m||Array.isArray(m))return;
-  if(m.map){m.map.colorSpace=SRGBColorSpace;m.map.anisotropy=lowCost?2:8;}if(m.normalMap)m.normalMap.anisotropy=lowCost?2:8;
-  if(/opacity/i.test(m.name)){const clone=m.clone();clone.alphaTest=.4;clone.transparent=false;mesh.material=clone;return;}
-  if(lowCost){
-   mesh.material=new MeshStandardMaterial({name:m.name,color:m.color,map:m.map,normalMap:m.normalMap,roughness:.54,metalness:0,vertexColors:m.vertexColors});
-   return;
-  }
-  mesh.material=new MeshPhysicalMaterial({name:m.name,color:m.color,map:m.map,normalMap:m.normalMap,roughness:.58,metalness:0,sheen:.25,sheenRoughness:.7,sheenColor:'#c98a72',specularIntensity:.4});
+ scene.traverse(o=>{
+  const mesh=o as Mesh;
+  if(!mesh.isMesh)return;
+  mesh.frustumCulled=false;
+  mesh.castShadow=!lowCost;
+  mesh.receiveShadow=!lowCost;
+  const originals=Array.isArray(mesh.material)?mesh.material:[mesh.material];
+  const result=originals.map(original=>{
+   const m=original as MeshStandardMaterial;
+   if(!m)return original;
+   if(m.map){m.map.colorSpace=SRGBColorSpace;m.map.anisotropy=lowCost?2:6;}
+   if(m.normalMap)m.normalMap.anisotropy=lowCost?2:6;
+   if(/opacity/i.test(m.name)){
+    const clone=m.clone();
+    clone.alphaTest=.4;clone.transparent=false;
+    return clone;
+   }
+   const isFace=/head|face/i.test(m.name);
+   const params={
+    name:m.name,
+    color:m.color.clone(),
+    map:m.map??null,
+    normalMap:m.normalMap??null,
+    normalScale:m.normalScale?.clone().multiplyScalar(lowCost?.7:.85),
+    roughness:isFace?.64:.73,
+    metalness:0,
+    vertexColors:m.vertexColors,
+    side:m.side
+   };
+   if(lowCost)return new MeshStandardMaterial(params);
+   return new MeshPhysicalMaterial({
+    ...params,
+    ior:1.42,
+    specularIntensity:isFace?.30:.24,
+    specularColor:'#fff4eb',
+    clearcoat:isFace?.022:.012,
+    clearcoatRoughness:.76,
+    sheen:.025,
+    sheenRoughness:.95,
+    sheenColor:'#dab4a0'
+   });
+  });
+  mesh.material=Array.isArray(mesh.material)?result:result[0];
  });
 }
