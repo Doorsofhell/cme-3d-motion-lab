@@ -1,0 +1,2902 @@
+[
+  {
+    "id": "shadow-boxe-debutant-01",
+    "name": "Garde orthodoxe et respiration",
+    "discipline": "boxe",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "garde"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-debutant-02",
+    "name": "jab",
+    "discipline": "boxe",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "jab"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-debutant-03",
+    "name": "direct",
+    "discipline": "boxe",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "direct"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-debutant-04",
+    "name": "crochet-avant",
+    "discipline": "boxe",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "crochet-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-debutant-05",
+    "name": "uppercut-arriere",
+    "discipline": "boxe",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "uppercut-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-debutant-06",
+    "name": "Pas avant et pas arrière",
+    "discipline": "boxe",
+    "level": "debutant",
+    "kind": "deplacement",
+    "motions": [
+      "pas-avant",
+      "pas-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-debutant-07",
+    "name": "Pas latéraux",
+    "discipline": "boxe",
+    "level": "debutant",
+    "kind": "deplacement",
+    "motions": [
+      "pas-gauche",
+      "pas-droite"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-debutant-08",
+    "name": "jab → direct",
+    "discipline": "boxe",
+    "level": "debutant",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "direct"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-debutant-09",
+    "name": "jab → jab → direct",
+    "discipline": "boxe",
+    "level": "debutant",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "jab",
+      "direct"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-debutant-10",
+    "name": "Esquive extérieure en garde",
+    "discipline": "boxe",
+    "level": "debutant",
+    "kind": "defense",
+    "motions": [
+      "esquive-droite"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-debutant-11",
+    "name": "Blocage haut",
+    "discipline": "boxe",
+    "level": "debutant",
+    "kind": "defense",
+    "motions": [
+      "blocage-haut"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-debutant-12",
+    "name": "Jab en avançant",
+    "discipline": "boxe",
+    "level": "debutant",
+    "kind": "combinaison",
+    "motions": [
+      "pas-avant",
+      "jab"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-intermediaire-01",
+    "name": "jab → direct → crochet-avant",
+    "discipline": "boxe",
+    "level": "intermediaire",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "direct",
+      "crochet-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-intermediaire-02",
+    "name": "jab → direct → crochet-avant → direct",
+    "discipline": "boxe",
+    "level": "intermediaire",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "direct",
+      "crochet-avant",
+      "direct"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-intermediaire-03",
+    "name": "jab → esquive-droite → direct",
+    "discipline": "boxe",
+    "level": "intermediaire",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "esquive-droite",
+      "direct"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-intermediaire-04",
+    "name": "direct → crochet-avant → direct",
+    "discipline": "boxe",
+    "level": "intermediaire",
+    "kind": "combinaison",
+    "motions": [
+      "direct",
+      "crochet-avant",
+      "direct"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-intermediaire-05",
+    "name": "uppercut-arriere → crochet-avant → direct",
+    "discipline": "boxe",
+    "level": "intermediaire",
+    "kind": "combinaison",
+    "motions": [
+      "uppercut-arriere",
+      "crochet-avant",
+      "direct"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-intermediaire-06",
+    "name": "Crochets au corps",
+    "discipline": "boxe",
+    "level": "intermediaire",
+    "kind": "combinaison",
+    "motions": [
+      "crochet-avant-corps",
+      "crochet-arriere-corps",
+      "crochet-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-intermediaire-07",
+    "name": "Parade et contre",
+    "discipline": "boxe",
+    "level": "intermediaire",
+    "kind": "defense",
+    "motions": [
+      "parade",
+      "direct",
+      "crochet-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-intermediaire-08",
+    "name": "Roll sous le crochet",
+    "discipline": "boxe",
+    "level": "intermediaire",
+    "kind": "defense",
+    "motions": [
+      "roll-droite",
+      "crochet-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-intermediaire-09",
+    "name": "Pivot après le jab",
+    "discipline": "boxe",
+    "level": "intermediaire",
+    "kind": "deplacement",
+    "motions": [
+      "jab",
+      "pivot-droite",
+      "jab"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-intermediaire-10",
+    "name": "Retrait et contre",
+    "discipline": "boxe",
+    "level": "intermediaire",
+    "kind": "defense",
+    "motions": [
+      "retrait",
+      "direct"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-intermediaire-11",
+    "name": "Jab au corps, jab à la tête",
+    "discipline": "boxe",
+    "level": "intermediaire",
+    "kind": "combinaison",
+    "motions": [
+      "jab-corps",
+      "jab",
+      "direct"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-avance-01",
+    "name": "jab → direct → roll-droite → crochet-avant",
+    "discipline": "boxe",
+    "level": "avance",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "direct",
+      "roll-droite",
+      "crochet-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-avance-02",
+    "name": "jab → direct → crochet-avant → uppercut-arriere → crochet-avant",
+    "discipline": "boxe",
+    "level": "avance",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "direct",
+      "crochet-avant",
+      "uppercut-arriere",
+      "crochet-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-avance-03",
+    "name": "Sortie d’angle et crochet",
+    "discipline": "boxe",
+    "level": "avance",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "direct",
+      "sortie-angle",
+      "crochet-avant",
+      "direct"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-avance-04",
+    "name": "Corps puis tête",
+    "discipline": "boxe",
+    "level": "avance",
+    "kind": "combinaison",
+    "motions": [
+      "jab-corps",
+      "direct-corps",
+      "crochet-avant",
+      "uppercut-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-avance-05",
+    "name": "Esquive, roll, contre",
+    "discipline": "boxe",
+    "level": "avance",
+    "kind": "defense",
+    "motions": [
+      "esquive-droite",
+      "roll-gauche",
+      "crochet-arriere",
+      "crochet-avant",
+      "direct"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-avance-06",
+    "name": "Double crochet et direct",
+    "discipline": "boxe",
+    "level": "avance",
+    "kind": "combinaison",
+    "motions": [
+      "crochet-avant",
+      "crochet-avant",
+      "direct",
+      "crochet-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-avance-07",
+    "name": "Feinte et attaque",
+    "discipline": "boxe",
+    "level": "avance",
+    "kind": "combinaison",
+    "motions": [
+      "feinte-jab",
+      "direct",
+      "crochet-avant",
+      "direct"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-avance-08",
+    "name": "Blocage puis riposte",
+    "discipline": "boxe",
+    "level": "avance",
+    "kind": "defense",
+    "motions": [
+      "blocage-haut",
+      "crochet-avant",
+      "direct",
+      "crochet-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-avance-09",
+    "name": "Pivots et angles",
+    "discipline": "boxe",
+    "level": "avance",
+    "kind": "deplacement",
+    "motions": [
+      "jab",
+      "pivot-droite",
+      "direct",
+      "pivot-gauche",
+      "jab",
+      "direct"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-avance-10",
+    "name": "Uppercuts en série",
+    "discipline": "boxe",
+    "level": "avance",
+    "kind": "combinaison",
+    "motions": [
+      "uppercut-avant",
+      "uppercut-arriere",
+      "crochet-avant",
+      "direct"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-avance-11",
+    "name": "Cardio boxe",
+    "discipline": "boxe",
+    "level": "avance",
+    "kind": "cardio",
+    "motions": [
+      "jab",
+      "direct",
+      "jab",
+      "direct",
+      "crochet-avant",
+      "direct"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-expert-01",
+    "name": "Série de 6 frappes",
+    "discipline": "boxe",
+    "level": "expert",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "direct",
+      "crochet-avant",
+      "direct",
+      "uppercut-avant",
+      "direct"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-expert-02",
+    "name": "Série de 8 frappes",
+    "discipline": "boxe",
+    "level": "expert",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "jab",
+      "direct",
+      "crochet-avant",
+      "uppercut-arriere",
+      "crochet-avant",
+      "direct",
+      "crochet-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-expert-03",
+    "name": "Série de 10 frappes",
+    "discipline": "boxe",
+    "level": "expert",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "direct",
+      "crochet-avant",
+      "direct",
+      "crochet-avant-corps",
+      "crochet-avant",
+      "uppercut-arriere",
+      "crochet-avant",
+      "direct",
+      "crochet-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-expert-04",
+    "name": "Défense et contre complet",
+    "discipline": "boxe",
+    "level": "expert",
+    "kind": "defense",
+    "motions": [
+      "parade",
+      "esquive-droite",
+      "roll-gauche",
+      "crochet-avant",
+      "direct",
+      "crochet-avant",
+      "uppercut-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-expert-05",
+    "name": "Changements de rythme",
+    "discipline": "boxe",
+    "level": "expert",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "feinte-epaule",
+      "jab",
+      "direct",
+      "retrait",
+      "direct",
+      "crochet-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-expert-06",
+    "name": "Déplacements multiples",
+    "discipline": "boxe",
+    "level": "expert",
+    "kind": "deplacement",
+    "motions": [
+      "pas-avant",
+      "jab",
+      "direct",
+      "pas-arriere",
+      "pas-gauche",
+      "jab",
+      "pivot-droite",
+      "direct",
+      "crochet-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-expert-07",
+    "name": "Corps-tête-corps",
+    "discipline": "boxe",
+    "level": "expert",
+    "kind": "combinaison",
+    "motions": [
+      "jab-corps",
+      "direct",
+      "crochet-avant-corps",
+      "crochet-avant",
+      "direct-corps",
+      "uppercut-arriere",
+      "crochet-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-expert-08",
+    "name": "Round technique 3 minutes",
+    "discipline": "boxe",
+    "level": "expert",
+    "kind": "round",
+    "motions": [
+      "jab",
+      "direct",
+      "esquive-droite",
+      "direct",
+      "crochet-avant",
+      "roll-droite",
+      "crochet-avant",
+      "direct",
+      "pas-arriere",
+      "jab"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-expert-09",
+    "name": "Round puissance",
+    "discipline": "boxe",
+    "level": "expert",
+    "kind": "round",
+    "motions": [
+      "direct",
+      "crochet-avant",
+      "direct",
+      "uppercut-arriere",
+      "crochet-avant",
+      "crochet-avant-corps",
+      "crochet-avant",
+      "direct"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-expert-10",
+    "name": "Contre sur roll",
+    "discipline": "boxe",
+    "level": "expert",
+    "kind": "defense",
+    "motions": [
+      "roll-droite",
+      "crochet-avant",
+      "direct",
+      "roll-gauche",
+      "crochet-arriere",
+      "crochet-avant",
+      "uppercut-arriere",
+      "direct"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-boxe-expert-11",
+    "name": "Cardio expert",
+    "discipline": "boxe",
+    "level": "expert",
+    "kind": "cardio",
+    "motions": [
+      "jab",
+      "direct",
+      "jab",
+      "direct",
+      "crochet-avant",
+      "direct",
+      "uppercut-arriere",
+      "crochet-avant",
+      "direct",
+      "jab"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-debutant-01",
+    "name": "Garde de kick-boxing",
+    "discipline": "kickboxing",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "garde"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-debutant-02",
+    "name": "jab",
+    "discipline": "kickboxing",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "jab"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-debutant-03",
+    "name": "direct",
+    "discipline": "kickboxing",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "direct"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-debutant-04",
+    "name": "front-kick-avant",
+    "discipline": "kickboxing",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "front-kick-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-debutant-05",
+    "name": "low-kick-arriere",
+    "discipline": "kickboxing",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "low-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-debutant-06",
+    "name": "middle-kick-arriere",
+    "discipline": "kickboxing",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "middle-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-debutant-07",
+    "name": "roundhouse-arriere",
+    "discipline": "kickboxing",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "roundhouse-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-debutant-08",
+    "name": "Check du low kick",
+    "discipline": "kickboxing",
+    "level": "debutant",
+    "kind": "defense",
+    "motions": [
+      "check-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-debutant-09",
+    "name": "jab → middle-kick-arriere",
+    "discipline": "kickboxing",
+    "level": "debutant",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "middle-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-debutant-10",
+    "name": "jab → direct → low-kick-arriere",
+    "discipline": "kickboxing",
+    "level": "debutant",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "direct",
+      "low-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-debutant-11",
+    "name": "Pas avant et pas arrière",
+    "discipline": "kickboxing",
+    "level": "debutant",
+    "kind": "deplacement",
+    "motions": [
+      "pas-avant",
+      "pas-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-intermediaire-01",
+    "name": "direct → crochet-avant → low-kick-arriere",
+    "discipline": "kickboxing",
+    "level": "intermediaire",
+    "kind": "combinaison",
+    "motions": [
+      "direct",
+      "crochet-avant",
+      "low-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-intermediaire-02",
+    "name": "jab → direct → high-kick-arriere",
+    "discipline": "kickboxing",
+    "level": "intermediaire",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "direct",
+      "high-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-intermediaire-03",
+    "name": "low-kick-arriere → direct → crochet-avant",
+    "discipline": "kickboxing",
+    "level": "intermediaire",
+    "kind": "combinaison",
+    "motions": [
+      "low-kick-arriere",
+      "direct",
+      "crochet-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-intermediaire-04",
+    "name": "jab → jab → direct → middle-kick-arriere",
+    "discipline": "kickboxing",
+    "level": "intermediaire",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "jab",
+      "direct",
+      "middle-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-intermediaire-05",
+    "name": "Check et contre",
+    "discipline": "kickboxing",
+    "level": "intermediaire",
+    "kind": "defense",
+    "motions": [
+      "check-avant",
+      "direct",
+      "low-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-intermediaire-06",
+    "name": "Front kick et poings",
+    "discipline": "kickboxing",
+    "level": "intermediaire",
+    "kind": "combinaison",
+    "motions": [
+      "front-kick-avant",
+      "jab",
+      "direct"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-intermediaire-07",
+    "name": "Blocage et retour",
+    "discipline": "kickboxing",
+    "level": "intermediaire",
+    "kind": "defense",
+    "motions": [
+      "blocage-haut",
+      "direct",
+      "middle-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-intermediaire-08",
+    "name": "Retrait de buste et contre",
+    "discipline": "kickboxing",
+    "level": "intermediaire",
+    "kind": "defense",
+    "motions": [
+      "retrait",
+      "direct",
+      "crochet-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-intermediaire-09",
+    "name": "Changement de distance",
+    "discipline": "kickboxing",
+    "level": "intermediaire",
+    "kind": "deplacement",
+    "motions": [
+      "pas-avant",
+      "jab",
+      "direct",
+      "pas-arriere",
+      "front-kick-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-intermediaire-10",
+    "name": "Crochet et low kick",
+    "discipline": "kickboxing",
+    "level": "intermediaire",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "crochet-avant",
+      "low-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-intermediaire-11",
+    "name": "uppercut-arriere → crochet-avant → high-kick-arriere",
+    "discipline": "kickboxing",
+    "level": "intermediaire",
+    "kind": "combinaison",
+    "motions": [
+      "uppercut-arriere",
+      "crochet-avant",
+      "high-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-avance-01",
+    "name": "Poings-pieds en 5",
+    "discipline": "kickboxing",
+    "level": "avance",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "direct",
+      "crochet-avant",
+      "direct",
+      "low-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-avance-02",
+    "name": "Pied avant d’entrée",
+    "discipline": "kickboxing",
+    "level": "avance",
+    "kind": "combinaison",
+    "motions": [
+      "roundhouse-avant",
+      "direct",
+      "crochet-avant",
+      "middle-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-avance-03",
+    "name": "Low kick des deux côtés",
+    "discipline": "kickboxing",
+    "level": "avance",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "low-kick-avant",
+      "direct",
+      "low-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-avance-04",
+    "name": "High kick après les poings",
+    "discipline": "kickboxing",
+    "level": "avance",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "direct",
+      "crochet-avant",
+      "high-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-avance-05",
+    "name": "Esquive et pied",
+    "discipline": "kickboxing",
+    "level": "avance",
+    "kind": "defense",
+    "motions": [
+      "esquive-droite",
+      "crochet-avant",
+      "direct",
+      "middle-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-avance-06",
+    "name": "Front kick, poings, middle",
+    "discipline": "kickboxing",
+    "level": "avance",
+    "kind": "combinaison",
+    "motions": [
+      "front-kick-arriere",
+      "jab",
+      "direct",
+      "middle-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-avance-07",
+    "name": "Changement d’angle",
+    "discipline": "kickboxing",
+    "level": "avance",
+    "kind": "deplacement",
+    "motions": [
+      "jab",
+      "direct",
+      "sortie-angle",
+      "crochet-avant",
+      "low-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-avance-08",
+    "name": "Check, contre complet",
+    "discipline": "kickboxing",
+    "level": "avance",
+    "kind": "defense",
+    "motions": [
+      "check-avant",
+      "jab",
+      "direct",
+      "crochet-avant",
+      "low-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-avance-09",
+    "name": "Corps et jambes",
+    "discipline": "kickboxing",
+    "level": "avance",
+    "kind": "combinaison",
+    "motions": [
+      "jab-corps",
+      "direct",
+      "crochet-avant-corps",
+      "middle-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-avance-10",
+    "name": "Feinte et pied",
+    "discipline": "kickboxing",
+    "level": "avance",
+    "kind": "combinaison",
+    "motions": [
+      "feinte-jab",
+      "direct",
+      "high-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-avance-11",
+    "name": "Cardio poings-pieds",
+    "discipline": "kickboxing",
+    "level": "avance",
+    "kind": "cardio",
+    "motions": [
+      "jab",
+      "direct",
+      "low-kick-arriere",
+      "jab",
+      "direct",
+      "middle-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-expert-01",
+    "name": "Enchaînement de 6",
+    "discipline": "kickboxing",
+    "level": "expert",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "direct",
+      "crochet-avant",
+      "uppercut-arriere",
+      "crochet-avant",
+      "low-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-expert-02",
+    "name": "Enchaînement de 7",
+    "discipline": "kickboxing",
+    "level": "expert",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "jab",
+      "direct",
+      "crochet-avant",
+      "direct",
+      "low-kick-arriere",
+      "high-kick-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-expert-03",
+    "name": "Enchaînement de 8",
+    "discipline": "kickboxing",
+    "level": "expert",
+    "kind": "combinaison",
+    "motions": [
+      "front-kick-avant",
+      "jab",
+      "direct",
+      "crochet-avant",
+      "direct",
+      "roundhouse-arriere",
+      "check-avant",
+      "direct"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-expert-04",
+    "name": "Défense-contre poings-pieds",
+    "discipline": "kickboxing",
+    "level": "expert",
+    "kind": "defense",
+    "motions": [
+      "check-avant",
+      "blocage-haut",
+      "esquive-droite",
+      "crochet-avant",
+      "direct",
+      "low-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-expert-05",
+    "name": "Rythme cassé",
+    "discipline": "kickboxing",
+    "level": "expert",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "feinte-epaule",
+      "direct",
+      "crochet-avant",
+      "retrait",
+      "direct",
+      "high-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-expert-06",
+    "name": "Pression vers l’avant",
+    "discipline": "kickboxing",
+    "level": "expert",
+    "kind": "deplacement",
+    "motions": [
+      "pas-avant",
+      "jab",
+      "direct",
+      "pas-avant",
+      "crochet-avant",
+      "direct",
+      "low-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-expert-07",
+    "name": "Combinaison 10 mouvements",
+    "discipline": "kickboxing",
+    "level": "expert",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "direct",
+      "crochet-avant",
+      "direct",
+      "low-kick-arriere",
+      "jab",
+      "direct",
+      "crochet-avant",
+      "uppercut-arriere",
+      "high-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-expert-08",
+    "name": "Round technique",
+    "discipline": "kickboxing",
+    "level": "expert",
+    "kind": "round",
+    "motions": [
+      "jab",
+      "direct",
+      "low-kick-arriere",
+      "check-avant",
+      "direct",
+      "crochet-avant",
+      "middle-kick-arriere",
+      "pas-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-expert-09",
+    "name": "Round cardio",
+    "discipline": "kickboxing",
+    "level": "expert",
+    "kind": "round",
+    "motions": [
+      "jab",
+      "direct",
+      "middle-kick-arriere",
+      "jab",
+      "direct",
+      "low-kick-arriere",
+      "front-kick-avant",
+      "direct"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-expert-10",
+    "name": "Angles et pieds",
+    "discipline": "kickboxing",
+    "level": "expert",
+    "kind": "deplacement",
+    "motions": [
+      "jab",
+      "sortie-angle",
+      "direct",
+      "low-kick-arriere",
+      "pivot-droite",
+      "crochet-avant",
+      "middle-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-kickboxing-expert-11",
+    "name": "Finition",
+    "discipline": "kickboxing",
+    "level": "expert",
+    "kind": "combinaison",
+    "motions": [
+      "uppercut-arriere",
+      "crochet-avant",
+      "direct",
+      "high-kick-arriere",
+      "direct",
+      "crochet-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-debutant-01",
+    "name": "Garde de MMA",
+    "discipline": "mma",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "garde"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-debutant-02",
+    "name": "jab",
+    "discipline": "mma",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "jab"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-debutant-03",
+    "name": "direct",
+    "discipline": "mma",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "direct"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-debutant-04",
+    "name": "low-kick-arriere",
+    "discipline": "mma",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "low-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-debutant-05",
+    "name": "changement-niveau",
+    "discipline": "mma",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "changement-niveau"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-debutant-06",
+    "name": "sprawl",
+    "discipline": "mma",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "sprawl"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-debutant-07",
+    "name": "Défense debout contre l’entrée",
+    "discipline": "mma",
+    "level": "debutant",
+    "kind": "defense",
+    "motions": [
+      "defense-lutte"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-debutant-08",
+    "name": "jab → direct → low-kick-arriere",
+    "discipline": "mma",
+    "level": "debutant",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "direct",
+      "low-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-debutant-09",
+    "name": "jab → direct → sprawl",
+    "discipline": "mma",
+    "level": "debutant",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "direct",
+      "sprawl"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-debutant-10",
+    "name": "Descente au sol et relevé",
+    "discipline": "mma",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "descente-sol",
+      "releve-technique"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-debutant-11",
+    "name": "Déplacements de base",
+    "discipline": "mma",
+    "level": "debutant",
+    "kind": "deplacement",
+    "motions": [
+      "pas-avant",
+      "pas-arriere",
+      "pas-gauche",
+      "pas-droite"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-intermediaire-01",
+    "name": "jab → feinte-lutte → direct",
+    "discipline": "mma",
+    "level": "intermediaire",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "feinte-lutte",
+      "direct"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-intermediaire-02",
+    "name": "direct → crochet-avant → changement-niveau",
+    "discipline": "mma",
+    "level": "intermediaire",
+    "kind": "combinaison",
+    "motions": [
+      "direct",
+      "crochet-avant",
+      "changement-niveau"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-intermediaire-03",
+    "name": "low-kick-arriere → direct → crochet-avant",
+    "discipline": "mma",
+    "level": "intermediaire",
+    "kind": "combinaison",
+    "motions": [
+      "low-kick-arriere",
+      "direct",
+      "crochet-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-intermediaire-04",
+    "name": "feinte-jab → jab → direct → sortie-angle",
+    "discipline": "mma",
+    "level": "intermediaire",
+    "kind": "combinaison",
+    "motions": [
+      "feinte-jab",
+      "jab",
+      "direct",
+      "sortie-angle"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-intermediaire-05",
+    "name": "Entrée en lutte après les poings",
+    "discipline": "mma",
+    "level": "intermediaire",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "direct",
+      "entree-lutte"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-intermediaire-06",
+    "name": "Défense et contre",
+    "discipline": "mma",
+    "level": "intermediaire",
+    "kind": "defense",
+    "motions": [
+      "sprawl",
+      "jab",
+      "direct"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-intermediaire-07",
+    "name": "Front kick et changement de niveau",
+    "discipline": "mma",
+    "level": "intermediaire",
+    "kind": "combinaison",
+    "motions": [
+      "front-kick-avant",
+      "jab",
+      "changement-niveau"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-intermediaire-08",
+    "name": "Mobilité au sol",
+    "discipline": "mma",
+    "level": "intermediaire",
+    "kind": "technique",
+    "motions": [
+      "descente-sol",
+      "sortie-hanche",
+      "releve-technique"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-intermediaire-09",
+    "name": "Overhand",
+    "discipline": "mma",
+    "level": "intermediaire",
+    "kind": "technique",
+    "motions": [
+      "overhand"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-intermediaire-10",
+    "name": "Teep et poings",
+    "discipline": "mma",
+    "level": "intermediaire",
+    "kind": "combinaison",
+    "motions": [
+      "teep-avant",
+      "jab",
+      "direct"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-intermediaire-11",
+    "name": "Middle kick et sortie",
+    "discipline": "mma",
+    "level": "intermediaire",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "middle-kick-arriere",
+      "sortie-angle"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-avance-01",
+    "name": "Striking + défense de lutte",
+    "discipline": "mma",
+    "level": "avance",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "direct",
+      "crochet-avant",
+      "sprawl",
+      "jab",
+      "direct"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-avance-02",
+    "name": "Feinte, entrée",
+    "discipline": "mma",
+    "level": "avance",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "feinte-lutte",
+      "direct",
+      "crochet-avant",
+      "entree-lutte"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-avance-03",
+    "name": "Overhand et lutte",
+    "discipline": "mma",
+    "level": "avance",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "overhand",
+      "changement-niveau",
+      "entree-lutte"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-avance-04",
+    "name": "Low kick, poings, sortie",
+    "discipline": "mma",
+    "level": "avance",
+    "kind": "combinaison",
+    "motions": [
+      "low-kick-arriere",
+      "direct",
+      "crochet-avant",
+      "sortie-angle",
+      "jab"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-avance-05",
+    "name": "Double sprawl",
+    "discipline": "mma",
+    "level": "avance",
+    "kind": "defense",
+    "motions": [
+      "jab",
+      "sprawl",
+      "direct",
+      "sprawl",
+      "crochet-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-avance-06",
+    "name": "Sol vers debout",
+    "discipline": "mma",
+    "level": "avance",
+    "kind": "technique",
+    "motions": [
+      "descente-sol",
+      "sortie-hanche",
+      "sortie-hanche",
+      "releve-technique",
+      "jab",
+      "direct"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-avance-07",
+    "name": "Genou d’entrée",
+    "discipline": "mma",
+    "level": "avance",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "direct",
+      "genou-direct-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-avance-08",
+    "name": "Défense de lutte et pied",
+    "discipline": "mma",
+    "level": "avance",
+    "kind": "defense",
+    "motions": [
+      "defense-lutte",
+      "direct",
+      "high-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-avance-09",
+    "name": "Angles MMA",
+    "discipline": "mma",
+    "level": "avance",
+    "kind": "deplacement",
+    "motions": [
+      "jab",
+      "sortie-angle",
+      "direct",
+      "pivot-droite",
+      "crochet-avant",
+      "low-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-avance-10",
+    "name": "Feintes enchaînées",
+    "discipline": "mma",
+    "level": "avance",
+    "kind": "combinaison",
+    "motions": [
+      "feinte-jab",
+      "feinte-lutte",
+      "overhand",
+      "crochet-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-avance-11",
+    "name": "Cardio MMA",
+    "discipline": "mma",
+    "level": "avance",
+    "kind": "cardio",
+    "motions": [
+      "jab",
+      "direct",
+      "sprawl",
+      "jab",
+      "direct",
+      "changement-niveau"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-expert-01",
+    "name": "Séquence striking-lutte 6",
+    "discipline": "mma",
+    "level": "expert",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "direct",
+      "crochet-avant",
+      "changement-niveau",
+      "entree-lutte",
+      "direct"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-expert-02",
+    "name": "Séquence 8 avec sprawl",
+    "discipline": "mma",
+    "level": "expert",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "direct",
+      "low-kick-arriere",
+      "sprawl",
+      "jab",
+      "direct",
+      "crochet-avant",
+      "overhand"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-expert-03",
+    "name": "Transitions debout-sol",
+    "discipline": "mma",
+    "level": "expert",
+    "kind": "technique",
+    "motions": [
+      "jab",
+      "direct",
+      "descente-sol",
+      "sortie-hanche",
+      "releve-technique",
+      "jab",
+      "direct",
+      "crochet-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-expert-04",
+    "name": "Défense et contre complet",
+    "discipline": "mma",
+    "level": "expert",
+    "kind": "defense",
+    "motions": [
+      "defense-lutte",
+      "sprawl",
+      "direct",
+      "crochet-avant",
+      "uppercut-arriere",
+      "crochet-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-expert-05",
+    "name": "Feinte, angle, finition",
+    "discipline": "mma",
+    "level": "expert",
+    "kind": "combinaison",
+    "motions": [
+      "feinte-jab",
+      "jab",
+      "direct",
+      "sortie-angle",
+      "crochet-avant",
+      "direct",
+      "high-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-expert-06",
+    "name": "Pression et lutte",
+    "discipline": "mma",
+    "level": "expert",
+    "kind": "deplacement",
+    "motions": [
+      "pas-avant",
+      "jab",
+      "direct",
+      "pas-avant",
+      "crochet-avant",
+      "changement-niveau",
+      "entree-lutte"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-expert-07",
+    "name": "Combinaison 10 mouvements",
+    "discipline": "mma",
+    "level": "expert",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "direct",
+      "crochet-avant",
+      "low-kick-arriere",
+      "jab",
+      "overhand",
+      "crochet-avant",
+      "feinte-lutte",
+      "entree-lutte",
+      "direct"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-expert-08",
+    "name": "Round MMA technique",
+    "discipline": "mma",
+    "level": "expert",
+    "kind": "round",
+    "motions": [
+      "jab",
+      "direct",
+      "sprawl",
+      "jab",
+      "low-kick-arriere",
+      "crochet-avant",
+      "changement-niveau",
+      "direct"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-expert-09",
+    "name": "Round MMA cardio",
+    "discipline": "mma",
+    "level": "expert",
+    "kind": "round",
+    "motions": [
+      "jab",
+      "direct",
+      "sprawl",
+      "jab",
+      "direct",
+      "sprawl",
+      "crochet-avant",
+      "direct"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-expert-10",
+    "name": "Genou et clinch de cage (solo)",
+    "discipline": "mma",
+    "level": "expert",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "direct",
+      "genou-direct-arriere",
+      "crochet-avant",
+      "uppercut-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-mma-expert-11",
+    "name": "Finition expert",
+    "discipline": "mma",
+    "level": "expert",
+    "kind": "combinaison",
+    "motions": [
+      "overhand",
+      "crochet-avant",
+      "uppercut-arriere",
+      "crochet-avant",
+      "direct",
+      "high-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-debutant-01",
+    "name": "Garde de muay-thaï",
+    "discipline": "muaythai",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "garde"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-debutant-02",
+    "name": "jab",
+    "discipline": "muaythai",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "jab"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-debutant-03",
+    "name": "direct",
+    "discipline": "muaythai",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "direct"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-debutant-04",
+    "name": "teep-avant",
+    "discipline": "muaythai",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "teep-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-debutant-05",
+    "name": "low-kick-arriere",
+    "discipline": "muaythai",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "low-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-debutant-06",
+    "name": "middle-kick-arriere",
+    "discipline": "muaythai",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "middle-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-debutant-07",
+    "name": "genou-direct-arriere",
+    "discipline": "muaythai",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "genou-direct-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-debutant-08",
+    "name": "coude-horizontal-avant",
+    "discipline": "muaythai",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "coude-horizontal-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-debutant-09",
+    "name": "Check",
+    "discipline": "muaythai",
+    "level": "debutant",
+    "kind": "defense",
+    "motions": [
+      "check-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-debutant-10",
+    "name": "jab → direct → low-kick-arriere",
+    "discipline": "muaythai",
+    "level": "debutant",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "direct",
+      "low-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-debutant-11",
+    "name": "jab → direct → genou-direct-arriere",
+    "discipline": "muaythai",
+    "level": "debutant",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "direct",
+      "genou-direct-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-intermediaire-01",
+    "name": "direct → crochet-avant → middle-kick-arriere",
+    "discipline": "muaythai",
+    "level": "intermediaire",
+    "kind": "combinaison",
+    "motions": [
+      "direct",
+      "crochet-avant",
+      "middle-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-intermediaire-02",
+    "name": "teep-avant → direct → low-kick-arriere",
+    "discipline": "muaythai",
+    "level": "intermediaire",
+    "kind": "combinaison",
+    "motions": [
+      "teep-avant",
+      "direct",
+      "low-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-intermediaire-03",
+    "name": "crochet-avant → coude-horizontal-arriere",
+    "discipline": "muaythai",
+    "level": "intermediaire",
+    "kind": "combinaison",
+    "motions": [
+      "crochet-avant",
+      "coude-horizontal-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-intermediaire-04",
+    "name": "direct → genou-direct-arriere → coude-horizontal-avant",
+    "discipline": "muaythai",
+    "level": "intermediaire",
+    "kind": "combinaison",
+    "motions": [
+      "direct",
+      "genou-direct-arriere",
+      "coude-horizontal-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-intermediaire-05",
+    "name": "check-avant → direct → low-kick-arriere",
+    "discipline": "muaythai",
+    "level": "intermediaire",
+    "kind": "combinaison",
+    "motions": [
+      "check-avant",
+      "direct",
+      "low-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-intermediaire-06",
+    "name": "Coude diagonal",
+    "discipline": "muaythai",
+    "level": "intermediaire",
+    "kind": "technique",
+    "motions": [
+      "coude-diagonal-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-intermediaire-07",
+    "name": "Coude remontant",
+    "discipline": "muaythai",
+    "level": "intermediaire",
+    "kind": "technique",
+    "motions": [
+      "coude-montant-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-intermediaire-08",
+    "name": "Genou circulaire",
+    "discipline": "muaythai",
+    "level": "intermediaire",
+    "kind": "technique",
+    "motions": [
+      "genou-circulaire-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-intermediaire-09",
+    "name": "Clinch simulé et genoux",
+    "discipline": "muaythai",
+    "level": "intermediaire",
+    "kind": "combinaison",
+    "motions": [
+      "clinch-tirage",
+      "genou-clinch",
+      "genou-clinch"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-intermediaire-10",
+    "name": "Teep et middle",
+    "discipline": "muaythai",
+    "level": "intermediaire",
+    "kind": "combinaison",
+    "motions": [
+      "teep-avant",
+      "middle-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-intermediaire-11",
+    "name": "High kick",
+    "discipline": "muaythai",
+    "level": "intermediaire",
+    "kind": "technique",
+    "motions": [
+      "high-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-avance-01",
+    "name": "Poings-pieds-genoux",
+    "discipline": "muaythai",
+    "level": "avance",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "direct",
+      "crochet-avant",
+      "genou-direct-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-avance-02",
+    "name": "Coudes en série",
+    "discipline": "muaythai",
+    "level": "avance",
+    "kind": "combinaison",
+    "motions": [
+      "coude-horizontal-avant",
+      "coude-horizontal-arriere",
+      "coude-montant-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-avance-03",
+    "name": "Check, contre au middle",
+    "discipline": "muaythai",
+    "level": "avance",
+    "kind": "defense",
+    "motions": [
+      "check-avant",
+      "direct",
+      "crochet-avant",
+      "middle-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-avance-04",
+    "name": "Clinch : tirage et genoux",
+    "discipline": "muaythai",
+    "level": "avance",
+    "kind": "combinaison",
+    "motions": [
+      "clinch-tirage",
+      "genou-clinch",
+      "genou-circulaire-clinch",
+      "genou-clinch"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-avance-05",
+    "name": "Teep, poings, coude",
+    "discipline": "muaythai",
+    "level": "avance",
+    "kind": "combinaison",
+    "motions": [
+      "teep-avant",
+      "jab",
+      "direct",
+      "coude-horizontal-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-avance-06",
+    "name": "Middle des deux côtés",
+    "discipline": "muaythai",
+    "level": "avance",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "middle-kick-avant",
+      "direct",
+      "middle-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-avance-07",
+    "name": "Esquive et coude",
+    "discipline": "muaythai",
+    "level": "avance",
+    "kind": "defense",
+    "motions": [
+      "esquive-droite",
+      "crochet-avant",
+      "coude-horizontal-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-avance-08",
+    "name": "High kick après les poings",
+    "discipline": "muaythai",
+    "level": "avance",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "direct",
+      "crochet-avant",
+      "high-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-avance-09",
+    "name": "Genou circulaire et coude",
+    "discipline": "muaythai",
+    "level": "avance",
+    "kind": "combinaison",
+    "motions": [
+      "genou-circulaire-avant",
+      "coude-diagonal-arriere",
+      "crochet-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-avance-10",
+    "name": "Pression muay-thaï",
+    "discipline": "muaythai",
+    "level": "avance",
+    "kind": "deplacement",
+    "motions": [
+      "pas-avant",
+      "teep-avant",
+      "pas-avant",
+      "jab",
+      "direct",
+      "low-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-avance-11",
+    "name": "Cardio thaï",
+    "discipline": "muaythai",
+    "level": "avance",
+    "kind": "cardio",
+    "motions": [
+      "jab",
+      "direct",
+      "middle-kick-arriere",
+      "jab",
+      "direct",
+      "genou-direct-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-expert-01",
+    "name": "Combinaison complète 6",
+    "discipline": "muaythai",
+    "level": "expert",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "direct",
+      "crochet-avant",
+      "coude-horizontal-arriere",
+      "genou-direct-arriere",
+      "low-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-expert-02",
+    "name": "Combinaison 8 armes",
+    "discipline": "muaythai",
+    "level": "expert",
+    "kind": "combinaison",
+    "motions": [
+      "teep-avant",
+      "jab",
+      "direct",
+      "crochet-avant",
+      "coude-horizontal-arriere",
+      "genou-direct-arriere",
+      "coude-montant-avant",
+      "middle-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-expert-03",
+    "name": "Défense thaï complète",
+    "discipline": "muaythai",
+    "level": "expert",
+    "kind": "defense",
+    "motions": [
+      "check-avant",
+      "blocage-haut",
+      "esquive-droite",
+      "direct",
+      "coude-horizontal-avant",
+      "genou-direct-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-expert-04",
+    "name": "Clinch long (solo)",
+    "discipline": "muaythai",
+    "level": "expert",
+    "kind": "combinaison",
+    "motions": [
+      "clinch-tirage",
+      "genou-clinch",
+      "genou-circulaire-clinch",
+      "genou-clinch",
+      "coude-diagonal-arriere",
+      "coude-montant-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-expert-05",
+    "name": "Combinaison 10 mouvements",
+    "discipline": "muaythai",
+    "level": "expert",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "direct",
+      "crochet-avant",
+      "direct",
+      "low-kick-arriere",
+      "teep-avant",
+      "jab",
+      "direct",
+      "genou-direct-arriere",
+      "coude-horizontal-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-expert-06",
+    "name": "Rythme thaï",
+    "discipline": "muaythai",
+    "level": "expert",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "feinte-epaule",
+      "direct",
+      "middle-kick-arriere",
+      "check-avant",
+      "direct",
+      "high-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-expert-07",
+    "name": "Avancer en frappant",
+    "discipline": "muaythai",
+    "level": "expert",
+    "kind": "deplacement",
+    "motions": [
+      "pas-avant",
+      "jab",
+      "direct",
+      "pas-avant",
+      "genou-direct-arriere",
+      "coude-horizontal-avant",
+      "pas-arriere",
+      "teep-avant"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-expert-08",
+    "name": "Round technique",
+    "discipline": "muaythai",
+    "level": "expert",
+    "kind": "round",
+    "motions": [
+      "teep-avant",
+      "jab",
+      "direct",
+      "low-kick-arriere",
+      "check-avant",
+      "middle-kick-arriere",
+      "genou-direct-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-expert-09",
+    "name": "Round puissance",
+    "discipline": "muaythai",
+    "level": "expert",
+    "kind": "round",
+    "motions": [
+      "direct",
+      "crochet-avant",
+      "middle-kick-arriere",
+      "direct",
+      "genou-direct-arriere",
+      "coude-horizontal-arriere",
+      "high-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-expert-10",
+    "name": "Coudes et genoux",
+    "discipline": "muaythai",
+    "level": "expert",
+    "kind": "combinaison",
+    "motions": [
+      "coude-horizontal-avant",
+      "coude-horizontal-arriere",
+      "genou-direct-arriere",
+      "genou-circulaire-avant",
+      "coude-diagonal-arriere",
+      "coude-montant-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-muaythai-expert-11",
+    "name": "Finition expert",
+    "discipline": "muaythai",
+    "level": "expert",
+    "kind": "combinaison",
+    "motions": [
+      "jab",
+      "direct",
+      "crochet-avant",
+      "uppercut-arriere",
+      "coude-horizontal-avant",
+      "genou-direct-arriere",
+      "high-kick-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-bjj-debutant-01",
+    "name": "Posture debout de grappling",
+    "discipline": "bjj",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "garde-bjj"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-bjj-debutant-02",
+    "name": "Descente au sol et relevé technique",
+    "discipline": "bjj",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "descente-sol",
+      "releve-technique"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-bjj-debutant-03",
+    "name": "Pont (upa)",
+    "discipline": "bjj",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "descente-sol",
+      "pont",
+      "releve-technique"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-bjj-debutant-04",
+    "name": "Sortie de hanche (shrimp)",
+    "discipline": "bjj",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "descente-sol",
+      "sortie-hanche",
+      "releve-technique"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-bjj-debutant-05",
+    "name": "Changement de base",
+    "discipline": "bjj",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "descente-sol",
+      "changement-base",
+      "releve-technique"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-bjj-intermediaire-01",
+    "name": "Pont puis sortie de hanche",
+    "discipline": "bjj",
+    "level": "intermediaire",
+    "kind": "combinaison",
+    "motions": [
+      "descente-sol",
+      "pont",
+      "sortie-hanche",
+      "releve-technique"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-bjj-intermediaire-02",
+    "name": "Rétention de garde (solo)",
+    "discipline": "bjj",
+    "level": "intermediaire",
+    "kind": "technique",
+    "motions": [
+      "descente-sol",
+      "retention-garde",
+      "releve-technique"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-bjj-intermediaire-03",
+    "name": "Shrimp et changement de base",
+    "discipline": "bjj",
+    "level": "intermediaire",
+    "kind": "combinaison",
+    "motions": [
+      "descente-sol",
+      "sortie-hanche",
+      "changement-base",
+      "releve-technique"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-bjj-intermediaire-04",
+    "name": "Deux shrimps et relevé",
+    "discipline": "bjj",
+    "level": "intermediaire",
+    "kind": "deplacement",
+    "motions": [
+      "descente-sol",
+      "sortie-hanche",
+      "sortie-hanche",
+      "releve-technique"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-bjj-avance-01",
+    "name": "Sorties enchaînées",
+    "discipline": "bjj",
+    "level": "avance",
+    "kind": "combinaison",
+    "motions": [
+      "descente-sol",
+      "pont",
+      "sortie-hanche",
+      "retention-garde",
+      "releve-technique"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-bjj-avance-02",
+    "name": "Mobilité complète",
+    "discipline": "bjj",
+    "level": "avance",
+    "kind": "combinaison",
+    "motions": [
+      "descente-sol",
+      "pont",
+      "sortie-hanche",
+      "changement-base",
+      "releve-technique"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-bjj-avance-03",
+    "name": "Garde et relevé",
+    "discipline": "bjj",
+    "level": "avance",
+    "kind": "combinaison",
+    "motions": [
+      "descente-sol",
+      "retention-garde",
+      "sortie-hanche",
+      "releve-technique"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-bjj-avance-04",
+    "name": "Circuit de mobilité",
+    "discipline": "bjj",
+    "level": "avance",
+    "kind": "cardio",
+    "motions": [
+      "descente-sol",
+      "pont",
+      "pont",
+      "sortie-hanche",
+      "sortie-hanche",
+      "releve-technique"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-bjj-expert-01",
+    "name": "Round de mobilité au sol",
+    "discipline": "bjj",
+    "level": "expert",
+    "kind": "round",
+    "motions": [
+      "descente-sol",
+      "pont",
+      "sortie-hanche",
+      "retention-garde",
+      "changement-base",
+      "releve-technique"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-bjj-expert-02",
+    "name": "Round cardio au sol",
+    "discipline": "bjj",
+    "level": "expert",
+    "kind": "cardio",
+    "motions": [
+      "descente-sol",
+      "pont",
+      "sortie-hanche",
+      "sortie-hanche",
+      "changement-base",
+      "pont",
+      "releve-technique"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-bjj-expert-03",
+    "name": "Enchaînement long",
+    "discipline": "bjj",
+    "level": "expert",
+    "kind": "combinaison",
+    "motions": [
+      "descente-sol",
+      "retention-garde",
+      "pont",
+      "sortie-hanche",
+      "retention-garde",
+      "releve-technique"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-judo-debutant-01",
+    "name": "Shizen-tai",
+    "discipline": "judo",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "shizen-tai"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-judo-debutant-02",
+    "name": "Tsugi-ashi avant et arrière",
+    "discipline": "judo",
+    "level": "debutant",
+    "kind": "deplacement",
+    "motions": [
+      "tsugi-ashi-avant",
+      "tsugi-ashi-arriere"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-judo-debutant-03",
+    "name": "Tsugi-ashi latéral",
+    "discipline": "judo",
+    "level": "debutant",
+    "kind": "deplacement",
+    "motions": [
+      "tsugi-ashi-lateral"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-judo-debutant-04",
+    "name": "Tai-sabaki",
+    "discipline": "judo",
+    "level": "debutant",
+    "kind": "technique",
+    "motions": [
+      "tai-sabaki"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-judo-intermediaire-01",
+    "name": "Kuzushi (déséquilibre, solo)",
+    "discipline": "judo",
+    "level": "intermediaire",
+    "kind": "technique",
+    "motions": [
+      "kuzushi"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-judo-intermediaire-02",
+    "name": "Uchikomi de seoi-nage (solo)",
+    "discipline": "judo",
+    "level": "intermediaire",
+    "kind": "technique",
+    "motions": [
+      "uchikomi-seoi"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-judo-intermediaire-03",
+    "name": "Avancer puis déséquilibrer",
+    "discipline": "judo",
+    "level": "intermediaire",
+    "kind": "combinaison",
+    "motions": [
+      "tsugi-ashi-avant",
+      "kuzushi"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-judo-intermediaire-04",
+    "name": "Déplacements et rotation",
+    "discipline": "judo",
+    "level": "intermediaire",
+    "kind": "deplacement",
+    "motions": [
+      "tsugi-ashi-avant",
+      "tsugi-ashi-arriere",
+      "tai-sabaki"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-judo-avance-01",
+    "name": "Kuzushi puis entrée",
+    "discipline": "judo",
+    "level": "avance",
+    "kind": "combinaison",
+    "motions": [
+      "kuzushi",
+      "uchikomi-seoi"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-judo-avance-02",
+    "name": "Reculer, déséquilibrer, entrer",
+    "discipline": "judo",
+    "level": "avance",
+    "kind": "combinaison",
+    "motions": [
+      "tsugi-ashi-arriere",
+      "kuzushi",
+      "uchikomi-seoi"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-judo-avance-03",
+    "name": "Série d’uchikomi",
+    "discipline": "judo",
+    "level": "avance",
+    "kind": "cardio",
+    "motions": [
+      "uchikomi-seoi",
+      "uchikomi-seoi",
+      "uchikomi-seoi"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-judo-avance-04",
+    "name": "Rotation et entrée",
+    "discipline": "judo",
+    "level": "avance",
+    "kind": "combinaison",
+    "motions": [
+      "tai-sabaki",
+      "tsugi-ashi-avant",
+      "uchikomi-seoi"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-judo-expert-01",
+    "name": "Round d’uchikomi",
+    "discipline": "judo",
+    "level": "expert",
+    "kind": "round",
+    "motions": [
+      "tsugi-ashi-avant",
+      "kuzushi",
+      "uchikomi-seoi",
+      "tsugi-ashi-arriere",
+      "kuzushi",
+      "uchikomi-seoi"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-judo-expert-02",
+    "name": "Déplacements et entrées",
+    "discipline": "judo",
+    "level": "expert",
+    "kind": "combinaison",
+    "motions": [
+      "tsugi-ashi-lateral",
+      "tai-sabaki",
+      "kuzushi",
+      "uchikomi-seoi",
+      "tsugi-ashi-arriere",
+      "uchikomi-seoi"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  },
+  {
+    "id": "shadow-judo-expert-03",
+    "name": "Série longue d’uchikomi",
+    "discipline": "judo",
+    "level": "expert",
+    "kind": "cardio",
+    "motions": [
+      "uchikomi-seoi",
+      "uchikomi-seoi",
+      "uchikomi-seoi",
+      "uchikomi-seoi",
+      "uchikomi-seoi"
+    ],
+    "status": "imported_from_shadow_unvalidated"
+  }
+]
