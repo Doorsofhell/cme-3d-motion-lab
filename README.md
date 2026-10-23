@@ -1,41 +1,28 @@
-# CME-3D Motion Lab — projet autonome
+# CME-3D Motion Lab
 
-Laboratoire expérimental d'animations de combat 3D. **Aucun code ni déploiement Shadow n'est modifié par ce dépôt.**
+Moteur 3D autonome pour l'étude de la biomécanique des disciplines de combat. Application expérimentale et PWA installable sur Android.
 
-## Ouvrir l'application
+**Application** : https://doorsofhell.github.io/cme-3d-motion-lab/
 
-Quand GitHub Pages sera activé :
-**https://doorsofhell.github.io/cme-3d-motion-lab/**
+## Utilisation
 
-Le site est une **PWA installable sur Android**. Chrome → menu ⋮ → « Ajouter à l'écran d'accueil » / « Installer l'application ».
+L'onglet **Laboratoire** occupe un seul écran en trois zones : sélection du coach/de la technique, vue 3D et barre des commandes avec console de débogage repliable et signalement d'incident.
 
-## Développement local
+L'onglet **Suivi des corrections** lit les issues publiques du dépôt, les classe par numéro, et déduit les étapes des labels/checkboxes réellement renseignés. Une issue fermée est à 100 %. La déclaration depuis l'application **prépare** une nouvelle issue GitHub ; seule la confirmation sur GitHub enregistre la demande.
 
-- Node.js 22
-- `npm ci`
-- `npm run dev` (Vite)
-- `npm test` (11 tests unitaires sur la mécanique, le système neuronal et les tenues)
-- `npm run build` (build local)
-- `npm run build -- --mode pages` (build avec base GitHub Pages)
-- `npm run preview -- --mode pages` après build GitHub Pages
+Le catalogue contient 86 mouvements uniques classés par discipline. Les modèles de Kadir et Amara comprennent 6 tenues chacun et une variante BJJ no-gi. Les deux styles de rendu partagent la même mécanique d'animation : Ultra-réaliste (en développement) et Animation fitness.
 
-## Publication
+## Développement
 
-1. Créer le dépôt public `Doorsofhell/cme-3d-motion-lab` (pas dans Shadow).
-2. Pousser les fichiers **à la racine du nouveau dépôt**, sur `main`.
-3. GitHub → Settings → Pages → Build and deployment → Source : « GitHub Actions ».
-4. Le workflow `.github/workflows/deploy-pages.yml` lance les tests et publie la PWA à chaque push sur `main`.
+Node.js 22 ; commandes : 
+- npm ci
+- npm test
+- npm run build -- --mode pages
 
-## Structure
+Sur chaque push main, GitHub Actions lance les tests, la compilation et le déploiement de l'application. Aucun tag ou release pour le moment.
 
-- `src/core` : trajectoires, IK, contacts au sol, correction neuronale expérimentale
-- `src/adapters` : rig Three.js et intégration des tenues
-- `src/lab` : application React / Three.js
-- `public/fighters` : modèles GLB originaux de Kadir et Amara, tenues par discipline
-- `public/draco` : décodeurs Draco
-- `public/manifest.webmanifest`, `public/cme-sw.js` : PWA et fonctionnement avec cache
-- `.github/workflows/deploy-pages.yml` : tests et déploiement GitHub Pages
+## Documentation
 
-**Statut :** prototype de recherche version 0.3. La garde et les rotations anatomiques ont été corrigées mais la validation visuelle et biomécanique complète est encore nécessaire. Les poids neuronaux reposent sur des données synthétiques. Ce n'est ni un modèle photoréaliste final ni un simulateur physique validé.
+Voir [le cahier des charges](docs/CAHIER_DES_CHARGES.md) pour objectifs, critères de qualité, architecture et responsabilités fonctionnelles.
 
-Modèles et vêtements sous les conditions précisées dans `public/fighters/LICENSE-ROCKETBOX.txt`.
+Les visuels et l'IA locale sont encore expérimentaux. Aucune qualité photoréaliste ni validation biomécanique avancée n'est actuellement revendiquée.

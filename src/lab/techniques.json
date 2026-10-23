@@ -1,0 +1,897 @@
+[
+  {
+    "id": "garde",
+    "name": "Position de garde",
+    "category": "garde",
+    "disciplines": [
+      "boxe",
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "garde"
+  },
+  {
+    "id": "pas-avant",
+    "name": "Pas avant",
+    "category": "deplacement",
+    "disciplines": [
+      "boxe",
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "pas-avant"
+  },
+  {
+    "id": "pas-arriere",
+    "name": "Pas arrière",
+    "category": "deplacement",
+    "disciplines": [
+      "boxe",
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "pas-arriere"
+  },
+  {
+    "id": "pas-gauche",
+    "name": "Pas latéral gauche",
+    "category": "deplacement",
+    "disciplines": [
+      "boxe",
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "pas-gauche"
+  },
+  {
+    "id": "pas-droite",
+    "name": "Pas latéral droit",
+    "category": "deplacement",
+    "disciplines": [
+      "boxe",
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "pas-droite"
+  },
+  {
+    "id": "pivot-droite",
+    "name": "Pivot",
+    "category": "deplacement",
+    "disciplines": [
+      "boxe",
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "pivot-droite"
+  },
+  {
+    "id": "pivot-gauche",
+    "name": "Pivot extérieur",
+    "category": "deplacement",
+    "disciplines": [
+      "boxe",
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "pivot-gauche"
+  },
+  {
+    "id": "sortie-angle",
+    "name": "Sortie d’angle",
+    "category": "deplacement",
+    "disciplines": [
+      "boxe",
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "sortie-angle"
+  },
+  {
+    "id": "jab",
+    "name": "Jab",
+    "category": "poing",
+    "disciplines": [
+      "boxe",
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "jab"
+  },
+  {
+    "id": "direct",
+    "name": "Direct arrière",
+    "category": "poing",
+    "disciplines": [
+      "boxe",
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "direct"
+  },
+  {
+    "id": "jab-corps",
+    "name": "Jab au corps",
+    "category": "poing",
+    "disciplines": [
+      "boxe",
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "jab-corps"
+  },
+  {
+    "id": "direct-corps",
+    "name": "Direct au corps",
+    "category": "poing",
+    "disciplines": [
+      "boxe",
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "direct-corps"
+  },
+  {
+    "id": "crochet-avant",
+    "name": "Crochet gauche",
+    "category": "poing",
+    "disciplines": [
+      "boxe",
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "crochet-avant"
+  },
+  {
+    "id": "crochet-arriere",
+    "name": "Crochet droit",
+    "category": "poing",
+    "disciplines": [
+      "boxe",
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "crochet-arriere"
+  },
+  {
+    "id": "crochet-avant-corps",
+    "name": "Crochet gauche au corps",
+    "category": "poing",
+    "disciplines": [
+      "boxe",
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "crochet-avant-corps"
+  },
+  {
+    "id": "crochet-arriere-corps",
+    "name": "Crochet droit au corps",
+    "category": "poing",
+    "disciplines": [
+      "boxe",
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "crochet-arriere-corps"
+  },
+  {
+    "id": "uppercut-avant",
+    "name": "Uppercut gauche",
+    "category": "poing",
+    "disciplines": [
+      "boxe",
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "uppercut-avant"
+  },
+  {
+    "id": "uppercut-arriere",
+    "name": "Uppercut droit",
+    "category": "poing",
+    "disciplines": [
+      "boxe",
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "uppercut-arriere"
+  },
+  {
+    "id": "overhand",
+    "name": "Overhand",
+    "category": "poing",
+    "disciplines": [
+      "mma",
+      "kickboxing"
+    ],
+    "motion": "overhand"
+  },
+  {
+    "id": "check-hook",
+    "name": "Check hook (crochet pivot)",
+    "category": "poing",
+    "disciplines": [
+      "boxe",
+      "mma"
+    ],
+    "motion": "check-hook"
+  },
+  {
+    "id": "esquive-droite",
+    "name": "Esquive extérieure",
+    "category": "defense",
+    "disciplines": [
+      "boxe",
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "esquive-droite"
+  },
+  {
+    "id": "esquive-gauche",
+    "name": "Esquive intérieure",
+    "category": "defense",
+    "disciplines": [
+      "boxe",
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "esquive-gauche"
+  },
+  {
+    "id": "roll-droite",
+    "name": "Rotation sous le crochet (roll)",
+    "category": "defense",
+    "disciplines": [
+      "boxe",
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "roll-droite"
+  },
+  {
+    "id": "roll-gauche",
+    "name": "Roll de l’autre côté",
+    "category": "defense",
+    "disciplines": [
+      "boxe",
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "roll-gauche"
+  },
+  {
+    "id": "blocage-haut",
+    "name": "Blocage haut",
+    "category": "defense",
+    "disciplines": [
+      "boxe",
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "blocage-haut"
+  },
+  {
+    "id": "blocage-corps-avant",
+    "name": "Blocage au corps",
+    "category": "defense",
+    "disciplines": [
+      "boxe",
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "blocage-corps-avant"
+  },
+  {
+    "id": "parade",
+    "name": "Parade",
+    "category": "defense",
+    "disciplines": [
+      "boxe",
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "parade"
+  },
+  {
+    "id": "retrait",
+    "name": "Retrait de buste",
+    "category": "defense",
+    "disciplines": [
+      "boxe",
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "retrait"
+  },
+  {
+    "id": "shoulder-roll",
+    "name": "Shoulder roll (rouler l’épaule)",
+    "category": "defense",
+    "disciplines": [
+      "boxe"
+    ],
+    "motion": "shoulder-roll"
+  },
+  {
+    "id": "check-avant",
+    "name": "Check (blocage tibia)",
+    "category": "defense",
+    "disciplines": [
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "check-avant"
+  },
+  {
+    "id": "check-arriere",
+    "name": "Check jambe arrière",
+    "category": "defense",
+    "disciplines": [
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "check-arriere"
+  },
+  {
+    "id": "garde-longue",
+    "name": "Garde longue",
+    "category": "defense",
+    "disciplines": [
+      "muaythai"
+    ],
+    "motion": "garde-longue"
+  },
+  {
+    "id": "rattrapage-middle",
+    "name": "Rattrapage du middle kick",
+    "category": "defense",
+    "disciplines": [
+      "muaythai"
+    ],
+    "motion": "rattrapage-middle"
+  },
+  {
+    "id": "front-kick-avant",
+    "name": "Front kick avant",
+    "category": "pied",
+    "disciplines": [
+      "kickboxing",
+      "mma"
+    ],
+    "motion": "front-kick-avant"
+  },
+  {
+    "id": "front-kick-arriere",
+    "name": "Front kick arrière",
+    "category": "pied",
+    "disciplines": [
+      "kickboxing",
+      "mma"
+    ],
+    "motion": "front-kick-arriere"
+  },
+  {
+    "id": "teep-avant",
+    "name": "Teep",
+    "category": "pied",
+    "disciplines": [
+      "muaythai",
+      "mma"
+    ],
+    "motion": "teep-avant"
+  },
+  {
+    "id": "teep-arriere",
+    "name": "Teep arrière",
+    "category": "pied",
+    "disciplines": [
+      "muaythai"
+    ],
+    "motion": "teep-arriere"
+  },
+  {
+    "id": "low-kick-arriere",
+    "name": "Low kick droit",
+    "category": "pied",
+    "disciplines": [
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "low-kick-arriere"
+  },
+  {
+    "id": "low-kick-avant",
+    "name": "Low kick gauche",
+    "category": "pied",
+    "disciplines": [
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "low-kick-avant"
+  },
+  {
+    "id": "middle-kick-arriere",
+    "name": "Middle kick droit",
+    "category": "pied",
+    "disciplines": [
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "middle-kick-arriere"
+  },
+  {
+    "id": "middle-kick-avant",
+    "name": "Middle kick gauche",
+    "category": "pied",
+    "disciplines": [
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "middle-kick-avant"
+  },
+  {
+    "id": "high-kick-arriere",
+    "name": "High kick droit",
+    "category": "pied",
+    "disciplines": [
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "high-kick-arriere"
+  },
+  {
+    "id": "high-kick-avant",
+    "name": "High kick gauche",
+    "category": "pied",
+    "disciplines": [
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "high-kick-avant"
+  },
+  {
+    "id": "roundhouse-arriere",
+    "name": "Roundhouse kick",
+    "category": "pied",
+    "disciplines": [
+      "kickboxing",
+      "mma"
+    ],
+    "motion": "roundhouse-arriere"
+  },
+  {
+    "id": "roundhouse-avant",
+    "name": "Roundhouse jambe avant",
+    "category": "pied",
+    "disciplines": [
+      "kickboxing"
+    ],
+    "motion": "roundhouse-avant"
+  },
+  {
+    "id": "switch-kick",
+    "name": "Switch kick",
+    "category": "pied",
+    "disciplines": [
+      "muaythai",
+      "kickboxing"
+    ],
+    "motion": "switch-kick"
+  },
+  {
+    "id": "genou-direct-arriere",
+    "name": "Genou direct",
+    "category": "genou",
+    "disciplines": [
+      "muaythai",
+      "mma",
+      "kickboxing"
+    ],
+    "motion": "genou-direct-arriere"
+  },
+  {
+    "id": "genou-direct-avant",
+    "name": "Genou direct avant",
+    "category": "genou",
+    "disciplines": [
+      "muaythai",
+      "kickboxing"
+    ],
+    "motion": "genou-direct-avant"
+  },
+  {
+    "id": "genou-circulaire-arriere",
+    "name": "Genou circulaire",
+    "category": "genou",
+    "disciplines": [
+      "muaythai",
+      "kickboxing"
+    ],
+    "motion": "genou-circulaire-arriere"
+  },
+  {
+    "id": "genou-circulaire-avant",
+    "name": "Genou circulaire avant",
+    "category": "genou",
+    "disciplines": [
+      "muaythai",
+      "kickboxing"
+    ],
+    "motion": "genou-circulaire-avant"
+  },
+  {
+    "id": "coude-horizontal-avant",
+    "name": "Coude horizontal gauche",
+    "category": "coude",
+    "disciplines": [
+      "muaythai"
+    ],
+    "motion": "coude-horizontal-avant"
+  },
+  {
+    "id": "coude-horizontal-arriere",
+    "name": "Coude horizontal droit",
+    "category": "coude",
+    "disciplines": [
+      "muaythai"
+    ],
+    "motion": "coude-horizontal-arriere"
+  },
+  {
+    "id": "coude-diagonal-arriere",
+    "name": "Coude diagonal descendant",
+    "category": "coude",
+    "disciplines": [
+      "muaythai"
+    ],
+    "motion": "coude-diagonal-arriere"
+  },
+  {
+    "id": "coude-diagonal-avant",
+    "name": "Coude diagonal avant",
+    "category": "coude",
+    "disciplines": [
+      "muaythai"
+    ],
+    "motion": "coude-diagonal-avant"
+  },
+  {
+    "id": "coude-montant-arriere",
+    "name": "Coude remontant",
+    "category": "coude",
+    "disciplines": [
+      "muaythai"
+    ],
+    "motion": "coude-montant-arriere"
+  },
+  {
+    "id": "coude-montant-avant",
+    "name": "Coude remontant avant",
+    "category": "coude",
+    "disciplines": [
+      "muaythai"
+    ],
+    "motion": "coude-montant-avant"
+  },
+  {
+    "id": "clinch-tirage",
+    "name": "Clinch simulé (tirage)",
+    "category": "clinch",
+    "disciplines": [
+      "muaythai"
+    ],
+    "motion": "clinch-tirage"
+  },
+  {
+    "id": "genou-clinch",
+    "name": "Genou dans le clinch",
+    "category": "clinch",
+    "disciplines": [
+      "muaythai"
+    ],
+    "motion": "genou-direct-arriere-clinch"
+  },
+  {
+    "id": "genou-circulaire-clinch",
+    "name": "Genou circulaire dans le clinch",
+    "category": "clinch",
+    "disciplines": [
+      "muaythai"
+    ],
+    "motion": "genou-circulaire-arriere-clinch"
+  },
+  {
+    "id": "feinte-jab",
+    "name": "Feinte de jab",
+    "category": "feinte",
+    "disciplines": [
+      "boxe",
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "feinte-jab"
+  },
+  {
+    "id": "feinte-epaule",
+    "name": "Feinte d’épaule",
+    "category": "feinte",
+    "disciplines": [
+      "boxe",
+      "kickboxing",
+      "mma",
+      "muaythai"
+    ],
+    "motion": "feinte-epaule"
+  },
+  {
+    "id": "feinte-lutte",
+    "name": "Feinte de lutte",
+    "category": "feinte",
+    "disciplines": [
+      "mma"
+    ],
+    "motion": "feinte-lutte"
+  },
+  {
+    "id": "changement-niveau",
+    "name": "Changement de niveau",
+    "category": "lutte",
+    "disciplines": [
+      "mma",
+      "bjj"
+    ],
+    "motion": "changement-niveau"
+  },
+  {
+    "id": "entree-lutte",
+    "name": "Entrée en double-leg (solo)",
+    "category": "lutte",
+    "disciplines": [
+      "mma",
+      "bjj"
+    ],
+    "motion": "entree-lutte"
+  },
+  {
+    "id": "single-leg",
+    "name": "Entrée en single-leg (solo)",
+    "category": "lutte",
+    "disciplines": [
+      "mma",
+      "bjj"
+    ],
+    "motion": "single-leg"
+  },
+  {
+    "id": "sprawl",
+    "name": "Sprawl",
+    "category": "lutte",
+    "disciplines": [
+      "mma"
+    ],
+    "motion": "sprawl"
+  },
+  {
+    "id": "defense-lutte",
+    "name": "Défense d’entrée en lutte",
+    "category": "lutte",
+    "disciplines": [
+      "mma"
+    ],
+    "motion": "defense-lutte"
+  },
+  {
+    "id": "descente-sol",
+    "name": "Descente contrôlée au sol",
+    "category": "sol",
+    "disciplines": [
+      "mma",
+      "bjj"
+    ],
+    "motion": "descente-sol"
+  },
+  {
+    "id": "sortie-hanche",
+    "name": "Sortie de hanche (shrimp)",
+    "category": "sol",
+    "disciplines": [
+      "mma",
+      "bjj"
+    ],
+    "motion": "sortie-hanche"
+  },
+  {
+    "id": "releve-technique",
+    "name": "Relevé technique",
+    "category": "sol",
+    "disciplines": [
+      "mma",
+      "bjj"
+    ],
+    "motion": "releve-technique"
+  },
+  {
+    "id": "pont",
+    "name": "Pont (upa)",
+    "category": "sol",
+    "disciplines": [
+      "bjj",
+      "mma"
+    ],
+    "motion": "pont"
+  },
+  {
+    "id": "retention-garde",
+    "name": "Rétention de garde (solo)",
+    "category": "sol",
+    "disciplines": [
+      "bjj"
+    ],
+    "motion": "retention-garde"
+  },
+  {
+    "id": "changement-base",
+    "name": "Changement de base",
+    "category": "sol",
+    "disciplines": [
+      "bjj"
+    ],
+    "motion": "changement-base"
+  },
+  {
+    "id": "sit-out",
+    "name": "Sit-out",
+    "category": "sol",
+    "disciplines": [
+      "bjj",
+      "mma"
+    ],
+    "motion": "sit-out"
+  },
+  {
+    "id": "releve-genoux",
+    "name": "Relevé depuis les genoux",
+    "category": "sol",
+    "disciplines": [
+      "bjj"
+    ],
+    "motion": "releve-genoux"
+  },
+  {
+    "id": "ukemi-ushiro",
+    "name": "Ushiro-ukemi (chute arrière, version basse)",
+    "category": "chute",
+    "disciplines": [
+      "judo",
+      "bjj"
+    ],
+    "motion": "ukemi-ushiro"
+  },
+  {
+    "id": "tai-sabaki",
+    "name": "Tai-sabaki (rotation du corps)",
+    "category": "deplacement",
+    "disciplines": [
+      "judo"
+    ],
+    "motion": "tai-sabaki"
+  },
+  {
+    "id": "kuzushi",
+    "name": "Kuzushi (déséquilibre, solo)",
+    "category": "projection",
+    "disciplines": [
+      "judo"
+    ],
+    "motion": "kuzushi"
+  },
+  {
+    "id": "uchikomi-seoi",
+    "name": "Uchikomi de seoi-nage (solo)",
+    "category": "projection",
+    "disciplines": [
+      "judo"
+    ],
+    "motion": "uchikomi-seoi"
+  },
+  {
+    "id": "ayumi-ashi",
+    "name": "Ayumi-ashi (pas marchés)",
+    "category": "deplacement",
+    "disciplines": [
+      "judo"
+    ],
+    "motion": "ayumi-ashi"
+  },
+  {
+    "id": "kumikata",
+    "name": "Kumi-kata (prise de garde, solo)",
+    "category": "garde",
+    "disciplines": [
+      "judo"
+    ],
+    "motion": "kumikata"
+  },
+  {
+    "id": "uchikomi-o-goshi",
+    "name": "Uchikomi d’o-goshi (solo)",
+    "category": "projection",
+    "disciplines": [
+      "judo"
+    ],
+    "motion": "uchikomi-o-goshi"
+  },
+  {
+    "id": "uchikomi-o-soto-gari",
+    "name": "Uchikomi d’o-soto-gari (solo)",
+    "category": "projection",
+    "disciplines": [
+      "judo"
+    ],
+    "motion": "uchikomi-o-soto-gari"
+  },
+  {
+    "id": "uchikomi-o-uchi-gari",
+    "name": "Uchikomi d’o-uchi-gari (solo)",
+    "category": "projection",
+    "disciplines": [
+      "judo"
+    ],
+    "motion": "uchikomi-o-uchi-gari"
+  },
+  {
+    "id": "uchikomi-ko-uchi-gari",
+    "name": "Uchikomi de ko-uchi-gari (solo)",
+    "category": "projection",
+    "disciplines": [
+      "judo"
+    ],
+    "motion": "uchikomi-ko-uchi-gari"
+  },
+  {
+    "id": "ukemi-yoko",
+    "name": "Yoko-ukemi (chute latérale, version basse)",
+    "category": "chute",
+    "disciplines": [
+      "judo"
+    ],
+    "motion": "ukemi-yoko"
+  }
+]

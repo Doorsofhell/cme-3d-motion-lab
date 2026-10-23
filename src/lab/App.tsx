@@ -1,124 +1,190 @@
-import { Suspense, Component, useCallback, useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from 'react';
-import { Canvas, useThree } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
-import { ACESFilmicToneMapping, NoToneMapping, PMREMGenerator, SRGBColorSpace } from 'three';
-import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
-import { Fighter } from './Fighter';
-import type { RigReport } from '../adapters/threeRig';
-import type { Technique } from '../core/motion';
+import {Suspense,Component,useCallback,useEffect,useMemo,useRef,useState,type ReactNode,type RefObject} from 'react';
+import {Canvas,useThree,useFrame} from '@react-three/fiber';
+import {OrbitControls} from '@react-three/drei';
+import {ACESFilmicToneMapping,NoToneMapping,SRGBColorSpace} from 'three';
+import {Fighter} from './Fighter';
+import rawTechniques from './techniques.json';
+import {IncidentReporter,IssueTracker,type TestContext} from './Issues';
 import './style.css';
 
-type Actor = 'mma-kadir'|'mma-amara';
-type Quality = 'performance'|'balanced'|'detail';
-export type Playback = { progress:number; playing:boolean; speed:number };
-const isMobile = () => typeof window !== 'undefined' && (window.matchMedia('(max-width: 770px)').matches || /Android|iPhone|iPad/i.test(navigator.userAgent));
-const initialQuality = (): Quality => isMobile() ? 'balanced' : 'detail';
-
-class RenderErrorBoundary extends Component<{children:ReactNode;onError:(message:string)=>void},{hasError:boolean}> {
- state={hasError:false};
- static getDerivedStateFromError(){return {hasError:true};}
- componentDidCatch(error:Error){this.props.onError(error.message || 'Échec de chargement du moteur 3D');}
- render(){return this.state.hasError ? null : this.props.children;}
+type Actor='mma-kadir'|'mma-amara';
+type TechniqueEntry={id:string;name:string;category:string;disciplines:string[];motion:string};
+const techniques=(rawTechniques as TechniqueEntry[]).filter((t,i,a)=>a.findIndex(x=>x.motion===t.motion)===i);
+const categories:Record<string,string>={garde:'Gardes',deplacement:'Déplacements',poing:'Poings',defense:'Défenses',pied:'Pieds',genou:'Genoux',coude:'Coudes',clinch:'Clinch',feinte:'Feintes',lutte:'Lutte',sol:'Sol',chute:'Chutes',projection:'Projections'};
+type Metrics={fps:number;drawCalls:number;triangles:number;textures:number;geometries:number;webgl:string;dpr:number};
+const emptyMetrics:Metrics={fps:0,drawCalls:0,triangles:0,textures:0,geometries:0,webgl:'Initialisation',dpr:1};
+export type Quality='performance'|'balanced'|'detail';
+export type RenderStyle='ultra'|'fitness';
+export type Playback={progress:number;playing:boolean;speed:number};
+export type RigReport={bones:number;armClamps:number;footErrorMetres:number;techniqueFound:boolean;source:string};
+const mobile=()=>typeof window!=='undefined'&&(window.matchMedia('(max-width:780px)').matches||/Android|iPhone/i.test(navigator.userAgent));
+const disciplines=[['boxe','Boxe anglaise'],['kickboxing','Kick-boxing'],['mma','MMA'],['muaythai','Muay-thaï'],['bjj','BJJ'],['judo','Judo']] as const;
+class ErrorBoundary extends Component<{children:ReactNode;onError:(message:string)=>void},{failed:boolean}>{
+ state={failed:false};static getDerivedStateFromError(){return {failed:true};}
+ componentDidCatch(e:Error){this.props.onError(e.message||'Erreur 3D');}
+ render(){return this.state.failed?null:this.props.children;}
 }
-function Lighting({quality,mobile}:{quality:Quality;mobile:boolean}){
- const {scene,gl}=useThree();
- useEffect(()=>{
-   gl.outputColorSpace=SRGBColorSpace;
-   gl.toneMapping=quality==='performance'?NoToneMapping:ACESFilmicToneMapping;
-   gl.toneMappingExposure=quality==='performance'?1:1.15;
-   if(mobile || quality!=='detail')return;
-   const pmrem=new PMREMGenerator(gl);
-   const room=new RoomEnvironment();
-   const env=pmrem.fromScene(room).texture;
-   scene.environment=env;
-   scene.environmentIntensity=.65;
-   return()=>{scene.environment=null;env.dispose();pmrem.dispose();room.dispose();};
- },[scene,gl,quality,mobile]);
+function Lights({quality,renderStyle}:{quality:Quality;renderStyle:RenderStyle}){
+ const {gl}=useThree();
+ useEffect(()=>{gl.outputColorSpace=SRGBColorSpace;gl.toneMapping=quality==='performance'?NoToneMapping:ACESFilmicToneMapping;gl.toneMappingExposure=1.1;},[gl,quality]);
+ const bright=quality!=='performance'; const fitness=renderStyle==='fitness';
  return <>
-  <ambientLight intensity={mobile?1.1:.8}/>
-  <hemisphereLight args={['#deedff','#202b38',mobile?1.25:1.35]}/>
-  <directionalLight position={[2.5,4,3.5]} intensity={mobile?2:2.5} castShadow={!mobile && quality==='detail'} shadow-mapSize={[1024,1024]} />
-  <directionalLight position={[-2.5,2,-3]} intensity={mobile?.9:1.3} color="#d5e3ff"/>
-  <mesh receiveShadow={!mobile && quality==='detail'} rotation={[-Math.PI/2,0,0]} position={[0,-.035,0]}>
-   <planeGeometry args={[12,12]}/><meshStandardMaterial color="#1a283a" roughness={.9}/>
-  </mesh>
+  <hemisphereLight args={['#fffdf4',fitness?'#e4e6e7':'#6b7c96',fitness?1.7:bright?1.05:1.3]}/>
+  <directionalLight position={[2.4,4,3.3]} intensity={fitness?1.7:bright?2.45:2.1} castShadow={quality==='detail'&&!mobile()} shadow-mapSize={[1024,1024]} />
+  <directionalLight position={[-3,2,1.8]} intensity={.75} color={fitness?'#ffffff':'#d7e3ff'}/>
+  <directionalLight position={[0,3,-3]} intensity={fitness?.85:1.35} color="#d5f0fa"/>
+  <mesh rotation={[-Math.PI/2,0,0]} position={[0,-.04,0]} receiveShadow><planeGeometry args={[8,8]}/><meshStandardMaterial color={fitness?'#e2ebe9':'#263444'} roughness={.95}/></mesh>
  </>;
 }
-function Viewer({actor,outfit,technique,playback,skeleton,quality,onReport}:{actor:Actor;outfit:string;technique:Technique;playback:RefObject<Playback>;skeleton:boolean;quality:Quality;onReport:(r:RigReport)=>void}){
- const mobile=isMobile();
+function PerfProbe({onMetrics}:{onMetrics:(metrics:Metrics)=>void}){
+ const {gl}=useThree();
+ const sample=useRef({frames:0,seconds:0});
+ useFrame((_,dt)=>{
+  sample.current.frames++;
+  sample.current.seconds+=Math.min(dt,.2);
+  if(sample.current.seconds<1)return;
+  const ctx=gl.getContext();
+  const webgl=(typeof WebGL2RenderingContext!=='undefined'&&ctx instanceof WebGL2RenderingContext)?'WebGL 2':'WebGL 1';
+  onMetrics({fps:Math.round(sample.current.frames/sample.current.seconds),drawCalls:gl.info.render.calls,triangles:gl.info.render.triangles,
+   textures:gl.info.memory.textures,geometries:gl.info.memory.geometries,webgl,dpr:gl.getPixelRatio()});
+  sample.current.frames=0;sample.current.seconds=0;
+ });
+ return null;
+}
+function Viewer({actor,discipline,technique,quality,renderStyle,playback,skeleton,onReport,onMetrics,onLog}:{
+ actor:Actor;discipline:string;technique:string;quality:Quality;renderStyle:RenderStyle;
+ playback:RefObject<Playback>;skeleton:boolean;onReport:(r:RigReport)=>void;onMetrics:(m:Metrics)=>void;onLog:(message:string)=>void;
+}){
  const [ready,setReady]=useState(false),[error,setError]=useState<string|null>(null),[slow,setSlow]=useState(false);
- useEffect(()=>{const id=window.setTimeout(()=>setSlow(true),18000);return()=>clearTimeout(id);},[]);
- const onReady=useCallback(()=>{setReady(true);setSlow(false);},[]);
- const glProps=useMemo(()=>({alpha:false,antialias:quality!=='performance',powerPreference:'default' as const,preserveDrawingBuffer:false,stencil:false,depth:true}),[quality]);
- const onCreated=useCallback(({gl}:{gl: {domElement:HTMLCanvasElement}})=>{
-   const canvas=gl.domElement;
-   const lost=(event:Event)=>{event.preventDefault();setError('Le navigateur a interrompu le rendu WebGL. Le contexte graphique a été perdu.');};
-   const restored=()=>{setError(null);setReady(false);};
-   canvas.addEventListener('webglcontextlost',lost,false);
-   canvas.addEventListener('webglcontextrestored',restored,false);
-   // These listeners live only for the canvas lifetime, removed by callback on cleanup.
-   const cleanup=()=>{canvas.removeEventListener('webglcontextlost',lost);canvas.removeEventListener('webglcontextrestored',restored);};
-   (canvas as HTMLCanvasElement & {cmeCleanup?:()=>void}).cmeCleanup=cleanup;
- },[]);
- useEffect(()=>()=>{document.querySelectorAll('canvas').forEach(el=>(el as HTMLCanvasElement & {cmeCleanup?:()=>void}).cmeCleanup?.());},[]);
- const supported=useMemo(()=>{
-  try { const test=document.createElement('canvas'); const ctx=test.getContext('webgl2')||test.getContext('webgl'); ctx?.getExtension('WEBGL_lose_context')?.loseContext();return !!ctx; }catch {return false;}
- },[]);
+ const [retry,setRetry]=useState(0);
+ // Crucial fix: a load timeout is never displayed after the model has rendered.
+ useEffect(()=>{
+  if(ready||error)return;
+  const id=window.setTimeout(()=>setSlow(true),24000);
+  return()=>window.clearTimeout(id);
+ },[ready,error,retry]);
+ const onReady=useCallback(()=>{setReady(true);setSlow(false);onLog('Coach et tenue décodés, rig initialisé');},[onLog]);
+ const gl=useMemo(()=>({alpha:false,antialias:quality!=='performance',powerPreference:'default' as const}),[quality]);
+ const onCreated=useCallback(({gl:renderer}:{gl:{domElement:HTMLCanvasElement}})=>{
+  const canvas=renderer.domElement;
+  const lost=(e:Event)=>{e.preventDefault();onLog('ERREUR : contexte WebGL perdu');setError('Contexte graphique perdu : réinitialise le moteur.');};
+  canvas.addEventListener('webglcontextlost',lost);
+  (canvas as HTMLCanvasElement & {cmeCleanup?:()=>void}).cmeCleanup=()=>canvas.removeEventListener('webglcontextlost',lost);
+ },[onLog]);
+ useEffect(()=>()=>{document.querySelectorAll('canvas').forEach(c=>(c as HTMLCanvasElement&{cmeCleanup?:()=>void}).cmeCleanup?.());},[]);
+ const dpr=quality==='performance'?1:quality==='balanced'?(mobile()?1.1:1.35):(mobile()?1.4:1.6);
  return <div className="viewer">
-  {!supported ? <div className="viewerState viewerError" role="alert">WebGL n'est pas disponible dans ce navigateur. Essaie Chrome Android à jour.</div>:
-  <RenderErrorBoundary onError={setError}>
-   <Canvas key={quality} gl={glProps} shadows={!mobile&&quality==='detail'} dpr={quality==='performance'?1:quality==='balanced'?(mobile?1.15:1.35):(mobile?1.4:1.65)} camera={{position:[0,1.55,3.2],fov:35}} onCreated={onCreated}>
-    <color attach="background" args={['#0d1522']}/>
-    <Lighting quality={quality} mobile={mobile}/>
-    <gridHelper args={[6,12,'#30435b','#1d2b3e']}/>
-    <Suspense fallback={null}>
-      <Fighter actor={actor} outfit={outfit} technique={technique} playback={playback} skeleton={skeleton} onReport={onReport} onReady={onReady} lowCost={mobile||quality==='performance'}/>
-    </Suspense>
-    <OrbitControls target={[0,1.0,0]} minDistance={1.25} maxDistance={7} enableDamping dampingFactor={.12}/>
-   </Canvas>
-  </RenderErrorBoundary>}
-  {!error && supported && !ready && <div className="viewerState" role="status"><span className="spinner"/>Chargement du combattant et de sa tenue…{slow&&<p>Le chargement est anormalement long. Vérifie la connexion puis relance le rendu.</p>}</div>}
-  {(error||slow)&&<div className="viewerState viewerError" role="alert"><strong>{error?'Erreur de rendu 3D':'Chargement trop long'}</strong><p>{error||'Le modèle n’a pas pu être affiché dans le délai attendu.'}</p><button type="button" onClick={()=>window.location.reload()}>↻ Relancer le moteur</button><p className="help">Si cela se reproduit, sélectionne le mode « Performance » et relance.</p></div>}
-  {ready&&!error&&<span className="viewHint">Glisser pour tourner · Pincer pour zoomer</span>}
+   <ErrorBoundary key={retry} onError={setError}>
+    <Canvas key={quality+'-'+retry} gl={gl} onCreated={onCreated} dpr={dpr} shadows={quality==='detail'&&!mobile()} camera={{position:[0,1.56,3.5],fov:34}} frameloop="always">
+     <color attach="background" args={[renderStyle==='fitness'?'#eaf0ed':'#101c2b']}/>
+     <Lights quality={quality} renderStyle={renderStyle}/>
+     <PerfProbe onMetrics={onMetrics}/>
+     {renderStyle==='fitness'?null:<gridHelper args={[7,14,'#304357','#223244']}/>}
+     <Suspense fallback={null}>
+      <Fighter actor={actor} outfit={discipline} technique={technique} playback={playback} skeleton={skeleton} quality={quality} renderStyle={renderStyle} onReady={onReady} onReport={onReport}/>
+     </Suspense>
+     <OrbitControls target={[0,1,0]} minDistance={1.35} maxDistance={6} enableDamping dampingFactor={.12}/>
+    </Canvas>
+   </ErrorBoundary>
+   {!error&&!ready&&<div className="viewerOverlay" role="status"><span className="spinner"/>Chargement du coach…{slow&&<span className="muted">Le chargement dépasse 24 s. Connexion ou décodage 3D lent.</span>}</div>}
+   {error&&<div className="viewerOverlay error" role="alert"><strong>Rendu 3D interrompu</strong><span>{error}</span><button onClick={()=>{setError(null);setReady(false);setSlow(false);setRetry(x=>x+1);}}>↻ Relancer</button></div>}
+   {ready&&!error&&<div className="hint" style={{color:renderStyle==='fitness'?'#476677':'#b7cbdb'}}>Glisser : rotation · Pincer : zoom</div>}
  </div>;
 }
-const actors=[{id:'mma-kadir',name:'Kadir — Homme'},{id:'mma-amara',name:'Amara — Femme'}] as const;
-const disciplines=[['boxe','Boxe anglaise'],['kickboxing','Kick-boxing'],['mma','MMA'],['muaythai','Muay-thaï'],['bjj','BJJ'],['judo','Judo']] as const;
 export function App(){
- const [actor,setActor]=useState<Actor>('mma-kadir'),[discipline,setDiscipline]=useState('boxe'),[technique,setTechnique]=useState<Technique>('hook-left'),[progress,setProgress]=useState(0),[playing,setPlaying]=useState(false),[speed,setSpeed]=useState(.5),[skeleton,setSkeleton]=useState(false),[quality,setQuality]=useState<Quality>(initialQuality),[report,setReport]=useState<RigReport|null>(null);
+ const [actor,setActor]=useState<Actor>('mma-amara');
+ const [discipline,setDiscipline]=useState('boxe');
+ const [nogi,setNogi]=useState(false);
+ const [technique,setTechnique]=useState('crochet-avant');
+ const [quality,setQuality]=useState<Quality>('balanced');
+ const [renderStyle,setRenderStyle]=useState<RenderStyle>('ultra');
+ const [skeleton,setSkeleton]=useState(false);
+ const [progress,setProgress]=useState(0),[playing,setPlaying]=useState(false),[speed,setSpeed]=useState(.5);
+ const [report,setReport]=useState<RigReport|null>(null);
+ const [extra,setExtra]=useState(false);
+ const [tab,setTab]=useState<'lab'|'tracking'>('lab');
+ const [incidentOpen,setIncidentOpen]=useState(false);
+ const [debug,setDebug]=useState(false),[catalogOpen,setCatalogOpen]=useState(false),[query,setQuery]=useState(''),[allCatalog,setAllCatalog]=useState(false);
+ const [metrics,setMetrics]=useState<Metrics>(emptyMetrics);
+ const [messages,setMessages]=useState<string[]>([]);
+ const onLog=useCallback((message:string)=>{setMessages(a=>[(new Date()).toLocaleTimeString('fr-FR')+'  '+message,...a].slice(0,40));},[]);
+ const outfit=discipline==='bjj'&&nogi?'bjj-nogi':discipline;
+ const currentTechniques=useMemo(()=>techniques.filter(t=>t.disciplines.includes(discipline)),[discipline]);
+ const palette=useMemo(()=>techniques.filter(t=>(allCatalog||t.disciplines.includes(discipline))&&
+   ((t.name+' '+t.id+' '+t.category).toLocaleLowerCase('fr-FR').includes(query.toLocaleLowerCase('fr-FR')))),[discipline,query,allCatalog]);
+ const onMetrics=useCallback((m:Metrics)=>setMetrics(m),[]);
+ const techniqueLabel=techniques.find(t=>t.motion===technique)?.name??technique;
+ const selectTechnique=(motion:string)=>{reset();setTechnique(motion);setCatalogOpen(false);onLog('Technique : '+motion);};
+ const incidentContext:TestContext={actor:actor==='mma-amara'?'Amara':'Kadir',discipline,outfit,technique,renderStyle,quality,userAgent:navigator.userAgent,diagnostics:JSON.stringify({report,metrics,messages},null,2)};
+ const exportReport=useCallback(()=>{
+  const data={createdAt:new Date().toISOString(),app:'CME-3D',userAgent:navigator.userAgent,actor,discipline,outfit,
+  renderStyle,technique,techniqueLabel,playing,speed,quality,report,metrics,logs:messages};
+  navigator.clipboard.writeText(JSON.stringify(data,null,2)).then(()=>onLog('Rapport copié')).catch(()=>onLog('Copie refusée : accès presse-papiers'));
+ },[actor,discipline,outfit,renderStyle,technique,techniqueLabel,playing,speed,quality,report,metrics,messages,onLog]);
+ useEffect(()=>{
+  const fail=(e:ErrorEvent)=>onLog('JS : '+String(e.message).slice(0,180));
+  const reject=(e:PromiseRejectionEvent)=>onLog('PROMISE : '+String(e.reason).slice(0,180));
+  window.addEventListener('error',fail);window.addEventListener('unhandledrejection',reject);
+  return()=>{window.removeEventListener('error',fail);window.removeEventListener('unhandledrejection',reject);};
+ },[onLog]);
  const playback=useRef<Playback>({progress:0,playing:false,speed:.5});
- playback.current.playing=playing;
- playback.current.speed=speed;
+ playback.current.playing=playing;playback.current.speed=speed;
  const seek=useCallback((p:number)=>{playback.current.progress=p;setProgress(p);},[]);
  const onReport=useCallback((r:RigReport)=>setReport(r),[]);
- useEffect(()=>{if(!playing)return;const id=window.setInterval(()=>setProgress(playback.current.progress),200);return()=>window.clearInterval(id);},[playing]);
- const resetActor=(id:Actor)=>{setPlaying(false);seek(0);setReport(null);setActor(id);};
- const resetDiscipline=(d:string)=>{setPlaying(false);seek(0);setReport(null);setDiscipline(d);};
- return <main className="app">
-  <header><span className="eyebrow">COMBAT MOTION ENGINE · 0.3 ANATOMY FIX</span><h1>CME-3D <span>Motion Lab</span></h1><p>Prototype 3D indépendant · Optimisation Android et diagnostics de rendu</p></header>
-  <section className="layout"><aside className="panel">
-   <h2>Combattant</h2>
-   <label>Personnage<select value={actor} onChange={e=>resetActor(e.target.value as Actor)}>{actors.map(a=><option key={a.id} value={a.id}>{a.name}</option>)}</select></label>
-   <label>Discipline et tenue<select value={discipline} onChange={e=>resetDiscipline(e.target.value)}>{disciplines.map(([id,name])=><option key={id} value={id}>{name}</option>)}</select></label>
-   <h2>Mouvement</h2>
-   <label>Technique<select value={technique} onChange={e=>{setTechnique(e.target.value as Technique);setPlaying(false);seek(0);}}><option value="hook-left">Crochet gauche</option><option value="hook-right">Crochet droit</option></select></label>
-   <div className="notice">{discipline==='boxe'?'Premières trajectoires expérimentales. Validation martiale à réaliser.':'Tenue disponible ; les animations spécifiques à cette discipline ne sont pas encore développées.'}</div>
-   <label className="check"><input type="checkbox" checked={skeleton} onChange={e=>setSkeleton(e.target.checked)}/>Afficher le squelette</label>
-   <h2>Qualité graphique</h2>
-   <label>Rendu<select value={quality} onChange={e=>{setPlaying(false);setQuality(e.target.value as Quality);}}>
-     <option value="performance">Performance · GPU réduit</option><option value="balanced">Équilibré · recommandé mobile</option><option value="detail">Détaillé · appareil puissant</option>
-   </select></label>
-   <h2>Lecture</h2><div className="buttons"><button onClick={()=>setPlaying(v=>!v)}>{playing?'⏸ Pause':'▶ Lecture'}</button><button onClick={()=>{setPlaying(false);seek(0);}}>↺ Début</button></div>
-   <input aria-label="Position de lecture" type="range" min="0" max="1000" value={Math.round(progress*1000)} onChange={e=>{setPlaying(false);seek(Number(e.target.value)/1000);}}/>
-   <p>{Math.round(progress*100)} %</p>
-   <label>Vitesse<select value={speed} onChange={e=>setSpeed(Number(e.target.value))}><option value={.25}>0,25 ×</option><option value={.5}>0,5 ×</option><option value={1}>1 ×</option></select></label>
-   <div className="notice">IA locale expérimentale, entraînée sur données synthétiques. <strong>Non validée biomécaniquement.</strong> Aucun appel IA cloud pendant l'animation.</div>
-  </aside>
-  <div className="stage"><div className="stageTop"><strong>{actor==='mma-kadir'?'Kadir':'Amara'}</strong><span>{technique==='hook-left'?'Crochet gauche':'Crochet droit'}</span></div>
-    <Viewer key={actor+'-'+discipline+'-'+quality} actor={actor} outfit={discipline} technique={technique} playback={playback} skeleton={skeleton} quality={quality} onReport={onReport}/>
-    <p className="note">Modèles photo-texturés originaux avec éclairage mobile optimisé. Nouveaux visages réalistes et shaders artistiques : non développés.</p>
-  </div></section>
-  <section className="panel diagnostics"><h2>Contrôle des articulations</h2><div className="stats"><div>Os reconnus<strong>{report?.bones??'—'}</strong></div><div>Bras IK<strong>{report?(report.leftArm&&report.rightArm?'2/2':'Incomplet'):'—'}</strong></div><div>Jambes IK<strong>{report?(report.leftLeg&&report.rightLeg?'2/2':'Incomplet'):'—'}</strong></div><div>Erreurs bras<strong>{report?.armClamps??'—'}</strong></div><div>Erreur appuis<strong>{report?(report.footErrorMetres*100).toFixed(1)+' cm':'—'}</strong></div></div></section>
-  <footer>Version expérimentale autonome, séparée de Shadow. Les animations et le rendu final restent à valider sur appareils réels.</footer>
+ useEffect(()=>{if(!playing)return;const i=window.setInterval(()=>setProgress(playback.current.progress),150);return()=>window.clearInterval(i);},[playing]);
+ const reset=()=>{setPlaying(false);seek(0);setReport(null);};
+ return <main className="labApp">
+  <header className="labHeader">
+   <div className="branding"><span className="brandDot">C</span><div><strong>CME<span>–3D</span> <small>LAB</small></strong><p>Laboratoire · Tests A/B</p></div></div>
+   <div className="headerActions"><span className="liveTag"><i/> Moteur local</span><button className="iconButton" title="Console de débogage" aria-label="Console de débogage" aria-expanded={debug} onClick={()=>setDebug(v=>!v)}>⌘</button><button className="iconButton" title="Réglages avancés" aria-label="Réglages avancés" aria-expanded={extra} onClick={()=>setExtra(v=>!v)}>⚙</button></div>
+  </header>
+  <nav className="labTabs" aria-label="Onglets de CME-3D"><button className={tab==='lab'?'selected':''} aria-current={tab==='lab'?'page':undefined} onClick={()=>{setTab('lab');setDebug(false);}}>Laboratoire</button><button className={tab==='tracking'?'selected':''} aria-current={tab==='tracking'?'page':undefined} onClick={()=>{setTab('tracking');setDebug(false);}}>Suivi des corrections</button></nav>
+  <div className="labContent" style={{display:tab==='lab'?'contents':'none'}}>
+  <section className="quickBar" aria-label="Sélection de test">
+   <label><span>Coach</span><select aria-label="Coach" value={actor} onChange={e=>{reset();setActor(e.target.value as Actor);}}><option value="mma-amara">Amara</option><option value="mma-kadir">Kadir</option></select></label>
+   <label><span>Discipline</span><select aria-label="Discipline" value={discipline} onChange={e=>{reset();setDiscipline(e.target.value);setTechnique(techniques.find(t=>t.disciplines.includes(e.target.value))?.motion??'garde');onLog('Discipline : '+e.target.value);}}>{disciplines.map(([id,name])=><option key={id} value={id}>{name}</option>)}</select></label>
+   <label><span>Technique · {currentTechniques.length}</span><button type="button" className="catalogButton" aria-label="Choisir une technique" onClick={()=>{setCatalogOpen(true);setQuery('');}}><span>{techniqueLabel}</span><strong>⌕</strong></button></label>
+  </section>
+  <section className="stage" aria-label="Vue de test 3D">
+   <div className="stageTitle"><span>{actor==='mma-amara'?'AMARA':'KADIR'} <em>· {renderStyle==='fitness'?'Animation fitness':'Ultra-réaliste'}</em></span><span className="stagePill">MOTION / IK</span></div>
+   <Viewer key={actor+outfit+quality+renderStyle} actor={actor} discipline={outfit} quality={quality} renderStyle={renderStyle} technique={technique} playback={playback} skeleton={skeleton} onReport={onReport} onMetrics={onMetrics} onLog={onLog}/>
+   <div className="stageBottom"><span>{report?report.bones+' os · '+(report.techniqueFound?'Technique disponible':'Garde de secours'):'Initialisation du rig'}</span><span>{report?('Tenue '+outfit+' ✓'):'Chargement'}</span></div>
+  </section>
+  <section className="transport" aria-label="Commandes d'animation">
+   <div className="transportMain"><button className="playButton" onClick={()=>setPlaying(x=>!x)}>{playing?'❚❚':'▶'} <span>{playing?'Pause':'Lecture'}</span></button><button className="resetButton" aria-label="Revenir au début" onClick={()=>{reset();}}>↺</button>
+    <div className="seek"><input aria-label="Position de lecture" type="range" min="0" max="1000" value={Math.round(progress*1000)} onChange={e=>{setPlaying(false);seek(Number(e.target.value)/1000);}}/><span>{Math.round(progress*100)}%</span></div>
+    <select aria-label="Vitesse" className="speed" value={speed} onChange={e=>setSpeed(Number(e.target.value))}><option value={.25}>¼×</option><option value={.5}>½×</option><option value={1}>1×</option></select>
+   </div>
+   <div className="compareBar">
+    <div className="switchGroup" aria-label="Comparaison visuelle"><button className={renderStyle==='ultra'?'active':''} onClick={()=>{reset();setRenderStyle('ultra');}}>Ultra-réaliste</button><button className={renderStyle==='fitness'?'active':''} onClick={()=>{reset();setRenderStyle('fitness');}}>Animation fitness</button></div>
+    <label className="inlineSelect"><span>Qualité</span><select aria-label="Qualité graphique" value={quality} onChange={e=>{reset();setQuality(e.target.value as Quality);}}><option value="performance">Rapide</option><option value="balanced">Auto</option><option value="detail">Détail</option></select></label>
+    <label className="checkMini"><input type="checkbox" checked={skeleton} onChange={e=>setSkeleton(e.target.checked)}/>Os</label>
+    {discipline==='bjj'&&<button className="outfitToggle" aria-label="Changer tenue BJJ" onClick={()=>{reset();setNogi(x=>!x);}}>{nogi?'No-gi':'Gi'}</button>}
+   </div>
+  </section>
+  <section className="bottomDebug" aria-label="Debug et incident"><button className="bottomDebugTrigger" onClick={()=>setDebug(x=>!x)} aria-expanded={debug}><span className="debugDot"/> <strong>Debug en direct</strong> <span className="miniMetrics">{metrics.fps||'–'} FPS · {metrics.webgl} · {messages.filter(x=>/ERREUR|JS :|PROMISE/.test(x)).length} erreur(s)</span><span className="expandSymbol">{debug?'⌃':'⌄'}</span></button><button className="incidentButton" onClick={()=>{setDebug(false);setIncidentOpen(true);}}>⚑ Signaler</button></section>
+  <section className="diagnostics" aria-label="Diagnostics">
+   <span><i className={report?.techniqueFound?'good':'bad'}/> {report?.techniqueFound?'Mouvement prêt ✓':'Motion à vérifier'}</span>
+   <span>Rig : {report?.bones??'–'} os</span><span>{metrics.fps||'–'} FPS · {metrics.drawCalls} appels</span>
+   <span className="footnote">IA locale expérimentale : entraînement validé en attente</span>
+  </section>
+  </div>
+  {tab==='tracking'&&<IssueTracker/>}
+  {tab==='lab'&&catalogOpen&&<div className="paletteBackdrop" onClick={()=>setCatalogOpen(false)}>
+    <section className="catalogPalette" role="dialog" aria-label="Catalogue complet des techniques" onClick={e=>e.stopPropagation()}>
+      <div className="paletteTitle"><strong>Techniques · {palette.length} / {techniques.length}</strong><button aria-label="Fermer le catalogue" onClick={()=>setCatalogOpen(false)}>×</button></div>
+      <div className="paletteFilters"><input autoFocus aria-label="Rechercher une technique" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Rechercher jab, crochet, projection…"/><label><input type="checkbox" checked={allCatalog} onChange={e=>setAllCatalog(e.target.checked)}/> Toutes disciplines</label></div>
+      <div className="paletteList">{palette.map(t=><button key={t.motion} onClick={()=>selectTechnique(t.motion)}><span>{t.name}<small>{categories[t.category]??t.category} · {t.motion}</small></span>{technique===t.motion&&<b>✓</b>}</button>)}</div>
+    </section>
+   </div>}
+  {tab==='lab'&&debug&&<aside className="debugPanel" role="region" aria-label="Console de débogage">
+   <div className="debugTitle"><strong>⌘ Diagnostic · CME-3D</strong><div><button onClick={exportReport}>Copier rapport</button><button aria-label="Fermer la console" onClick={()=>setDebug(false)}>×</button></div></div>
+   <div className="debugGrid"><span>WebGL <b>{metrics.webgl}</b></span><span>FPS <b>{metrics.fps}</b></span><span>Draw calls <b>{metrics.drawCalls}</b></span><span>Triangles <b>{metrics.triangles.toLocaleString('fr-FR')}</b></span><span>Textures <b>{metrics.textures}</b></span><span>Géométries <b>{metrics.geometries}</b></span><span>DPR <b>{metrics.dpr.toFixed(2)}</b></span><span>Rig <b>{report?.bones??'–'} os</b></span></div>
+   <div className="debugSubject"><strong>{actor==='mma-amara'?'Amara':'Kadir'} · {discipline}</strong><span>Tenue : {outfit}</span><span>Style : {renderStyle} · {quality}</span><span>Mouvement : {technique} · {report?.techniqueFound?'résolu':'non trouvé'}</span></div>
+   <div className="debugLog"><strong>Événements et erreurs</strong>{messages.length?messages.map((x,i)=><p key={i}>{x}</p>):<p>Aucun événement anormal signalé</p>}</div>
+   <div className="debugFootnote">Données locales : aucune télémétrie envoyée à un serveur. FPS indicatifs mesurés dans la boucle Three.js.</div>
+  </aside>}
+  {tab==='lab'&&extra&&<aside className="advanced" role="region" aria-label="Informations du banc d'essai"><button className="close" onClick={()=>setExtra(false)} aria-label="Fermer">×</button><h2>Banc d’essai · CME-3D</h2><p>Le rendu et les techniques utilisent des poses articulées et un moteur de mouvements intégrés dans CME-3D.</p><p>Comparaison des rendus Ultra-réaliste et Animation fitness en un clic, sur la même animation. Le module neuronal historique est expérimental, entraîné sur des données synthétiques : aucune amélioration biomécanique par IA n’est encore revendiquée.</p><p>La prochaine étape sera un correcteur temporel léger quantifié (ONNX Runtime WASM), entraîné et évalué sur un jeu de mouvements de combat adapté au modèle.</p><p>Un seul écran, sans défilement vertical. Aucune transmission cloud pendant l’animation.</p></aside>}
+  {tab==='lab'&&incidentOpen&&<IncidentReporter context={incidentContext} onClose={()=>setIncidentOpen(false)}/>}
  </main>;
 }
