@@ -154,3 +154,16 @@ select{width:100%;min-width:0;background:#1b2b3e;border:1px solid #344c60;border
 .trackerIssuesHeader{font-size:13px;color:#dce9f2;font-weight:750;margin:6px 0 0}
 .debugReview{font:inherit;color:#72e2c7;border:0;background:transparent;padding:1px 3px;text-decoration:underline;cursor:pointer}
 @media(max-width:760px){.autoInbox{padding:8px}.autoDraftActions>a{font-size:10px}.autoTabCount{margin-left:3px}}
+
+
+/* Extended reproducible report, compatible with a single-screen laboratory. */
+.trackerTitleActions{display:flex;align-items:center;gap:5px}
+.trackerTitleActions button:first-child{background:#57d3c4;color:#09272e;border-color:#57d3c4;font-weight:800}
+.reportFallback{position:absolute;inset:0;z-index:60;background:#041020ed;display:flex;align-items:center;justify-content:center;padding:8px}
+.reportFallbackInner{background:#162b3c;border:1px solid #65a9ac;border-radius:12px;padding:12px;width:min(680px,100%);height:min(86dvh,800px);display:flex;flex-direction:column;gap:9px}
+.reportFallbackHead{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:14px}
+.reportFallbackHead button{font-size:25px;background:transparent;border:0;color:#f5ffff}
+.reportFallbackInner p{font-size:11px;color:#b8d1db;margin:0;line-height:1.5}
+.reportFallbackInner textarea{flex:1;min-height:0;resize:none;user-select:text;background:#0c1c2a;color:#dceef1;border:1px solid #42687b;border-radius:7px;padding:10px;font-family:monospace;font-size:10px;line-height:1.5}
+.reportFallbackInner>button{background:#5ddccc;color:#09282c;border:0;border-radius:7px;padding:10px;font-weight:750}
+@media(max-width:760px){.trackerTitleActions{flex-direction:column;gap:4px}.trackerTitleActions button{padding:5px 6px;font-size:10px}.trackerTitle small{max-width:170px}}
