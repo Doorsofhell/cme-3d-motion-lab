@@ -1,4 +1,5 @@
 import {useCallback,useEffect,useMemo,useState,type FormEvent} from 'react';
+import {autoIssueURL,type AutoIncident} from './AutoIncidents';
 
 const REPO='Doorsofhell/cme-3d-motion-lab';
 const WEB='https://github.com/'+REPO+'/issues';
@@ -77,7 +78,7 @@ export function IncidentReporter({context,onClose}:{context:TestContext;onClose:
   </form>
  </div>;
 }
-export function IssueTracker(){
+export function IssueTracker({drafts,onDismiss,onClear}:{drafts:AutoIncident[];onDismiss:(id:string)=>void;onClear:()=>void}){
  const [issues,setIssues]=useState<IssueData[]>([]),[loading,setLoading]=useState(false),[error,setError]=useState(''),[checked,setChecked]=useState('');
  const refresh=useCallback(async()=>{
   setLoading(true);
@@ -95,10 +96,23 @@ export function IssueTracker(){
  return <section className="tracker" aria-label="Suivi des corrections">
   <div className="trackerTitle"><div><strong>Suivi des corrections</strong><small>File GitHub ordonnée par numéro de demande</small></div><button onClick={()=>void refresh()} disabled={loading}>{loading?'Lecture…':'↻ Actualiser'}</button></div>
   <div className="trackerSummary"><div><strong>{open.length}</strong><span>Ouvertes</span></div><div><strong>{open.filter(x=>stageForIssue(x).progress>0).length}</strong><span>En cours</span></div><div><strong>{closed.length}</strong><span>Terminées</span></div></div>
-  <p className="trackerLegend">Pourcentage fondé sur les étapes explicitement validées dans les tickets. Mise à jour toutes les trois minutes.{checked?' Vérifié à '+checked+'.':''}</p>
+  <p className="trackerLegend">Les anomalies détectées sont conservées sur cet appareil, sans transmission automatique. Tu choisis celles à soumettre.{checked?' Dernière lecture GitHub à '+checked+'.':''}</p>
   {error&&<div className="trackerWarning" role="alert">Lecture des demandes impossible : {error}. <a href={WEB} target="_blank" rel="noreferrer">Voir GitHub ↗</a></div>}
   <div className="trackerList">
-   {!loading&&!error&&!issues.length&&<div className="trackerEmpty"><strong>Aucune demande enregistrée</strong><p>Déclare un incident dans le Laboratoire, puis confirme son enregistrement sur GitHub. Il apparaîtra ici.</p></div>}
+   <section className="autoInbox" aria-label="Signalements automatiques à examiner">
+    <div className="autoInboxHeader"><strong>Détectés automatiquement <span className="autoCount">{drafts.length}</span></strong>{drafts.length>0&&<button onClick={()=>{if(window.confirm('Effacer tous les brouillons locaux ? Aucun ticket GitHub ne sera supprimé.'))onClear();}}>Tout effacer</button>}</div>
+    <p className="autoInboxDescription">Brouillons privés sur ton téléphone. Aucune soumission sans ton intervention.</p>
+    {drafts.length===0&&<div className="autoEmpty">Aucune anomalie détectée sur cet appareil.</div>}
+    {drafts.map(item=><article className="autoDraft" key={item.id}>
+      <div className="autoDraftTop"><span>Non soumis · {item.category}</span><time>{new Date(item.lastSeen).toLocaleString('fr-FR')}</time></div>
+      <strong>{item.title}</strong>
+      <p>{item.details.slice(0,300)}</p>
+      <div className="autoDraftContext">{item.context.actor} · {item.context.discipline} · {item.context.technique}{item.occurrences>1?' · '+item.occurrences+' occurrences':''}</div>
+      <div className="autoDraftActions"><a href={autoIssueURL(item)} target="_blank" rel="noopener noreferrer">Examiner et soumettre sur GitHub ↗</a><button onClick={()=>onDismiss(item.id)}>Écarter</button></div>
+    </article>)}
+   </section>
+   <h3 className="trackerIssuesHeader">Tickets enregistrés sur GitHub</h3>
+   {!loading&&!error&&!issues.length&&<div className="trackerEmpty"><strong>Aucun ticket encore enregistré</strong><p>Les brouillons ne deviennent des tickets qu'après ta confirmation sur GitHub.</p></div>}
    {[...open,...closed].map(item=>{
     const st=stageForIssue(item);
     const position=open.findIndex(x=>x.number===item.number)+1;
@@ -111,6 +125,6 @@ export function IssueTracker(){
     </article>;
    })}
   </div>
-  <div className="trackerBottom">Les barres ne représentent pas le temps écoulé. La correction n’est pas déclenchée automatiquement dans une conversation.</div>
+  <div className="trackerBottom">Les brouillons ne sont pas des tickets enregistrés. Progression : étapes validées, puis 100 % à la clôture. Aucune correction automatique.</div>
  </section>;
 }
