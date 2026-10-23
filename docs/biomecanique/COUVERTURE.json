@@ -1,0 +1,73 @@
+{
+  "updated": "2026-10-24",
+  "coverage": [
+    {
+      "discipline": "boxe",
+      "techniques_catalogue": 42,
+      "implemented_in_lab": 30,
+      "new_candidates": 12,
+      "biomechanics_validated": 0,
+      "family_references_scientific": 10,
+      "fully_documented": 0,
+      "combos_proposed": 13,
+      "combos_3d_validated": 0
+    },
+    {
+      "discipline": "kickboxing",
+      "techniques_catalogue": 59,
+      "implemented_in_lab": 46,
+      "new_candidates": 13,
+      "biomechanics_validated": 0,
+      "family_references_scientific": 20,
+      "fully_documented": 0,
+      "combos_proposed": 7,
+      "combos_3d_validated": 0
+    },
+    {
+      "discipline": "muaythai",
+      "techniques_catalogue": 63,
+      "implemented_in_lab": 54,
+      "new_candidates": 9,
+      "biomechanics_validated": 0,
+      "family_references_scientific": 12,
+      "fully_documented": 0,
+      "combos_proposed": 6,
+      "combos_3d_validated": 0
+    },
+    {
+      "discipline": "mma",
+      "techniques_catalogue": 77,
+      "implemented_in_lab": 54,
+      "new_candidates": 23,
+      "biomechanics_validated": 0,
+      "family_references_scientific": 15,
+      "fully_documented": 0,
+      "combos_proposed": 6,
+      "combos_3d_validated": 0
+    },
+    {
+      "discipline": "bjj",
+      "techniques_catalogue": 60,
+      "implemented_in_lab": 12,
+      "new_candidates": 48,
+      "biomechanics_validated": 0,
+      "family_references_scientific": 0,
+      "fully_documented": 0,
+      "combos_proposed": 5,
+      "combos_3d_validated": 0
+    },
+    {
+      "discipline": "judo",
+      "techniques_catalogue": 111,
+      "implemented_in_lab": 11,
+      "new_candidates": 100,
+      "biomechanics_validated": 0,
+      "family_references_scientific": 4,
+      "fully_documented": 0,
+      "combos_proposed": 6,
+      "combos_3d_validated": 0
+    }
+  ],
+  "count_unique_motions": 291,
+  "count_combinations": 43
+}

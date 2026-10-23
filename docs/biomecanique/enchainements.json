@@ -1,0 +1,2466 @@
+{
+  "schema": "CME3D_COMBINATIONS_1",
+  "updated": "2026-10-24",
+  "note": "Séquences proposées comme hypothèses de tests ; aucune ne peut être déclarée validée sans mesure ni revue experte.",
+  "combinations": [
+    {
+      "id": "seq-boxe-1–2",
+      "name": "jab direct",
+      "disciplines": [
+        "boxe"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "jab",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "direct",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-boxe-1–1–2",
+      "name": "double jab puis direct",
+      "disciplines": [
+        "boxe"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "jab",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "jab",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "direct",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-boxe-1–2–3",
+      "name": "jab direct crochet avant",
+      "disciplines": [
+        "boxe"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "jab",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "direct",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "crochet-avant",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-boxe-1–2–3–2",
+      "name": "jab direct crochet direct",
+      "disciplines": [
+        "boxe"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "jab",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "direct",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "crochet-avant",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 4,
+          "movement_id": "direct",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-boxe-1–2–5–2",
+      "name": "jab direct uppercut avant direct",
+      "disciplines": [
+        "boxe"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "jab",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "direct",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "uppercut-avant",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 4,
+          "movement_id": "direct",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-boxe-2–3–2",
+      "name": "direct crochet direct",
+      "disciplines": [
+        "boxe"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "direct",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "crochet-avant",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "direct",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-boxe-jab-corps-tete",
+      "name": "jab tête puis direct corps et crochet tête",
+      "disciplines": [
+        "boxe"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "jab",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "direct-corps",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "crochet-avant",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-boxe-esquive-contre",
+      "name": "esquive droite puis direct crochet",
+      "disciplines": [
+        "boxe"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "esquive-droite",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "direct",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "crochet-avant",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-boxe-roll-contre",
+      "name": "roll gauche puis crochet et direct",
+      "disciplines": [
+        "boxe"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "roll-gauche",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "crochet-avant",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "direct",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-boxe-tyson-jab-body",
+      "name": "jab puis crochet au corps puis uppercut",
+      "disciplines": [
+        "boxe"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "jab",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "crochet-avant-corps",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "uppercut-arriere",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-boxe-double-crochets",
+      "name": "crochet avant et arrière puis retour",
+      "disciplines": [
+        "boxe"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "crochet-avant",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "crochet-arriere",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "jab",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-boxe-angle-pivot",
+      "name": "jab direct puis pivot",
+      "disciplines": [
+        "boxe"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "jab",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "direct",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "pivot-gauche",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-boxe-body-head-switch",
+      "name": "direct au corps puis crochet tête et direct",
+      "disciplines": [
+        "boxe"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "direct-corps",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "crochet-avant",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "direct",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-kickboxing-1-2-lowkick",
+      "name": "jab direct low kick arrière",
+      "disciplines": [
+        "kickboxing"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "jab",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "direct",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "low-kick-arriere",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-kickboxing-1-2-middle",
+      "name": "jab direct middle kick arrière",
+      "disciplines": [
+        "kickboxing"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "jab",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "direct",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "middle-kick-arriere",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-kickboxing-jab-front-cross",
+      "name": "jab front kick arrière direct",
+      "disciplines": [
+        "kickboxing"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "jab",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "front-kick-arriere",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "direct",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-kickboxing-check-counter",
+      "name": "check avant puis direct et low kick",
+      "disciplines": [
+        "kickboxing"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "check-avant",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "direct",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "low-kick-arriere",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-kickboxing-doublekick",
+      "name": "low kick arrière puis high kick arrière",
+      "disciplines": [
+        "kickboxing"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "low-kick-arriere",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "high-kick-arriere",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-kickboxing-feinte-switch",
+      "name": "feinte jab et switch kick",
+      "disciplines": [
+        "kickboxing"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "feinte-jab",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "switch-kick",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-kickboxing-angle-kick",
+      "name": "direct sortie angle roundhouse",
+      "disciplines": [
+        "kickboxing"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "direct",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "sortie-angle",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "roundhouse-arriere",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-muaythai-teep-punch-kick",
+      "name": "teep avant direct middle",
+      "disciplines": [
+        "muaythai"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "teep-avant",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "direct",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "middle-kick-arriere",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-muaythai-jab-cross-knee",
+      "name": "jab direct genou arrière",
+      "disciplines": [
+        "muaythai"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "jab",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "direct",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "genou-direct-arriere",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-muaythai-kick-clinch-knee",
+      "name": "middle puis clinch puis genou",
+      "disciplines": [
+        "muaythai"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "middle-kick-arriere",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "clinch-tirage",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "genou-clinch",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-muaythai-check-counter-kick",
+      "name": "check arrière puis direct low kick",
+      "disciplines": [
+        "muaythai"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "check-arriere",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "direct",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "low-kick-arriere",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-muaythai-elbow-knee",
+      "name": "coude horizontal puis genou",
+      "disciplines": [
+        "muaythai"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "coude-horizontal-avant",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "genou-direct-arriere",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-muaythai-feint-teep",
+      "name": "feinte jab teep arrière crochet",
+      "disciplines": [
+        "muaythai"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "feinte-jab",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "teep-arriere",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "crochet-avant",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-mma-jab-cross-levelchange",
+      "name": "jab direct changement niveau entrée lutte",
+      "disciplines": [
+        "mma"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "jab",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "direct",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "changement-niveau",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 4,
+          "movement_id": "entree-lutte",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-mma-feint-sprawl",
+      "name": "feinte lutte sprawl relevé",
+      "disciplines": [
+        "mma"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "feinte-lutte",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "sprawl",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "releve-technique",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-mma-kick-to-entry",
+      "name": "low kick direct entrée single leg",
+      "disciplines": [
+        "mma"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "low-kick-arriere",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "direct",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "single-leg",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-mma-defense-counter",
+      "name": "sprawl défense lutte direct",
+      "disciplines": [
+        "mma"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "sprawl",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "defense-lutte",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "direct",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-mma-body-cross-takedown",
+      "name": "direct corps entrée double leg",
+      "disciplines": [
+        "mma"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "direct-corps",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "entree-lutte",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-mma-ground-recovery",
+      "name": "descente sol sortie hanche relevé",
+      "disciplines": [
+        "mma"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "descente-sol",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "sortie-hanche",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "releve-technique",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-bjj-bridge-shrimp-stand",
+      "name": "pont puis sortie de hanche puis relevé technique",
+      "disciplines": [
+        "bjj"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "pont",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "sortie-hanche",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "releve-technique",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-bjj-guard-recovery",
+      "name": "releve depuis genoux sit-out retention garde",
+      "disciplines": [
+        "bjj"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "releve-genoux",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "sit-out",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "retention-garde",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-bjj-hip-escape-base",
+      "name": "sortie hanche changement base relevé",
+      "disciplines": [
+        "bjj"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "sortie-hanche",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "changement-base",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "releve-technique",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-bjj-technical-comeback",
+      "name": "pont changement base relevé",
+      "disciplines": [
+        "bjj"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "pont",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "changement-base",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "releve-technique",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-bjj-ground-flow",
+      "name": "releve genoux sit-out sortie hanche",
+      "disciplines": [
+        "bjj"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "releve-genoux",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "sit-out",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "sortie-hanche",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-judo-kuzushi-seoi-entry",
+      "name": "kuzushi puis uchikomi seoi",
+      "disciplines": [
+        "judo"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "kuzushi",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "uchikomi-seoi",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-judo-footwork-uchi",
+      "name": "ayumi ashi puis o uchi gari entrée",
+      "disciplines": [
+        "judo"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "ayumi-ashi",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "uchikomi-o-uchi-gari",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-judo-footwork-oso",
+      "name": "tai sabaki puis o soto gari entrée",
+      "disciplines": [
+        "judo"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "tai-sabaki",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "uchikomi-o-soto-gari",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-judo-grip-kuzushi-hip",
+      "name": "kumikata kuzushi o goshi entrée",
+      "disciplines": [
+        "judo"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "kumikata",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "kuzushi",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "uchikomi-o-goshi",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-judo-kuzushi-kouchi",
+      "name": "kumikata kuzushi ko uchi gari entrée",
+      "disciplines": [
+        "judo"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "kumikata",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "kuzushi",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "uchikomi-ko-uchi-gari",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    },
+    {
+      "id": "seq-judo-tai-sabaki-kuzushi",
+      "name": "tai sabaki kuzushi uchikomi seoi",
+      "disciplines": [
+        "judo"
+      ],
+      "sequence": [
+        {
+          "order": 1,
+          "movement_id": "tai-sabaki",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 2,
+          "movement_id": "kuzushi",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        },
+        {
+          "order": 3,
+          "movement_id": "uchikomi-seoi",
+          "phase_entry": "from_guard_or_previous_recovery",
+          "phase_exit": "restore_guard_or_next_setup",
+          "overlap_seconds": null
+        }
+      ],
+      "provenance": "proposition_experimentale",
+      "evidence": [],
+      "tactical_intent": "Hypothèse de séquence pour tests d’animation (non validée comme méthode officielle).",
+      "initial_posture": "garde ou position de départ de la discipline",
+      "support_distribution": "À mesurer en mocap; aucun ratio imposé",
+      "transitions": [
+        "contact_support_maintained",
+        "velocity_continuity",
+        "guard_return_checked"
+      ],
+      "continuity_constraints": [
+        "pas_de_saut_instantane_du_bassin",
+        "ne_pas_reinitialiser_pieds_au_raccord",
+        "lisser_vitesse_angulaire_tronc",
+        "retour_en_garde_compatible"
+      ],
+      "synchronization_rules": "Définir les fenêtres de préparation/récupération sur données vidéo avant validation.",
+      "difficulties": [
+        "biomechanical_blend",
+        "support_contact",
+        "no_teleportation"
+      ],
+      "validation": {
+        "status": "hypothesis_unverified",
+        "instrumented": false,
+        "on_android": false,
+        "requires_partner": false
+      }
+    }
+  ]
+}
