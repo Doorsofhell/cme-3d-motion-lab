@@ -1,0 +1,71 @@
+name: Apply CME-3D laboratory improvements
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/apply-lab-update.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: cme3d-lab-update
+  cancel-in-progress: false
+
+jobs:
+  publish-updated-laboratory:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Download and verify independent CME-3D source
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 --connect-timeout 20 --max-time 180 \
+            "https://d2ol7oe51mr4n9.cloudfront.net/user_3AnRK2HScfmCMSrMLAtsAf1MESy/e914dd5d-7223-4731-a019-075b4c4f97bd.zip" \
+            --output /tmp/cme3d-src.zip
+          printf '%s  %s\n' "7e6ee698ec436cf65abb1938ec92ae12587719aa623dce6e9201411a9c9ec962" "/tmp/cme3d-src.zip" | sha256sum --check
+          unzip -q /tmp/cme3d-src.zip -d /tmp/cme3d-src
+          test -f /tmp/cme3d-src/src/lab/Issues.tsx
+          test -f /tmp/cme3d-src/src/lab/techniques.json
+          test -f /tmp/cme3d-src/docs/CAHIER_DES_CHARGES.md
+      - name: Replace application source and commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf src public docs
+          cp -a /tmp/cme3d-src/. .
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m "Improve CME-3D: two-tab test lab, incidents, issue tracking and mobile diagnostics"
+            git push origin HEAD:main
+          fi
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Validate unit tests
+        run: npm test
+      - name: Build Pages
+        run: npm run build -- --mode pages
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - name: Publish site
+        id: deployment
+        uses: actions/deploy-pages@v4
