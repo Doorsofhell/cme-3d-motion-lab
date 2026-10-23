@@ -1,5 +1,6 @@
 import {useCallback,useEffect,useMemo,useState,type FormEvent} from 'react';
 import {autoIssueURL,type AutoIncident} from './AutoIncidents';
+import {hasFailedTreatment,linkForDraft} from './IssueLinks';
 
 const REPO='Doorsofhell/cme-3d-motion-lab';
 const WEB='https://github.com/'+REPO+'/issues';
@@ -13,6 +14,7 @@ export interface IssueData {
  labels:Array<string|{name:string}>;created_at:string;updated_at:string;pull_request?:unknown;
 }
 export function stageForIssue(issue:IssueData):{progress:number;stage:string;done:boolean}{
+ if(hasFailedTreatment(issue))return {progress:0,stage:'Échec du correctif',done:false};
  if(issue.state==='closed')return {progress:100,stage:'Terminé',done:true};
  const labels=issue.labels.map(l=>typeof l==='string'?l:l.name).map(x=>x.toLowerCase());
  const states:[string,number,string][]=[
@@ -78,38 +80,51 @@ export function IncidentReporter({context,onClose}:{context:TestContext;onClose:
   </form>
  </div>;
 }
-export function IssueTracker({drafts,onDismiss,onClear}:{drafts:AutoIncident[];onDismiss:(id:string)=>void;onClear:()=>void}){
+export function useKnownIssues(){
  const [issues,setIssues]=useState<IssueData[]>([]),[loading,setLoading]=useState(false),[error,setError]=useState(''),[checked,setChecked]=useState('');
  const refresh=useCallback(async()=>{
   setLoading(true);
   try{
-   const res=await fetch(API+'?state=all&per_page=100&sort=created&direction=asc',{headers:{Accept:'application/vnd.github+json'},cache:'no-store'});
+   const res=await fetch(API+'?state=all&per_page=100&sort=updated&direction=desc',{headers:{Accept:'application/vnd.github+json'},cache:'no-store'});
    if(!res.ok)throw new Error('HTTP '+res.status+(res.status===403?' · quota de consultation GitHub':''));
    const data=await res.json() as IssueData[];
    setIssues(data.filter(x=>!x.pull_request&&((x.body??'').includes(MARKER)||x.title.startsWith('[CME-3D]'))).sort((a,b)=>a.number-b.number));
    setChecked(new Date().toLocaleTimeString('fr-FR'));setError('');
   }catch(e){setError(e instanceof Error?e.message:String(e));}finally{setLoading(false);}
  },[]);
- useEffect(()=>{void refresh();const id=window.setInterval(()=>{if(document.visibilityState==='visible')void refresh();},180000);return()=>window.clearInterval(id);},[refresh]);
- const open=useMemo(()=>issues.filter(x=>x.state!=='closed').sort((a,b)=>a.number-b.number),[issues]);
- const closed=useMemo(()=>issues.filter(x=>x.state==='closed').sort((a,b)=>b.number-a.number),[issues]);
+ useEffect(()=>{
+  void refresh();
+  const interval=window.setInterval(()=>{if(document.visibilityState==='visible')void refresh();},180000);
+  const onFocus=()=>{if(document.visibilityState==='visible')void refresh();};
+  window.addEventListener('focus',onFocus);
+  document.addEventListener('visibilitychange',onFocus);
+  return()=>{window.clearInterval(interval);window.removeEventListener('focus',onFocus);document.removeEventListener('visibilitychange',onFocus);};
+ },[refresh]);
+ return {issues,loading,error,checked,refresh};
+}
+export function IssueTracker({drafts,onDismiss,onClear,onCopyReport,issues,loading,error,checked,refresh}:{
+ drafts:AutoIncident[];onDismiss:(id:string)=>void;onClear:()=>void;onCopyReport:()=>void;
+ issues:IssueData[];loading:boolean;error:string;checked:string;refresh:()=>void;
+}){
+ const open=useMemo(()=>issues.filter(x=>x.state!=='closed'||hasFailedTreatment(x)).sort((a,b)=>a.number-b.number),[issues]);
+ const closed=useMemo(()=>issues.filter(x=>x.state==='closed'&&!hasFailedTreatment(x)).sort((a,b)=>b.number-a.number),[issues]);
  return <section className="tracker" aria-label="Suivi des corrections">
-  <div className="trackerTitle"><div><strong>Suivi des corrections</strong><small>File GitHub ordonnée par numéro de demande</small></div><button onClick={()=>void refresh()} disabled={loading}>{loading?'Lecture…':'↻ Actualiser'}</button></div>
+  <div className="trackerTitle"><div><strong>Suivi des corrections</strong><small>File GitHub ordonnée par numéro de demande</small></div><div className="trackerTitleActions"><button onClick={onCopyReport}>Copier rapport détaillé</button><button onClick={()=>void refresh()} disabled={loading}>{loading?'Lecture…':'↻ Actualiser'}</button></div></div>
   <div className="trackerSummary"><div><strong>{open.length}</strong><span>Ouvertes</span></div><div><strong>{open.filter(x=>stageForIssue(x).progress>0).length}</strong><span>En cours</span></div><div><strong>{closed.length}</strong><span>Terminées</span></div></div>
-  <p className="trackerLegend">Les anomalies détectées sont conservées sur cet appareil, sans transmission automatique. Tu choisis celles à soumettre.{checked?' Dernière lecture GitHub à '+checked+'.':''}</p>
+  <p className="trackerLegend">Les anomalies déjà associées à un ticket GitHub sont retirées des brouillons à soumettre. Elles n’y réapparaissent qu’en cas d’échec explicite du correctif.{checked?' Dernière lecture GitHub à '+checked+'.':''}</p>
   {error&&<div className="trackerWarning" role="alert">Lecture des demandes impossible : {error}. <a href={WEB} target="_blank" rel="noreferrer">Voir GitHub ↗</a></div>}
   <div className="trackerList">
    <section className="autoInbox" aria-label="Signalements automatiques à examiner">
     <div className="autoInboxHeader"><strong>Détectés automatiquement <span className="autoCount">{drafts.length}</span></strong>{drafts.length>0&&<button onClick={()=>{if(window.confirm('Effacer tous les brouillons locaux ? Aucun ticket GitHub ne sera supprimé.'))onClear();}}>Tout effacer</button>}</div>
     <p className="autoInboxDescription">Brouillons privés sur ton téléphone. Aucune soumission sans ton intervention.</p>
     {drafts.length===0&&<div className="autoEmpty">Aucune anomalie détectée sur cet appareil.</div>}
-    {drafts.map(item=><article className="autoDraft" key={item.id}>
-      <div className="autoDraftTop"><span>Non soumis · {item.category}</span><time>{new Date(item.lastSeen).toLocaleString('fr-FR')}</time></div>
+    {drafts.map(item=>{const linked=linkForDraft(item,issues);return <article className="autoDraft" key={item.id}>
+      <div className="autoDraftTop"><span>{linked?'Correctif en échec · ticket #'+linked.number:'Non soumis'} · {item.category}</span><time>{new Date(item.lastSeen).toLocaleString('fr-FR')}</time></div>
       <strong>{item.title}</strong>
       <p>{item.details.slice(0,300)}</p>
       <div className="autoDraftContext">{item.context.actor} · {item.context.discipline} · {item.context.technique}{item.occurrences>1?' · '+item.occurrences+' occurrences':''}</div>
-      <div className="autoDraftActions"><a href={autoIssueURL(item)} target="_blank" rel="noopener noreferrer">Examiner et soumettre sur GitHub ↗</a><button onClick={()=>onDismiss(item.id)}>Écarter</button></div>
-    </article>)}
+      <div className="autoDraftActions"><a href={linked?.html_url??autoIssueURL(item)} target="_blank" rel="noopener noreferrer">{linked?'Reprendre le ticket en échec ↗':'Examiner et soumettre sur GitHub ↗'}</a><button onClick={()=>onDismiss(item.id)}>Écarter</button></div>
+    </article>})}
    </section>
    <h3 className="trackerIssuesHeader">Tickets enregistrés sur GitHub</h3>
    {!loading&&!error&&!issues.length&&<div className="trackerEmpty"><strong>Aucun ticket encore enregistré</strong><p>Les brouillons ne deviennent des tickets qu'après ta confirmation sur GitHub.</p></div>}
