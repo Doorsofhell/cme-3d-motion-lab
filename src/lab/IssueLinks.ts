@@ -9,7 +9,13 @@ export function hasFailedTreatment(issue:IssueData):boolean{
 }
 export function linkForDraft(draft:AutoIncident,issues:IssueData[]):IssueData|undefined{
  const id=correlationId(draft.fingerprint);
- return issues.find(x=>!!x.body&&x.body.includes(ID_MARKER+id));
+ const correlated=issues.find(x=>!!x.body&&x.body.includes(ID_MARKER+id));
+ if(correlated)return correlated;
+ // Backward compatibility for already reported incidents without a tracking token:
+ // require exactly the same title AND the original coach and technique.
+ return issues.find(x=>x.title.trim()==='[CME-3D] '+draft.title.trim()
+  &&!!x.body&&x.body.includes('- Coach : '+draft.context.actor)
+  &&x.body.includes('- Technique : '+draft.context.technique));
 }
 export function unresolvedDrafts(drafts:AutoIncident[],issues:IssueData[]):AutoIncident[]{
  // Submitted incidents disappear from the "to report" inbox. They come back only after
