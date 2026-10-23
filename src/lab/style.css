@@ -9,6 +9,7 @@ button{cursor:pointer}
 .brandDot{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:9px;color:#0d1c24;background:#69e1cc;font-size:21px;font-weight:900}
 .branding strong{font-size:18px;letter-spacing:-.05em;white-space:nowrap}.branding strong span{color:#67ddcb}.branding small{font-size:10px;color:#fff;background:#2a4054;border-radius:4px;padding:2px 5px;letter-spacing:0;margin-left:5px}
 .branding p{font-size:10px;color:#9aadc3;margin:2px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.branding .cmeVersion{font-size:10px;color:#8ff3df;background:#183948;border:1px solid #377a78;border-radius:6px;padding:3px 5px;vertical-align:middle;letter-spacing:0;font-weight:800;margin-left:3px}
 .headerActions{display:flex;align-items:center;gap:12px}.liveTag{font-size:10px;font-weight:650;color:#a3b7c9}.liveTag i{display:inline-block;width:7px;height:7px;background:#68d6ba;border-radius:50%;margin-right:3px}
 .iconButton{background:#172738;border:1px solid #35495c;color:#f2f8ff;border-radius:9px;width:38px;height:36px;font-size:18px}
 .quickBar{background:#111c2b;border:1px solid #2b4053;border-radius:12px;display:grid;grid-template-columns:.85fr 1fr 1.15fr;gap:8px;padding:8px;min-height:71px}
@@ -167,3 +168,15 @@ select{width:100%;min-width:0;background:#1b2b3e;border:1px solid #344c60;border
 .reportFallbackInner textarea{flex:1;min-height:0;resize:none;user-select:text;background:#0c1c2a;color:#dceef1;border:1px solid #42687b;border-radius:7px;padding:10px;font-family:monospace;font-size:10px;line-height:1.5}
 .reportFallbackInner>button{background:#5ddccc;color:#09282c;border:0;border-radius:7px;padding:10px;font-weight:750}
 @media(max-width:760px){.trackerTitleActions{flex-direction:column;gap:4px}.trackerTitleActions button{padding:5px 6px;font-size:10px}.trackerTitle small{max-width:170px}}
+
+/* 3D incident evidence on mobile: captured frame, file download and user-controlled upload. */
+.incidentPhoto{border:1px solid #497387;background:#142333;border-radius:9px;padding:9px;display:flex;flex-direction:column;gap:7px}
+.incidentPhotoHead{display:flex;justify-content:space-between;align-items:center;gap:6px}
+.incidentPhotoHead strong{font-size:12px;color:#d6e9f2}.incidentPhotoHead span{font-size:10px;color:#adc4d0}
+.incidentPhoto img{display:block;max-height:175px;max-width:100%;width:auto;margin:auto;object-fit:contain;border-radius:7px;background:#0c1a26}
+.incidentPhoto p{font-size:11px;color:#b6d0e0;margin:0}
+.incidentPhotoActions{display:flex;flex-wrap:wrap;gap:5px}
+.incidentPhotoActions>button,.incidentPhotoActions>a{border:1px solid #517889;background:#213c4f;color:#c5efe7;padding:7px 8px;font-size:10px;text-decoration:none;border-radius:6px}
+.incidentPhotoActions>a{background:#5edbca;color:#082d35;border:0;font-weight:750}
+.incidentPhotoInfo{font-size:10px!important;color:#86e3ce!important}
+@media(max-width:760px){.branding .cmeVersion{font-size:9px;margin-left:0}.incidentPhoto img{max-height:145px}.incidentPhotoHead span{font-size:9px}}

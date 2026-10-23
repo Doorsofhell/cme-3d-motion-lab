@@ -1,6 +1,7 @@
 import {useCallback,useEffect,useMemo,useState,type FormEvent} from 'react';
 import {autoIssueURL,type AutoIncident} from './AutoIncidents';
 import {hasFailedTreatment,linkForDraft} from './IssueLinks';
+import {snapshotFilename} from './Screenshot';
 
 const REPO='Doorsofhell/cme-3d-motion-lab';
 const WEB='https://github.com/'+REPO+'/issues';
@@ -37,7 +38,20 @@ export function stageForIssue(issue:IssueData):{progress:number;stage:string;don
  if(checklist>progress){progress=checklist;stage=['À traiter','Reproduction','Diagnostic','Correction','Tests validés'][n];}
  return {progress,stage,done:false};
 }
-export function IncidentReporter({context,onClose}:{context:TestContext;onClose:()=>void}){
+export function IncidentReporter({context,image,onCapture,onClose}:{context:TestContext;image:string|null;onCapture:()=>string|null;onClose:()=>void}){
+ const [screenshot,setScreenshot]=useState<string|null>(image);
+ const [imageMessage,setImageMessage]=useState('');
+ const filename=useMemo(()=>snapshotFilename({...context,progress:0}),[context.actor,context.discipline,context.technique,context.renderStyle]);
+ const captureAgain=()=>{const result=onCapture();setScreenshot(result);setImageMessage(result?'Capture du combattant actualisée.':'Capture impossible : essaye après chargement du modèle.');};
+ const copyImage=async()=>{
+  if(!screenshot)return;
+  try{
+   if(typeof ClipboardItem==='undefined'||!navigator.clipboard?.write)throw Error('image clipboard unavailable');
+   const blob=await(await fetch(screenshot)).blob();
+   await navigator.clipboard.write([new ClipboardItem({'image/png':blob})]);
+   setImageMessage('Image copiée. Tu peux la coller dans le ticket GitHub.');
+  }catch{setImageMessage('Copie de l’image indisponible sur ce navigateur : télécharge le PNG puis joins-le à GitHub.');}
+ };
  const [title,setTitle]=useState(''),[observed,setObserved]=useState(''),[expected,setExpected]=useState('');
  const [severity,setSeverity]=useState('Majeure'),[error,setError]=useState('');
  const issueURL=useMemo(()=>{
@@ -49,7 +63,9 @@ export function IncidentReporter({context,onClose}:{context:TestContext;onClose:
    '- Rendu : '+context.renderStyle,'- Qualité : '+context.quality,
    '- Priorité : '+severity,'- Navigateur : '+context.userAgent,'',
    '## Constat',safe(observed),'','## Résultat attendu',safe(expected),'',
-   '## Diagnostic embarqué','~~~',safe(context.diagnostics),'~~~','',
+   '## Capture du combattant',
+   screenshot?('Capture préparée : '+filename+' — joindre cette image PNG depuis le téléphone avant de valider le ticket.'):'Capture indisponible au moment de la déclaration.',
+   '','## Diagnostic embarqué','~~~',safe(context.diagnostics),'~~~','',
    '## Étapes de traitement (à cocher par le développement)',
    '- [ ] Reproduction de l’incident','- [ ] Diagnostic confirmé',
    '- [ ] Correctif intégré','- [ ] Tests et vérification','',
@@ -59,7 +75,7 @@ export function IncidentReporter({context,onClose}:{context:TestContext;onClose:
   url.searchParams.set('title','[CME-3D] '+title.trim().slice(0,120));
   url.searchParams.set('body',content);
   return url.toString();
- },[context,title,observed,expected,severity]);
+ },[context,title,observed,expected,severity,screenshot,filename]);
  const submit=(e:FormEvent)=>{
   e.preventDefault();
   if(title.trim().length<5||observed.trim().length<8||expected.trim().length<6){setError('Renseigne le titre, le constat et le résultat attendu.');return;}
@@ -70,12 +86,21 @@ export function IncidentReporter({context,onClose}:{context:TestContext;onClose:
   <form className="incidentModal" role="dialog" aria-label="Déclarer un incident" onSubmit={submit} onClick={e=>e.stopPropagation()}>
    <div className="modalHeading"><div><strong>Signaler un incident</strong><span>Le contexte du test et les diagnostics seront préremplis.</span></div><button type="button" aria-label="Fermer la déclaration" onClick={onClose}>×</button></div>
    <div className="incidentContext">{context.actor} · {context.discipline} · {context.technique} · {context.renderStyle}</div>
+   <section className="incidentPhoto" aria-label="Image du combattant à joindre">
+    <div className="incidentPhotoHead"><strong>Capture du combattant</strong><span>Pose affichée au moment du signalement</span></div>
+    {screenshot?<img src={screenshot} alt={'Capture 3D de '+context.actor+' en '+context.discipline+' pendant '+context.technique}/>:<p>Image non disponible : le coach doit être chargé pour capturer sa pose.</p>}
+    <div className="incidentPhotoActions">
+     <button type="button" onClick={captureAgain}>↻ Recapturer la pose</button>
+     {screenshot&&<><a href={screenshot} download={filename}>↓ Télécharger PNG</a><button type="button" onClick={()=>{void copyImage();}}>Copier l'image</button></>}
+    </div>
+    {imageMessage&&<p role="status" className="incidentPhotoInfo">{imageMessage}</p>}
+   </section>
    <label>Titre<input aria-label="Titre de l'incident" value={title} onChange={e=>setTitle(e.target.value)} placeholder="Ex. Main gauche traverse le buste" maxLength={120}/></label>
    <label>Priorité<select aria-label="Priorité" value={severity} onChange={e=>setSeverity(e.target.value)}><option>Bloquante</option><option>Majeure</option><option>Mineure</option><option>Amélioration</option></select></label>
    <label>Constat<textarea aria-label="Constat" value={observed} onChange={e=>setObserved(e.target.value)} placeholder="Décris ce qui se produit, à quel moment et comment le reproduire." rows={3}/></label>
    <label>Résultat attendu<textarea aria-label="Résultat attendu" value={expected} onChange={e=>setExpected(e.target.value)} placeholder="Décris précisément le comportement attendu." rows={2}/></label>
    {error&&<p className="formError" role="alert">{error}</p>}
-   <div className="issueDisclaimer">La page GitHub de la demande s’ouvrira. <strong>Valide « Submit new issue » sur GitHub</strong> pour enregistrer réellement le ticket. Rien n’est créé avant cette confirmation. Les demandes sont publiques sur GitHub. Tu peux ajouter une capture d’écran avant de valider.</div>
+   <div className="issueDisclaimer">La page GitHub de la demande s’ouvrira. <strong>Valide « Submit new issue » sur GitHub</strong> pour enregistrer réellement le ticket. Rien n’est créé avant cette confirmation. Les demandes sont publiques sur GitHub. La capture est conservée localement : télécharge le PNG ou copie l’image et joins-la dans le ticket GitHub avant de valider. L’application ne peut pas téléverser directement une image sans autorisation GitHub.</div>
    <button className="incidentSubmit" type="submit">Continuer vers l’enregistrement ↗</button>
   </form>
  </div>;
