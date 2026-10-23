@@ -110,7 +110,7 @@ export function useKnownIssues(){
  const refresh=useCallback(async()=>{
   setLoading(true);
   try{
-   const res=await fetch(API+'?state=all&per_page=100&sort=updated&direction=desc&refresh='+Date.now(),{headers:{Accept:'application/vnd.github+json','Cache-Control':'no-cache'},cache:'no-store'});
+   const res=await fetch(API+'?state=all&per_page=100&sort=updated&direction=desc&refresh='+Date.now(),{headers:{Accept:'application/vnd.github+json'},cache:'no-store'});
    if(!res.ok)throw new Error('HTTP '+res.status+(res.status===403?' · quota de consultation GitHub':''));
    const data=await res.json() as IssueData[];
    setIssues(data.filter(x=>!x.pull_request&&((x.body??'').includes(MARKER)||x.title.startsWith('[CME-3D]'))).sort((a,b)=>a.number-b.number));

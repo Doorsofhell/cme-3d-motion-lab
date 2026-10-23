@@ -1,5 +1,5 @@
 /* Scoped service worker, works under GitHub Pages /cme-3d-motion-lab/. */
-const VERSION='cme3d-lab-v0-6-0';
+const VERSION='cme3d-lab-v0-6-1';
 const BASE=new URL(self.registration.scope).pathname;
 const files=['index.html','manifest.webmanifest','cme-icon-192.png','cme-icon-512.png'];
 self.addEventListener('install',e=>{
