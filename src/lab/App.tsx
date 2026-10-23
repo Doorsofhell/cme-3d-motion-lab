@@ -7,6 +7,8 @@ import {CME_APP_VERSION} from './buildInfo';
 import {captureFighterImage} from './Screenshot';
 import {watchWebGLContext} from './webglRecovery';
 import rawTechniques from './techniques.json';
+import rawSequences from './complexSequences.json';
+import {ComparisonPanel} from './ComparisonPanel';
 import {IncidentReporter,IssueTracker,useKnownIssues,type TestContext} from './Issues';
 import {unresolvedDrafts} from './IssueLinks';
 import {buildFullReport,useSessionJournal} from './SessionReport';
@@ -16,6 +18,8 @@ import './style.css';
 type Actor='mma-kadir'|'mma-amara';
 type TechniqueEntry={id:string;name:string;category:string;disciplines:string[];motion:string};
 const techniques=(rawTechniques as TechniqueEntry[]).filter((t,i,a)=>a.findIndex(x=>x.motion===t.motion)===i);
+type SequenceEntry={id:string;name:string;discipline:string;motions:string[];status:string};
+const sequences=rawSequences as SequenceEntry[];
 const categories:Record<string,string>={garde:'Gardes',deplacement:'Déplacements',poing:'Poings',defense:'Défenses',pied:'Pieds',genou:'Genoux',coude:'Coudes',clinch:'Clinch',feinte:'Feintes',lutte:'Lutte',sol:'Sol',chute:'Chutes',projection:'Projections'};
 type Metrics={fps:number;drawCalls:number;triangles:number;textures:number;geometries:number;webgl:string;dpr:number};
 const emptyMetrics:Metrics={fps:0,drawCalls:0,triangles:0,textures:0,geometries:0,webgl:'Initialisation',dpr:1};
@@ -161,6 +165,8 @@ export function App(){
  const [report,setReport]=useState<RigReport|null>(null);
  const [extra,setExtra]=useState(false);
  const [tab,setTab]=useState<'lab'|'tracking'|'comparison'>('lab');
+ const [catalogMode,setCatalogMode]=useState<'techniques'|'sequences'>('techniques');
+ const [comparisonSnapshot,setComparisonSnapshot]=useState<string|null>(null);
  const [incidentOpen,setIncidentOpen]=useState(false);
  const [debug,setDebug]=useState(false),[catalogOpen,setCatalogOpen]=useState(false),[query,setQuery]=useState(''),[allCatalog,setAllCatalog]=useState(false);
  const [metrics,setMetrics]=useState<Metrics>(emptyMetrics);
@@ -175,10 +181,14 @@ export function App(){
  const onLog=useCallback((message:string)=>{journal.record(/ERREUR|JS :|PROMISE/i.test(message)?'error':'debug',message);setMessages(a=>[(new Date()).toLocaleTimeString('fr-FR')+'  '+message,...a].slice(0,40));},[journal.record]);
  const outfit=discipline==='bjj'&&nogi?'bjj-nogi':discipline;
  const currentTechniques=useMemo(()=>techniques.filter(t=>t.disciplines.includes(discipline)),[discipline]);
+ const currentSequences=useMemo(()=>sequences.filter(t=>t.discipline===discipline),[discipline]);
+ const visibleSequences=useMemo(()=>currentSequences.filter(t=>(t.name+' '+t.motions.join(' ')).toLocaleLowerCase('fr-FR').includes(query.toLocaleLowerCase('fr-FR'))),[currentSequences,query]);
+ const knownMotions=useMemo(()=>new Set(techniques.map(t=>t.motion)),[]);
+ const canRunSequence=(entry:SequenceEntry)=>entry.motions.every(m=>knownMotions.has(m));
  const palette=useMemo(()=>techniques.filter(t=>(allCatalog||t.disciplines.includes(discipline))&&
    ((t.name+' '+t.id+' '+t.category).toLocaleLowerCase('fr-FR').includes(query.toLocaleLowerCase('fr-FR')))),[discipline,query,allCatalog]);
  const onMetrics=useCallback((m:Metrics)=>{journal.measure(m);setMetrics(m);},[journal.measure]);
- const techniqueLabel=techniques.find(t=>t.motion===technique)?.name??technique;
+ const techniqueLabel=techniques.find(t=>t.motion===technique)?.name??sequences.find(x=>x.id===technique)?.name??technique;
  const selectTechnique=(motion:string)=>{journal.record('technique','Technique sélectionnée : '+motion,{previous:technique,discipline,coach:actor});reset();setTechnique(motion);setCatalogOpen(false);onLog('Technique : '+motion);};
  const incidentContext:TestContext={actor:actor==='mma-amara'?'Amara':'Kadir',discipline,outfit,technique,renderStyle,quality,userAgent:navigator.userAgent,diagnostics:JSON.stringify({report,metrics,messages},null,2)};
  const {items:autoDrafts,record:autoRecord,dismiss:autoDismiss,clear:autoClear}=useAutoIncidentQueue(incidentContext,onLog);
@@ -211,16 +221,23 @@ export function App(){
   else if(Date.now()-slowFpsSince.current>=18000){autoRecord('performance','Fréquence d’images insuffisante','Rendu actif sous 16 FPS pendant au moins 18 secondes, mesure récente : '+metrics.fps+' FPS');slowFpsSince.current=null;}
  },[metrics.fps,playing,tab,autoRecord]);
  const reset=()=>{setPlaying(false);seek(0);setReport(null);};
+ const openComparison=()=>{
+  journal.record('navigation','Ouverture comparatif moteurs 3D',{coach:actor,discipline,technique});
+  const captured=screenshotHandler.current?.()??null;
+  if(captured)setComparisonSnapshot(captured);
+  setTab('comparison');setDebug(false);setCatalogOpen(false);
+ };
  return <main className="labApp">
   <header className="labHeader">
    <div className="branding"><span className="brandDot">C</span><div><strong>CME<span>–3D</span> <small>LAB</small> <span className="cmeVersion" aria-label={'Version '+CME_APP_VERSION}>v{CME_APP_VERSION}</span></strong><p>Laboratoire · Tests A/B</p></div></div>
    <div className="headerActions"><span className="liveTag"><i/> Moteur local</span><button className="iconButton" title="Console de débogage" aria-label="Console de débogage" aria-expanded={debug} onClick={()=>setDebug(v=>!v)}>⌘</button><button className="iconButton" title="Réglages avancés" aria-label="Réglages avancés" aria-expanded={extra} onClick={()=>setExtra(v=>!v)}>⚙</button></div>
   </header>
+  
   <div className="labContent" style={{display:tab==='lab'?'contents':'none'}}>
   <section className="quickBar" aria-label="Sélection de test">
    <label><span>Coach</span><select aria-label="Coach" value={actor} onChange={e=>{journal.record('coach','Changement de coach : '+actor+' → '+e.target.value);reset();setActor(e.target.value as Actor);}}><option value="mma-amara">Amara</option><option value="mma-kadir">Kadir</option></select></label>
    <label><span>Discipline</span><select aria-label="Discipline" value={discipline} onChange={e=>{journal.record('discipline','Discipline : '+discipline+' → '+e.target.value,{coach:actor,style:renderStyle});reset();setDiscipline(e.target.value);setTechnique(techniques.find(t=>t.disciplines.includes(e.target.value))?.motion??'garde');onLog('Discipline : '+e.target.value);}}>{disciplines.map(([id,name])=><option key={id} value={id}>{name}</option>)}</select></label>
-   <label><span>Technique · {currentTechniques.length}</span><button type="button" className="catalogButton" aria-label="Choisir une technique" onClick={()=>{setCatalogOpen(true);setQuery('');}}><span>{techniqueLabel}</span><strong>⌕</strong></button></label>
+   <label><span>{technique.startsWith('seq-')?'Enchaînement':'Technique'} · {currentTechniques.length}</span><div className="motionSelector"><button type="button" className="catalogButton" aria-label="Choisir une technique" onClick={()=>{setCatalogMode('techniques');setCatalogOpen(true);setQuery('');}}><span>{techniqueLabel}</span><strong>⌕</strong></button><button type="button" className="comboChoose" aria-label="Choisir un enchaînement complexe" onClick={()=>{setCatalogMode('sequences');setCatalogOpen(true);setQuery('');}}>×{currentSequences.length}</button></div></label>
   </section>
   <section className="stage" aria-label="Vue de test 3D">
    <div className="stageTitle"><span>{actor==='mma-amara'?'AMARA':'KADIR'} <em>· {renderStyle==='fitness'?'Animation fitness':'Ultra-réaliste'}</em></span><span className="stagePill">MOTION / IK</span></div>
@@ -246,13 +263,13 @@ export function App(){
    <span className="footnote">IA locale expérimentale : entraînement validé en attente</span>
   </section>
   </div>
-  {tab==='comparison'&&<section className="engineComparison" aria-label="Comparatif des moteurs 3D"><h2>Comparatif des moteurs 3D</h2><p>Comparaison technique entre le moteur CME-3D et le moteur Shadow Studio. Les informations Shadow Studio sont indicatives : aucun accès ni modification à son dépôt depuis cette application.</p><div className="engineComparisonGrid"><article><h3>CME-3D</h3><p>Moteur local de mouvements, rendu Three.js / React Three Fiber, laboratoire biomécanique et diagnostics intégrés.</p><p>Tests : animations, articulations, rig et performance.</p></article><article><h3>Shadow Studio</h3><p>Moteur de l'application de shadow boxing, destiné aux entraînements et aux coachs 3D.</p><p>Comparaison visuelle directe et mesures communes : intégration à développer. Aucun moteur Shadow n'est chargé ici.</p></article></div><p className="engineComparisonNote">Statut : comparaison descriptive. Aucun résultat de performance ou de fidélité biomécanique n'est affirmé sans mesure commune.</p></section>}
   {tab==='tracking'&&<IssueTracker drafts={pendingDrafts} onDismiss={autoDismiss} onClear={autoClear} onCopyReport={exportReport} {...known}/>}
+  {tab==='comparison'&&<ComparisonPanel metrics={metrics} report={report} snapshot={comparisonSnapshot} actor={actor==='mma-amara'?'Amara':'Kadir'} discipline={discipline} technique={techniqueLabel} renderStyle={renderStyle} onOpenLab={()=>setTab('lab')} onCopyReport={exportReport}/>}
   {tab==='lab'&&catalogOpen&&<div className="paletteBackdrop" onClick={()=>setCatalogOpen(false)}>
     <section className="catalogPalette" role="dialog" aria-label="Catalogue complet des techniques" onClick={e=>e.stopPropagation()}>
-      <div className="paletteTitle"><strong>Techniques · {palette.length} / {techniques.length}</strong><button aria-label="Fermer le catalogue" onClick={()=>setCatalogOpen(false)}>×</button></div>
-      <div className="paletteFilters"><input autoFocus aria-label="Rechercher une technique" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Rechercher jab, crochet, projection…"/><label><input type="checkbox" checked={allCatalog} onChange={e=>setAllCatalog(e.target.checked)}/> Toutes disciplines</label></div>
-      <div className="paletteList">{palette.map(t=><button key={t.motion} onClick={()=>selectTechnique(t.motion)}><span>{t.name}<small>{categories[t.category]??t.category} · {t.motion}</small></span>{technique===t.motion&&<b>✓</b>}</button>)}</div>
+      <div className="paletteTitle"><strong>{catalogMode==='sequences'?'Enchaînements expérimentaux · '+visibleSequences.length:'Techniques · '+palette.length+' / '+techniques.length}</strong><button aria-label="Fermer le catalogue" onClick={()=>setCatalogOpen(false)}>×</button></div>
+      <div className="paletteFilters"><input autoFocus aria-label="Rechercher une technique" value={query} onChange={e=>setQuery(e.target.value)} placeholder={catalogMode==='sequences'?'Jab → direct → crochet, lutte, genoux…':'Rechercher jab, crochet, projection…'}/>{catalogMode==='techniques'&&<label><input type="checkbox" checked={allCatalog} onChange={e=>setAllCatalog(e.target.checked)}/> Toutes disciplines</label>}</div>
+      <div className="paletteList">{catalogMode==='sequences'?visibleSequences.map(t=><button key={t.id} disabled={!canRunSequence(t)} onClick={()=>selectTechnique(t.id)}><span>{t.name}<small>{t.motions.join(' → ')} · {t.motions.length} mouvements · expérimental{!canRunSequence(t)?' · gestes manquants':''}</small></span>{technique===t.id&&<b>✓</b>}</button>):palette.map(t=><button key={t.motion} onClick={()=>selectTechnique(t.motion)}><span>{t.name}<small>{categories[t.category]??t.category} · {t.motion}</small></span>{technique===t.motion&&<b>✓</b>}</button>)}</div>
     </section>
    </div>}
   {tab==='lab'&&debug&&<aside className="debugPanel" role="region" aria-label="Console de débogage">
@@ -265,6 +282,10 @@ export function App(){
   {tab==='lab'&&extra&&<aside className="advanced" role="region" aria-label="Informations du banc d'essai"><button className="close" onClick={()=>setExtra(false)} aria-label="Fermer">×</button><h2>Banc d’essai · CME-3D</h2><p>Le rendu et les techniques utilisent des poses articulées et un moteur de mouvements intégrés dans CME-3D.</p><p>Comparaison des rendus Ultra-réaliste et Animation fitness en un clic, sur la même animation. Le module neuronal historique est expérimental, entraîné sur des données synthétiques : aucune amélioration biomécanique par IA n’est encore revendiquée.</p><p>La prochaine étape sera un correcteur temporel léger quantifié (ONNX Runtime WASM), entraîné et évalué sur un jeu de mouvements de combat adapté au modèle.</p><p>Un seul écran, sans défilement vertical. Aucune transmission cloud pendant l’animation.</p></aside>}
   {tab==='lab'&&incidentOpen&&<IncidentReporter context={incidentContext} image={snapshot} onCapture={captureNow} onClose={()=>setIncidentOpen(false)}/>}
   {!!reportText&&<div className="reportFallback" role="dialog" aria-label="Rapport complet CME-3D"><div className="reportFallbackInner"><div className="reportFallbackHead"><strong>Rapport complet · Copier vers ChatGPT</strong><button onClick={()=>setReportText('')} aria-label="Fermer le rapport">×</button></div><p>La copie automatique n’est pas autorisée par ton navigateur. Sélectionne le texte ci-dessous puis copie-le pour me l’envoyer ici.</p><textarea aria-label="Texte complet du rapport" value={reportText} readOnly onFocus={e=>e.currentTarget.select()}/><button onClick={()=>{if(navigator.clipboard?.writeText)void navigator.clipboard.writeText(reportText).then(()=>{setReportText('');onLog('Rapport copié manuellement');});}}>Réessayer la copie</button></div></div>}
-  <nav className="labTabs" aria-label="Onglets de CME-3D"><button className={tab==='lab'?'selected':''} aria-current={tab==='lab'?'page':undefined} onClick={()=>{journal.record('navigation','Ouverture onglet Laboratoire');setTab('lab');setDebug(false);}}>Laboratoire</button><button className={tab==='tracking'?'selected':''} aria-current={tab==='tracking'?'page':undefined} onClick={()=>{journal.record('navigation','Ouverture Suivi des corrections');void known.refresh();setTab('tracking');setDebug(false);}}>Suivi des corrections{pendingDrafts.length>0&&<span className="autoTabCount">{pendingDrafts.length}</span>}</button></nav>
+ <nav className="labTabs" aria-label="Onglets de CME-3D en bas de page">
+   <button className={tab==='lab'?'selected':''} aria-current={tab==='lab'?'page':undefined} onClick={()=>{journal.record('navigation','Ouverture Laboratoire');setTab('lab');setDebug(false);}}>Laboratoire</button>
+   <button className={tab==='tracking'?'selected':''} aria-current={tab==='tracking'?'page':undefined} onClick={()=>{journal.record('navigation','Ouverture Suivi des corrections');void known.refresh();setTab('tracking');setDebug(false);}}>Incidents{pendingDrafts.length>0&&<span className="autoTabCount">{pendingDrafts.length}</span>}</button>
+   <button className={tab==='comparison'?'selected':''} aria-current={tab==='comparison'?'page':undefined} onClick={openComparison}>Comparatif 3D</button>
+  </nav>
  </main>;
 }

@@ -1,7 +1,7 @@
 {
   "schema": "CME3D_MOTIONS_1",
   "updated": "2026-10-24",
-  "motion_count": 291,
+  "motion_count": 306,
   "note": "Les fiches inventories ne sont PAS des validations biomécaniques. Valeurs numériques manquantes = null ; seules sources à portée explicitée.",
   "movements": [
     {
@@ -23628,6 +23628,2196 @@
           "date": "2026-10-24",
           "action": "inventory_creation",
           "reason": "Audit initial des six disciplines"
+        }
+      ]
+    },
+    {
+      "id": "mae-mai-01",
+      "name": "Mae Mai Muay Thai : Salab Fan Pla",
+      "aliases": [
+        "Salab Fan Pla"
+      ],
+      "disciplines": [
+        "muaythai"
+      ],
+      "family": "tradition",
+      "subfamily": "mae_mai",
+      "side": "indetermine",
+      "stance_variants": [
+        "variable"
+      ],
+      "difficulty": "to_assess",
+      "motion_engine_id": null,
+      "source_of_inventory": "github_thai_boxing_label_research_only",
+      "execution_context": "solo_possible",
+      "prerequisites": [],
+      "variants": [],
+      "associated_techniques": [],
+      "anatomical_analysis": {
+        "starting_position": null,
+        "head_gaze": null,
+        "hands_shoulders": null,
+        "pelvis_trunk": null,
+        "legs_feet": null,
+        "joints": [],
+        "prime_movers": [],
+        "stabilizers": [],
+        "centre_of_mass": null,
+        "ground_contacts": [],
+        "note": "Non mesuré pour cette entrée; analyser sources et capture de mouvement."
+      },
+      "kinematic_phases": [
+        {
+          "name": "position_initiale",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "preparation",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "amorcage",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "production_force_deplacement",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "coordination_intersegmentaire",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "acceleration",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "contact_ou_position_cible",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "deceleration",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "recuperation",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "retour_ou_transition",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        }
+      ],
+      "biomechanical_constraints": {
+        "measured_joint_ranges_degrees": null,
+        "measured_speed_m_per_s": null,
+        "measured_acceleration": null,
+        "measured_ground_reaction_force_N": null,
+        "measured_contact_points": null,
+        "design_checks_provisional": [
+          "Kuzushi → tsukuri → kake si projection complète; centre de masse des deux partenaires à étudier."
+        ],
+        "warning": "Aucune valeur numérique réutilisable n’est attribuée à cette technique sans protocole spécifique."
+      },
+      "animation_specification": {
+        "IK_targets": [],
+        "FK_chains": [],
+        "support_states": [],
+        "transition_in": [],
+        "transition_out": [],
+        "no_joint_locking": true,
+        "contact_solver_required": false,
+        "motion_capture_reference": null,
+        "lightweight_AI_parameters": null,
+        "visual_checkpoints": [
+          "vue_face",
+          "vue_profil",
+          "vue_dos",
+          "ralenti",
+          "vitesse_normale"
+        ],
+        "known_risks": [
+          "Kuzushi → tsukuri → kake si projection complète; centre de masse des deux partenaires à étudier."
+        ]
+      },
+      "evidence": [],
+      "quality": {
+        "documentation_status": "inventory_only",
+        "biomechanics_validation": "not_validated",
+        "animation_validation": "not_validated",
+        "requires_human_review": true,
+        "evidence_grade_for_motion": null,
+        "confidence_note": "Classe vidéo identifiée, non mesurée/validée."
+      },
+      "review_history": [
+        {
+          "date": "2026-10-24",
+          "action": "catalogue_name_addition",
+          "reason": "Dataset class label only"
+        }
+      ]
+    },
+    {
+      "id": "mae-mai-02",
+      "name": "Mae Mai Muay Thai : Paksa Waek Rang",
+      "aliases": [
+        "Paksa Waek Rang"
+      ],
+      "disciplines": [
+        "muaythai"
+      ],
+      "family": "tradition",
+      "subfamily": "mae_mai",
+      "side": "indetermine",
+      "stance_variants": [
+        "variable"
+      ],
+      "difficulty": "to_assess",
+      "motion_engine_id": null,
+      "source_of_inventory": "github_thai_boxing_label_research_only",
+      "execution_context": "solo_possible",
+      "prerequisites": [],
+      "variants": [],
+      "associated_techniques": [],
+      "anatomical_analysis": {
+        "starting_position": null,
+        "head_gaze": null,
+        "hands_shoulders": null,
+        "pelvis_trunk": null,
+        "legs_feet": null,
+        "joints": [],
+        "prime_movers": [],
+        "stabilizers": [],
+        "centre_of_mass": null,
+        "ground_contacts": [],
+        "note": "Non mesuré pour cette entrée; analyser sources et capture de mouvement."
+      },
+      "kinematic_phases": [
+        {
+          "name": "position_initiale",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "preparation",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "amorcage",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "production_force_deplacement",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "coordination_intersegmentaire",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "acceleration",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "contact_ou_position_cible",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "deceleration",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "recuperation",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "retour_ou_transition",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        }
+      ],
+      "biomechanical_constraints": {
+        "measured_joint_ranges_degrees": null,
+        "measured_speed_m_per_s": null,
+        "measured_acceleration": null,
+        "measured_ground_reaction_force_N": null,
+        "measured_contact_points": null,
+        "design_checks_provisional": [
+          "Kuzushi → tsukuri → kake si projection complète; centre de masse des deux partenaires à étudier."
+        ],
+        "warning": "Aucune valeur numérique réutilisable n’est attribuée à cette technique sans protocole spécifique."
+      },
+      "animation_specification": {
+        "IK_targets": [],
+        "FK_chains": [],
+        "support_states": [],
+        "transition_in": [],
+        "transition_out": [],
+        "no_joint_locking": true,
+        "contact_solver_required": false,
+        "motion_capture_reference": null,
+        "lightweight_AI_parameters": null,
+        "visual_checkpoints": [
+          "vue_face",
+          "vue_profil",
+          "vue_dos",
+          "ralenti",
+          "vitesse_normale"
+        ],
+        "known_risks": [
+          "Kuzushi → tsukuri → kake si projection complète; centre de masse des deux partenaires à étudier."
+        ]
+      },
+      "evidence": [],
+      "quality": {
+        "documentation_status": "inventory_only",
+        "biomechanics_validation": "not_validated",
+        "animation_validation": "not_validated",
+        "requires_human_review": true,
+        "evidence_grade_for_motion": null,
+        "confidence_note": "Classe vidéo identifiée, non mesurée/validée."
+      },
+      "review_history": [
+        {
+          "date": "2026-10-24",
+          "action": "catalogue_name_addition",
+          "reason": "Dataset class label only"
+        }
+      ]
+    },
+    {
+      "id": "mae-mai-03",
+      "name": "Mae Mai Muay Thai : Chawa Sat Hork",
+      "aliases": [
+        "Chawa Sat Hork"
+      ],
+      "disciplines": [
+        "muaythai"
+      ],
+      "family": "tradition",
+      "subfamily": "mae_mai",
+      "side": "indetermine",
+      "stance_variants": [
+        "variable"
+      ],
+      "difficulty": "to_assess",
+      "motion_engine_id": null,
+      "source_of_inventory": "github_thai_boxing_label_research_only",
+      "execution_context": "solo_possible",
+      "prerequisites": [],
+      "variants": [],
+      "associated_techniques": [],
+      "anatomical_analysis": {
+        "starting_position": null,
+        "head_gaze": null,
+        "hands_shoulders": null,
+        "pelvis_trunk": null,
+        "legs_feet": null,
+        "joints": [],
+        "prime_movers": [],
+        "stabilizers": [],
+        "centre_of_mass": null,
+        "ground_contacts": [],
+        "note": "Non mesuré pour cette entrée; analyser sources et capture de mouvement."
+      },
+      "kinematic_phases": [
+        {
+          "name": "position_initiale",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "preparation",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "amorcage",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "production_force_deplacement",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "coordination_intersegmentaire",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "acceleration",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "contact_ou_position_cible",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "deceleration",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "recuperation",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "retour_ou_transition",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        }
+      ],
+      "biomechanical_constraints": {
+        "measured_joint_ranges_degrees": null,
+        "measured_speed_m_per_s": null,
+        "measured_acceleration": null,
+        "measured_ground_reaction_force_N": null,
+        "measured_contact_points": null,
+        "design_checks_provisional": [
+          "Kuzushi → tsukuri → kake si projection complète; centre de masse des deux partenaires à étudier."
+        ],
+        "warning": "Aucune valeur numérique réutilisable n’est attribuée à cette technique sans protocole spécifique."
+      },
+      "animation_specification": {
+        "IK_targets": [],
+        "FK_chains": [],
+        "support_states": [],
+        "transition_in": [],
+        "transition_out": [],
+        "no_joint_locking": true,
+        "contact_solver_required": false,
+        "motion_capture_reference": null,
+        "lightweight_AI_parameters": null,
+        "visual_checkpoints": [
+          "vue_face",
+          "vue_profil",
+          "vue_dos",
+          "ralenti",
+          "vitesse_normale"
+        ],
+        "known_risks": [
+          "Kuzushi → tsukuri → kake si projection complète; centre de masse des deux partenaires à étudier."
+        ]
+      },
+      "evidence": [],
+      "quality": {
+        "documentation_status": "inventory_only",
+        "biomechanics_validation": "not_validated",
+        "animation_validation": "not_validated",
+        "requires_human_review": true,
+        "evidence_grade_for_motion": null,
+        "confidence_note": "Classe vidéo identifiée, non mesurée/validée."
+      },
+      "review_history": [
+        {
+          "date": "2026-10-24",
+          "action": "catalogue_name_addition",
+          "reason": "Dataset class label only"
+        }
+      ]
+    },
+    {
+      "id": "mae-mai-04",
+      "name": "Mae Mai Muay Thai : Inao Taeng Grit",
+      "aliases": [
+        "Inao Taeng Grit"
+      ],
+      "disciplines": [
+        "muaythai"
+      ],
+      "family": "tradition",
+      "subfamily": "mae_mai",
+      "side": "indetermine",
+      "stance_variants": [
+        "variable"
+      ],
+      "difficulty": "to_assess",
+      "motion_engine_id": null,
+      "source_of_inventory": "github_thai_boxing_label_research_only",
+      "execution_context": "solo_possible",
+      "prerequisites": [],
+      "variants": [],
+      "associated_techniques": [],
+      "anatomical_analysis": {
+        "starting_position": null,
+        "head_gaze": null,
+        "hands_shoulders": null,
+        "pelvis_trunk": null,
+        "legs_feet": null,
+        "joints": [],
+        "prime_movers": [],
+        "stabilizers": [],
+        "centre_of_mass": null,
+        "ground_contacts": [],
+        "note": "Non mesuré pour cette entrée; analyser sources et capture de mouvement."
+      },
+      "kinematic_phases": [
+        {
+          "name": "position_initiale",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "preparation",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "amorcage",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "production_force_deplacement",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "coordination_intersegmentaire",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "acceleration",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "contact_ou_position_cible",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "deceleration",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "recuperation",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "retour_ou_transition",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        }
+      ],
+      "biomechanical_constraints": {
+        "measured_joint_ranges_degrees": null,
+        "measured_speed_m_per_s": null,
+        "measured_acceleration": null,
+        "measured_ground_reaction_force_N": null,
+        "measured_contact_points": null,
+        "design_checks_provisional": [
+          "Kuzushi → tsukuri → kake si projection complète; centre de masse des deux partenaires à étudier."
+        ],
+        "warning": "Aucune valeur numérique réutilisable n’est attribuée à cette technique sans protocole spécifique."
+      },
+      "animation_specification": {
+        "IK_targets": [],
+        "FK_chains": [],
+        "support_states": [],
+        "transition_in": [],
+        "transition_out": [],
+        "no_joint_locking": true,
+        "contact_solver_required": false,
+        "motion_capture_reference": null,
+        "lightweight_AI_parameters": null,
+        "visual_checkpoints": [
+          "vue_face",
+          "vue_profil",
+          "vue_dos",
+          "ralenti",
+          "vitesse_normale"
+        ],
+        "known_risks": [
+          "Kuzushi → tsukuri → kake si projection complète; centre de masse des deux partenaires à étudier."
+        ]
+      },
+      "evidence": [],
+      "quality": {
+        "documentation_status": "inventory_only",
+        "biomechanics_validation": "not_validated",
+        "animation_validation": "not_validated",
+        "requires_human_review": true,
+        "evidence_grade_for_motion": null,
+        "confidence_note": "Classe vidéo identifiée, non mesurée/validée."
+      },
+      "review_history": [
+        {
+          "date": "2026-10-24",
+          "action": "catalogue_name_addition",
+          "reason": "Dataset class label only"
+        }
+      ]
+    },
+    {
+      "id": "mae-mai-05",
+      "name": "Mae Mai Muay Thai : Yor Khao Phra Sumen",
+      "aliases": [
+        "Yor Khao Phra Sumen"
+      ],
+      "disciplines": [
+        "muaythai"
+      ],
+      "family": "tradition",
+      "subfamily": "mae_mai",
+      "side": "indetermine",
+      "stance_variants": [
+        "variable"
+      ],
+      "difficulty": "to_assess",
+      "motion_engine_id": null,
+      "source_of_inventory": "github_thai_boxing_label_research_only",
+      "execution_context": "solo_possible",
+      "prerequisites": [],
+      "variants": [],
+      "associated_techniques": [],
+      "anatomical_analysis": {
+        "starting_position": null,
+        "head_gaze": null,
+        "hands_shoulders": null,
+        "pelvis_trunk": null,
+        "legs_feet": null,
+        "joints": [],
+        "prime_movers": [],
+        "stabilizers": [],
+        "centre_of_mass": null,
+        "ground_contacts": [],
+        "note": "Non mesuré pour cette entrée; analyser sources et capture de mouvement."
+      },
+      "kinematic_phases": [
+        {
+          "name": "position_initiale",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "preparation",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "amorcage",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "production_force_deplacement",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "coordination_intersegmentaire",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "acceleration",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "contact_ou_position_cible",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "deceleration",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "recuperation",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "retour_ou_transition",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        }
+      ],
+      "biomechanical_constraints": {
+        "measured_joint_ranges_degrees": null,
+        "measured_speed_m_per_s": null,
+        "measured_acceleration": null,
+        "measured_ground_reaction_force_N": null,
+        "measured_contact_points": null,
+        "design_checks_provisional": [
+          "Kuzushi → tsukuri → kake si projection complète; centre de masse des deux partenaires à étudier."
+        ],
+        "warning": "Aucune valeur numérique réutilisable n’est attribuée à cette technique sans protocole spécifique."
+      },
+      "animation_specification": {
+        "IK_targets": [],
+        "FK_chains": [],
+        "support_states": [],
+        "transition_in": [],
+        "transition_out": [],
+        "no_joint_locking": true,
+        "contact_solver_required": false,
+        "motion_capture_reference": null,
+        "lightweight_AI_parameters": null,
+        "visual_checkpoints": [
+          "vue_face",
+          "vue_profil",
+          "vue_dos",
+          "ralenti",
+          "vitesse_normale"
+        ],
+        "known_risks": [
+          "Kuzushi → tsukuri → kake si projection complète; centre de masse des deux partenaires à étudier."
+        ]
+      },
+      "evidence": [],
+      "quality": {
+        "documentation_status": "inventory_only",
+        "biomechanics_validation": "not_validated",
+        "animation_validation": "not_validated",
+        "requires_human_review": true,
+        "evidence_grade_for_motion": null,
+        "confidence_note": "Classe vidéo identifiée, non mesurée/validée."
+      },
+      "review_history": [
+        {
+          "date": "2026-10-24",
+          "action": "catalogue_name_addition",
+          "reason": "Dataset class label only"
+        }
+      ]
+    },
+    {
+      "id": "mae-mai-06",
+      "name": "Mae Mai Muay Thai : Ta Then Kam Fak",
+      "aliases": [
+        "Ta Then Kam Fak"
+      ],
+      "disciplines": [
+        "muaythai"
+      ],
+      "family": "tradition",
+      "subfamily": "mae_mai",
+      "side": "indetermine",
+      "stance_variants": [
+        "variable"
+      ],
+      "difficulty": "to_assess",
+      "motion_engine_id": null,
+      "source_of_inventory": "github_thai_boxing_label_research_only",
+      "execution_context": "solo_possible",
+      "prerequisites": [],
+      "variants": [],
+      "associated_techniques": [],
+      "anatomical_analysis": {
+        "starting_position": null,
+        "head_gaze": null,
+        "hands_shoulders": null,
+        "pelvis_trunk": null,
+        "legs_feet": null,
+        "joints": [],
+        "prime_movers": [],
+        "stabilizers": [],
+        "centre_of_mass": null,
+        "ground_contacts": [],
+        "note": "Non mesuré pour cette entrée; analyser sources et capture de mouvement."
+      },
+      "kinematic_phases": [
+        {
+          "name": "position_initiale",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "preparation",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "amorcage",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "production_force_deplacement",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "coordination_intersegmentaire",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "acceleration",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "contact_ou_position_cible",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "deceleration",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "recuperation",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "retour_ou_transition",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        }
+      ],
+      "biomechanical_constraints": {
+        "measured_joint_ranges_degrees": null,
+        "measured_speed_m_per_s": null,
+        "measured_acceleration": null,
+        "measured_ground_reaction_force_N": null,
+        "measured_contact_points": null,
+        "design_checks_provisional": [
+          "Kuzushi → tsukuri → kake si projection complète; centre de masse des deux partenaires à étudier."
+        ],
+        "warning": "Aucune valeur numérique réutilisable n’est attribuée à cette technique sans protocole spécifique."
+      },
+      "animation_specification": {
+        "IK_targets": [],
+        "FK_chains": [],
+        "support_states": [],
+        "transition_in": [],
+        "transition_out": [],
+        "no_joint_locking": true,
+        "contact_solver_required": false,
+        "motion_capture_reference": null,
+        "lightweight_AI_parameters": null,
+        "visual_checkpoints": [
+          "vue_face",
+          "vue_profil",
+          "vue_dos",
+          "ralenti",
+          "vitesse_normale"
+        ],
+        "known_risks": [
+          "Kuzushi → tsukuri → kake si projection complète; centre de masse des deux partenaires à étudier."
+        ]
+      },
+      "evidence": [],
+      "quality": {
+        "documentation_status": "inventory_only",
+        "biomechanics_validation": "not_validated",
+        "animation_validation": "not_validated",
+        "requires_human_review": true,
+        "evidence_grade_for_motion": null,
+        "confidence_note": "Classe vidéo identifiée, non mesurée/validée."
+      },
+      "review_history": [
+        {
+          "date": "2026-10-24",
+          "action": "catalogue_name_addition",
+          "reason": "Dataset class label only"
+        }
+      ]
+    },
+    {
+      "id": "mae-mai-07",
+      "name": "Mae Mai Muay Thai : Mon Yan Lak",
+      "aliases": [
+        "Mon Yan Lak"
+      ],
+      "disciplines": [
+        "muaythai"
+      ],
+      "family": "tradition",
+      "subfamily": "mae_mai",
+      "side": "indetermine",
+      "stance_variants": [
+        "variable"
+      ],
+      "difficulty": "to_assess",
+      "motion_engine_id": null,
+      "source_of_inventory": "github_thai_boxing_label_research_only",
+      "execution_context": "solo_possible",
+      "prerequisites": [],
+      "variants": [],
+      "associated_techniques": [],
+      "anatomical_analysis": {
+        "starting_position": null,
+        "head_gaze": null,
+        "hands_shoulders": null,
+        "pelvis_trunk": null,
+        "legs_feet": null,
+        "joints": [],
+        "prime_movers": [],
+        "stabilizers": [],
+        "centre_of_mass": null,
+        "ground_contacts": [],
+        "note": "Non mesuré pour cette entrée; analyser sources et capture de mouvement."
+      },
+      "kinematic_phases": [
+        {
+          "name": "position_initiale",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "preparation",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "amorcage",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "production_force_deplacement",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "coordination_intersegmentaire",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "acceleration",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "contact_ou_position_cible",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "deceleration",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "recuperation",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "retour_ou_transition",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        }
+      ],
+      "biomechanical_constraints": {
+        "measured_joint_ranges_degrees": null,
+        "measured_speed_m_per_s": null,
+        "measured_acceleration": null,
+        "measured_ground_reaction_force_N": null,
+        "measured_contact_points": null,
+        "design_checks_provisional": [
+          "Kuzushi → tsukuri → kake si projection complète; centre de masse des deux partenaires à étudier."
+        ],
+        "warning": "Aucune valeur numérique réutilisable n’est attribuée à cette technique sans protocole spécifique."
+      },
+      "animation_specification": {
+        "IK_targets": [],
+        "FK_chains": [],
+        "support_states": [],
+        "transition_in": [],
+        "transition_out": [],
+        "no_joint_locking": true,
+        "contact_solver_required": false,
+        "motion_capture_reference": null,
+        "lightweight_AI_parameters": null,
+        "visual_checkpoints": [
+          "vue_face",
+          "vue_profil",
+          "vue_dos",
+          "ralenti",
+          "vitesse_normale"
+        ],
+        "known_risks": [
+          "Kuzushi → tsukuri → kake si projection complète; centre de masse des deux partenaires à étudier."
+        ]
+      },
+      "evidence": [],
+      "quality": {
+        "documentation_status": "inventory_only",
+        "biomechanics_validation": "not_validated",
+        "animation_validation": "not_validated",
+        "requires_human_review": true,
+        "evidence_grade_for_motion": null,
+        "confidence_note": "Classe vidéo identifiée, non mesurée/validée."
+      },
+      "review_history": [
+        {
+          "date": "2026-10-24",
+          "action": "catalogue_name_addition",
+          "reason": "Dataset class label only"
+        }
+      ]
+    },
+    {
+      "id": "mae-mai-08",
+      "name": "Mae Mai Muay Thai : Pal Look Toy",
+      "aliases": [
+        "Pal Look Toy"
+      ],
+      "disciplines": [
+        "muaythai"
+      ],
+      "family": "tradition",
+      "subfamily": "mae_mai",
+      "side": "indetermine",
+      "stance_variants": [
+        "variable"
+      ],
+      "difficulty": "to_assess",
+      "motion_engine_id": null,
+      "source_of_inventory": "github_thai_boxing_label_research_only",
+      "execution_context": "solo_possible",
+      "prerequisites": [],
+      "variants": [],
+      "associated_techniques": [],
+      "anatomical_analysis": {
+        "starting_position": null,
+        "head_gaze": null,
+        "hands_shoulders": null,
+        "pelvis_trunk": null,
+        "legs_feet": null,
+        "joints": [],
+        "prime_movers": [],
+        "stabilizers": [],
+        "centre_of_mass": null,
+        "ground_contacts": [],
+        "note": "Non mesuré pour cette entrée; analyser sources et capture de mouvement."
+      },
+      "kinematic_phases": [
+        {
+          "name": "position_initiale",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "preparation",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "amorcage",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "production_force_deplacement",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "coordination_intersegmentaire",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "acceleration",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "contact_ou_position_cible",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "deceleration",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "recuperation",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "retour_ou_transition",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        }
+      ],
+      "biomechanical_constraints": {
+        "measured_joint_ranges_degrees": null,
+        "measured_speed_m_per_s": null,
+        "measured_acceleration": null,
+        "measured_ground_reaction_force_N": null,
+        "measured_contact_points": null,
+        "design_checks_provisional": [
+          "Kuzushi → tsukuri → kake si projection complète; centre de masse des deux partenaires à étudier."
+        ],
+        "warning": "Aucune valeur numérique réutilisable n’est attribuée à cette technique sans protocole spécifique."
+      },
+      "animation_specification": {
+        "IK_targets": [],
+        "FK_chains": [],
+        "support_states": [],
+        "transition_in": [],
+        "transition_out": [],
+        "no_joint_locking": true,
+        "contact_solver_required": false,
+        "motion_capture_reference": null,
+        "lightweight_AI_parameters": null,
+        "visual_checkpoints": [
+          "vue_face",
+          "vue_profil",
+          "vue_dos",
+          "ralenti",
+          "vitesse_normale"
+        ],
+        "known_risks": [
+          "Kuzushi → tsukuri → kake si projection complète; centre de masse des deux partenaires à étudier."
+        ]
+      },
+      "evidence": [],
+      "quality": {
+        "documentation_status": "inventory_only",
+        "biomechanics_validation": "not_validated",
+        "animation_validation": "not_validated",
+        "requires_human_review": true,
+        "evidence_grade_for_motion": null,
+        "confidence_note": "Classe vidéo identifiée, non mesurée/validée."
+      },
+      "review_history": [
+        {
+          "date": "2026-10-24",
+          "action": "catalogue_name_addition",
+          "reason": "Dataset class label only"
+        }
+      ]
+    },
+    {
+      "id": "mae-mai-09",
+      "name": "Mae Mai Muay Thai : Jorrakhe Fad Hang",
+      "aliases": [
+        "Jorrakhe Fad Hang"
+      ],
+      "disciplines": [
+        "muaythai"
+      ],
+      "family": "tradition",
+      "subfamily": "mae_mai",
+      "side": "indetermine",
+      "stance_variants": [
+        "variable"
+      ],
+      "difficulty": "to_assess",
+      "motion_engine_id": null,
+      "source_of_inventory": "github_thai_boxing_label_research_only",
+      "execution_context": "solo_possible",
+      "prerequisites": [],
+      "variants": [],
+      "associated_techniques": [],
+      "anatomical_analysis": {
+        "starting_position": null,
+        "head_gaze": null,
+        "hands_shoulders": null,
+        "pelvis_trunk": null,
+        "legs_feet": null,
+        "joints": [],
+        "prime_movers": [],
+        "stabilizers": [],
+        "centre_of_mass": null,
+        "ground_contacts": [],
+        "note": "Non mesuré pour cette entrée; analyser sources et capture de mouvement."
+      },
+      "kinematic_phases": [
+        {
+          "name": "position_initiale",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "preparation",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "amorcage",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "production_force_deplacement",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "coordination_intersegmentaire",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "acceleration",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "contact_ou_position_cible",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "deceleration",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "recuperation",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "retour_ou_transition",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        }
+      ],
+      "biomechanical_constraints": {
+        "measured_joint_ranges_degrees": null,
+        "measured_speed_m_per_s": null,
+        "measured_acceleration": null,
+        "measured_ground_reaction_force_N": null,
+        "measured_contact_points": null,
+        "design_checks_provisional": [
+          "Kuzushi → tsukuri → kake si projection complète; centre de masse des deux partenaires à étudier."
+        ],
+        "warning": "Aucune valeur numérique réutilisable n’est attribuée à cette technique sans protocole spécifique."
+      },
+      "animation_specification": {
+        "IK_targets": [],
+        "FK_chains": [],
+        "support_states": [],
+        "transition_in": [],
+        "transition_out": [],
+        "no_joint_locking": true,
+        "contact_solver_required": false,
+        "motion_capture_reference": null,
+        "lightweight_AI_parameters": null,
+        "visual_checkpoints": [
+          "vue_face",
+          "vue_profil",
+          "vue_dos",
+          "ralenti",
+          "vitesse_normale"
+        ],
+        "known_risks": [
+          "Kuzushi → tsukuri → kake si projection complète; centre de masse des deux partenaires à étudier."
+        ]
+      },
+      "evidence": [],
+      "quality": {
+        "documentation_status": "inventory_only",
+        "biomechanics_validation": "not_validated",
+        "animation_validation": "not_validated",
+        "requires_human_review": true,
+        "evidence_grade_for_motion": null,
+        "confidence_note": "Classe vidéo identifiée, non mesurée/validée."
+      },
+      "review_history": [
+        {
+          "date": "2026-10-24",
+          "action": "catalogue_name_addition",
+          "reason": "Dataset class label only"
+        }
+      ]
+    },
+    {
+      "id": "mae-mai-10",
+      "name": "Mae Mai Muay Thai : Hak Nguang Aiyara",
+      "aliases": [
+        "Hak Nguang Aiyara"
+      ],
+      "disciplines": [
+        "muaythai"
+      ],
+      "family": "tradition",
+      "subfamily": "mae_mai",
+      "side": "indetermine",
+      "stance_variants": [
+        "variable"
+      ],
+      "difficulty": "to_assess",
+      "motion_engine_id": null,
+      "source_of_inventory": "github_thai_boxing_label_research_only",
+      "execution_context": "solo_possible",
+      "prerequisites": [],
+      "variants": [],
+      "associated_techniques": [],
+      "anatomical_analysis": {
+        "starting_position": null,
+        "head_gaze": null,
+        "hands_shoulders": null,
+        "pelvis_trunk": null,
+        "legs_feet": null,
+        "joints": [],
+        "prime_movers": [],
+        "stabilizers": [],
+        "centre_of_mass": null,
+        "ground_contacts": [],
+        "note": "Non mesuré pour cette entrée; analyser sources et capture de mouvement."
+      },
+      "kinematic_phases": [
+        {
+          "name": "position_initiale",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "preparation",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "amorcage",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "production_force_deplacement",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "coordination_intersegmentaire",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "acceleration",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "contact_ou_position_cible",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "deceleration",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "recuperation",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "retour_ou_transition",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        }
+      ],
+      "biomechanical_constraints": {
+        "measured_joint_ranges_degrees": null,
+        "measured_speed_m_per_s": null,
+        "measured_acceleration": null,
+        "measured_ground_reaction_force_N": null,
+        "measured_contact_points": null,
+        "design_checks_provisional": [
+          "Kuzushi → tsukuri → kake si projection complète; centre de masse des deux partenaires à étudier."
+        ],
+        "warning": "Aucune valeur numérique réutilisable n’est attribuée à cette technique sans protocole spécifique."
+      },
+      "animation_specification": {
+        "IK_targets": [],
+        "FK_chains": [],
+        "support_states": [],
+        "transition_in": [],
+        "transition_out": [],
+        "no_joint_locking": true,
+        "contact_solver_required": false,
+        "motion_capture_reference": null,
+        "lightweight_AI_parameters": null,
+        "visual_checkpoints": [
+          "vue_face",
+          "vue_profil",
+          "vue_dos",
+          "ralenti",
+          "vitesse_normale"
+        ],
+        "known_risks": [
+          "Kuzushi → tsukuri → kake si projection complète; centre de masse des deux partenaires à étudier."
+        ]
+      },
+      "evidence": [],
+      "quality": {
+        "documentation_status": "inventory_only",
+        "biomechanics_validation": "not_validated",
+        "animation_validation": "not_validated",
+        "requires_human_review": true,
+        "evidence_grade_for_motion": null,
+        "confidence_note": "Classe vidéo identifiée, non mesurée/validée."
+      },
+      "review_history": [
+        {
+          "date": "2026-10-24",
+          "action": "catalogue_name_addition",
+          "reason": "Dataset class label only"
+        }
+      ]
+    },
+    {
+      "id": "mae-mai-11",
+      "name": "Mae Mai Muay Thai : Naka Bid Hang",
+      "aliases": [
+        "Naka Bid Hang"
+      ],
+      "disciplines": [
+        "muaythai"
+      ],
+      "family": "tradition",
+      "subfamily": "mae_mai",
+      "side": "indetermine",
+      "stance_variants": [
+        "variable"
+      ],
+      "difficulty": "to_assess",
+      "motion_engine_id": null,
+      "source_of_inventory": "github_thai_boxing_label_research_only",
+      "execution_context": "solo_possible",
+      "prerequisites": [],
+      "variants": [],
+      "associated_techniques": [],
+      "anatomical_analysis": {
+        "starting_position": null,
+        "head_gaze": null,
+        "hands_shoulders": null,
+        "pelvis_trunk": null,
+        "legs_feet": null,
+        "joints": [],
+        "prime_movers": [],
+        "stabilizers": [],
+        "centre_of_mass": null,
+        "ground_contacts": [],
+        "note": "Non mesuré pour cette entrée; analyser sources et capture de mouvement."
+      },
+      "kinematic_phases": [
+        {
+          "name": "position_initiale",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "preparation",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "amorcage",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "production_force_deplacement",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "coordination_intersegmentaire",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "acceleration",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "contact_ou_position_cible",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "deceleration",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "recuperation",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "retour_ou_transition",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        }
+      ],
+      "biomechanical_constraints": {
+        "measured_joint_ranges_degrees": null,
+        "measured_speed_m_per_s": null,
+        "measured_acceleration": null,
+        "measured_ground_reaction_force_N": null,
+        "measured_contact_points": null,
+        "design_checks_provisional": [
+          "Kuzushi → tsukuri → kake si projection complète; centre de masse des deux partenaires à étudier."
+        ],
+        "warning": "Aucune valeur numérique réutilisable n’est attribuée à cette technique sans protocole spécifique."
+      },
+      "animation_specification": {
+        "IK_targets": [],
+        "FK_chains": [],
+        "support_states": [],
+        "transition_in": [],
+        "transition_out": [],
+        "no_joint_locking": true,
+        "contact_solver_required": false,
+        "motion_capture_reference": null,
+        "lightweight_AI_parameters": null,
+        "visual_checkpoints": [
+          "vue_face",
+          "vue_profil",
+          "vue_dos",
+          "ralenti",
+          "vitesse_normale"
+        ],
+        "known_risks": [
+          "Kuzushi → tsukuri → kake si projection complète; centre de masse des deux partenaires à étudier."
+        ]
+      },
+      "evidence": [],
+      "quality": {
+        "documentation_status": "inventory_only",
+        "biomechanics_validation": "not_validated",
+        "animation_validation": "not_validated",
+        "requires_human_review": true,
+        "evidence_grade_for_motion": null,
+        "confidence_note": "Classe vidéo identifiée, non mesurée/validée."
+      },
+      "review_history": [
+        {
+          "date": "2026-10-24",
+          "action": "catalogue_name_addition",
+          "reason": "Dataset class label only"
+        }
+      ]
+    },
+    {
+      "id": "mae-mai-12",
+      "name": "Mae Mai Muay Thai : Wiroon Hok Glab",
+      "aliases": [
+        "Wiroon Hok Glab"
+      ],
+      "disciplines": [
+        "muaythai"
+      ],
+      "family": "tradition",
+      "subfamily": "mae_mai",
+      "side": "indetermine",
+      "stance_variants": [
+        "variable"
+      ],
+      "difficulty": "to_assess",
+      "motion_engine_id": null,
+      "source_of_inventory": "github_thai_boxing_label_research_only",
+      "execution_context": "solo_possible",
+      "prerequisites": [],
+      "variants": [],
+      "associated_techniques": [],
+      "anatomical_analysis": {
+        "starting_position": null,
+        "head_gaze": null,
+        "hands_shoulders": null,
+        "pelvis_trunk": null,
+        "legs_feet": null,
+        "joints": [],
+        "prime_movers": [],
+        "stabilizers": [],
+        "centre_of_mass": null,
+        "ground_contacts": [],
+        "note": "Non mesuré pour cette entrée; analyser sources et capture de mouvement."
+      },
+      "kinematic_phases": [
+        {
+          "name": "position_initiale",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "preparation",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "amorcage",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "production_force_deplacement",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "coordination_intersegmentaire",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "acceleration",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "contact_ou_position_cible",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "deceleration",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "recuperation",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "retour_ou_transition",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        }
+      ],
+      "biomechanical_constraints": {
+        "measured_joint_ranges_degrees": null,
+        "measured_speed_m_per_s": null,
+        "measured_acceleration": null,
+        "measured_ground_reaction_force_N": null,
+        "measured_contact_points": null,
+        "design_checks_provisional": [
+          "Kuzushi → tsukuri → kake si projection complète; centre de masse des deux partenaires à étudier."
+        ],
+        "warning": "Aucune valeur numérique réutilisable n’est attribuée à cette technique sans protocole spécifique."
+      },
+      "animation_specification": {
+        "IK_targets": [],
+        "FK_chains": [],
+        "support_states": [],
+        "transition_in": [],
+        "transition_out": [],
+        "no_joint_locking": true,
+        "contact_solver_required": false,
+        "motion_capture_reference": null,
+        "lightweight_AI_parameters": null,
+        "visual_checkpoints": [
+          "vue_face",
+          "vue_profil",
+          "vue_dos",
+          "ralenti",
+          "vitesse_normale"
+        ],
+        "known_risks": [
+          "Kuzushi → tsukuri → kake si projection complète; centre de masse des deux partenaires à étudier."
+        ]
+      },
+      "evidence": [],
+      "quality": {
+        "documentation_status": "inventory_only",
+        "biomechanics_validation": "not_validated",
+        "animation_validation": "not_validated",
+        "requires_human_review": true,
+        "evidence_grade_for_motion": null,
+        "confidence_note": "Classe vidéo identifiée, non mesurée/validée."
+      },
+      "review_history": [
+        {
+          "date": "2026-10-24",
+          "action": "catalogue_name_addition",
+          "reason": "Dataset class label only"
+        }
+      ]
+    },
+    {
+      "id": "mae-mai-13",
+      "name": "Mae Mai Muay Thai : Dab Chawala",
+      "aliases": [
+        "Dab Chawala"
+      ],
+      "disciplines": [
+        "muaythai"
+      ],
+      "family": "tradition",
+      "subfamily": "mae_mai",
+      "side": "indetermine",
+      "stance_variants": [
+        "variable"
+      ],
+      "difficulty": "to_assess",
+      "motion_engine_id": null,
+      "source_of_inventory": "github_thai_boxing_label_research_only",
+      "execution_context": "solo_possible",
+      "prerequisites": [],
+      "variants": [],
+      "associated_techniques": [],
+      "anatomical_analysis": {
+        "starting_position": null,
+        "head_gaze": null,
+        "hands_shoulders": null,
+        "pelvis_trunk": null,
+        "legs_feet": null,
+        "joints": [],
+        "prime_movers": [],
+        "stabilizers": [],
+        "centre_of_mass": null,
+        "ground_contacts": [],
+        "note": "Non mesuré pour cette entrée; analyser sources et capture de mouvement."
+      },
+      "kinematic_phases": [
+        {
+          "name": "position_initiale",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "preparation",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "amorcage",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "production_force_deplacement",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "coordination_intersegmentaire",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "acceleration",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "contact_ou_position_cible",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "deceleration",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "recuperation",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "retour_ou_transition",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        }
+      ],
+      "biomechanical_constraints": {
+        "measured_joint_ranges_degrees": null,
+        "measured_speed_m_per_s": null,
+        "measured_acceleration": null,
+        "measured_ground_reaction_force_N": null,
+        "measured_contact_points": null,
+        "design_checks_provisional": [
+          "Kuzushi → tsukuri → kake si projection complète; centre de masse des deux partenaires à étudier."
+        ],
+        "warning": "Aucune valeur numérique réutilisable n’est attribuée à cette technique sans protocole spécifique."
+      },
+      "animation_specification": {
+        "IK_targets": [],
+        "FK_chains": [],
+        "support_states": [],
+        "transition_in": [],
+        "transition_out": [],
+        "no_joint_locking": true,
+        "contact_solver_required": false,
+        "motion_capture_reference": null,
+        "lightweight_AI_parameters": null,
+        "visual_checkpoints": [
+          "vue_face",
+          "vue_profil",
+          "vue_dos",
+          "ralenti",
+          "vitesse_normale"
+        ],
+        "known_risks": [
+          "Kuzushi → tsukuri → kake si projection complète; centre de masse des deux partenaires à étudier."
+        ]
+      },
+      "evidence": [],
+      "quality": {
+        "documentation_status": "inventory_only",
+        "biomechanics_validation": "not_validated",
+        "animation_validation": "not_validated",
+        "requires_human_review": true,
+        "evidence_grade_for_motion": null,
+        "confidence_note": "Classe vidéo identifiée, non mesurée/validée."
+      },
+      "review_history": [
+        {
+          "date": "2026-10-24",
+          "action": "catalogue_name_addition",
+          "reason": "Dataset class label only"
+        }
+      ]
+    },
+    {
+      "id": "mae-mai-14",
+      "name": "Mae Mai Muay Thai : Khun Yak Hap Ling",
+      "aliases": [
+        "Khun Yak Hap Ling"
+      ],
+      "disciplines": [
+        "muaythai"
+      ],
+      "family": "tradition",
+      "subfamily": "mae_mai",
+      "side": "indetermine",
+      "stance_variants": [
+        "variable"
+      ],
+      "difficulty": "to_assess",
+      "motion_engine_id": null,
+      "source_of_inventory": "github_thai_boxing_label_research_only",
+      "execution_context": "solo_possible",
+      "prerequisites": [],
+      "variants": [],
+      "associated_techniques": [],
+      "anatomical_analysis": {
+        "starting_position": null,
+        "head_gaze": null,
+        "hands_shoulders": null,
+        "pelvis_trunk": null,
+        "legs_feet": null,
+        "joints": [],
+        "prime_movers": [],
+        "stabilizers": [],
+        "centre_of_mass": null,
+        "ground_contacts": [],
+        "note": "Non mesuré pour cette entrée; analyser sources et capture de mouvement."
+      },
+      "kinematic_phases": [
+        {
+          "name": "position_initiale",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "preparation",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "amorcage",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "production_force_deplacement",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "coordination_intersegmentaire",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "acceleration",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "contact_ou_position_cible",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "deceleration",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "recuperation",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "retour_ou_transition",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        }
+      ],
+      "biomechanical_constraints": {
+        "measured_joint_ranges_degrees": null,
+        "measured_speed_m_per_s": null,
+        "measured_acceleration": null,
+        "measured_ground_reaction_force_N": null,
+        "measured_contact_points": null,
+        "design_checks_provisional": [
+          "Kuzushi → tsukuri → kake si projection complète; centre de masse des deux partenaires à étudier."
+        ],
+        "warning": "Aucune valeur numérique réutilisable n’est attribuée à cette technique sans protocole spécifique."
+      },
+      "animation_specification": {
+        "IK_targets": [],
+        "FK_chains": [],
+        "support_states": [],
+        "transition_in": [],
+        "transition_out": [],
+        "no_joint_locking": true,
+        "contact_solver_required": false,
+        "motion_capture_reference": null,
+        "lightweight_AI_parameters": null,
+        "visual_checkpoints": [
+          "vue_face",
+          "vue_profil",
+          "vue_dos",
+          "ralenti",
+          "vitesse_normale"
+        ],
+        "known_risks": [
+          "Kuzushi → tsukuri → kake si projection complète; centre de masse des deux partenaires à étudier."
+        ]
+      },
+      "evidence": [],
+      "quality": {
+        "documentation_status": "inventory_only",
+        "biomechanics_validation": "not_validated",
+        "animation_validation": "not_validated",
+        "requires_human_review": true,
+        "evidence_grade_for_motion": null,
+        "confidence_note": "Classe vidéo identifiée, non mesurée/validée."
+      },
+      "review_history": [
+        {
+          "date": "2026-10-24",
+          "action": "catalogue_name_addition",
+          "reason": "Dataset class label only"
+        }
+      ]
+    },
+    {
+      "id": "mae-mai-15",
+      "name": "Mae Mai Muay Thai : Hak Kor Erawan",
+      "aliases": [
+        "Hak Kor Erawan"
+      ],
+      "disciplines": [
+        "muaythai"
+      ],
+      "family": "tradition",
+      "subfamily": "mae_mai",
+      "side": "indetermine",
+      "stance_variants": [
+        "variable"
+      ],
+      "difficulty": "to_assess",
+      "motion_engine_id": null,
+      "source_of_inventory": "github_thai_boxing_label_research_only",
+      "execution_context": "solo_possible",
+      "prerequisites": [],
+      "variants": [],
+      "associated_techniques": [],
+      "anatomical_analysis": {
+        "starting_position": null,
+        "head_gaze": null,
+        "hands_shoulders": null,
+        "pelvis_trunk": null,
+        "legs_feet": null,
+        "joints": [],
+        "prime_movers": [],
+        "stabilizers": [],
+        "centre_of_mass": null,
+        "ground_contacts": [],
+        "note": "Non mesuré pour cette entrée; analyser sources et capture de mouvement."
+      },
+      "kinematic_phases": [
+        {
+          "name": "position_initiale",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "preparation",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "amorcage",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "production_force_deplacement",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "coordination_intersegmentaire",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "acceleration",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "contact_ou_position_cible",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "deceleration",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "recuperation",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        },
+        {
+          "name": "retour_ou_transition",
+          "event_time_seconds": null,
+          "body_pose": null,
+          "measured": false
+        }
+      ],
+      "biomechanical_constraints": {
+        "measured_joint_ranges_degrees": null,
+        "measured_speed_m_per_s": null,
+        "measured_acceleration": null,
+        "measured_ground_reaction_force_N": null,
+        "measured_contact_points": null,
+        "design_checks_provisional": [
+          "Kuzushi → tsukuri → kake si projection complète; centre de masse des deux partenaires à étudier."
+        ],
+        "warning": "Aucune valeur numérique réutilisable n’est attribuée à cette technique sans protocole spécifique."
+      },
+      "animation_specification": {
+        "IK_targets": [],
+        "FK_chains": [],
+        "support_states": [],
+        "transition_in": [],
+        "transition_out": [],
+        "no_joint_locking": true,
+        "contact_solver_required": false,
+        "motion_capture_reference": null,
+        "lightweight_AI_parameters": null,
+        "visual_checkpoints": [
+          "vue_face",
+          "vue_profil",
+          "vue_dos",
+          "ralenti",
+          "vitesse_normale"
+        ],
+        "known_risks": [
+          "Kuzushi → tsukuri → kake si projection complète; centre de masse des deux partenaires à étudier."
+        ]
+      },
+      "evidence": [],
+      "quality": {
+        "documentation_status": "inventory_only",
+        "biomechanics_validation": "not_validated",
+        "animation_validation": "not_validated",
+        "requires_human_review": true,
+        "evidence_grade_for_motion": null,
+        "confidence_note": "Classe vidéo identifiée, non mesurée/validée."
+      },
+      "review_history": [
+        {
+          "date": "2026-10-24",
+          "action": "catalogue_name_addition",
+          "reason": "Dataset class label only"
         }
       ]
     },

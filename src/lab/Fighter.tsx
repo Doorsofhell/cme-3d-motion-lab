@@ -2,10 +2,12 @@ import {useEffect,useMemo,useRef,type RefObject} from 'react';
 import {useFrame} from '@react-three/fiber';
 import {useGLTF} from '@react-three/drei';
 import {clone} from 'three/examples/jsm/utils/SkeletonUtils.js';
-import {SkeletonHelper,type Mesh,type Object3D,MeshStandardMaterial,MeshToonMaterial,DataTexture,RedFormat,UnsignedByteType,NearestFilter,Color} from 'three';
+import {SkeletonHelper,type Mesh,type Object3D,MeshStandardMaterial,MeshToonMaterial,DoubleSide,DataTexture,RedFormat,UnsignedByteType,NearestFilter,Color} from 'three';
 import {CoachRig} from '../shadow-engine/rig';
 import {getLibrary} from '../shadow-engine/library';
 import {MotionSampler} from '../shadow-engine/motion';
+import {SequenceSampler} from './ComplexSequences';
+import rawSequences from './complexSequences.json';
 import {restoreReferencePose} from './restorePose';
 import type {Playback,Quality,RenderStyle,RigReport} from './App';
 import {attachOutfit,enhanceHumanMaterial} from '../adapters/outfits';
@@ -30,7 +32,7 @@ function applyFitnessStyle(root:Object3D){
    const shorts=name.includes('short-')||name.includes('ceinture-');
    const shoes=name.includes('chaussure');
    const trim=name.includes('liseré-');
-   const palette=trim?'#e4a76a':shoes?'#fbfbf4':isGlove?'#294d67':outfitTop?'#cf7668':shorts?'#2d5c70':'#ffffff';
+   const palette=trim?'#d6b180':shoes?'#f1f4f4':isGlove?'#24495e':outfitTop?'#393e51':shorts?'#25485c':'#f3f4f3';
    const material=new MeshToonMaterial({
     name:old.name+'-fitness',
     color:new Color(palette),
@@ -39,7 +41,7 @@ function applyFitnessStyle(root:Object3D){
     normalMap:old.normalMap??null,
     normalScale:old.normalScale?.clone(),
     vertexColors:old.vertexColors,
-    side:old.side,
+    side:outfitTop?DoubleSide:old.side,
     transparent:old.transparent,
     opacity:old.opacity,
     alphaTest:old.alphaTest
@@ -71,14 +73,19 @@ export function Fighter({actor,outfit,technique,playback,skeleton,quality,render
  },[gltf.scene,clothes.scene,renderStyle,quality]);
  const rig=useMemo(()=>new CoachRig(scene),[scene]);
  const library=useMemo(()=>getLibrary(rig,(outfit==='boxe'?'boxing':outfit.startsWith('bjj')?'bjj':outfit) as 'boxing'|'kickboxing'|'mma'|'muaythai'|'bjj'|'judo'),[rig,outfit]);
+ const seq=(rawSequences as Array<{id:string;name:string;discipline:string;motions:string[]}>).find(s=>s.id===technique);
  const motion=library.get(technique)??library.get('garde');
- const sampler=useMemo(()=>motion?new MotionSampler(rig,motion):null,[rig,motion]);
+ const seqValid=!!seq&&seq.motions.every(id=>library.has(id));
+ const sampler=useMemo(()=>{
+  if(seq&&seqValid)return new SequenceSampler(rig,library,seq.motions);
+  return motion?new MotionSampler(rig,motion):null;
+ },[rig,motion,library,seq,seqValid]);
  const helper=useMemo(()=>new SkeletonHelper(scene),[scene]);
  const lastSample=useRef<number|null>(null);
  const t=useRef(0);
  useEffect(()=>{lastSample.current=null;},[technique,outfit]);
  useEffect(()=>{
-  onReport({bones:helper.bones.length,armClamps:0,footErrorMetres:0,techniqueFound:!!library.get(technique),source:'Shadow v0.31'});
+  onReport({bones:helper.bones.length,armClamps:0,footErrorMetres:0,techniqueFound:seq?seqValid:!!library.get(technique),source:seq?'CME-3D · enchaînement expérimental':'CME-3D · bibliothèque de mouvements'});
   onReady();
  },[helper,library,technique,onReport,onReady]);
  useEffect(()=>()=>{helper.dispose();scene.traverse(o=>{
@@ -101,7 +108,7 @@ export function Fighter({actor,outfit,technique,playback,skeleton,quality,render
   if(skeleton)helper.updateMatrixWorld(true);
   t.current+=dt;
   if(t.current>.9){
-   onReport({bones:helper.bones.length,armClamps:0,footErrorMetres:0,techniqueFound:!!library.get(technique),source:'Shadow v0.31'});
+   onReport({bones:helper.bones.length,armClamps:0,footErrorMetres:0,techniqueFound:seq?seqValid:!!library.get(technique),source:seq?'CME-3D · enchaînement expérimental':'CME-3D · bibliothèque de mouvements'});
    t.current=0;
   }
  });

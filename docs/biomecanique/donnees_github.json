@@ -1,0 +1,233 @@
+{
+  "bjj_chains": [
+    {
+      "name": "knee-slice",
+      "url": "https://github.com/ctrl-malacan/bjj-commons/blob/main/chains/01-knee-slice.md",
+      "type": "conditional_position_chain",
+      "license": "CC-BY-SA-4.0",
+      "copied": false
+    },
+    {
+      "name": "half-guard-wrestle-up",
+      "url": "https://github.com/ctrl-malacan/bjj-commons/blob/main/chains/02-half-guard-wrestle-up.md",
+      "type": "conditional_position_chain",
+      "license": "CC-BY-SA-4.0",
+      "copied": false
+    },
+    {
+      "name": "turtle-attack",
+      "url": "https://github.com/ctrl-malacan/bjj-commons/blob/main/chains/03-turtle-attack.md",
+      "type": "conditional_position_chain",
+      "license": "CC-BY-SA-4.0",
+      "copied": false
+    },
+    {
+      "name": "closed-guard-attack",
+      "url": "https://github.com/ctrl-malacan/bjj-commons/blob/main/chains/04-closed-guard-attack.md",
+      "type": "conditional_position_chain",
+      "license": "CC-BY-SA-4.0",
+      "copied": false
+    },
+    {
+      "name": "side-control-pressure",
+      "url": "https://github.com/ctrl-malacan/bjj-commons/blob/main/chains/05-side-control-pressure.md",
+      "type": "conditional_position_chain",
+      "license": "CC-BY-SA-4.0",
+      "copied": false
+    },
+    {
+      "name": "mount-submission",
+      "url": "https://github.com/ctrl-malacan/bjj-commons/blob/main/chains/06-mount-submission.md",
+      "type": "conditional_position_chain",
+      "license": "CC-BY-SA-4.0",
+      "copied": false
+    },
+    {
+      "name": "shoulder-clamp",
+      "url": "https://github.com/ctrl-malacan/bjj-commons/blob/main/chains/07-shoulder-clamp.md",
+      "type": "conditional_position_chain",
+      "license": "CC-BY-SA-4.0",
+      "copied": false
+    },
+    {
+      "name": "kimura-trap",
+      "url": "https://github.com/ctrl-malacan/bjj-commons/blob/main/chains/08-kimura-trap.md",
+      "type": "conditional_position_chain",
+      "license": "CC-BY-SA-4.0",
+      "copied": false
+    },
+    {
+      "name": "arm-drag",
+      "url": "https://github.com/ctrl-malacan/bjj-commons/blob/main/chains/09-arm-drag.md",
+      "type": "conditional_position_chain",
+      "license": "CC-BY-SA-4.0",
+      "copied": false
+    },
+    {
+      "name": "carving-system",
+      "url": "https://github.com/ctrl-malacan/bjj-commons/blob/main/chains/10-carving-system.md",
+      "type": "conditional_position_chain",
+      "license": "CC-BY-SA-4.0",
+      "copied": false
+    },
+    {
+      "name": "octopus-guard",
+      "url": "https://github.com/ctrl-malacan/bjj-commons/blob/main/chains/11-octopus-guard.md",
+      "type": "conditional_position_chain",
+      "license": "CC-BY-SA-4.0",
+      "copied": false
+    },
+    {
+      "name": "front-headlock",
+      "url": "https://github.com/ctrl-malacan/bjj-commons/blob/main/chains/12-front-headlock.md",
+      "type": "conditional_position_chain",
+      "license": "CC-BY-SA-4.0",
+      "copied": false
+    }
+  ],
+  "thai_mae_mai_classes": [
+    {
+      "id": "mae-mai-01",
+      "name": "Salab Fan Pla",
+      "class_number": 1,
+      "reported_clips_per_class": 60,
+      "data_license": "research_only"
+    },
+    {
+      "id": "mae-mai-02",
+      "name": "Paksa Waek Rang",
+      "class_number": 2,
+      "reported_clips_per_class": 60,
+      "data_license": "research_only"
+    },
+    {
+      "id": "mae-mai-03",
+      "name": "Chawa Sat Hork",
+      "class_number": 3,
+      "reported_clips_per_class": 60,
+      "data_license": "research_only"
+    },
+    {
+      "id": "mae-mai-04",
+      "name": "Inao Taeng Grit",
+      "class_number": 4,
+      "reported_clips_per_class": 60,
+      "data_license": "research_only"
+    },
+    {
+      "id": "mae-mai-05",
+      "name": "Yor Khao Phra Sumen",
+      "class_number": 5,
+      "reported_clips_per_class": 60,
+      "data_license": "research_only"
+    },
+    {
+      "id": "mae-mai-06",
+      "name": "Ta Then Kam Fak",
+      "class_number": 6,
+      "reported_clips_per_class": 60,
+      "data_license": "research_only"
+    },
+    {
+      "id": "mae-mai-07",
+      "name": "Mon Yan Lak",
+      "class_number": 7,
+      "reported_clips_per_class": 60,
+      "data_license": "research_only"
+    },
+    {
+      "id": "mae-mai-08",
+      "name": "Pal Look Toy",
+      "class_number": 8,
+      "reported_clips_per_class": 60,
+      "data_license": "research_only"
+    },
+    {
+      "id": "mae-mai-09",
+      "name": "Jorrakhe Fad Hang",
+      "class_number": 9,
+      "reported_clips_per_class": 60,
+      "data_license": "research_only"
+    },
+    {
+      "id": "mae-mai-10",
+      "name": "Hak Nguang Aiyara",
+      "class_number": 10,
+      "reported_clips_per_class": 60,
+      "data_license": "research_only"
+    },
+    {
+      "id": "mae-mai-11",
+      "name": "Naka Bid Hang",
+      "class_number": 11,
+      "reported_clips_per_class": 60,
+      "data_license": "research_only"
+    },
+    {
+      "id": "mae-mai-12",
+      "name": "Wiroon Hok Glab",
+      "class_number": 12,
+      "reported_clips_per_class": 60,
+      "data_license": "research_only"
+    },
+    {
+      "id": "mae-mai-13",
+      "name": "Dab Chawala",
+      "class_number": 13,
+      "reported_clips_per_class": 60,
+      "data_license": "research_only"
+    },
+    {
+      "id": "mae-mai-14",
+      "name": "Khun Yak Hap Ling",
+      "class_number": 14,
+      "reported_clips_per_class": 60,
+      "data_license": "research_only"
+    },
+    {
+      "id": "mae-mai-15",
+      "name": "Hak Kor Erawan",
+      "class_number": 15,
+      "reported_clips_per_class": 60,
+      "data_license": "research_only"
+    }
+  ],
+  "boxingvi_punch_types": [
+    "Cross",
+    "Jab",
+    "Lead Hook",
+    "Lead Uppercut",
+    "Rear Hook",
+    "Rear Uppercut"
+  ],
+  "deepmimic_motion_metadata": [
+    {
+      "file": "humanoid3d_punch.txt",
+      "frames": 65,
+      "duration_s_approx": 2.133,
+      "columns_per_frame": 44,
+      "loop": "none",
+      "uri": "https://github.com/xbpeng/DeepMimic/blob/master/data/motions/humanoid3d_punch.txt",
+      "copied": false
+    },
+    {
+      "file": "humanoid3d_kick.txt",
+      "frames": 47,
+      "duration_s_approx": 1.533,
+      "columns_per_frame": 44,
+      "loop": "none",
+      "uri": "https://github.com/xbpeng/DeepMimic/blob/master/data/motions/humanoid3d_kick.txt",
+      "copied": false
+    },
+    {
+      "file": "humanoid3d_spinkick.txt",
+      "frames": 78,
+      "duration_s_approx": 1.283,
+      "columns_per_frame": 44,
+      "loop": "wrap",
+      "uri": "https://github.com/xbpeng/DeepMimic/blob/master/data/motions/humanoid3d_spinkick.txt",
+      "copied": false
+    }
+  ],
+  "note": "Index seulement; aucun fichier de motion ou vidéo tiers repris."
+}

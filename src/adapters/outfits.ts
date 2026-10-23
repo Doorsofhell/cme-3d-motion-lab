@@ -1,4 +1,4 @@
-import { Bone, BufferAttribute, Material, Mesh, MeshPhysicalMaterial, MeshStandardMaterial, Object3D, Skeleton, SkinnedMesh, SRGBColorSpace } from 'three';
+import { Bone, BufferAttribute, Material, Mesh, MeshPhysicalMaterial, MeshStandardMaterial, Object3D, Skeleton, SkinnedMesh, SRGBColorSpace, DoubleSide } from 'three';
 function hiddenKeys(s:string):Set<string>{
  const bytes=Uint8Array.from(atob(s),c=>c.charCodeAt(0)),dv=new DataView(bytes.buffer),keys=new Set<string>();
  for(let o=0;o+6<=bytes.length;o+=6)keys.add(`${dv.getInt16(o,true)},${dv.getInt16(o+2,true)},${dv.getInt16(o+4,true)}`);return keys;
@@ -15,7 +15,9 @@ function material(original:Material,lowCost=false):Material{
  // Respect original fabric maps; restrained studio specular prevents plastic-looking uniforms.
  return new MeshPhysicalMaterial({
   name:m.name,color:m.color.clone(),map:m.map??null,normalMap:m.normalMap??null,
-  roughness:Math.max(.47,m.roughness),metalness:0,vertexColors:m.vertexColors,side:m.side,
+  roughness:Math.max(.58,m.roughness),metalness:0,vertexColors:m.vertexColors,
+  side:/brassiere|haut-/i.test(m.name)?DoubleSide:m.side,
+  polygonOffset:/brassiere|haut-/i.test(m.name),polygonOffsetFactor:-1,polygonOffsetUnits:-1,
   sheen:Math.min(.22,Math.max(.035,sheen)),sheenRoughness:.78,
   sheenColor:m.color.clone().lerp(m.color.clone().set('#ffffff'),.12),
   clearcoat:Math.min(.18,Math.max(0,coat)),clearcoatRoughness:.52,
@@ -30,7 +32,8 @@ export function attachOutfit(body:Object3D,outfit:Object3D,lowCost=false):{garme
  let hiding:{keys:string;scale:number}|null=null;const garments:SkinnedMesh[]=[];
  outfit.traverse(o=>{if(o.userData?.hideBody)hiding={keys:String(o.userData.hideBody),scale:Number(o.userData.hideScale??1000)};if((o as SkinnedMesh).isSkinnedMesh)garments.push(o as SkinnedMesh);});
  for(const g of garments){
-  const mesh=new SkinnedMesh(g.geometry,material(g.material as Material,lowCost));mesh.name='tenue:'+g.name;
+  const mesh=new SkinnedMesh(g.geometry.clone(),material(g.material as Material,lowCost));mesh.name='tenue:'+g.name;
+  mesh.geometry.userData.cmeOwned=true;
   mesh.position.copy(g.position);mesh.quaternion.copy(g.quaternion);mesh.scale.copy(g.scale);
   const skeleton=new Skeleton(g.skeleton.bones.map(b=>bones.get(b.name)??b),g.skeleton.boneInverses);
   anchor.parent?.add(mesh);mesh.updateMatrixWorld(true);mesh.bind(skeleton,g.bindMatrix);

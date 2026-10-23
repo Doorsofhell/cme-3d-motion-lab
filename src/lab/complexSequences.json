@@ -1,0 +1,470 @@
+[
+  {
+    "id": "seq-boxe-1–2",
+    "name": "jab direct",
+    "discipline": "boxe",
+    "motions": [
+      "jab",
+      "direct"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-boxe-1–1–2",
+    "name": "double jab puis direct",
+    "discipline": "boxe",
+    "motions": [
+      "jab",
+      "jab",
+      "direct"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-boxe-1–2–3",
+    "name": "jab direct crochet avant",
+    "discipline": "boxe",
+    "motions": [
+      "jab",
+      "direct",
+      "crochet-avant"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-boxe-1–2–3–2",
+    "name": "jab direct crochet direct",
+    "discipline": "boxe",
+    "motions": [
+      "jab",
+      "direct",
+      "crochet-avant",
+      "direct"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-boxe-1–2–5–2",
+    "name": "jab direct uppercut avant direct",
+    "discipline": "boxe",
+    "motions": [
+      "jab",
+      "direct",
+      "uppercut-avant",
+      "direct"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-boxe-2–3–2",
+    "name": "direct crochet direct",
+    "discipline": "boxe",
+    "motions": [
+      "direct",
+      "crochet-avant",
+      "direct"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-boxe-jab-corps-tete",
+    "name": "jab tête puis direct corps et crochet tête",
+    "discipline": "boxe",
+    "motions": [
+      "jab",
+      "direct-corps",
+      "crochet-avant"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-boxe-esquive-contre",
+    "name": "esquive droite puis direct crochet",
+    "discipline": "boxe",
+    "motions": [
+      "esquive-droite",
+      "direct",
+      "crochet-avant"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-boxe-roll-contre",
+    "name": "roll gauche puis crochet et direct",
+    "discipline": "boxe",
+    "motions": [
+      "roll-gauche",
+      "crochet-avant",
+      "direct"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-boxe-tyson-jab-body",
+    "name": "jab puis crochet au corps puis uppercut",
+    "discipline": "boxe",
+    "motions": [
+      "jab",
+      "crochet-avant-corps",
+      "uppercut-arriere"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-boxe-double-crochets",
+    "name": "crochet avant et arrière puis retour",
+    "discipline": "boxe",
+    "motions": [
+      "crochet-avant",
+      "crochet-arriere",
+      "jab"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-boxe-angle-pivot",
+    "name": "jab direct puis pivot",
+    "discipline": "boxe",
+    "motions": [
+      "jab",
+      "direct",
+      "pivot-gauche"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-boxe-body-head-switch",
+    "name": "direct au corps puis crochet tête et direct",
+    "discipline": "boxe",
+    "motions": [
+      "direct-corps",
+      "crochet-avant",
+      "direct"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-kickboxing-1-2-lowkick",
+    "name": "jab direct low kick arrière",
+    "discipline": "kickboxing",
+    "motions": [
+      "jab",
+      "direct",
+      "low-kick-arriere"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-kickboxing-1-2-middle",
+    "name": "jab direct middle kick arrière",
+    "discipline": "kickboxing",
+    "motions": [
+      "jab",
+      "direct",
+      "middle-kick-arriere"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-kickboxing-jab-front-cross",
+    "name": "jab front kick arrière direct",
+    "discipline": "kickboxing",
+    "motions": [
+      "jab",
+      "front-kick-arriere",
+      "direct"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-kickboxing-check-counter",
+    "name": "check avant puis direct et low kick",
+    "discipline": "kickboxing",
+    "motions": [
+      "check-avant",
+      "direct",
+      "low-kick-arriere"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-kickboxing-doublekick",
+    "name": "low kick arrière puis high kick arrière",
+    "discipline": "kickboxing",
+    "motions": [
+      "low-kick-arriere",
+      "high-kick-arriere"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-kickboxing-feinte-switch",
+    "name": "feinte jab et switch kick",
+    "discipline": "kickboxing",
+    "motions": [
+      "feinte-jab",
+      "switch-kick"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-kickboxing-angle-kick",
+    "name": "direct sortie angle roundhouse",
+    "discipline": "kickboxing",
+    "motions": [
+      "direct",
+      "sortie-angle",
+      "roundhouse-arriere"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-muaythai-teep-punch-kick",
+    "name": "teep avant direct middle",
+    "discipline": "muaythai",
+    "motions": [
+      "teep-avant",
+      "direct",
+      "middle-kick-arriere"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-muaythai-jab-cross-knee",
+    "name": "jab direct genou arrière",
+    "discipline": "muaythai",
+    "motions": [
+      "jab",
+      "direct",
+      "genou-direct-arriere"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-muaythai-kick-clinch-knee",
+    "name": "middle puis clinch puis genou",
+    "discipline": "muaythai",
+    "motions": [
+      "middle-kick-arriere",
+      "clinch-tirage",
+      "genou-direct-arriere-clinch"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-muaythai-check-counter-kick",
+    "name": "check arrière puis direct low kick",
+    "discipline": "muaythai",
+    "motions": [
+      "check-arriere",
+      "direct",
+      "low-kick-arriere"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-muaythai-elbow-knee",
+    "name": "coude horizontal puis genou",
+    "discipline": "muaythai",
+    "motions": [
+      "coude-horizontal-avant",
+      "genou-direct-arriere"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-muaythai-feint-teep",
+    "name": "feinte jab teep arrière crochet",
+    "discipline": "muaythai",
+    "motions": [
+      "feinte-jab",
+      "teep-arriere",
+      "crochet-avant"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-mma-jab-cross-levelchange",
+    "name": "jab direct changement niveau entrée lutte",
+    "discipline": "mma",
+    "motions": [
+      "jab",
+      "direct",
+      "changement-niveau",
+      "entree-lutte"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-mma-feint-sprawl",
+    "name": "feinte lutte sprawl relevé",
+    "discipline": "mma",
+    "motions": [
+      "feinte-lutte",
+      "sprawl",
+      "releve-technique"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-mma-kick-to-entry",
+    "name": "low kick direct entrée single leg",
+    "discipline": "mma",
+    "motions": [
+      "low-kick-arriere",
+      "direct",
+      "single-leg"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-mma-defense-counter",
+    "name": "sprawl défense lutte direct",
+    "discipline": "mma",
+    "motions": [
+      "sprawl",
+      "defense-lutte",
+      "direct"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-mma-body-cross-takedown",
+    "name": "direct corps entrée double leg",
+    "discipline": "mma",
+    "motions": [
+      "direct-corps",
+      "entree-lutte"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-mma-ground-recovery",
+    "name": "descente sol sortie hanche relevé",
+    "discipline": "mma",
+    "motions": [
+      "descente-sol",
+      "sortie-hanche",
+      "releve-technique"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-bjj-bridge-shrimp-stand",
+    "name": "pont puis sortie de hanche puis relevé technique",
+    "discipline": "bjj",
+    "motions": [
+      "pont",
+      "sortie-hanche",
+      "releve-technique"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-bjj-guard-recovery",
+    "name": "releve depuis genoux sit-out retention garde",
+    "discipline": "bjj",
+    "motions": [
+      "releve-genoux",
+      "sit-out",
+      "retention-garde"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-bjj-hip-escape-base",
+    "name": "sortie hanche changement base relevé",
+    "discipline": "bjj",
+    "motions": [
+      "sortie-hanche",
+      "changement-base",
+      "releve-technique"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-bjj-technical-comeback",
+    "name": "pont changement base relevé",
+    "discipline": "bjj",
+    "motions": [
+      "pont",
+      "changement-base",
+      "releve-technique"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-bjj-ground-flow",
+    "name": "releve genoux sit-out sortie hanche",
+    "discipline": "bjj",
+    "motions": [
+      "releve-genoux",
+      "sit-out",
+      "sortie-hanche"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-judo-kuzushi-seoi-entry",
+    "name": "kuzushi puis uchikomi seoi",
+    "discipline": "judo",
+    "motions": [
+      "kuzushi",
+      "uchikomi-seoi"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-judo-footwork-uchi",
+    "name": "ayumi ashi puis o uchi gari entrée",
+    "discipline": "judo",
+    "motions": [
+      "ayumi-ashi",
+      "uchikomi-o-uchi-gari"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-judo-footwork-oso",
+    "name": "tai sabaki puis o soto gari entrée",
+    "discipline": "judo",
+    "motions": [
+      "tai-sabaki",
+      "uchikomi-o-soto-gari"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-judo-grip-kuzushi-hip",
+    "name": "kumikata kuzushi o goshi entrée",
+    "discipline": "judo",
+    "motions": [
+      "kumikata",
+      "kuzushi",
+      "uchikomi-o-goshi"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-judo-kuzushi-kouchi",
+    "name": "kumikata kuzushi ko uchi gari entrée",
+    "discipline": "judo",
+    "motions": [
+      "kumikata",
+      "kuzushi",
+      "uchikomi-ko-uchi-gari"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  },
+  {
+    "id": "seq-judo-tai-sabaki-kuzushi",
+    "name": "tai sabaki kuzushi uchikomi seoi",
+    "discipline": "judo",
+    "motions": [
+      "tai-sabaki",
+      "kuzushi",
+      "uchikomi-seoi"
+    ],
+    "status": "experimental_not_biomechanically_validated"
+  }
+]

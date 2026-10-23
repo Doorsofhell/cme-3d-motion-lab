@@ -25,9 +25,9 @@
     },
     {
       "discipline": "muaythai",
-      "techniques_catalogue": 63,
+      "techniques_catalogue": 78,
       "implemented_in_lab": 54,
-      "new_candidates": 9,
+      "new_candidates": 24,
       "biomechanics_validated": 0,
       "family_references_scientific": 12,
       "fully_documented": 0,
@@ -68,6 +68,6 @@
       "combos_3d_validated": 0
     }
   ],
-  "count_unique_motions": 291,
+  "count_unique_motions": 306,
   "count_combinations": 43
 }

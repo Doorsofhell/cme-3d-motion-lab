@@ -121,22 +121,22 @@ function hook(a: Author, side: 'L' | 'R', target: 'chin' | 'body'): Motion {
   const T = a.target(target, 0.5);
   const hit = edit(g, (d) => {
     if (side === 'L') {
-      d.pelvis.yaw += deg(-34);
+      d.pelvis.yaw += deg(-27);
       d.chest.yaw += deg(-14);
       d.hips.x += 0.02 * s;
       if (d.footL.mode === 'ground') {
-        d.footL.yaw += deg(-40);
-        d.footL.heel = deg(22);
+        d.footL.yaw += deg(-29);
+        d.footL.heel = deg(12);
       }
       d.handR.pos = add(d.handR.pos, { y: 0.01 * s });
     } else {
-      d.pelvis.yaw += deg(48);
-      d.chest.yaw += deg(18);
+      d.pelvis.yaw += deg(33);
+      d.chest.yaw += deg(16);
       d.hips.x += 0.05 * s;
       d.hips.z += 0.02 * s;
       if (d.footR.mode === 'ground') {
-        d.footR.yaw += deg(42);
-        d.footR.heel = deg(45);
+        d.footR.yaw += deg(28);
+        d.footR.heel = deg(21);
       }
       d.handL.pos = add(d.handL.pos, { z: -0.08 * s });
     }
@@ -152,6 +152,7 @@ function hook(a: Author, side: 'L' | 'R', target: 'chin' | 'body'): Motion {
   let at = v3(T.x + 0.04 * sg * s, T.y, T.z);
   if (!body) {
     const sh = a.shoulder(hit, side);
+    // A ~95° flexion target limits the overly open hook without locking the elbow.
     const reach = Math.hypot(a.m.upperArm, a.m.foreArm);
     const fx = at.x - sh.x;
     const fz = at.z - sh.z;
@@ -162,22 +163,23 @@ function hook(a: Author, side: 'L' | 'R', target: 'chin' | 'body'): Motion {
   hit[side === 'L' ? 'handL' : 'handR'] = hand;
   const wind = edit(g, (d) => {
     const h = side === 'L' ? d.handL : d.handR;
-    // Keep the fist close to its guard during the loading phase. The old wind-up
-    // sent it 0.22 * scale outside the shoulder, producing an exaggerated loop
-    // (especially visible on the rear hook in the Muay Thai stance).
-    // Drive the hook with the hips and torso instead of drawing a wide arm circle.
-    const guardHand = h.space === 'world' ? h.pos : a.toWorld(g, h.pos);
     h.space = 'world';
-    h.pos = add(guardHand, { x: 0.07 * sg * s, z: 0.05 * s, y: body ? -0.05 * s : 0 });
+    const sh = a.shoulder(g, side);
+    // v0.29: the fist opens further to the side, for a wider arc that stays as fast at impact with the shorter,
+    // 90° bent arm of the hit pose
+    const origin = side === 'L' ? g.handL : g.handR;
+    const start = origin.space === 'world' ? origin.pos : a.toWorld(g,origin.pos);
+    // Compact load phase: rotate around the guarded fist, rather than widening from the shoulder.
+    h.pos = v3(start.x + 0.055 * sg * s, start.y + (body ? -0.025 : 0.005) * s, start.z + 0.05 * s);
     h.pole = v3(sg, body ? -0.4 : 0.05, -0.2);
     h.pron = body ? 0.1 : 0.7;
-    d.pelvis.yaw += deg(-10 * sg);
-    d.chest.yaw += deg(-6 * sg);
+    d.pelvis.yaw += deg(-6 * sg);
+    d.chest.yaw += deg(-4 * sg);
     d.hips.y -= (body ? 0.08 : 0.015) * s;
   });
-  const t1 = 0.1;
-  const t2 = side === 'L' ? 0.2 : 0.23;
-  const t3 = t2 + 0.22;
+  const t1 = 0.095;
+  const t2 = side === 'L' ? 0.24 : 0.27;
+  const t3 = t2 + 0.24;
   return {
     id: `crochet-${side === 'L' ? 'avant' : 'arriere'}${body ? '-corps' : ''}`,
     keys: [

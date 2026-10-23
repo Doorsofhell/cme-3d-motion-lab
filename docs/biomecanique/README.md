@@ -8,12 +8,12 @@
 |---|---:|---:|---:|---:|---:|
 | Boxe anglaise | 42 | 30 | 12 | 0 | 13 |
 | Kick-boxing | 59 | 46 | 13 | 0 | 7 |
-| Muay-thaï | 63 | 54 | 9 | 0 | 6 |
+| Muay-thaï | 78 | 54 | 24 | 0 | 6 |
 | MMA | 77 | 54 | 23 | 0 | 6 |
 | BJJ | 60 | 12 | 48 | 0 | 5 |
 | Judo | 111 | 11 | 100 | 0 | 6 |
 
-Au total : **291 mouvements uniques**, dont **86 existants** et **205 candidats supplémentaires** ; **43 propositions de combinaisons** ; **25 notices de références** ; **291 fiches de recherche visuelle**. Plusieurs mouvements appartiennent à plusieurs disciplines.
+Au total : **306 mouvements uniques**, dont **86 existants** et **220 candidats supplémentaires** ; **43 propositions de combinaisons** ; **25 notices de références** ; **306 fiches de recherche visuelle**. Plusieurs mouvements appartiennent à plusieurs disciplines.
 
 **Attention : 0 mouvement scientifiquement validé dans son animation 3D à ce stade.** Une source pouvant décrire la famille d'un geste ne signifie pas que son animation a été validée.
 
@@ -37,3 +37,7 @@ Ne pas changer les identifiants existants; enregistrer provenance, source, date,
 Lancer : python3 docs/biomecanique/validate_biomecanique.py
 
 **Cette livraison est un socle de recherche structuré, et non la fin d'une recherche internationale exhaustive.**
+
+
+## Audit des dépôts internationaux
+sources_github.json contient 15 dépôts avec contraintes de licence ; donnees_github.json contient les 12 chaînes BJJ, 15 classes muay-thaï, 6 types de punch BoxingVI et les mesures descriptives de trois clips DeepMimic. Aucun média tiers réhébergé.

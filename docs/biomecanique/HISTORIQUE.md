@@ -11,3 +11,6 @@
 - Aucun fichier du moteur CME-3D modifié.
 
 Toute évolution devra conserver la source, la justification, l'auteur, la date et les résultats des contrôles.
+
+## 2026-10-24 — Élargissement GitHub
+15 dépôts documentés, 15 techniques Mae Mai ajoutées (titres seulement), 12 chaînes BJJ indexées, six classes BoxingVI et trois clips DeepMimic référencés sans réutilisation des médias protégés. Total : 306 fiches.

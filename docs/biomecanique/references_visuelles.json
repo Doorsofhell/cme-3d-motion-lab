@@ -1,7 +1,7 @@
 {
   "schema": "CME3D_VISUAL_ATLAS_1",
   "updated": "2026-10-24",
-  "warning": "291 fiches ont une requête d’images; seules les sources par familles sont vérifiées. Ne pas déclarer 291 analyses photographiques achevées.",
+  "warning": "306 mouvements indexés; photos individuelles non validées.",
   "reference_portals": [
     {
       "id": "VIS-BOX-ENGLAND",
@@ -90,6 +90,46 @@
       "scope": "harai_goshi_seoi_nage_osoto_gari",
       "usage": "link_only",
       "status": "verified_article_figures"
+    },
+    {
+      "id": "GH-BJJ",
+      "url": "https://github.com/ctrl-malacan/bjj-commons",
+      "type": "taxonomy",
+      "scope": "BJJ position/chain, links only",
+      "usage": "link_only",
+      "status": "repository_verified"
+    },
+    {
+      "id": "GH-BOXING",
+      "url": "https://github.com/Bikudebug/BoxingVI",
+      "type": "video_class",
+      "scope": "Six boxing types, rights uncertain",
+      "usage": "link_only",
+      "status": "repository_verified"
+    },
+    {
+      "id": "GH-THAI",
+      "url": "https://github.com/shujaatxaidi/Thai-Boxing",
+      "type": "video_class",
+      "scope": "15 Mae Mai, research-only",
+      "usage": "link_only",
+      "status": "repository_verified"
+    },
+    {
+      "id": "GH-MIMIC",
+      "url": "https://github.com/xbpeng/DeepMimic/tree/master/data/motions",
+      "type": "numeric_motion",
+      "scope": "Generic boxing/kick exemplar not biomechanically validated",
+      "usage": "link_only",
+      "status": "repository_verified"
+    },
+    {
+      "id": "GH-JUDO",
+      "url": "https://github.com/Coshea46/Judo-Throw-Predictor",
+      "type": "pose_pipeline",
+      "scope": "Judo footage rights uncertain",
+      "usage": "link_only",
+      "status": "repository_verified"
     }
   ],
   "atlas": [
@@ -103,7 +143,12 @@
         "Americana bjj tutoriel technique photo séquence vue face profil",
         "Americana slow motion sport biomechanics movement phases"
       ],
-      "reference_portals": [],
+      "reference_portals": [
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
+        }
+      ],
       "stills": {
         "guard_or_start": null,
         "preparation": null,
@@ -186,7 +231,12 @@
         "Armbar bjj tutoriel technique photo séquence vue face profil",
         "Armbar slow motion sport biomechanics movement phases"
       ],
-      "reference_portals": [],
+      "reference_portals": [
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
+        }
+      ],
       "stills": {
         "guard_or_start": null,
         "preparation": null,
@@ -231,6 +281,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -277,6 +331,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -323,6 +381,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -406,6 +468,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -489,6 +555,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -712,6 +782,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -842,7 +916,12 @@
         "Bow arrow choke bjj tutoriel technique photo séquence vue face profil",
         "Bow arrow choke slow motion sport biomechanics movement phases"
       ],
-      "reference_portals": [],
+      "reference_portals": [
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
+        }
+      ],
       "stills": {
         "guard_or_start": null,
         "preparation": null,
@@ -887,6 +966,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -1016,6 +1099,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -1063,6 +1150,10 @@
         {
           "id": "VIS-MMA-TAKEDOWN",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -1706,6 +1797,10 @@
         {
           "id": "VIS-MT-TRAINER",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BOXING",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -1812,6 +1907,10 @@
         {
           "id": "VIS-MT-TRAINER",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BOXING",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -1953,6 +2052,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -1999,6 +2102,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -2091,6 +2198,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -2138,6 +2249,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -2233,6 +2348,14 @@
         {
           "id": "VIS-MT-TRAINER",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BOXING",
+          "scope": "index_reference_only_not_pose_validated"
+        },
+        {
+          "id": "GH-MIMIC",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -2332,6 +2455,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -2378,6 +2505,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -2558,6 +2689,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -2650,6 +2785,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -2697,6 +2836,10 @@
         {
           "id": "VIS-MMA-TAKEDOWN",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -3115,6 +3258,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -3203,6 +3350,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -3280,7 +3431,12 @@
         "Front kick avant kickboxing tutoriel technique photo séquence vue face profil",
         "Front kick avant slow motion sport biomechanics movement phases"
       ],
-      "reference_portals": [],
+      "reference_portals": [
+        {
+          "id": "GH-MIMIC",
+          "scope": "index_reference_only_not_pose_validated"
+        }
+      ],
       "stills": {
         "guard_or_start": null,
         "preparation": null,
@@ -3374,6 +3530,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -3420,6 +3580,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -3466,6 +3630,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -3549,6 +3717,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -3595,6 +3767,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -3641,6 +3817,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -3687,6 +3867,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -4027,6 +4211,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -4147,6 +4335,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -4185,7 +4377,12 @@
         "Guillotine bjj tutoriel technique photo séquence vue face profil",
         "Guillotine slow motion sport biomechanics movement phases"
       ],
-      "reference_portals": [],
+      "reference_portals": [
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
+        }
+      ],
       "stills": {
         "guard_or_start": null,
         "preparation": null,
@@ -4230,6 +4427,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -4276,6 +4477,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -4359,6 +4564,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -4405,6 +4614,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -4451,6 +4664,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -4497,6 +4714,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -4543,6 +4764,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -4589,6 +4814,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -4635,6 +4864,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -4681,6 +4914,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -4719,7 +4956,12 @@
         "Heel hook bjj tutoriel technique photo séquence vue face profil",
         "Heel hook slow motion sport biomechanics movement phases"
       ],
-      "reference_portals": [],
+      "reference_portals": [
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
+        }
+      ],
       "stills": {
         "guard_or_start": null,
         "preparation": null,
@@ -4898,6 +5140,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -4944,6 +5190,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -4990,6 +5240,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -5036,6 +5290,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -5082,6 +5340,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -5244,6 +5506,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -5297,6 +5563,14 @@
         {
           "id": "VIS-MT-TRAINER",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BOXING",
+          "scope": "index_reference_only_not_pose_validated"
+        },
+        {
+          "id": "GH-MIMIC",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -5396,6 +5670,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -5442,6 +5720,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -5488,6 +5770,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -5534,6 +5820,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -5580,6 +5870,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -5626,6 +5920,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -5672,6 +5970,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -5718,6 +6020,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -5764,6 +6070,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -5810,6 +6120,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -5856,6 +6170,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -5894,7 +6212,12 @@
         "Kimura bjj tutoriel technique photo séquence vue face profil",
         "Kimura slow motion sport biomechanics movement phases"
       ],
-      "reference_portals": [],
+      "reference_portals": [
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
+        }
+      ],
       "stills": {
         "guard_or_start": null,
         "preparation": null,
@@ -5939,6 +6262,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -5985,6 +6312,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -6023,7 +6354,12 @@
         "Kneebar bjj tutoriel technique photo séquence vue face profil",
         "Kneebar slow motion sport biomechanics movement phases"
       ],
-      "reference_portals": [],
+      "reference_portals": [
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
+        }
+      ],
       "stills": {
         "guard_or_start": null,
         "preparation": null,
@@ -6068,6 +6404,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -6114,6 +6454,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -6160,6 +6504,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -6206,6 +6554,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -6252,6 +6604,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -6298,6 +6654,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -6344,6 +6704,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -6390,6 +6754,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -6436,6 +6804,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -6482,6 +6854,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -6528,6 +6904,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -6620,6 +7000,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -6842,6 +7226,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -6888,6 +7276,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -6971,6 +7363,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -7017,6 +7413,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -7063,6 +7463,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -7109,6 +7513,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -7155,6 +7563,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -7201,6 +7613,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -7247,6 +7663,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -7293,6 +7713,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -7339,6 +7763,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -7385,6 +7813,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -7431,6 +7863,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -7477,6 +7913,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -7523,6 +7963,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -7569,6 +8013,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -7615,6 +8063,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -7653,7 +8105,12 @@
         "Omoplata bjj tutoriel technique photo séquence vue face profil",
         "Omoplata slow motion sport biomechanics movement phases"
       ],
-      "reference_portals": [],
+      "reference_portals": [
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
+        }
+      ],
       "stills": {
         "guard_or_start": null,
         "preparation": null,
@@ -7735,6 +8192,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -8147,6 +8608,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -8292,6 +8757,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -8338,6 +8807,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -8505,7 +8978,12 @@
         "Rear naked choke bjj tutoriel technique photo séquence vue face profil",
         "Rear naked choke slow motion sport biomechanics movement phases"
       ],
-      "reference_portals": [],
+      "reference_portals": [
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
+        }
+      ],
       "stills": {
         "guard_or_start": null,
         "preparation": null,
@@ -8550,6 +9028,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -8597,6 +9079,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -8643,6 +9129,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -8833,6 +9323,10 @@
         {
           "id": "VIS-KICK-PLOS",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-MIMIC",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -8921,6 +9415,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -8967,6 +9465,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -9013,6 +9515,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -9059,6 +9565,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -9105,6 +9615,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -9151,6 +9665,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -9197,6 +9715,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -9335,6 +9857,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -9498,6 +10024,10 @@
         {
           "id": "VIS-MMA-TAKEDOWN",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -9545,6 +10075,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -9637,6 +10171,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -9683,6 +10221,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -9779,6 +10321,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -9825,6 +10371,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -10037,6 +10587,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -10158,7 +10712,12 @@
         "Straight ankle lock bjj tutoriel technique photo séquence vue face profil",
         "Straight ankle lock slow motion sport biomechanics movement phases"
       ],
-      "reference_portals": [],
+      "reference_portals": [
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
+        }
+      ],
       "stills": {
         "guard_or_start": null,
         "preparation": null,
@@ -10203,6 +10762,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -10249,6 +10812,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -10295,6 +10862,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -10426,6 +10997,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -10472,6 +11047,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -10555,6 +11134,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -10601,6 +11184,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -10647,6 +11234,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -10693,6 +11284,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -10853,7 +11448,12 @@
         "Toe hold bjj tutoriel technique photo séquence vue face profil",
         "Toe hold slow motion sport biomechanics movement phases"
       ],
-      "reference_portals": [],
+      "reference_portals": [
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
+        }
+      ],
       "stills": {
         "guard_or_start": null,
         "preparation": null,
@@ -10898,6 +11498,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -10944,6 +11548,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -10990,6 +11598,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -11028,7 +11640,12 @@
         "Triangle choke bjj tutoriel technique photo séquence vue face profil",
         "Triangle choke slow motion sport biomechanics movement phases"
       ],
-      "reference_portals": [],
+      "reference_portals": [
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
+        }
+      ],
       "stills": {
         "guard_or_start": null,
         "preparation": null,
@@ -11073,6 +11690,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -11119,6 +11740,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -11165,6 +11790,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -11211,6 +11840,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -11257,6 +11890,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -11303,6 +11940,10 @@
         {
           "id": "VIS-BJJ-SOLO",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -11386,6 +12027,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -11432,6 +12077,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -11478,6 +12127,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -11524,6 +12177,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -11570,6 +12227,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -11616,6 +12277,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -11662,6 +12327,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -11712,6 +12381,10 @@
         {
           "id": "VIS-JUDO-3D",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -11758,6 +12431,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -11808,6 +12485,10 @@
         {
           "id": "VIS-JUDO-3D",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -11854,6 +12535,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -11900,6 +12585,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -11947,6 +12636,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -11993,6 +12686,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -12039,6 +12736,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -12085,6 +12786,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -12131,6 +12836,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -12177,6 +12886,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -12276,6 +12989,10 @@
         {
           "id": "VIS-MT-TRAINER",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BOXING",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -12329,6 +13046,10 @@
         {
           "id": "VIS-MT-TRAINER",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-BOXING",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -12375,6 +13096,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -12421,6 +13146,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -12467,6 +13196,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -12513,6 +13246,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -12559,6 +13296,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -12605,6 +13346,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -12781,7 +13526,12 @@
         "Wrist lock bjj tutoriel technique photo séquence vue face profil",
         "Wrist lock slow motion sport biomechanics movement phases"
       ],
-      "reference_portals": [],
+      "reference_portals": [
+        {
+          "id": "GH-BJJ",
+          "scope": "index_reference_only_not_pose_validated"
+        }
+      ],
       "stills": {
         "guard_or_start": null,
         "preparation": null,
@@ -12826,6 +13576,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -12872,6 +13626,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -12918,6 +13676,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -12964,6 +13726,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -13010,6 +13776,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -13056,6 +13826,10 @@
         {
           "id": "VIS-JUDO-QUEBEC",
           "scope": "family_or_portal_reference_not_this_exact_move"
+        },
+        {
+          "id": "GH-JUDO",
+          "scope": "index_reference_only_not_pose_validated"
         }
       ],
       "stills": {
@@ -13082,6 +13856,576 @@
         "trajectoire",
         "retour_en_garde",
         "torsion_genou_cheville"
+      ]
+    },
+    {
+      "movement_id": "mae-mai-01",
+      "disciplines": [
+        "muaythai"
+      ],
+      "search_terms": [
+        "Salab Fan Pla muay thai demonstration",
+        "Salab Fan Pla front side view biomechanics",
+        "Salab Fan Pla phase recovery slow motion"
+      ],
+      "reference_portals": [
+        {
+          "id": "GH-THAI",
+          "scope": "label_only_video_not_copied"
+        }
+      ],
+      "stills": {
+        "guard_or_start": null,
+        "preparation": null,
+        "peak_or_contact": null,
+        "recovery": null
+      },
+      "angles_needed": [
+        "face",
+        "profile",
+        "rear"
+      ],
+      "partner_needed": false,
+      "status": "research_query_prepared",
+      "per_movement_photo_verified": false,
+      "licensing": "Research clips not copied",
+      "evaluation_points": [
+        "guard",
+        "pelvis",
+        "contacts",
+        "transition"
+      ]
+    },
+    {
+      "movement_id": "mae-mai-02",
+      "disciplines": [
+        "muaythai"
+      ],
+      "search_terms": [
+        "Paksa Waek Rang muay thai demonstration",
+        "Paksa Waek Rang front side view biomechanics",
+        "Paksa Waek Rang phase recovery slow motion"
+      ],
+      "reference_portals": [
+        {
+          "id": "GH-THAI",
+          "scope": "label_only_video_not_copied"
+        }
+      ],
+      "stills": {
+        "guard_or_start": null,
+        "preparation": null,
+        "peak_or_contact": null,
+        "recovery": null
+      },
+      "angles_needed": [
+        "face",
+        "profile",
+        "rear"
+      ],
+      "partner_needed": false,
+      "status": "research_query_prepared",
+      "per_movement_photo_verified": false,
+      "licensing": "Research clips not copied",
+      "evaluation_points": [
+        "guard",
+        "pelvis",
+        "contacts",
+        "transition"
+      ]
+    },
+    {
+      "movement_id": "mae-mai-03",
+      "disciplines": [
+        "muaythai"
+      ],
+      "search_terms": [
+        "Chawa Sat Hork muay thai demonstration",
+        "Chawa Sat Hork front side view biomechanics",
+        "Chawa Sat Hork phase recovery slow motion"
+      ],
+      "reference_portals": [
+        {
+          "id": "GH-THAI",
+          "scope": "label_only_video_not_copied"
+        }
+      ],
+      "stills": {
+        "guard_or_start": null,
+        "preparation": null,
+        "peak_or_contact": null,
+        "recovery": null
+      },
+      "angles_needed": [
+        "face",
+        "profile",
+        "rear"
+      ],
+      "partner_needed": false,
+      "status": "research_query_prepared",
+      "per_movement_photo_verified": false,
+      "licensing": "Research clips not copied",
+      "evaluation_points": [
+        "guard",
+        "pelvis",
+        "contacts",
+        "transition"
+      ]
+    },
+    {
+      "movement_id": "mae-mai-04",
+      "disciplines": [
+        "muaythai"
+      ],
+      "search_terms": [
+        "Inao Taeng Grit muay thai demonstration",
+        "Inao Taeng Grit front side view biomechanics",
+        "Inao Taeng Grit phase recovery slow motion"
+      ],
+      "reference_portals": [
+        {
+          "id": "GH-THAI",
+          "scope": "label_only_video_not_copied"
+        }
+      ],
+      "stills": {
+        "guard_or_start": null,
+        "preparation": null,
+        "peak_or_contact": null,
+        "recovery": null
+      },
+      "angles_needed": [
+        "face",
+        "profile",
+        "rear"
+      ],
+      "partner_needed": false,
+      "status": "research_query_prepared",
+      "per_movement_photo_verified": false,
+      "licensing": "Research clips not copied",
+      "evaluation_points": [
+        "guard",
+        "pelvis",
+        "contacts",
+        "transition"
+      ]
+    },
+    {
+      "movement_id": "mae-mai-05",
+      "disciplines": [
+        "muaythai"
+      ],
+      "search_terms": [
+        "Yor Khao Phra Sumen muay thai demonstration",
+        "Yor Khao Phra Sumen front side view biomechanics",
+        "Yor Khao Phra Sumen phase recovery slow motion"
+      ],
+      "reference_portals": [
+        {
+          "id": "GH-THAI",
+          "scope": "label_only_video_not_copied"
+        }
+      ],
+      "stills": {
+        "guard_or_start": null,
+        "preparation": null,
+        "peak_or_contact": null,
+        "recovery": null
+      },
+      "angles_needed": [
+        "face",
+        "profile",
+        "rear"
+      ],
+      "partner_needed": false,
+      "status": "research_query_prepared",
+      "per_movement_photo_verified": false,
+      "licensing": "Research clips not copied",
+      "evaluation_points": [
+        "guard",
+        "pelvis",
+        "contacts",
+        "transition"
+      ]
+    },
+    {
+      "movement_id": "mae-mai-06",
+      "disciplines": [
+        "muaythai"
+      ],
+      "search_terms": [
+        "Ta Then Kam Fak muay thai demonstration",
+        "Ta Then Kam Fak front side view biomechanics",
+        "Ta Then Kam Fak phase recovery slow motion"
+      ],
+      "reference_portals": [
+        {
+          "id": "GH-THAI",
+          "scope": "label_only_video_not_copied"
+        }
+      ],
+      "stills": {
+        "guard_or_start": null,
+        "preparation": null,
+        "peak_or_contact": null,
+        "recovery": null
+      },
+      "angles_needed": [
+        "face",
+        "profile",
+        "rear"
+      ],
+      "partner_needed": false,
+      "status": "research_query_prepared",
+      "per_movement_photo_verified": false,
+      "licensing": "Research clips not copied",
+      "evaluation_points": [
+        "guard",
+        "pelvis",
+        "contacts",
+        "transition"
+      ]
+    },
+    {
+      "movement_id": "mae-mai-07",
+      "disciplines": [
+        "muaythai"
+      ],
+      "search_terms": [
+        "Mon Yan Lak muay thai demonstration",
+        "Mon Yan Lak front side view biomechanics",
+        "Mon Yan Lak phase recovery slow motion"
+      ],
+      "reference_portals": [
+        {
+          "id": "GH-THAI",
+          "scope": "label_only_video_not_copied"
+        }
+      ],
+      "stills": {
+        "guard_or_start": null,
+        "preparation": null,
+        "peak_or_contact": null,
+        "recovery": null
+      },
+      "angles_needed": [
+        "face",
+        "profile",
+        "rear"
+      ],
+      "partner_needed": false,
+      "status": "research_query_prepared",
+      "per_movement_photo_verified": false,
+      "licensing": "Research clips not copied",
+      "evaluation_points": [
+        "guard",
+        "pelvis",
+        "contacts",
+        "transition"
+      ]
+    },
+    {
+      "movement_id": "mae-mai-08",
+      "disciplines": [
+        "muaythai"
+      ],
+      "search_terms": [
+        "Pal Look Toy muay thai demonstration",
+        "Pal Look Toy front side view biomechanics",
+        "Pal Look Toy phase recovery slow motion"
+      ],
+      "reference_portals": [
+        {
+          "id": "GH-THAI",
+          "scope": "label_only_video_not_copied"
+        }
+      ],
+      "stills": {
+        "guard_or_start": null,
+        "preparation": null,
+        "peak_or_contact": null,
+        "recovery": null
+      },
+      "angles_needed": [
+        "face",
+        "profile",
+        "rear"
+      ],
+      "partner_needed": false,
+      "status": "research_query_prepared",
+      "per_movement_photo_verified": false,
+      "licensing": "Research clips not copied",
+      "evaluation_points": [
+        "guard",
+        "pelvis",
+        "contacts",
+        "transition"
+      ]
+    },
+    {
+      "movement_id": "mae-mai-09",
+      "disciplines": [
+        "muaythai"
+      ],
+      "search_terms": [
+        "Jorrakhe Fad Hang muay thai demonstration",
+        "Jorrakhe Fad Hang front side view biomechanics",
+        "Jorrakhe Fad Hang phase recovery slow motion"
+      ],
+      "reference_portals": [
+        {
+          "id": "GH-THAI",
+          "scope": "label_only_video_not_copied"
+        }
+      ],
+      "stills": {
+        "guard_or_start": null,
+        "preparation": null,
+        "peak_or_contact": null,
+        "recovery": null
+      },
+      "angles_needed": [
+        "face",
+        "profile",
+        "rear"
+      ],
+      "partner_needed": false,
+      "status": "research_query_prepared",
+      "per_movement_photo_verified": false,
+      "licensing": "Research clips not copied",
+      "evaluation_points": [
+        "guard",
+        "pelvis",
+        "contacts",
+        "transition"
+      ]
+    },
+    {
+      "movement_id": "mae-mai-10",
+      "disciplines": [
+        "muaythai"
+      ],
+      "search_terms": [
+        "Hak Nguang Aiyara muay thai demonstration",
+        "Hak Nguang Aiyara front side view biomechanics",
+        "Hak Nguang Aiyara phase recovery slow motion"
+      ],
+      "reference_portals": [
+        {
+          "id": "GH-THAI",
+          "scope": "label_only_video_not_copied"
+        }
+      ],
+      "stills": {
+        "guard_or_start": null,
+        "preparation": null,
+        "peak_or_contact": null,
+        "recovery": null
+      },
+      "angles_needed": [
+        "face",
+        "profile",
+        "rear"
+      ],
+      "partner_needed": false,
+      "status": "research_query_prepared",
+      "per_movement_photo_verified": false,
+      "licensing": "Research clips not copied",
+      "evaluation_points": [
+        "guard",
+        "pelvis",
+        "contacts",
+        "transition"
+      ]
+    },
+    {
+      "movement_id": "mae-mai-11",
+      "disciplines": [
+        "muaythai"
+      ],
+      "search_terms": [
+        "Naka Bid Hang muay thai demonstration",
+        "Naka Bid Hang front side view biomechanics",
+        "Naka Bid Hang phase recovery slow motion"
+      ],
+      "reference_portals": [
+        {
+          "id": "GH-THAI",
+          "scope": "label_only_video_not_copied"
+        }
+      ],
+      "stills": {
+        "guard_or_start": null,
+        "preparation": null,
+        "peak_or_contact": null,
+        "recovery": null
+      },
+      "angles_needed": [
+        "face",
+        "profile",
+        "rear"
+      ],
+      "partner_needed": false,
+      "status": "research_query_prepared",
+      "per_movement_photo_verified": false,
+      "licensing": "Research clips not copied",
+      "evaluation_points": [
+        "guard",
+        "pelvis",
+        "contacts",
+        "transition"
+      ]
+    },
+    {
+      "movement_id": "mae-mai-12",
+      "disciplines": [
+        "muaythai"
+      ],
+      "search_terms": [
+        "Wiroon Hok Glab muay thai demonstration",
+        "Wiroon Hok Glab front side view biomechanics",
+        "Wiroon Hok Glab phase recovery slow motion"
+      ],
+      "reference_portals": [
+        {
+          "id": "GH-THAI",
+          "scope": "label_only_video_not_copied"
+        }
+      ],
+      "stills": {
+        "guard_or_start": null,
+        "preparation": null,
+        "peak_or_contact": null,
+        "recovery": null
+      },
+      "angles_needed": [
+        "face",
+        "profile",
+        "rear"
+      ],
+      "partner_needed": false,
+      "status": "research_query_prepared",
+      "per_movement_photo_verified": false,
+      "licensing": "Research clips not copied",
+      "evaluation_points": [
+        "guard",
+        "pelvis",
+        "contacts",
+        "transition"
+      ]
+    },
+    {
+      "movement_id": "mae-mai-13",
+      "disciplines": [
+        "muaythai"
+      ],
+      "search_terms": [
+        "Dab Chawala muay thai demonstration",
+        "Dab Chawala front side view biomechanics",
+        "Dab Chawala phase recovery slow motion"
+      ],
+      "reference_portals": [
+        {
+          "id": "GH-THAI",
+          "scope": "label_only_video_not_copied"
+        }
+      ],
+      "stills": {
+        "guard_or_start": null,
+        "preparation": null,
+        "peak_or_contact": null,
+        "recovery": null
+      },
+      "angles_needed": [
+        "face",
+        "profile",
+        "rear"
+      ],
+      "partner_needed": false,
+      "status": "research_query_prepared",
+      "per_movement_photo_verified": false,
+      "licensing": "Research clips not copied",
+      "evaluation_points": [
+        "guard",
+        "pelvis",
+        "contacts",
+        "transition"
+      ]
+    },
+    {
+      "movement_id": "mae-mai-14",
+      "disciplines": [
+        "muaythai"
+      ],
+      "search_terms": [
+        "Khun Yak Hap Ling muay thai demonstration",
+        "Khun Yak Hap Ling front side view biomechanics",
+        "Khun Yak Hap Ling phase recovery slow motion"
+      ],
+      "reference_portals": [
+        {
+          "id": "GH-THAI",
+          "scope": "label_only_video_not_copied"
+        }
+      ],
+      "stills": {
+        "guard_or_start": null,
+        "preparation": null,
+        "peak_or_contact": null,
+        "recovery": null
+      },
+      "angles_needed": [
+        "face",
+        "profile",
+        "rear"
+      ],
+      "partner_needed": false,
+      "status": "research_query_prepared",
+      "per_movement_photo_verified": false,
+      "licensing": "Research clips not copied",
+      "evaluation_points": [
+        "guard",
+        "pelvis",
+        "contacts",
+        "transition"
+      ]
+    },
+    {
+      "movement_id": "mae-mai-15",
+      "disciplines": [
+        "muaythai"
+      ],
+      "search_terms": [
+        "Hak Kor Erawan muay thai demonstration",
+        "Hak Kor Erawan front side view biomechanics",
+        "Hak Kor Erawan phase recovery slow motion"
+      ],
+      "reference_portals": [
+        {
+          "id": "GH-THAI",
+          "scope": "label_only_video_not_copied"
+        }
+      ],
+      "stills": {
+        "guard_or_start": null,
+        "preparation": null,
+        "peak_or_contact": null,
+        "recovery": null
+      },
+      "angles_needed": [
+        "face",
+        "profile",
+        "rear"
+      ],
+      "partner_needed": false,
+      "status": "research_query_prepared",
+      "per_movement_photo_verified": false,
+      "licensing": "Research clips not copied",
+      "evaluation_points": [
+        "guard",
+        "pelvis",
+        "contacts",
+        "transition"
       ]
     }
   ]

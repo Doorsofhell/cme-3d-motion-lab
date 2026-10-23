@@ -1,0 +1,188 @@
+{
+  "schema": "CME3D_GITHUB_1",
+  "projects": [
+    {
+      "repository": "ctrl-malacan/bjj-commons",
+      "url": "https://github.com/ctrl-malacan/bjj-commons",
+      "license_status": "CC-BY-SA-4.0",
+      "disciplines": [
+        "bjj"
+      ],
+      "description": "12 chaînes, 10 pages de positions, graphes conditionnels",
+      "reuse_limits": "Référence textuelle et liens seulement; ShareAlike à étudier avant copie",
+      "checked_at": "2026-10-24",
+      "media_copied": false,
+      "code_imported": false
+    },
+    {
+      "repository": "Bikudebug/BoxingVI",
+      "url": "https://github.com/Bikudebug/BoxingVI",
+      "license_status": "licence non précisée",
+      "disciplines": [
+        "boxe"
+      ],
+      "description": "6915 clips annotés annoncés; six types de coups",
+      "reuse_limits": "Aucun clip vidéo repris sans droits",
+      "checked_at": "2026-10-24",
+      "media_copied": false,
+      "code_imported": false
+    },
+    {
+      "repository": "krishmula/fightflow",
+      "url": "https://github.com/krishmula/fightflow",
+      "license_status": "licence non précisée",
+      "disciplines": [
+        "boxe"
+      ],
+      "description": "Classification vidéo direct/crochet/uppercut",
+      "reuse_limits": "Pipeline de recherche, aucune intégration directe",
+      "checked_at": "2026-10-24",
+      "media_copied": false,
+      "code_imported": false
+    },
+    {
+      "repository": "shujaatxaidi/Thai-Boxing",
+      "url": "https://github.com/shujaatxaidi/Thai-Boxing",
+      "license_status": "recherche uniquement selon README",
+      "disciplines": [
+        "muaythai"
+      ],
+      "description": "15 Mae Mai; 900 clips annoncés",
+      "reuse_limits": "Libellés seulement; vidéos recherche",
+      "checked_at": "2026-10-24",
+      "media_copied": false,
+      "code_imported": false
+    },
+    {
+      "repository": "xbpeng/DeepMimic",
+      "url": "https://github.com/xbpeng/DeepMimic",
+      "license_status": "MIT code; données à vérifier",
+      "disciplines": [
+        "mma"
+      ],
+      "description": "65 frames punch, 47 kick, 78 spinkick",
+      "reuse_limits": "Métadonnées seulement; droits des animations non vérifiés",
+      "checked_at": "2026-10-24",
+      "media_copied": false,
+      "code_imported": false
+    },
+    {
+      "repository": "hkaimio/posetrak",
+      "url": "https://github.com/hkaimio/posetrak",
+      "license_status": "Apache-2.0",
+      "disciplines": [],
+      "description": "Capture multi caméras",
+      "reuse_limits": "Logiciel, pas données martiales",
+      "checked_at": "2026-10-24",
+      "media_copied": false,
+      "code_imported": false
+    },
+    {
+      "repository": "xbpeng/MimicKit",
+      "url": "https://github.com/xbpeng/MimicKit",
+      "license_status": "Apache-2.0",
+      "disciplines": [],
+      "description": "Moteur RL imitation",
+      "reuse_limits": "Pas de modèle mobile prêt",
+      "checked_at": "2026-10-24",
+      "media_copied": false,
+      "code_imported": false
+    },
+    {
+      "repository": "NVlabs/ProtoMotions",
+      "url": "https://github.com/NVlabs/ProtoMotions",
+      "license_status": "Apache-2.0",
+      "disciplines": [],
+      "description": "Simulation humanoïde accélérée GPU",
+      "reuse_limits": "Données externes séparées",
+      "checked_at": "2026-10-24",
+      "media_copied": false,
+      "code_imported": false
+    },
+    {
+      "repository": "ZhengyiLuo/PHC",
+      "url": "https://github.com/ZhengyiLuo/PHC",
+      "license_status": "BSD 3-Clause Clear",
+      "disciplines": [],
+      "description": "Contrôle avatar et retargeting",
+      "reuse_limits": "Données/poids à vérifier",
+      "checked_at": "2026-10-24",
+      "media_copied": false,
+      "code_imported": false
+    },
+    {
+      "repository": "FMint/pbhc",
+      "url": "https://github.com/FMint/pbhc",
+      "license_status": "CC-BY-NC-4.0",
+      "disciplines": [
+        "mma"
+      ],
+      "description": "KungfuBot",
+      "reuse_limits": "Non commercial",
+      "checked_at": "2026-10-24",
+      "media_copied": false,
+      "code_imported": false
+    },
+    {
+      "repository": "ubisoft/ubisoft-laforge-animation-dataset",
+      "url": "https://github.com/ubisoft/ubisoft-laforge-animation-dataset",
+      "license_status": "CC-BY-NC-ND-4.0",
+      "disciplines": [],
+      "description": "LAFAN1 transitions",
+      "reuse_limits": "Données non commerciales et non dérivables",
+      "checked_at": "2026-10-24",
+      "media_copied": false,
+      "code_imported": false
+    },
+    {
+      "repository": "Coshea46/Judo-Throw-Predictor",
+      "url": "https://github.com/Coshea46/Judo-Throw-Predictor",
+      "license_status": "licence non précisée",
+      "disciplines": [
+        "judo"
+      ],
+      "description": "2500 clips évoqués / pipeline poses",
+      "reuse_limits": "Clips IJF/YouTube non réutilisables sans droits",
+      "checked_at": "2026-10-24",
+      "media_copied": false,
+      "code_imported": false
+    },
+    {
+      "repository": "judoole/judostats",
+      "url": "https://github.com/judoole/judostats",
+      "license_status": "licence non précisée",
+      "disciplines": [
+        "judo"
+      ],
+      "description": "Statistiques combat",
+      "reuse_limits": "Pas de cinématique",
+      "checked_at": "2026-10-24",
+      "media_copied": false,
+      "code_imported": false
+    },
+    {
+      "repository": "mocapflow/Free-Mocap-Library-FBX-GLB",
+      "url": "https://github.com/mocapflow/Free-Mocap-Library-FBX-GLB",
+      "license_status": "CC0 revendiqué pour dépôt",
+      "disciplines": [],
+      "description": "Liste d’assets boxing/capoeira",
+      "reuse_limits": "Disponibilité et chaîne de droits des assets non établies",
+      "checked_at": "2026-10-24",
+      "media_copied": false,
+      "code_imported": false
+    },
+    {
+      "repository": "SpiRaiL/GhostTrial-public",
+      "url": "https://github.com/SpiRaiL/GhostTrial-public",
+      "license_status": "licence non précisée",
+      "disciplines": [
+        "mma"
+      ],
+      "description": "Retargeting séquence sur robot",
+      "reuse_limits": "Morphologie robot, droits vidéos séparés",
+      "checked_at": "2026-10-24",
+      "media_copied": false,
+      "code_imported": false
+    }
+  ]
+}
