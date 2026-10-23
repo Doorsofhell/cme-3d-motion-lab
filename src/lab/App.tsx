@@ -5,6 +5,7 @@ import {ACESFilmicToneMapping,NoToneMapping,SRGBColorSpace} from 'three';
 import {Fighter} from './Fighter';
 import rawTechniques from './techniques.json';
 import {IncidentReporter,IssueTracker,type TestContext} from './Issues';
+import {useAutoIncidentQueue,type AutoCategory} from './AutoIncidents';
 import './style.css';
 
 type Actor='mma-kadir'|'mma-amara';
@@ -51,30 +52,30 @@ function PerfProbe({onMetrics}:{onMetrics:(metrics:Metrics)=>void}){
  });
  return null;
 }
-function Viewer({actor,discipline,technique,quality,renderStyle,playback,skeleton,onReport,onMetrics,onLog}:{
+function Viewer({actor,discipline,technique,quality,renderStyle,playback,skeleton,onReport,onMetrics,onLog,onIncident}:{
  actor:Actor;discipline:string;technique:string;quality:Quality;renderStyle:RenderStyle;
- playback:RefObject<Playback>;skeleton:boolean;onReport:(r:RigReport)=>void;onMetrics:(m:Metrics)=>void;onLog:(message:string)=>void;
+ playback:RefObject<Playback>;skeleton:boolean;onReport:(r:RigReport)=>void;onMetrics:(m:Metrics)=>void;onLog:(message:string)=>void;onIncident:(category:AutoCategory,title:string,details:string)=>void;
 }){
  const [ready,setReady]=useState(false),[error,setError]=useState<string|null>(null),[slow,setSlow]=useState(false);
  const [retry,setRetry]=useState(0);
  // Crucial fix: a load timeout is never displayed after the model has rendered.
  useEffect(()=>{
   if(ready||error)return;
-  const id=window.setTimeout(()=>setSlow(true),24000);
+  const id=window.setTimeout(()=>{setSlow(true);onIncident('loading','Chargement 3D anormalement long','Coach '+actor+', tenue '+discipline+' : aucun signal de fin de chargement après 24 secondes');},24000);
   return()=>window.clearTimeout(id);
- },[ready,error,retry]);
+ },[ready,error,retry,actor,discipline,onIncident]);
  const onReady=useCallback(()=>{setReady(true);setSlow(false);onLog('Coach et tenue décodés, rig initialisé');},[onLog]);
  const gl=useMemo(()=>({alpha:false,antialias:quality!=='performance',powerPreference:'default' as const}),[quality]);
  const onCreated=useCallback(({gl:renderer}:{gl:{domElement:HTMLCanvasElement}})=>{
   const canvas=renderer.domElement;
-  const lost=(e:Event)=>{e.preventDefault();onLog('ERREUR : contexte WebGL perdu');setError('Contexte graphique perdu : réinitialise le moteur.');};
+  const lost=(e:Event)=>{e.preventDefault();onLog('ERREUR : contexte WebGL perdu');onIncident('webgl','Perte du contexte graphique WebGL','Le contexte WebGL a été perdu pendant le rendu du coach '+actor);setError('Contexte graphique perdu : réinitialise le moteur.');};
   canvas.addEventListener('webglcontextlost',lost);
   (canvas as HTMLCanvasElement & {cmeCleanup?:()=>void}).cmeCleanup=()=>canvas.removeEventListener('webglcontextlost',lost);
- },[onLog]);
+ },[onLog,onIncident,actor]);
  useEffect(()=>()=>{document.querySelectorAll('canvas').forEach(c=>(c as HTMLCanvasElement&{cmeCleanup?:()=>void}).cmeCleanup?.());},[]);
  const dpr=quality==='performance'?1:quality==='balanced'?(mobile()?1.1:1.35):(mobile()?1.4:1.6);
  return <div className="viewer">
-   <ErrorBoundary key={retry} onError={setError}>
+   <ErrorBoundary key={retry} onError={message=>{setError(message);onIncident('javascript','Erreur du composant de rendu 3D',message);}}>
     <Canvas key={quality+'-'+retry} gl={gl} onCreated={onCreated} dpr={dpr} shadows={quality==='detail'&&!mobile()} camera={{position:[0,1.56,3.5],fov:34}} frameloop="always">
      <color attach="background" args={[renderStyle==='fitness'?'#eaf0ed':'#101c2b']}/>
      <Lights quality={quality} renderStyle={renderStyle}/>
@@ -116,6 +117,7 @@ export function App(){
  const techniqueLabel=techniques.find(t=>t.motion===technique)?.name??technique;
  const selectTechnique=(motion:string)=>{reset();setTechnique(motion);setCatalogOpen(false);onLog('Technique : '+motion);};
  const incidentContext:TestContext={actor:actor==='mma-amara'?'Amara':'Kadir',discipline,outfit,technique,renderStyle,quality,userAgent:navigator.userAgent,diagnostics:JSON.stringify({report,metrics,messages},null,2)};
+ const {items:autoDrafts,record:autoRecord,dismiss:autoDismiss,clear:autoClear}=useAutoIncidentQueue(incidentContext,onLog);
  const exportReport=useCallback(()=>{
   const data={createdAt:new Date().toISOString(),app:'CME-3D',userAgent:navigator.userAgent,actor,discipline,outfit,
   renderStyle,technique,techniqueLabel,playing,speed,quality,report,metrics,logs:messages};
@@ -130,15 +132,21 @@ export function App(){
  const playback=useRef<Playback>({progress:0,playing:false,speed:.5});
  playback.current.playing=playing;playback.current.speed=speed;
  const seek=useCallback((p:number)=>{playback.current.progress=p;setProgress(p);},[]);
- const onReport=useCallback((r:RigReport)=>setReport(r),[]);
+ const onReport=useCallback((r:RigReport)=>{setReport(r);if(!r.techniqueFound)autoRecord('motion','Mouvement indisponible','Aucune animation correspondante : '+technique+' pour la discipline '+discipline);},[autoRecord,technique,discipline]);
  useEffect(()=>{if(!playing)return;const i=window.setInterval(()=>setProgress(playback.current.progress),150);return()=>window.clearInterval(i);},[playing]);
+ const slowFpsSince=useRef<number|null>(null);
+ useEffect(()=>{
+  if(!playing||tab!=='lab'||document.visibilityState!=='visible'||metrics.fps<=0||metrics.fps>=16){slowFpsSince.current=null;return;}
+  if(slowFpsSince.current===null)slowFpsSince.current=Date.now();
+  else if(Date.now()-slowFpsSince.current>=18000){autoRecord('performance','Fréquence d’images insuffisante','Rendu actif sous 16 FPS pendant au moins 18 secondes, mesure récente : '+metrics.fps+' FPS');slowFpsSince.current=null;}
+ },[metrics.fps,playing,tab,autoRecord]);
  const reset=()=>{setPlaying(false);seek(0);setReport(null);};
  return <main className="labApp">
   <header className="labHeader">
    <div className="branding"><span className="brandDot">C</span><div><strong>CME<span>–3D</span> <small>LAB</small></strong><p>Laboratoire · Tests A/B</p></div></div>
    <div className="headerActions"><span className="liveTag"><i/> Moteur local</span><button className="iconButton" title="Console de débogage" aria-label="Console de débogage" aria-expanded={debug} onClick={()=>setDebug(v=>!v)}>⌘</button><button className="iconButton" title="Réglages avancés" aria-label="Réglages avancés" aria-expanded={extra} onClick={()=>setExtra(v=>!v)}>⚙</button></div>
   </header>
-  <nav className="labTabs" aria-label="Onglets de CME-3D"><button className={tab==='lab'?'selected':''} aria-current={tab==='lab'?'page':undefined} onClick={()=>{setTab('lab');setDebug(false);}}>Laboratoire</button><button className={tab==='tracking'?'selected':''} aria-current={tab==='tracking'?'page':undefined} onClick={()=>{setTab('tracking');setDebug(false);}}>Suivi des corrections</button></nav>
+  <nav className="labTabs" aria-label="Onglets de CME-3D"><button className={tab==='lab'?'selected':''} aria-current={tab==='lab'?'page':undefined} onClick={()=>{setTab('lab');setDebug(false);}}>Laboratoire</button><button className={tab==='tracking'?'selected':''} aria-current={tab==='tracking'?'page':undefined} onClick={()=>{setTab('tracking');setDebug(false);}}>Suivi des corrections{autoDrafts.length>0&&<span className="autoTabCount">{autoDrafts.length}</span>}</button></nav>
   <div className="labContent" style={{display:tab==='lab'?'contents':'none'}}>
   <section className="quickBar" aria-label="Sélection de test">
    <label><span>Coach</span><select aria-label="Coach" value={actor} onChange={e=>{reset();setActor(e.target.value as Actor);}}><option value="mma-amara">Amara</option><option value="mma-kadir">Kadir</option></select></label>
@@ -147,7 +155,7 @@ export function App(){
   </section>
   <section className="stage" aria-label="Vue de test 3D">
    <div className="stageTitle"><span>{actor==='mma-amara'?'AMARA':'KADIR'} <em>· {renderStyle==='fitness'?'Animation fitness':'Ultra-réaliste'}</em></span><span className="stagePill">MOTION / IK</span></div>
-   <Viewer key={actor+outfit+quality+renderStyle} actor={actor} discipline={outfit} quality={quality} renderStyle={renderStyle} technique={technique} playback={playback} skeleton={skeleton} onReport={onReport} onMetrics={onMetrics} onLog={onLog}/>
+   <Viewer key={actor+outfit+quality+renderStyle} actor={actor} discipline={outfit} quality={quality} renderStyle={renderStyle} technique={technique} playback={playback} skeleton={skeleton} onReport={onReport} onMetrics={onMetrics} onLog={onLog} onIncident={autoRecord}/>
    <div className="stageBottom"><span>{report?report.bones+' os · '+(report.techniqueFound?'Technique disponible':'Garde de secours'):'Initialisation du rig'}</span><span>{report?('Tenue '+outfit+' ✓'):'Chargement'}</span></div>
   </section>
   <section className="transport" aria-label="Commandes d'animation">
@@ -162,14 +170,14 @@ export function App(){
     {discipline==='bjj'&&<button className="outfitToggle" aria-label="Changer tenue BJJ" onClick={()=>{reset();setNogi(x=>!x);}}>{nogi?'No-gi':'Gi'}</button>}
    </div>
   </section>
-  <section className="bottomDebug" aria-label="Debug et incident"><button className="bottomDebugTrigger" onClick={()=>setDebug(x=>!x)} aria-expanded={debug}><span className="debugDot"/> <strong>Debug en direct</strong> <span className="miniMetrics">{metrics.fps||'–'} FPS · {metrics.webgl} · {messages.filter(x=>/ERREUR|JS :|PROMISE/.test(x)).length} erreur(s)</span><span className="expandSymbol">{debug?'⌃':'⌄'}</span></button><button className="incidentButton" onClick={()=>{setDebug(false);setIncidentOpen(true);}}>⚑ Signaler</button></section>
+  <section className="bottomDebug" aria-label="Debug et incident"><button className="bottomDebugTrigger" onClick={()=>setDebug(x=>!x)} aria-expanded={debug}><span className="debugDot"/> <strong>Debug en direct</strong> <span className="miniMetrics">{metrics.fps||'–'} FPS · {metrics.webgl} · {autoDrafts.length} à examiner</span><span className="expandSymbol">{debug?'⌃':'⌄'}</span></button><button className="incidentButton" onClick={()=>{setDebug(false);setIncidentOpen(true);}}>⚑ Signaler</button></section>
   <section className="diagnostics" aria-label="Diagnostics">
    <span><i className={report?.techniqueFound?'good':'bad'}/> {report?.techniqueFound?'Mouvement prêt ✓':'Motion à vérifier'}</span>
    <span>Rig : {report?.bones??'–'} os</span><span>{metrics.fps||'–'} FPS · {metrics.drawCalls} appels</span>
    <span className="footnote">IA locale expérimentale : entraînement validé en attente</span>
   </section>
   </div>
-  {tab==='tracking'&&<IssueTracker/>}
+  {tab==='tracking'&&<IssueTracker drafts={autoDrafts} onDismiss={autoDismiss} onClear={autoClear}/>}
   {tab==='lab'&&catalogOpen&&<div className="paletteBackdrop" onClick={()=>setCatalogOpen(false)}>
     <section className="catalogPalette" role="dialog" aria-label="Catalogue complet des techniques" onClick={e=>e.stopPropagation()}>
       <div className="paletteTitle"><strong>Techniques · {palette.length} / {techniques.length}</strong><button aria-label="Fermer le catalogue" onClick={()=>setCatalogOpen(false)}>×</button></div>
@@ -182,7 +190,7 @@ export function App(){
    <div className="debugGrid"><span>WebGL <b>{metrics.webgl}</b></span><span>FPS <b>{metrics.fps}</b></span><span>Draw calls <b>{metrics.drawCalls}</b></span><span>Triangles <b>{metrics.triangles.toLocaleString('fr-FR')}</b></span><span>Textures <b>{metrics.textures}</b></span><span>Géométries <b>{metrics.geometries}</b></span><span>DPR <b>{metrics.dpr.toFixed(2)}</b></span><span>Rig <b>{report?.bones??'–'} os</b></span></div>
    <div className="debugSubject"><strong>{actor==='mma-amara'?'Amara':'Kadir'} · {discipline}</strong><span>Tenue : {outfit}</span><span>Style : {renderStyle} · {quality}</span><span>Mouvement : {technique} · {report?.techniqueFound?'résolu':'non trouvé'}</span></div>
    <div className="debugLog"><strong>Événements et erreurs</strong>{messages.length?messages.map((x,i)=><p key={i}>{x}</p>):<p>Aucun événement anormal signalé</p>}</div>
-   <div className="debugFootnote">Données locales : aucune télémétrie envoyée à un serveur. FPS indicatifs mesurés dans la boucle Three.js.</div>
+   <div className="debugFootnote">{autoDrafts.length} anomalie(s) sauvegardée(s) localement. Aucun envoi automatique. <button className="debugReview" onClick={()=>{setDebug(false);setTab('tracking');}}>Examiner les signalements ↗</button> FPS mesurés dans la boucle Three.js.</div>
   </aside>}
   {tab==='lab'&&extra&&<aside className="advanced" role="region" aria-label="Informations du banc d'essai"><button className="close" onClick={()=>setExtra(false)} aria-label="Fermer">×</button><h2>Banc d’essai · CME-3D</h2><p>Le rendu et les techniques utilisent des poses articulées et un moteur de mouvements intégrés dans CME-3D.</p><p>Comparaison des rendus Ultra-réaliste et Animation fitness en un clic, sur la même animation. Le module neuronal historique est expérimental, entraîné sur des données synthétiques : aucune amélioration biomécanique par IA n’est encore revendiquée.</p><p>La prochaine étape sera un correcteur temporel léger quantifié (ONNX Runtime WASM), entraîné et évalué sur un jeu de mouvements de combat adapté au modèle.</p><p>Un seul écran, sans défilement vertical. Aucune transmission cloud pendant l’animation.</p></aside>}
   {tab==='lab'&&incidentOpen&&<IncidentReporter context={incidentContext} onClose={()=>setIncidentOpen(false)}/>}
