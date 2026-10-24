@@ -1,6 +1,7 @@
 import {useEffect,useRef,useState} from 'react';
 import {Canvas} from '@react-three/fiber';
 import {CameraPedagogique} from './CameraPedagogique';
+import {useSceneFullscreen,SceneFullscreenButton} from './SceneFullscreen';
 import {OrbitControls,useGLTF} from '@react-three/drei';
 import {NeutralRig,LAB_DISCIPLINES,type LabDiscipline,type NeutralRigReport} from './NeutralRig';
 import './StudioCoach.css';
@@ -65,8 +66,7 @@ export function StudioCoach(){
  const [message,setMessage]=useState('');
  const [rigMode,setRigMode]=useState(true);
  const [cameraAuto,setCameraAuto]=useState(false);
- const [previewFullscreen,setPreviewFullscreen]=useState(false);
- useEffect(()=>{const close=(event:KeyboardEvent)=>{if(event.key==='Escape')setPreviewFullscreen(false);};window.addEventListener('keydown',close);return()=>window.removeEventListener('keydown',close);},[]);
+ const sceneFullscreen=useSceneFullscreen();
  const [advancedOpen,setAdvancedOpen]=useState(false);
  const [discipline,setDiscipline]=useState<LabDiscipline>('boxing');
  const [motionId,setMotionId]=useState('garde');
@@ -74,23 +74,6 @@ export function StudioCoach(){
  const [showSkeleton,setShowSkeleton]=useState(false);
  const [report,setReport]=useState<NeutralRigReport|null>(null);
  const importRef=useRef<HTMLInputElement>(null);
- const previewRef=useRef<HTMLDivElement>(null);
- const lastTap=useRef(0);
- const toggleFullscreen=()=>{
-  const element=previewRef.current;
-  if(!element)return;
-  if(document.fullscreenElement===element){void document.exitFullscreen().catch(()=>setPreviewFullscreen(false));return;}
-  if(document.fullscreenElement){void document.exitFullscreen().then(()=>element.requestFullscreen()).catch(()=>setPreviewFullscreen(v=>!v));return;}
-  if(element.requestFullscreen){void element.requestFullscreen().catch(()=>setPreviewFullscreen(v=>!v));return;}
-  setPreviewFullscreen(v=>!v);
- };
- useEffect(()=>{const sync=()=>setPreviewFullscreen(document.fullscreenElement===previewRef.current);document.addEventListener('fullscreenchange',sync);return()=>document.removeEventListener('fullscreenchange',sync);},[]);
- const handleTouchEnd=(event:React.TouchEvent<HTMLDivElement>)=>{
-  if((event.target as HTMLElement).closest('button,input,select,summary'))return;
-  const now=Date.now();
-  if(now-lastTap.current<350){event.preventDefault();toggleFullscreen();lastTap.current=0;}
-  else lastTap.current=now;
- };
  const update=<K extends keyof CoachLook>(key:K,value:CoachLook[K])=>setLook(l=>normalizeCoachLook({...l,[key]:value}));
  const range=(key:'height'|'shoulders'|'muscle'|'waist'|'jaw'|'nose'|'eyes',label:string,min:number,max:number)=><label className="coachField"><span>{label} <b>{look[key].toFixed(2)}</b></span><input type="range" min={min} max={max} step=".01" value={look[key]} onChange={e=>update(key,Number(e.target.value))}/></label>;
  const color=(key:'skin'|'eyeColor'|'hairColor'|'topColor'|'bottomColor'|'gloveColor'|'shinColor',label:string)=><label className="coachColor"><span>{label}</span><input type="color" value={look[key]} onChange={e=>update(key,e.target.value)}/></label>;
@@ -110,8 +93,8 @@ export function StudioCoach(){
  return <section className="coachStudio" aria-label="Studio Coach">
   <header className="coachStudioHeader"><div><small>STUDIO COACH</small><h2>Votre combattant</h2></div></header>
   <div className="coachStudioLayout">
-   <div ref={previewRef} className={`coachPreview ${previewFullscreen?"cmeFullscreen":""}`} onDoubleClick={event=>{if(!(event.target as HTMLElement).closest("button,input,select,summary"))toggleFullscreen();}} onTouchEnd={handleTouchEnd} aria-label="Aperçu 3D du mannequin ; double clic pour agrandir">
-    <button type="button" className="cmeFullscreenToggle" onClick={event=>{event.stopPropagation();toggleFullscreen();}} aria-label={previewFullscreen?"Quitter le plein écran":"Agrandir le coach"}>{previewFullscreen?"Réduire ✕":"⛶"}</button>
+   <div ref={sceneFullscreen.ref as React.RefObject<HTMLDivElement>} className={`coachPreview ${sceneFullscreen.fullscreen?"cmeFullscreen":""}`} onDoubleClick={sceneFullscreen.onDoubleClick} onTouchEnd={sceneFullscreen.onTouchEnd} aria-label="Aperçu 3D du mannequin ; double clic pour agrandir">
+    <SceneFullscreenButton fullscreen={sceneFullscreen.fullscreen} onClick={sceneFullscreen.toggle}/>
     <div className="coachRigSwitch" role="group" aria-label="Mode du modèle 3D"><button className={!rigMode?'active':''} aria-pressed={!rigMode} onClick={()=>setRigMode(false)}>Coach</button><button className={rigMode?'active':''} aria-pressed={rigMode} onClick={()=>setRigMode(true)}>Anatomie</button></div>
     <button type="button" className="cmeCameraAuto" aria-label={cameraAuto?'Désactiver la caméra automatique':'Activer la caméra automatique'} title="Caméra pédagogique" aria-pressed={cameraAuto} onClick={()=>setCameraAuto(v=>!v)}>◉ {cameraAuto?'Auto':'Libre'}</button>
     <div className="coachCanvasViewport"><Canvas camera={{position:[0,1.3,4.5],fov:38}} dpr={[1,1.5]} gl={{antialias:true}}>
