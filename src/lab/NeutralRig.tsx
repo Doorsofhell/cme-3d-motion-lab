@@ -10,6 +10,7 @@ import {restoreReferencePose} from './restorePose';
 import {applyNeutralAppearance,applyNeutralRigMaterials,inspectCoachMaterialZones,type NeutralAppearance} from './neutralAppearance';
 import {applyCoachLookGeometry,inspectCoachShapes,type CoachFaceShape} from './coachGeometry';
 import {CadrageSquelette} from './CadrageSquelette';
+import {attachOutfit} from '../adapters/outfits';
 
 export const LAB_DISCIPLINES=['boxing','kickboxing','muaythai','mma','bjj','judo'] as const;
 export type LabDiscipline=typeof LAB_DISCIPLINES[number];
@@ -26,10 +27,23 @@ export type NeutralRigReport={sex:NeutralSex;discipline:LabDiscipline;motion:str
  * Both use the SAME CoachRig / MotionSampler implementation. No changes to canonical motion code.
  * These are neutralized reference rigs, NOT new independently certified anatomical assets.
  */
-export function NeutralRig({sex,discipline,motionId,playing,speed,showSkeleton,onReport,appearance,proportions,face,autoCadrage=false,mode='neutral'}:{
+type NeutralRigProps={
  sex:NeutralSex;discipline:LabDiscipline;motionId:string;playing:boolean;speed:number;showSkeleton:boolean;
  onReport:(r:NeutralRigReport)=>void;appearance?:NeutralAppearance;proportions?:{height:number;shoulders:number;muscle:number;waist:number};face?:CoachFaceShape;autoCadrage?:boolean;mode?:'neutral'|'appearance';
-}){
+};
+/** Appearance uses a genuine, already-shipped outfit GLB.
+ * Neutral anatomy does not fetch or display an outfit.
+ */
+export function NeutralRig(props:NeutralRigProps){
+ return props.mode==='appearance'?<OutfittedRig {...props}/>:<RigBody {...props}/>;
+}
+function OutfittedRig(props:NeutralRigProps){
+ const costume=props.discipline==='boxing'?'boxe':props.discipline;
+ const url=import.meta.env.BASE_URL+'fighters/'+NEUTRAL_ASSETS[props.sex]+'/tenues/'+costume+'.glb';
+ const {scene}=useGLTF(url,import.meta.env.BASE_URL+'draco/');
+ return <RigBody {...props} outfitScene={scene}/>;
+}
+function RigBody({sex,discipline,motionId,playing,speed,showSkeleton,onReport,appearance,proportions,face,autoCadrage=false,mode='neutral',outfitScene}:NeutralRigProps & {outfitScene?:Object3D}){
  const url=import.meta.env.BASE_URL+'fighters/'+NEUTRAL_ASSETS[sex]+'/photo.glb';
  const gltf=useGLTF(url,import.meta.env.BASE_URL+'draco/');
  const scene=useMemo(()=>{
@@ -50,9 +64,10 @@ export function NeutralRig({sex,discipline,motionId,playing,speed,showSkeleton,o
     p.needsUpdate=true;
    }
   });
+  if(mode==='appearance'&&outfitScene)attachOutfit(root,outfitScene,true);
   if(mode==='neutral')applyNeutralRigMaterials(root);
   return root;
- },[gltf.scene,mode,sex]);
+ },[gltf.scene,mode,sex,outfitScene]);
  const appearanceSupport=useMemo(()=>({
   colors:inspectCoachMaterialZones(scene),shape:inspectCoachShapes(scene)
  }),[scene]);
