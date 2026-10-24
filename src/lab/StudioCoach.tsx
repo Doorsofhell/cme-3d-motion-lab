@@ -52,27 +52,6 @@ export function parseCoachLookJson(text:string):CoachLook{
  }
  return normalizeCoachLook(input as CoachLook);
 }
-function Mannequin({look}:{look:CoachLook}){
- const skin=look.skin,top=look.top==='aucun'?skin:look.topColor;
- const h=look.height,shoulder=look.shoulders*(look.sex==='femme'?.94:1),arm=look.muscle,waist=look.waist;
- return <group scale={[1,h,1]} position={[0,-.1,0]}>
-  <mesh position={[0,1.62,0]} scale={[.21*look.jaw,.27,.19]}><sphereGeometry args={[1,20,16]}/><meshStandardMaterial color={skin} roughness={.86}/></mesh>
-  <mesh position={[0,1.6,.194]} scale={[.045*look.nose,.075*look.nose,.06*look.nose]}><sphereGeometry args={[1,14,10]}/><meshStandardMaterial color={skin}/></mesh>
-  {look.hairStyle!=='rase'&&<mesh position={[0,1.83,-.015]} scale={[.21,look.hairStyle==='long'?.19:.11,.19]}><sphereGeometry args={[1,20,12]}/><meshStandardMaterial color={look.hairColor}/></mesh>}
-  {[-1,1].map(s=><group key={s}>
-   <mesh position={[s*.083,1.65,.177]} scale={[.036*look.eyes,.026,.018]}><sphereGeometry args={[1,12,8]}/><meshStandardMaterial color={look.eyeColor}/></mesh>
-   <mesh position={[s*.32*shoulder,1.13,0]} rotation={[0,0,s*.13]} scale={[.105*arm,.36,.115]}><capsuleGeometry args={[1,1,6,12]}/><meshStandardMaterial color={top} roughness={.88}/></mesh>
-   <mesh position={[s*.35*shoulder,.76,0]} scale={[.105*arm,.24,.1]}><capsuleGeometry args={[1,1,6,12]}/><meshStandardMaterial color={skin}/></mesh>
-   <mesh position={[s*.35*shoulder,.49,.02]} scale={[look.gloves==='boxe'?.14:.105,.12,.12]}><sphereGeometry args={[1,16,12]}/><meshStandardMaterial color={look.gloves==='aucun'?skin:look.gloveColor}/></mesh>
-   <mesh position={[s*.15,.28,0]} scale={[.14,.42,.16]}><capsuleGeometry args={[1,1,6,12]}/><meshStandardMaterial color={look.bottom==='legging'?look.bottomColor:skin}/></mesh>
-   <mesh position={[s*.15,-.28,0]} scale={[.11,.35,.12]}><capsuleGeometry args={[1,1,6,12]}/><meshStandardMaterial color={look.shins?look.shinColor:look.bottom==='legging'?look.bottomColor:skin}/></mesh>
-   <mesh position={[s*.15,-.73,.11]} scale={[.12,.075,.24]}><sphereGeometry args={[1,14,10]}/><meshStandardMaterial color={skin}/></mesh>
-  </group>)}
-  <mesh position={[0,1.13,0]} scale={[.32*shoulder,.43,.19*arm]}><capsuleGeometry args={[1,1,8,16]}/><meshStandardMaterial color={top}/></mesh>
-  <mesh position={[0,.68,0]} scale={[.25*waist,.22,.16]}><sphereGeometry args={[1,18,12]}/><meshStandardMaterial color={top}/></mesh>
-  <mesh position={[0,.46,0]} scale={[.26,.19,.18]}><sphereGeometry args={[1,18,12]}/><meshStandardMaterial color={look.bottomColor}/></mesh>
- </group>;
-}
 const sections:Category[]=['corps','visage','peau','cheveux','tenue','protections'];
 const sectionNames:Record<Category,string>={corps:'Morphologie',visage:'Visage',peau:'Peau',cheveux:'Cheveux',tenue:'Tenue',protections:'Protections'};
 export function StudioCoach(){
