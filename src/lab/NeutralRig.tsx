@@ -34,7 +34,8 @@ export function NeutralRig({sex,discipline,motionId,playing,speed,showSkeleton,o
   restoreReferencePose(root);
   if(mode==='neutral'){
    root.traverse(o=>{const m=o as Mesh;if(m.isMesh)m.visible=false;});
-   buildNeutralHumanoid(root,sex);
+   const result=buildNeutralHumanoid(root,sex);
+   if(result.segments<12)throw new Error('Rig neutre incomplet : '+result.segments+' segments');
   }
   root.traverse(o=>{
    const m=o as Mesh;
