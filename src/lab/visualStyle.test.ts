@@ -1,5 +1,5 @@
 import {describe,it,expect} from 'vitest';
-import {BoxGeometry,Group,Mesh,MeshStandardMaterial,MeshToonMaterial,Texture} from 'three';
+import {BoxGeometry,Group,Mesh,MeshStandardMaterial,MeshToonMaterial,Texture,Bone,Skeleton,SkinnedMesh} from 'three';
 import {applyFitnessStyle,applyComicStyle} from './Fighter';
 
 function makeCoachMaterial(name:string,textured=true){
@@ -34,6 +34,23 @@ describe('CME-3D toon costume detail and adult comics',()=>{
   expect(mat.alphaMap).toBe(alphaMap);
   expect(mat.transparent).toBe(true);
   expect(mat.opacity).toBe(.85);
+ });
+ it('adds an ink shell to a fully opaque skinned fighter on balanced/mobile tier',()=>{
+  const root=new Group();
+  const bone=new Bone();
+  const skinned=new SkinnedMesh(new BoxGeometry(),new MeshStandardMaterial({name:'body',color:'#ffffff'}));
+  skinned.add(bone);
+  skinned.bind(new Skeleton([bone]));
+  root.add(skinned);
+  const outlines=applyComicStyle(root,'balanced');
+  expect(outlines).toHaveLength(1);
+  expect(outlines[0]).toBeInstanceOf(SkinnedMesh);
+  expect((outlines[0] as SkinnedMesh).skeleton).toBe(skinned.skeleton);
+  expect(outlines[0].parent).toBe(skinned);
+ });
+ it('skips the extra ink draw call in performance tier',()=>{
+  const {root}=makeCoachMaterial('haut-boxe',false);
+  expect(applyComicStyle(root,'performance')).toHaveLength(0);
  });
  it('uses a distinct three-band ink gradient for adult comics',()=>{
   const comic=makeCoachMaterial('haut-boxe');
