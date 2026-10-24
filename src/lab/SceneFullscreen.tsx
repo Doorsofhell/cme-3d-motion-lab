@@ -1,9 +1,10 @@
-import {useEffect,useRef,useState,type MouseEvent,type TouchEvent,type ReactNode} from 'react';
+import {useEffect,useRef,useState,type MouseEvent,type TouchEvent} from 'react';
 
 /** Contrôle 3D partagé : même plein écran, mêmes gestes et même bouton partout. */
 export function useSceneFullscreen(){
  const ref=useRef<HTMLElement>(null);
  const lastTap=useRef(0);
+ const ignoreSyntheticClick=useRef(false);
  const [fullscreen,setFullscreen]=useState(false);
  useEffect(()=>{
   const sync=()=>setFullscreen(document.fullscreenElement===ref.current);
@@ -20,11 +21,14 @@ export function useSceneFullscreen(){
   setFullscreen(v=>!v);
  };
  const isControl=(target:EventTarget)=>target instanceof Element&&!!target.closest('button,input,select,textarea,summary,a');
- const onDoubleClick=(event:MouseEvent<HTMLElement>)=>{if(!isControl(event.target))toggle();};
+ const onDoubleClick=(event:MouseEvent<HTMLElement>)=>{
+  if(ignoreSyntheticClick.current){ignoreSyntheticClick.current=false;return;}
+  if(!isControl(event.target))toggle();
+ };
  const onTouchEnd=(event:TouchEvent<HTMLElement>)=>{
-  if(isControl(event.target))return;
+  if(isControl(event.target)||event.touches.length>0||event.changedTouches.length!==1)return;
   const now=Date.now();
-  if(now-lastTap.current<350){event.preventDefault();lastTap.current=0;toggle();}
+  if(now-lastTap.current<350){event.preventDefault();lastTap.current=0;ignoreSyntheticClick.current=true;toggle();}
   else lastTap.current=now;
  };
  return {ref,fullscreen,toggle,onDoubleClick,onTouchEnd};
