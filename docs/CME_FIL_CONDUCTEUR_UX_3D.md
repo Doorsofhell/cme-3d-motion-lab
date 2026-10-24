@@ -46,3 +46,11 @@ L'utilisateur a confirmé sur capture Android : **Rig neutre** = humanoïde d'é
 - Les tests automatisés vérifient la présence des segments sur les deux sexes, leur rattachement aux os et l'absence de texture. **Ils ne valident pas encore le retargeting physique** ni les trajectoires des 6 disciplines sur de vrais GLB.
 - Ce proxy articulé ne remplace PAS deux modèles humains neutres sculptés/riggés de qualité production : le volume est schématique. Les assets GLB dédiés, l'audit des poids de skinning et les mesures Android restent à réaliser.
 - Prochain lot recommandé : produire/importer deux vrais meshes anatomiques neutres sous licence compatible, avec squelette identique et comparaison quantitative A/B.
+
+## 24/10 — consignes complémentaires consolidées
+- Toute instruction future complète le **prompt maître** dans `docs/CME_PROMPT_MAITRE_CONSOLIDE.md`, sans réinitialiser les acquis.
+- À chaque interaction : analyse croisée, réalisation mesurable, statut honnête et choix prédéfinis recommandés.
+- Bug P0 remonté sur Android : l'écran Studio Coach ne défile ni vers le haut ni vers le bas ; correction CSS du propriétaire du défilement vertical entre en-tête et barre basse, avec touch-action pan-y et overflow-y auto.
+- Parcours cible strict : animations testées d'abord sur humanoïdes neutres ; coachs construits en mode Apparence à partir du même rig ; coachs sauvegardés visibles et testables dans le Laboratoire.
+- Première liaison de bibliothèque locale Studio → Laboratoire ; sélection ouvre le profil dans Studio. **Le chargement du coach directement comme acteur animé du Laboratoire reste à implémenter.**
+- Test tactile réel Android à confirmer malgré CI verte.
