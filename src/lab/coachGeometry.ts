@@ -70,6 +70,7 @@ export function applyCoachBodyShape(root:Object3D,shape:CoachBodyShape):number{
   if(!state){
    const weights=computeTorsoWeights(o);
    if(!weights||!weights.some(x=>x>.4))return;
+   if(!cache.has(o)&&Math.abs(shape.shoulders-1)<.001&&Math.abs(shape.muscle-1)<.001&&Math.abs(shape.waist-1)<.001)return;
    const source=o.geometry.getAttribute('position');
    const newGeo=o.geometry.clone();
    newGeo.userData.cmeOwned=true;
