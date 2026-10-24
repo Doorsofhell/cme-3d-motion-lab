@@ -4,6 +4,7 @@ import {OrbitControls} from '@react-three/drei';
 import {ACESFilmicToneMapping,NeutralToneMapping,SRGBColorSpace,CanvasTexture} from 'three';
 import {Fighter} from './Fighter';
 import {StudioCoach} from './StudioCoach';
+import {readSavedCoaches,type SavedCoach} from './savedCoaches';
 import {parseCoachPlan,type CoachPlan} from './coachProtocol';
 import {CME_APP_VERSION} from './buildInfo';
 import {captureFighterImage} from './Screenshot';
@@ -21,6 +22,11 @@ import {useAutoIncidentQueue,type AutoCategory} from './AutoIncidents';
 import {autoClearEnabled,setAutoClearEnabled,clearApplicationCache} from './cachePolicy';
 import './style.css';
 
+function SavedCoachLibrary({openCoach}:{openCoach:(id:string)=>void}){
+ const [coaches,setCoaches]=useState<SavedCoach[]>(()=>{try{return readSavedCoaches(localStorage);}catch{return [];}});
+ useEffect(()=>{const refresh=()=>{try{setCoaches(readSavedCoaches(localStorage));}catch{setCoaches([]);}};window.addEventListener('cme-coaches-changed',refresh);return()=>window.removeEventListener('cme-coaches-changed',refresh);},[]);
+ return <section className="savedCoachLibrary" aria-label="Coachs créés"><h3>Mes coachs ({coaches.length})</h3>{coaches.length===0?<p>Créez votre premier coach dans Studio Coach. Il apparaîtra ici.</p>:<div className="savedCoachItems">{coaches.map(c=><button key={c.id} onClick={()=>openCoach(c.id)}><strong>{c.name}</strong><small>{c.look.sex} · Profil d'apparence</small></button>)}</div>}<small>Profils locaux : les mouvements restent ceux du moteur canonique ; personnalisation 3D encore partielle.</small></section>;
+}
 type Actor='mma-kadir'|'mma-amara'|'mma-naira';
 type TechniqueEntry={id:string;name:string;category:string;disciplines:string[];motion:string};
 const techniques=(rawTechniques as TechniqueEntry[]).filter((t,i,a)=>a.findIndex(x=>x.motion===t.motion)===i);
@@ -286,6 +292,7 @@ export function App(){
    <span className="footnote">IA locale expérimentale : entraînement validé en attente</span>
   </section>
   </div>
+  {tab==='lab'&&<SavedCoachLibrary openCoach={id=>{try{localStorage.setItem('cme-selected-coach',id);}catch{}setTab('studio');}}/>}
   {tab==='studio'&&<StudioCoach/>}
   {tab==='versions'&&<VersionsPanel/>}
   {tab==='options'&&<section className="cmeOptions" aria-label="Options CME-3D">
