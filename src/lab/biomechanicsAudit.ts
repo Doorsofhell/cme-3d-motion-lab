@@ -1,3 +1,4 @@
+import {acceleration} from './motionContinuity';
 import type {Motion} from '../shadow-engine/motion';
 import type {Pose,V3} from '../shadow-engine/pose';
 
@@ -33,6 +34,16 @@ export function auditMotion(m:Motion):MotionFinding[]{
    const before=m.keys[i-1];const dt=k.t-before.t;
    if(dt>0&&dt<.025)add(i,'KEY_INTERVAL','Less than 25ms between poses');
    if(dt>0&&dist(p.hips,before.pose.hips)/dt>4)add(i,'HIP_SPEED','Hip translation exceeds 4 m/s');
+  }
+  if(i>0&&i<m.keys.length-1&&!k.hold){
+   const a=m.keys[i-1],b=m.keys[i+1];
+   const dt0=k.t-a.t,dt1=b.t-k.t;
+   if(dt0>.025&&dt1>.025){
+    const ax=acceleration(a.pose.hips.x,p.hips.x,b.pose.hips.x,dt0,dt1);
+    const ay=acceleration(a.pose.hips.y,p.hips.y,b.pose.hips.y,dt0,dt1);
+    const az=acceleration(a.pose.hips.z,p.hips.z,b.pose.hips.z,dt0,dt1);
+    if(Math.hypot(ax,ay,az)>45)add(i,'HIP_ACCELERATION','Abrupt pelvis velocity change; review impact or interpolation');
+   }
   }
   previous=k.t;
  }
