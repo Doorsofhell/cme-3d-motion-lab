@@ -182,7 +182,7 @@ export function StudioCoach(){
     <div className="coachCanvasViewport"><Canvas key={canvasRetry} onCreated={onCanvasCreated} camera={{position:[0,1.3,4.5],fov:38}} dpr={[1,1.5]} gl={{antialias:true}}>
      <AndroidFrameProbe telemetry={androidTelemetry}/>
      <color attach="background" args={['#e6edf6']}/><hemisphereLight args={['#fff8ef','#677388',1.05]}/><ambientLight intensity={0.65}/><directionalLight position={[3,5,4]} intensity={1.55}/>
-     <SceneLoadingBoundary><NeutralRig key={`${look.sex}-${rigMode?'neutral':'appearance'}`} mode={rigMode?'neutral':'appearance'} sex={look.sex} discipline={discipline} noGi={noGi} motionId={testingMotion?motionId:'garde'} playing={testingMotion&&playing} speed={1} showSkeleton={showSkeleton} autoCadrage={!cameraAuto} focusZone={focusZone} focusRequest={focusRequest} onReport={handleRigReport} appearance={colors} proportions={dimensions} face={faceDimensions}/></SceneLoadingBoundary>
+     <SceneLoadingBoundary><NeutralRig key={`${look.sex}-${rigMode?'neutral':'appearance'}`} mode={rigMode?'neutral':'appearance'} sex={look.sex} discipline={discipline} noGi={noGi} motionId={testingMotion?motionId:'garde'} creationPose={!testingMotion} playing={testingMotion&&playing} speed={1} showSkeleton={showSkeleton} autoCadrage={!cameraAuto} focusZone={focusZone} focusRequest={focusRequest} onReport={handleRigReport} appearance={colors} proportions={dimensions} face={faceDimensions}/></SceneLoadingBoundary>
      <SceneCameraControls automatic={cameraAuto} motion={motionId}/>
     </Canvas></div>
     <span className="coachPreviewLabel">{rigMode?'Anatomie 3D':'Coach en direct · '+(look.sex==='femme'?'Femme':'Homme')}</span>
