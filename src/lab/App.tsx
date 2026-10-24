@@ -10,6 +10,7 @@ import rawTechniques from './techniques.json';
 import rawSequences from './complexSequences.json';
 import shadowExercises from './shadowExercises.json';
 import {ComparisonPanel} from './ComparisonPanel';
+import {fighterRoster} from './fighterRoster';
 import {VersionsPanel} from './VersionsPanel';
 import {IncidentReporter,IssueTracker,useKnownIssues,type TestContext} from './Issues';
 import {unresolvedDrafts} from './IssueLinks';
@@ -240,7 +241,7 @@ export function App(){
   
   <div className="labContent" style={{display:tab==='lab'?'contents':'none'}}>
   <section className="quickBar" aria-label="Sélection de test">
-   <label><span>Coach</span><select aria-label="Coach" value={actor} onChange={e=>{journal.record('coach','Changement de coach : '+actor+' → '+e.target.value);reset();setActor(e.target.value as Actor);}}><option value="mma-amara">Amara</option><option value="mma-kadir">Kadir</option></select></label>
+   <label><span>Coach</span><select aria-label="Coach" value={actor} onChange={e=>{journal.record('coach','Changement de coach : '+actor+' → '+e.target.value);reset();setActor(e.target.value as Actor);}}>{fighterRoster.map(f=><option key={f.id} value={f.id} disabled={f.status!=='available'}>{f.name}{f.status==='in-production'?' · en création':''}</option>)}</select></label>
    <label><span>Discipline</span><select aria-label="Discipline" value={discipline} onChange={e=>{journal.record('discipline','Discipline : '+discipline+' → '+e.target.value,{coach:actor,style:renderStyle});reset();setDiscipline(e.target.value);setTechnique(techniques.find(t=>t.disciplines.includes(e.target.value))?.motion??'garde');onLog('Discipline : '+e.target.value);}}>{disciplines.map(([id,name])=><option key={id} value={id}>{name}</option>)}</select></label>
    <label><span>{technique.startsWith('seq-')?'Enchaînement':'Technique'} · {currentTechniques.length}</span><div className="motionSelector"><button type="button" className="catalogButton" aria-label="Choisir une technique" onClick={()=>{setCatalogMode('techniques');setCatalogOpen(true);setQuery('');}}><span>{techniqueLabel}</span><strong>⌕</strong></button><button type="button" className="comboChoose" aria-label="Choisir un enchaînement complexe" onClick={()=>{setCatalogMode('sequences');setCatalogOpen(true);setQuery('');}}>×{currentSequences.length}</button></div></label>
   </section>
