@@ -7,6 +7,8 @@ import {CoachRig} from '../shadow-engine/rig';
 import {getLibrary} from '../shadow-engine/library';
 import {MotionSampler} from '../shadow-engine/motion';
 import {SequenceSampler} from './ComplexSequences';
+import {CoachPlanSampler} from './CoachPlanSampler';
+import type {CoachPlan} from './coachProtocol';
 import rawSequences from './complexSequences.json';
 import {restoreReferencePose} from './restorePose';
 import type {Playback,Quality,RenderStyle,RigReport} from './App';
@@ -102,8 +104,8 @@ function applyComicStyle(root:Object3D,quality:Quality){
  });
  return outlines;
 }
-export function Fighter({actor,outfit,technique,playback,skeleton,quality,renderStyle,onReport,onReady}:{
- actor:'mma-kadir'|'mma-amara'|'mma-naira';outfit:string;technique:string;playback:RefObject<Playback>;skeleton:boolean;
+export function Fighter({actor,outfit,technique,coachPlan,playback,skeleton,quality,renderStyle,onReport,onReady}:{
+ actor:'mma-kadir'|'mma-amara'|'mma-naira';outfit:string;technique:string;coachPlan?:CoachPlan|null;playback:RefObject<Playback>;skeleton:boolean;
  quality:Quality;renderStyle:RenderStyle;onReport:(r:RigReport)=>void;onReady:()=>void;
 }){
  const base=import.meta.env.BASE_URL;
@@ -145,9 +147,10 @@ export function Fighter({actor,outfit,technique,playback,skeleton,quality,render
  const motion=library.get(technique)??library.get('garde');
  const seqValid=!!seq&&seq.motions.every(id=>library.has(id));
  const sampler=useMemo(()=>{
+  if(coachPlan&&coachPlan.discipline===(outfit==='bjj-nogi'?'bjj':outfit))return new CoachPlanSampler(rig,library,coachPlan);
   if(seq&&seqValid)return new SequenceSampler(rig,library,seq.motions);
   return motion?new MotionSampler(rig,motion):null;
- },[rig,motion,library,seq,seqValid]);
+ },[rig,motion,library,seq,seqValid,coachPlan]);
  const helper=useMemo(()=>new SkeletonHelper(scene),[scene]);
  const lastSample=useRef<number|null>(null);
  const t=useRef(0);
