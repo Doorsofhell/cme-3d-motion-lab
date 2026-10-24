@@ -60,7 +60,7 @@ function computeTorsoWeights(mesh:SkinnedMesh):Float32Array|null{
 /**
  * Shape real skinned GLB geometry without touching bones, bind matrices, skinIndex,
  * skinWeight, motion samplers or the cached GLTF. Vertex changes are intentionally
- * modest (under 10%) and restricted to vertices weighted to torso bones.
+ * modest and restricted to vertices weighted to torso bones.
  */
 export function applyCoachBodyShape(root:Object3D,shape:CoachBodyShape):number{
  let modified=0;
@@ -71,24 +71,32 @@ export function applyCoachBodyShape(root:Object3D,shape:CoachBodyShape):number{
    const weights=computeTorsoWeights(o);
    if(!weights||!weights.some(x=>x>.4))return;
    if(!cache.has(o)&&Math.abs(shape.shoulders-1)<.001&&Math.abs(shape.muscle-1)<.001&&Math.abs(shape.waist-1)<.001)return;
-   const source=o.geometry.getAttribute('position');
-   const newGeo=o.geometry.clone();
+   const previous=o.geometry;
+   const source=previous.getAttribute('position');
+   const newGeo=previous.clone();
    newGeo.userData.cmeOwned=true;
-   const pos=newGeo.getAttribute('position') as BufferAttribute;
    state={geometry:newGeo,reference:new Float32Array(source.array as ArrayLike<number>),weights};
-   cache.set(o,state);o.geometry=newGeo;
+   cache.set(o,state);
+   o.geometry=newGeo;
+   // attachOutfit already owns its per-instance garments and masked body geometries.
+   // Release an abandoned owned GPU buffer after copying, never a cached GLTF source.
+   if(previous.userData.cmeOwned===true)previous.dispose();
   }
   const position=state.geometry.getAttribute('position') as BufferAttribute;
   const ref=state.reference;
   const shoulder=clamp(shape.shoulders,.75,1.25)-1;
   const muscle=clamp(shape.muscle,.7,1.35)-1;
   const waist=clamp(shape.waist,.75,1.3)-1;
+  // Extra cloth clearance is deliberately tiny, weighted only to chest/hips.
+  // It reduces poke-through for attached garments; it is not collision detection.
+  const clothClearance=o.name.startsWith('tenue:')
+   ?Math.min(.012,Math.max(Math.abs(shoulder),Math.abs(muscle),Math.abs(waist))*.04):0;
   for(let i=0;i<position.count;i++){
    const chest=state.weights[i*2],hips=state.weights[i*2+1];
    const torso=Math.min(1,chest+hips);
    // The waist/shoulders volumes follow relevant skin weights, not broad mesh names.
-   const width=1+shoulder*.25*chest+waist*.28*hips+muscle*.12*torso;
-   const depth=1+muscle*.14*torso+waist*.12*hips;
+   const width=1+shoulder*.25*chest+waist*.28*hips+muscle*.12*torso+clothClearance*torso;
+   const depth=1+muscle*.14*torso+waist*.12*hips+clothClearance*torso;
    position.setXYZ(i,ref[i*3]*width,ref[i*3+1],ref[i*3+2]*depth);
    if(torso>.4)modified++;
   }
