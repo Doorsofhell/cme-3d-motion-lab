@@ -98,3 +98,13 @@
  .coachRigSwitch{padding:3px;gap:2px}
  .coachRigSwitch button{min-width:54px;padding:7px 8px;font-size:11px}
 }
+
+/* Alerte WebGL non bloquante : le redémarrage est explicite, sans capture. */
+.coachWebglAlert{
+ position:absolute;left:10px;right:10px;bottom:52px;z-index:18;
+ display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:10px;
+ background:#1e2634ed;color:#fff;border:1px solid #df8b57;border-radius:12px;
+ font-size:12px;
+}
+.coachWebglAlert span{flex:1 1 150px}
+.coachWebglAlert button{min-height:44px;padding:8px 10px;background:#f1f4f9;color:#263448;border:0;border-radius:10px}
