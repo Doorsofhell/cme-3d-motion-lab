@@ -1,6 +1,6 @@
 import {describe,it,expect} from 'vitest';
 import {Mesh,MeshStandardMaterial,MeshToonMaterial,Object3D,BoxGeometry,Texture} from 'three';
-import {appearanceZone,applyNeutralAppearance} from './neutralAppearance';
+import {appearanceZone,applyNeutralAppearance,inspectCoachMaterialZones} from './neutralAppearance';
 describe('skinned appearance adapter isolation',()=>{
  it('applique les teintes aux matériaux Toon de Fitness/Comics sans perdre les textures',()=>{
   const root=new Object3D(),sourceMap=new Texture();
