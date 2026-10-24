@@ -9,6 +9,7 @@ import {MotionSampler} from '../shadow-engine/motion';
 import {restoreReferencePose} from './restorePose';
 import {applyNeutralAppearance,type NeutralAppearance} from './neutralAppearance';
 import {buildNeutralHumanoid} from './canonicalNeutralBody';
+import {masquerApparenceSource} from './neutralVisibility';
 
 export const LAB_DISCIPLINES=['boxing','kickboxing','muaythai','mma','bjj','judo'] as const;
 export type LabDiscipline=typeof LAB_DISCIPLINES[number];
@@ -33,7 +34,7 @@ export function NeutralRig({sex,discipline,motionId,playing,speed,showSkeleton,o
   const root=clone(gltf.scene) as Object3D;
   restoreReferencePose(root);
   if(mode==='neutral'){
-   root.traverse(o=>{const m=o as Mesh;if(m.isMesh){m.visible=true;m.userData.cmeHiddenSource=true;}});
+   masquerApparenceSource(root);
    const result=buildNeutralHumanoid(root,sex);
    if(result.segments<12)throw new Error('Rig neutre incomplet : '+result.segments+' segments');
   }
