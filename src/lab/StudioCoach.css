@@ -138,3 +138,8 @@
 .coachFocusLine span{min-width:0;flex:1 1 130px}
 .coachFocusLine button{box-sizing:border-box;min-height:44px;padding:8px 12px;border-radius:10px;border:1px solid #d7dfeb;background:#f5f7fb;color:#263448;cursor:pointer}
 .coachFocusLine button:focus-visible{outline:3px solid #d6363c;outline-offset:2px}
+
+/* Amara: active female silhouette controls, no horizontal scrolling on Android. */
+.coachFemaleShapes{display:flex;flex-direction:column;gap:13px;min-width:0}
+.coachFemaleShapes .coachField{min-height:58px}
+.coachFemaleShapes input[type=range]{min-height:44px;touch-action:pan-y}
