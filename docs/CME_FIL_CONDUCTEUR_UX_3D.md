@@ -163,3 +163,14 @@ A — stabilisation et non-régression d'abord ; B — personnalisation dynamiqu
 - Contrôle CI des 2 corps GLB et 14 tenues disponibles (boxe, kickboxing, muay-thaï, MMA, judo, JJB gi/no-gi) : intégrité structurelle, maillages skinnés, poids de skinning, rapprochement des os des tenues avec le corps. Ce contrôle est indépendant du moteur de mouvements.
 - Tests unitaires : clearance, idempotence, retour à l'origine, protection du squelette, propriété des géométries et absence de libération des sources.
 - **À fermer seulement après une recette sur Android physique** : revue 360° statique/dynamique pour deux sexes × six disciplines, postures extrêmes, accroche/occlusion et FPS/latence. Aucune vidéo et aucune analyse par caméra ne sont admises. Shadow Studio et mouvements canoniques restent intacts.
+
+## 24/10/2026 — Nouvelle priorité : personnalisation dynamique réelle (0.7.23)
+
+**Constat sur Android 0.7.22** : peau trop rouge/assombrie ; seulement 2 sous-matériaux reconnus ; couleurs de gants affichées comme non disponibles ; certains choix restent des placeholders et la prévisualisation ne montrait pas les vêtements GLB présents dans le dépôt. La limitation et le défaut d'intégration ne doivent pas être confondus.
+
+**Lot logiciel 0.7.23 :**
+- Charger dans Studio Coach, en mode Apparence, la tenue GLB réelle pour chacune des 6 disciplines (boxe, kickboxing, muay-thaï, MMA, JJB, judo). L'anatomie reste indépendante et non habillée. Choix par l'utilisateur depuis l'onglet Tenue ; identifiants de matériaux inventoriés par la CI.
+- Palette dédiée de 8 carnations humaines usuelles ; réglage immédiat ; adapter la couleur des textures de peau en *variation relative au matériau natif* : la carnation de référence préserve l'albédo GLB original et évite de le multiplier à nouveau par du marron.
+- Priorité de classement des zones : iris / cheveux / protections / vêtements avant peau ; éviter de recolorer par erreur des gants ou cheveux attachés à un parent de type `skin/body`. Afficher les quantités par zone réellement détectée sur les modèles chargés. Ne pas prétendre que des coiffures/gants ajoutables existent si les GLB ne contiennent pas de maillage distinct.
+- Éclairage Studio équilibré. Tests unitaires couleur native, aller-retour teint, matériaux Toon, classification, et tests de contrat des tenues et de l'ergonomie mobile.
+- **Restent ouverts :** revue visuelle sur Android physique en vue 360° et en mouvement ; couverture réelle des sous-matériaux par discipline / sexe ; création et intégration d'assets additionnels si les GLB existants ne permettent pas de changer coiffure, protections ou visage. Pas de capture/vision ou analyse vidéo, pas de changement des animations canoniques ni de Shadow Studio.
