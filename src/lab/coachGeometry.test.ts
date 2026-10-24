@@ -177,6 +177,34 @@ describe('Studio Coach — déformations GLB non destructives',()=>{
  });
 });
 
+describe('Amara — personnalisation poitrine réellement appliquée au corps visible',()=>{
+ const defaults={height:1,shoulders:1,muscle:1,waist:1,jaw:1,nose:1,eyes:1,sex:'femme' as const,roundness:1,hips:1,thighs:1,bust:1};
+ it('déforme localement l’avant du torse et recalcule les normales, sans altérer les os',()=>{
+  const {root,body,geo,bones,reference}=skinnedFemale();
+  expect(inspectCoachShapes(root).bustVertices).toBeGreaterThan(0);
+  const pose=bones.map(b=>b.position.clone());
+  applyCoachLookGeometry(root,{...defaults,bust:1.35});
+  const changed=Array.from(body.geometry.getAttribute('position').array);
+  expect(changed).not.toEqual(reference);
+  const original=geo.getAttribute('position');
+  const generated=body.geometry.getAttribute('position');
+  // Front torso points change depth, but the back remains untouched.
+  const front=Array.from({length:generated.count},(_,i)=>i).filter(i=>original.getZ(i)>0&&original.getY(i)>.3);
+  const back=Array.from({length:generated.count},(_,i)=>i).filter(i=>original.getZ(i)<0&&original.getY(i)>.3);
+  expect(front.some(i=>Math.abs(generated.getZ(i)-original.getZ(i))>.00001)).toBe(true);
+  expect(back.every(i=>generated.getZ(i)===original.getZ(i))).toBe(true);
+  applyCoachLookGeometry(root,{...defaults,bust:1.35});
+  expect(Array.from(generated.array)).toEqual(changed);
+  applyCoachLookGeometry(root,defaults);
+  expect(Array.from(generated.array)).toEqual(reference);
+  expect(bones.every((bone,i)=>bone.position.equals(pose[i]))).toBe(true);
+ });
+ it('ignore strictement le curseur poitrine sur un corps masculin',()=>{
+  const {root,body,geo}=skinnedFemale();
+  applyCoachLookGeometry(root,{...defaults,sex:'homme',bust:1.35});
+  expect(body.geometry).toBe(geo);
+ });
+});
 describe('Silhouette femme — vrais volumes skinnés, sans déformation des os',()=>{
  const defaults={height:1,shoulders:1,muscle:1,waist:1,jaw:1,nose:1,eyes:1,sex:'femme' as const,roundness:1,hips:1,thighs:1};
  it('détecte de vrais sommets de bassin et de cuisse, y compris sur les tenues',()=>{
