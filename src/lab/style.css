@@ -229,3 +229,5 @@ select{width:100%;min-width:0;background:#1b2b3e;border:1px solid #344c60;border
  .comparisonTable{font-size:10px}
  .comparisonTable th,.comparisonTable td{padding:8px 5px}
 }
+
+.cmeOptions{flex:1;overflow:auto;padding:18px;background:#101b29;border:1px solid #344a61;border-radius:12px;color:#e4edf8}.cmeOptions h2{margin:0 0 18px;font-size:19px}.cacheOption{display:flex;gap:14px;align-items:flex-start;padding:16px;background:#192a3b;border:1px solid #37516a;border-radius:12px;margin-bottom:16px}.cacheOption input{width:22px;height:22px;flex-shrink:0;accent-color:#69dccc}.cacheOption span{display:flex;flex-direction:column;gap:8px}.cacheOption strong{font-size:14px}.cacheOption small{font-size:12px;line-height:1.6;color:#afc5d7}.cmeOptions p{font-size:12px;color:#8ff3df}
