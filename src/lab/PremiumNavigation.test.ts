@@ -1,4 +1,5 @@
 import {describe,it,expect} from 'vitest';
+// @ts-ignore — lecture locale des fichiers de composants sous Vitest, à l’image des tests Studio existants.
 import {readFileSync} from 'node:fs';
 const app=readFileSync(new URL('./App.tsx',import.meta.url),'utf8');
 const css=readFileSync(new URL('./style.css',import.meta.url),'utf8');
