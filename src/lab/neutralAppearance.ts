@@ -5,7 +5,6 @@ export type NeutralAppearance={
  skin:string;hairColor:string;topColor:string;bottomColor:string;gloveColor:string;eyeColor?:string;
 };
 export type AppearanceZone=keyof NeutralAppearance;
-type Tintable=MeshStandardMaterial|MeshToonMaterial;
 
 const sourceColors=new WeakMap<Material,Color>();
 const readableFallback=/^(?:material(?:[._ -]?[0-9]+)?|mat[0-9]*|default(?:material)?|[0-9]+)$/i;
@@ -44,8 +43,7 @@ export function relativeSkinColor(original:Color,targetHex:string):Color{
  return new Color().setRGB(
   limit(original.r*scale(target.r,reference.r),0,1),
   limit(original.g*scale(target.g,reference.g),0,1),
-  limit(original.b*scale(target.b,reference.b),0,1),
-  Color.LinearSRGBColorSpace
+  limit(original.b*scale(target.b,reference.b),0,1)
  );
 }
 
