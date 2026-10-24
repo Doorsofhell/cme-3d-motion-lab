@@ -1,5 +1,7 @@
-import html from '../../index.html?raw';
-import css from './mobileUsability.css?raw';
+// @ts-ignore — Vitest s'exécute sous Node ; le projet ne fournit pas les types Node.
+import {readFileSync} from 'node:fs';
+const html=readFileSync(new URL('../../index.html',import.meta.url),'utf8');
+const css=readFileSync(new URL('./mobileUsability.css',import.meta.url),'utf8');
 import {describe,expect,it} from 'vitest';
 describe('ergonomie mobile P0',()=>{
  it('charge la feuille dédiée depuis la page principale',()=>{
