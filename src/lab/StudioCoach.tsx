@@ -79,7 +79,7 @@ export function StudioCoach(){
  const [look,setLook]=useState<CoachLook>(defaultCoachLook);
  const [section,setSection]=useState<Category>('corps');
  const [message,setMessage]=useState('');
- const [rigMode,setRigMode]=useState(true);
+ const [rigMode,setRigMode]=useState(false);
  const [advancedOpen,setAdvancedOpen]=useState(false);
  const [discipline,setDiscipline]=useState<LabDiscipline>('boxing');
  const [motionId,setMotionId]=useState('garde');
@@ -104,13 +104,13 @@ export function StudioCoach(){
   <header className="coachStudioHeader"><div><small>STUDIO COACH</small><h2>Votre combattant</h2><p>Choisissez un modèle et personnalisez son apparence.</p></div></header>
   <div className="coachStudioLayout">
    <div className="coachPreview" aria-label="Aperçu 3D permanent du mannequin personnalisable">
-    <div className="coachRigSwitch"><button className={!rigMode?'active':''} onClick={()=>setRigMode(false)}>Apparence</button><button className={rigMode?'active':''} onClick={()=>setRigMode(true)}>Rig animé</button></div>
+    <div className="coachRigSwitch" role="group" aria-label="Mode du modèle 3D"><button className={!rigMode?'active':''} aria-pressed={!rigMode} onClick={()=>setRigMode(false)}>Apparence</button><button className={rigMode?'active':''} aria-pressed={rigMode} onClick={()=>setRigMode(true)}>Rig neutre</button></div>
     <Canvas camera={{position:[0,1.05,3.4],fov:38}} dpr={[1,1.5]} gl={{antialias:true}}>
      <color attach="background" args={['#171920']}/><ambientLight intensity={1.4}/><directionalLight position={[3,5,4]} intensity={2.1}/>
-     {rigMode?<NeutralRig sex={look.sex} discipline={discipline} motionId={motionId} playing={playing} speed={1} showSkeleton={showSkeleton} onReport={setReport} appearance={{skin:look.skin,hairColor:look.hairColor,topColor:look.topColor,bottomColor:look.bottomColor,gloveColor:look.gloveColor}}/>:<Mannequin look={look}/>}
+     <NeutralRig key={`${look.sex}-${rigMode?'neutral':'appearance'}`} mode={rigMode?'neutral':'appearance'} sex={look.sex} discipline={discipline} motionId={motionId} playing={playing} speed={1} showSkeleton={showSkeleton} onReport={setReport} appearance={{skin:look.skin,hairColor:look.hairColor,topColor:look.topColor,bottomColor:look.bottomColor,gloveColor:look.gloveColor}}/>
      <OrbitControls target={[0,.65,0]} enablePan={false} minDistance={2.2} maxDistance={5}/>
     </Canvas>
-    <span className="coachPreviewLabel">{rigMode?'Modèle riggé · couleurs appliquées aux matériaux identifiables':'Aperçu simplifié · non riggé'}</span>
+    <span className="coachPreviewLabel">{rigMode?'Humanoïde de test monochrome · squelette partagé · équipements séparés masqués':'Modèle habillé · apparence personnalisable sur matériaux identifiés'}</span>
    </div>
    <div className="coachEditor">
     <div className="coachQuickChoice" role="group" aria-label="Choisir le modèle">
@@ -119,7 +119,7 @@ export function StudioCoach(){
     </div>
     <nav className="coachCategories" aria-label="Personnalisation">{sections.map(item=><button key={item} className={section===item?'active':''} aria-current={section===item?'true':undefined} onClick={()=>setSection(item)}>{sectionNames[item]}</button>)}</nav>
     <h3 className="coachSectionTitle">{sectionNames[section]}</h3>
-    {rigMode&&<details className="coachAdvanced"><summary>Tester les mouvements</summary><div className="coachRigControls">
+    {<details className="coachAdvanced"><summary>Tester les mouvements</summary><div className="coachRigControls">
       <label>Discipline <select value={discipline} onChange={e=>{setDiscipline(e.target.value as LabDiscipline);setReport(null);}}>{LAB_DISCIPLINES.map(d=><option key={d} value={d}>{d}</option>)}</select></label>
       <label>Mouvement <input value={motionId} onChange={e=>setMotionId(e.target.value)} placeholder="garde"/></label>
       <button onClick={()=>setPlaying(v=>!v)}>{playing?'Pause':'Lecture'}</button>
