@@ -1,0 +1,17 @@
+.androidDiagnostic{min-width:0;flex:none;border:1px solid #454956;border-radius:12px;background:#20232c;color:#f5f5f5}
+.androidDiagnostic>summary{cursor:pointer;min-height:44px;box-sizing:border-box;padding:12px;font-size:13px;font-weight:700}
+.androidDiagnosticBody{display:grid;gap:10px;padding:10px 12px;font-size:12px}
+.androidDiagnosticBody p{margin:0;line-height:1.5}
+.androidDiagnosticHelp{color:#b3bccb}
+.androidDiagnosticActions{display:flex;flex-wrap:wrap;gap:8px}
+.androidDiagnosticActions button{min-height:44px;padding:10px 12px;border-radius:10px;border:1px solid #586172;background:#2f3747;color:#fff}
+.androidDiagnosticActions button:first-child{background:#c9323a;border-color:#c9323a}
+.androidDiagnosticActions button:disabled{opacity:.55;cursor:not-allowed}
+.androidDiagnosticGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+.androidDiagnosticGrid span{display:grid;gap:3px;border:1px solid #454956;border-radius:10px;padding:9px}
+.androidDiagnosticGrid strong{font-size:14px;font-variant-numeric:tabular-nums}
+.androidDiagnostic textarea{width:100%;box-sizing:border-box;min-height:130px}
+.androidDiagnostic--studio{background:#f3f6fb;color:#263448;border-color:#d4dce8}
+.androidDiagnostic--studio .androidDiagnosticHelp{color:#65758c}
+.androidDiagnostic--studio .androidDiagnosticGrid span{border-color:#d4dce8}
+.androidDiagnostic--studio .androidDiagnosticActions button:not(:first-child){background:#e3e9f1;color:#263448;border-color:#ccd5e2}
