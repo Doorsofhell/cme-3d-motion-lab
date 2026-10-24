@@ -1,6 +1,6 @@
 import type {CoachLook} from './StudioCoach';
 export const COACH_STORAGE_KEY='cme-3d-coaches-v1';
-export type SavedCoach={id:string;name:string;createdAt:string;look:CoachLook};
+export type SavedCoach={id:string;name:string;createdAt:string;look:CoachLook;portrait?:string};
 export function readSavedCoaches(storage:Pick<Storage,'getItem'>):SavedCoach[]{
  try{
   const data=JSON.parse(storage.getItem(COACH_STORAGE_KEY)??'[]') as unknown;
