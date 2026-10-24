@@ -1,5 +1,6 @@
 import { Author, StanceOffsets, StanceStyle } from '../author';
 import {auditCatalog} from '../../lab/biomechanicsAudit';
+import {correctGroundContact} from '../../lab/groundContact';
 import { Motion, mirrorMotion } from '../motion';
 import type { CoachRig } from '../rig';
 import { balanceKeys } from '../balance';
@@ -22,7 +23,8 @@ export function getLibrary(rig: CoachRig, style: StanceStyle, profile?: { id: st
   if (!lib) {
     const a = new Author(rig.metrics, rig.chestFrame.bind(rig), style, profile?.offsets);
     lib = new Map();
-    for (const m of buildAll(a)) {
+    for (const authored of buildAll(a)) {
+      const m=correctGroundContact(authored);
       // joint safety on every key pose: no elbow folded beyond its natural range
       for (const k of m.keys) a.openElbows(k.pose);
       if (m.balance) balanceKeys(rig, m);
