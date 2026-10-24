@@ -16,7 +16,7 @@ describe('CME-3D toon costume detail (issue #3)',()=>{
  it('keeps garment texture, normal and alpha details in fitness mode',()=>{
   const {root,mesh,map,normalMap,alphaMap}=makeCoachMaterial('haut-boxe');
   applyFitnessStyle(root);
-  const mat=mesh.material as MeshToonMaterial;
+  const mat=mesh.material as unknown as MeshToonMaterial;
   expect(mat.isMeshToonMaterial).toBe(true);
   expect(mat.map).toBe(map);
   expect(mat.normalMap).toBe(normalMap);
@@ -28,7 +28,7 @@ describe('CME-3D toon costume detail (issue #3)',()=>{
  it('keeps garment texture and opacity in graphic-novel mode',()=>{
   const {root,mesh,map,normalMap,alphaMap}=makeCoachMaterial('brassiere');
   applyComicStyle(root,'balanced');
-  const mat=mesh.material as MeshToonMaterial;
+  const mat=mesh.material as unknown as MeshToonMaterial;
   expect(mat.map).toBe(map);
   expect(mat.normalMap).toBe(normalMap);
   expect(mat.alphaMap).toBe(alphaMap);
@@ -38,10 +38,10 @@ describe('CME-3D toon costume detail (issue #3)',()=>{
  it('preserves facial textures and flat palette for untextured costumes',()=>{
   const face=makeCoachMaterial('f021_head');
   applyFitnessStyle(face.root);
-  expect((face.mesh.material as MeshToonMaterial).map).toBe(face.map);
+  expect((face.mesh.material as unknown as MeshToonMaterial).map).toBe(face.map);
   const plain=makeCoachMaterial('short-boxe',false);
   applyComicStyle(plain.root,'balanced');
-  expect((plain.mesh.material as MeshToonMaterial).map).toBeNull();
-  expect((plain.mesh.material as MeshToonMaterial).gradientMap).not.toBeNull();
+  expect((plain.mesh.material as unknown as MeshToonMaterial).map).toBeNull();
+  expect((plain.mesh.material as unknown as MeshToonMaterial).gradientMap).not.toBeNull();
  });
 });
