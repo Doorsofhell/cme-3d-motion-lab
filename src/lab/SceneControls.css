@@ -33,3 +33,6 @@
  .cmeSceneToolbarActions{gap:5px}
  .cmeSceneToolbar .cmeCameraAuto{padding:8px 7px}
 }
+
+/* The Lab title never sits beneath its top-right fullscreen command. */
+.stage:has(.cmeSceneToolbar) .stageTitle{padding-right:70px}
