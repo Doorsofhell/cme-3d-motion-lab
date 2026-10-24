@@ -42,7 +42,8 @@ export function buildNeutralHumanoid(root:Object3D,sex:'homme'|'femme'):NeutralB
   a.getWorldPosition(start);b.getWorldPosition(end);
   const length=start.distanceTo(end);
   if(length<.005){missing.push(from+'→'+to+' (longueur nulle)');continue;}
-  const r=radius(from);
+  // Les GLB n'utilisent pas tous le mètre : la largeur suit la longueur réelle des os.
+  const r=Math.max(length*.12,Math.min(length*.38,radius(from)*Math.max(1,length/.22)));
   const geometry=new CapsuleGeometry(r,Math.max(.001,length-2*r),5,10);
   const mesh=new Mesh(geometry,material());
   mesh.name='CME_NEUTRAL_'+from+'_'+to;
@@ -59,9 +60,13 @@ export function buildNeutralHumanoid(root:Object3D,sex:'homme'|'femme'):NeutralB
  }
  const head=bones.get('head');
  if(head){
-  const sphere=new Mesh(new SphereGeometry(sex==='femme'?.105:.112,16,12),material());
+  const neck=bones.get('neck');
+  const neckPos=new Vector3(),headPos=new Vector3();
+  neck?.getWorldPosition(neckPos);head.getWorldPosition(headPos);
+  const headRadius=Math.max(.035,neck?neckPos.distanceTo(headPos)*.75:.11);
+  const sphere=new Mesh(new SphereGeometry(headRadius*(sex==='femme'?.96:1),16,12),material());
   sphere.name='CME_NEUTRAL_HEAD';
-  sphere.position.set(0,.075,0);
+  sphere.position.set(0,headRadius*.55,0);
   sphere.visible=true;
   sphere.frustumCulled=false;
   head.add(sphere);
