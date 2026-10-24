@@ -1,4 +1,5 @@
 import {BufferAttribute,Mesh,Object3D,SkinnedMesh,type BufferGeometry} from 'three';
+import {cloneOwnedGeometry} from '../adapters/geometryOwnership';
 
 export type CoachBodyShape={shoulders:number;muscle:number;waist:number};
 export type CoachFaceShape={jaw:number;nose:number;eyes:number};
@@ -73,8 +74,7 @@ export function applyCoachBodyShape(root:Object3D,shape:CoachBodyShape):number{
    if(!cache.has(o)&&Math.abs(shape.shoulders-1)<.001&&Math.abs(shape.muscle-1)<.001&&Math.abs(shape.waist-1)<.001)return;
    const previous=o.geometry;
    const source=previous.getAttribute('position');
-   const newGeo=previous.clone();
-   newGeo.userData.cmeOwned=true;
+   const newGeo=cloneOwnedGeometry(previous);
    state={geometry:newGeo,reference:new Float32Array(source.array as ArrayLike<number>),weights};
    cache.set(o,state);
    o.geometry=newGeo;
