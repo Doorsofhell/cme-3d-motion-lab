@@ -12,7 +12,7 @@ function makeCoachMaterial(name:string,textured=true){
  const root=new Group();root.add(mesh);
  return {root,mesh,map,normalMap,alphaMap};
 }
-describe('CME-3D toon costume detail (issue #3)',()=>{
+describe('CME-3D toon costume detail and adult comics',()=>{
  it('keeps garment texture, normal and alpha details in fitness mode',()=>{
   const {root,mesh,map,normalMap,alphaMap}=makeCoachMaterial('haut-boxe');
   applyFitnessStyle(root);
@@ -34,6 +34,17 @@ describe('CME-3D toon costume detail (issue #3)',()=>{
   expect(mat.alphaMap).toBe(alphaMap);
   expect(mat.transparent).toBe(true);
   expect(mat.opacity).toBe(.85);
+ });
+ it('uses a distinct three-band ink gradient for adult comics',()=>{
+  const comic=makeCoachMaterial('haut-boxe');
+  const fitness=makeCoachMaterial('haut-boxe');
+  applyComicStyle(comic.root,'balanced');
+  applyFitnessStyle(fitness.root);
+  const c=comic.mesh.material as MeshToonMaterial;
+  const f=fitness.mesh.material as MeshToonMaterial;
+  expect(c.gradientMap?.image.width).toBe(3);
+  expect(f.gradientMap?.image.width).toBe(6);
+  expect(c.color.getHexString()).not.toBe(f.color.getHexString());
  });
  it('preserves facial textures and flat palette for untextured costumes',()=>{
   const face=makeCoachMaterial('f021_head');
