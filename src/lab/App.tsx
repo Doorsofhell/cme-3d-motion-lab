@@ -174,6 +174,7 @@ export function App(){
  const [progress,setProgress]=useState(0),[playing,setPlaying]=useState(false),[speed,setSpeed]=useState(.5);
  const [report,setReport]=useState<RigReport|null>(null);
  const [extra,setExtra]=useState(false);
+ const [moreOpen,setMoreOpen]=useState(false);
  const [tab,setTab]=useState<'lab'|'tracking'|'comparison'|'versions'|'options'|'studio'>('lab');
  const [clearCacheOnOpen,setClearCacheOnOpen]=useState(autoClearEnabled);
  const [cacheMessage,setCacheMessage]=useState('');
@@ -312,13 +313,18 @@ export function App(){
   {tab==='lab'&&extra&&<aside className="advanced" role="region" aria-label="Informations du banc d'essai"><button className="close" onClick={()=>setExtra(false)} aria-label="Fermer">×</button><h2>Banc d’essai · CME-3D</h2><p>Le rendu et les techniques utilisent des poses articulées et un moteur de mouvements intégrés dans CME-3D.</p><p>Comparaison des rendus Ultra-réaliste et Animation fitness en un clic, sur la même animation. Le module neuronal historique est expérimental, entraîné sur des données synthétiques : aucune amélioration biomécanique par IA n’est encore revendiquée.</p><p>La prochaine étape sera un correcteur temporel léger quantifié (ONNX Runtime WASM), entraîné et évalué sur un jeu de mouvements de combat adapté au modèle.</p><p>Un seul écran, sans défilement vertical. Aucune transmission cloud pendant l’animation.</p></aside>}
   {tab==='lab'&&incidentOpen&&<IncidentReporter context={incidentContext} image={snapshot} onCapture={captureNow} onClose={()=>setIncidentOpen(false)}/>}
   {!!reportText&&<div className="reportFallback" role="dialog" aria-label="Rapport complet CME-3D"><div className="reportFallbackInner"><div className="reportFallbackHead"><strong>Rapport complet · Copier vers ChatGPT</strong><button onClick={()=>setReportText('')} aria-label="Fermer le rapport">×</button></div><p>La copie automatique n’est pas autorisée par ton navigateur. Sélectionne le texte ci-dessous puis copie-le pour me l’envoyer ici.</p><textarea aria-label="Texte complet du rapport" value={reportText} readOnly onFocus={e=>e.currentTarget.select()}/><button onClick={()=>{if(navigator.clipboard?.writeText)void navigator.clipboard.writeText(reportText).then(()=>{setReportText('');onLog('Rapport copié manuellement');});}}>Réessayer la copie</button></div></div>}
- <nav className="labTabs" aria-label="Onglets de CME-3D en bas de page">
-   <button className={tab==='lab'?'selected':''} aria-current={tab==='lab'?'page':undefined} onClick={()=>{journal.record('navigation','Ouverture Laboratoire');setTab('lab');setDebug(false);}}>Laboratoire</button>
-   <button className={tab==='tracking'?'selected':''} aria-current={tab==='tracking'?'page':undefined} onClick={()=>{journal.record('navigation','Ouverture Suivi des corrections');void known.refresh();setTab('tracking');setDebug(false);}}>Incidents{pendingDrafts.length>0&&<span className="autoTabCount">{pendingDrafts.length}</span>}</button>
-   <button className={tab==='comparison'?'selected':''} aria-current={tab==='comparison'?'page':undefined} onClick={openComparison}>Comparatif 3D</button>
-   <button className={tab==='studio'?'selected':''} aria-current={tab==='studio'?'page':undefined} onClick={()=>{setTab('studio');setDebug(false);}}>Studio Coach</button>
-   <button className={tab==='versions'?'selected':''} aria-current={tab==='versions'?'page':undefined} onClick={()=>setTab('versions')}>Versions</button>
-   <button className={tab==='options'?'selected':''} aria-current={tab==='options'?'page':undefined} onClick={()=>setTab('options')}>Options</button>
+ <nav className="labTabs" aria-label="Navigation principale CME-3D">
+   <button className={tab==='lab'?'selected':''} aria-current={tab==='lab'?'page':undefined} onClick={()=>{journal.record('navigation','Ouverture Laboratoire');setTab('lab');setDebug(false);}}>◉ <span>Laboratoire</span></button>
+   <button className={tab==='studio'?'selected':''} aria-current={tab==='studio'?'page':undefined} onClick={()=>{setTab('studio');setDebug(false);}}>♙ <span>Studio Coach</span></button>
+   <button className={tab==='comparison'?'selected':''} aria-current={tab==='comparison'?'page':undefined} onClick={openComparison}>⇄ <span>Comparatif 3D</span></button>
+   <div className="labMore">
+    <button className={['tracking','versions','options'].includes(tab)?'selected':''} aria-haspopup="true" aria-expanded={moreOpen} aria-controls="cmeMoreMenu" onClick={()=>setMoreOpen(v=>!v)}>⋯ <span>Plus</span>{pendingDrafts.length>0&&<i className="labMoreDot"/>}</button>
+    {moreOpen&&<div id="cmeMoreMenu" className="labMoreMenu" role="group" aria-label="Fonctions complémentaires">
+      <button onClick={()=>{journal.record('navigation','Ouverture Suivi des corrections');void known.refresh();setTab('tracking');setDebug(false);setMoreOpen(false);}}>Incidents {pendingDrafts.length>0&&`(${pendingDrafts.length})`}</button>
+      <button onClick={()=>{setTab('versions');setMoreOpen(false);}}>Versions</button>
+      <button onClick={()=>{setTab('options');setMoreOpen(false);}}>Options</button>
+    </div>}
+   </div>
   </nav>
  </main>;
 }
