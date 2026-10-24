@@ -12,6 +12,7 @@ import type {CoachPlan} from './coachProtocol';
 import rawSequences from './complexSequences.json';
 import {restoreReferencePose} from './restorePose';
 import {applyNeutralAppearance} from './neutralAppearance';
+import {applyCoachLookGeometry} from './coachGeometry';
 import type {CoachLook} from './StudioCoach';
 import type {Playback,Quality,RenderStyle,RigReport} from './App';
 import {attachOutfit,enhanceHumanMaterial} from '../adapters/outfits';
@@ -145,6 +146,9 @@ export function Fighter({actor,outfit,technique,coachPlan,playback,skeleton,qual
   }
   enhanceHumanMaterial(s,quality==='performance');
   attachOutfit(s,clothes.scene,quality==='performance');
+  // Studio et Laboratoire partagent les mêmes proportions, morphs et hauteur.
+  // Seules les copies skinnées locales changent ; les gestes canoniques restent inchangés.
+  if(coachLook)applyCoachLookGeometry(s,coachLook);
   if(renderStyle==='fitness')applyFitnessStyle(s);
   if(renderStyle==='comic')applyComicStyle(s,quality);
   if(coachLook)applyNeutralAppearance(s,{skin:coachLook.skin,hairColor:coachLook.hairColor,topColor:coachLook.topColor,bottomColor:coachLook.bottomColor,gloveColor:coachLook.gloveColor});

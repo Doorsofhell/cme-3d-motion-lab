@@ -147,3 +147,11 @@ A — stabilisation et non-régression d'abord ; B — personnalisation dynamiqu
 - Aucun changement dans `src/shadow-engine`, `src/core` ni dans `Doorsofhell/combat-shadow-studio`.
 - Les nouveaux GLB professionnels, coiffures, équipements et tissus dédiés restent **P1 / dépendance asset**. Ne pas prétendre que les morph targets faciaux existent sur Kadir ou Amara sans inspection de leurs noms réels.
 - L'évaluation visuelle Android, les interpenetrations géométriques sous animations et la validation biomécanique des six disciplines restent ouvertes ; la CI seule ne les certifie.
+
+## 24/10/2026 — Lot 0.7.21 : parité Studio Coach / Laboratoire
+
+- Un adaptateur commun `applyCoachLookGeometry` est utilisé par `NeutralRig` (Studio Coach) et `Fighter` (Laboratoire) : taille relative, épaules, musculature, taille et morph targets faciaux explicitement disponibles. Les changements ne touchent que les copies de géométrie skinnée ; os, poids de skinning, matrices de liaison et gestes canoniques sont conservés.
+- Les couleurs des matériaux `MeshToonMaterial` (Fitness et Comics) prennent désormais en charge les mêmes zones identifiées que les matériaux Standard/Physical, sans supprimer les textures ; les zones inconnues restent intactes.
+- Le mode Anatomie ne reprend pas la variation de taille du profil : la géométrie neutre demeure une référence indépendante.
+- Tests : effets réels de l'adaptateur partagé sur un rig synthétique, idempotence, réversibilité, intégrité des os, tests de colorimétrie Toon et contrat de réutilisation Studio/Laboratoire.
+- Exclusions : **aucun changement** des mouvements canoniques ni du dépôt Shadow Studio, aucun ajout artificiel de coiffures, tenues ou morph targets. Recette Android physique et conformité visuelle/anatomique encore **non certifiées**. Les déformations de vêtements et les collisions doivent être évaluées visuellement par discipline et par sexe.

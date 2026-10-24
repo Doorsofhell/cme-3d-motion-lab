@@ -1,6 +1,6 @@
 import {describe,it,expect} from 'vitest';
 import {Bone,BoxGeometry,BufferAttribute,Group,Mesh,MeshStandardMaterial,Skeleton,SkinnedMesh} from 'three';
-import {applyCoachBodyShape,applyCoachFaceShapes,inspectCoachShapes} from './coachGeometry';
+import {applyCoachBodyShape,applyCoachFaceShapes,applyCoachLookGeometry,inspectCoachShapes} from './coachGeometry';
 import {applyNeutralAppearance,inspectCoachMaterialZones} from './neutralAppearance';
 
 function skinnedTorso(){
@@ -68,6 +68,30 @@ describe('Studio Coach — déformations GLB non destructives',()=>{
   expect(mesh.morphTargetInfluences[1]).toBeGreaterThan(0);
   expect(mesh.morphTargetInfluences[2]).toBe(.4);
   expect(mesh.morphTargetInfluences[3]).toBeGreaterThan(0);
+ });
+ it('applique le même profil Studio et Laboratoire aux volumes et morphs sans changer le rig',()=>{
+  const {root,mesh,original,positions,bones}=skinnedTorso();
+  const face=new Mesh(new BoxGeometry(),new MeshStandardMaterial({name:'skin_face'}));
+  face.morphTargetDictionary={jawWide:0,smile:1};
+  face.morphTargetInfluences=[0,.35];root.add(face);
+  const initialBones=bones.map(b=>b.position.clone());
+  const look={height:1.08,shoulders:1.18,muscle:1.23,waist:.9,jaw:1.2,nose:1,eyes:1};
+  const first=applyCoachLookGeometry(root,look);
+  expect(first.torsoVertices).toBeGreaterThan(0);
+  expect(first.faceTargets).toBe(1);
+  expect(root.scale.x).toBeCloseTo(1.08);
+  expect(mesh.geometry).not.toBe(original);
+  expect(face.morphTargetInfluences[0]).toBeGreaterThan(0);
+  expect(face.morphTargetInfluences[1]).toBe(.35);
+  const shaped=Array.from(mesh.geometry.getAttribute('position').array);
+  applyCoachLookGeometry(root,look);
+  expect(Array.from(mesh.geometry.getAttribute('position').array)).toEqual(shaped);
+  const reset=applyCoachLookGeometry(root,{height:1,shoulders:1,muscle:1,waist:1,jaw:1,nose:1,eyes:1});
+  expect(reset.faceTargets).toBe(1);
+  expect(Array.from(mesh.geometry.getAttribute('position').array)).toEqual(Array.from(positions));
+  expect(face.morphTargetInfluences[0]).toBe(0);
+  expect(root.scale.x).toBe(1);
+  expect(bones.every((bone,i)=>bone.position.equals(initialBones[i]))).toBe(true);
  });
  it('classe chaque sous-matériau par priorité avant le nom de maillage parent',()=>{
   const root=new Group();

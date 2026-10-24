@@ -112,3 +112,16 @@ export function applyCoachFaceShapes(root:Object3D,shape:CoachFaceShape):number{
  });
  return affected;
 }
+
+/**
+ * Shared Studio/Laboratoire adapter. Only a cloned rig should be passed here:
+ * canonical animations, bone positions, bind matrices and source GLBs stay intact.
+ * Unavailable face morph targets and torso weights are ignored.
+ */
+export function applyCoachLookGeometry(root:Object3D,look:CoachBodyShape & CoachFaceShape & {height:number}):{torsoVertices:number;faceTargets:number}{
+ root.scale.setScalar(clamp(look.height,.9,1.1));
+ return {
+  torsoVertices:applyCoachBodyShape(root,look),
+  faceTargets:applyCoachFaceShapes(root,look)
+ };
+}

@@ -1,4 +1,4 @@
-import {Mesh,MeshStandardMaterial,Object3D,Color} from 'three';
+import {Mesh,MeshStandardMaterial,MeshToonMaterial,Object3D,Color} from 'three';
 
 export type NeutralAppearance={
  skin:string;hairColor:string;topColor:string;bottomColor:string;gloveColor:string;eyeColor?:string;
@@ -24,7 +24,7 @@ export function applyNeutralAppearance(root:Object3D,appearance?:NeutralAppearan
   if(!mesh.isMesh)return;
   const materials=Array.isArray(mesh.material)?mesh.material:[mesh.material];
   for(const material of materials){
-   if(!(material instanceof MeshStandardMaterial))continue;
+   if(!(material instanceof MeshStandardMaterial)&&!(material instanceof MeshToonMaterial))continue;
    // Material-specific zones take precedence over an enclosing skinned body mesh.
    const zone=appearanceZone(material.name)||(!material.name||/^(?:material(?:[._ -]?[0-9]+)?|mat[0-9]*|default(?:material)?)$/i.test(material.name)?appearanceZone(mesh.name):null);
    if(!zone)continue;
@@ -49,7 +49,7 @@ export function inspectCoachMaterialZones(root:Object3D):Record<keyof NeutralApp
   if(!mesh.isMesh)return;
   const materials=Array.isArray(mesh.material)?mesh.material:[mesh.material];
   for(const material of materials){
-   if(!(material instanceof MeshStandardMaterial))continue;
+   if(!(material instanceof MeshStandardMaterial)&&!(material instanceof MeshToonMaterial))continue;
    const zone=appearanceZone(material.name)||(!material.name||/^(?:material(?:[._ -]?[0-9]+)?|mat[0-9]*|default(?:material)?)$/i.test(material.name)?appearanceZone(mesh.name):null);
    if(zone)totals[zone]++;
   }
