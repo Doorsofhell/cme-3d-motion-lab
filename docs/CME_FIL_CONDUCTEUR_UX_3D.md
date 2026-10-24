@@ -63,3 +63,6 @@ Audit en lecture seule des versions actuelle et initiale de techniques/exercices
 
 ## 24/10 — Priorité ergonomie et non-régression
 P0 : grande scène de test, double clic/tap pour plein écran, commandes techniques repliées, Studio Coach en mode rig neutre par défaut. À confirmer sur Android réel : présence et qualité visuelle du rig neutre, actualisation des meshes pendant chaque modification, double tap tactile, absence de débordement vertical et performances. Les tests CI ne remplacent pas cette validation visuelle. Maintenir compatibilité future des acteurs et profils avec Shadow sans toucher son dépôt.
+
+## 24/10 — Anti-régression rig neutre
+La géométrie du rig neutre doit rester visible même lors des animations et du changement de pose : frustum culling désactivé sur les surfaces rattachées aux os, vérification du nombre de segments, tests pour homme et femme. Il s'agit toujours d'un proxy procédural, pas encore d'un mesh anatomique sculpté identique à la maquette. Validation visuelle Android, tests complets des six disciplines et qualité biomécanique à confirmer avant certification. Shadow reste intact.

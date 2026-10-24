@@ -33,6 +33,7 @@ describe('canonical neutral humanoid proxy',()=>{
    expect((m.parent as Bone).isBone).toBe(true);
   });
   expect(count).toBeGreaterThan(10);
+  root.traverse(o=>{const m=o as Mesh;if(m.isMesh&&m.name.startsWith('CME_NEUTRAL_')){expect(m.visible).toBe(true);expect(m.frustumCulled).toBe(false);}});
  });
  it('keeps one canonical motion engine across both source rigs and six disciplines',()=>{
   expect(Object.keys(NEUTRAL_ASSETS)).toHaveLength(2);

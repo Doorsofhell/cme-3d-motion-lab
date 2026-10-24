@@ -1,4 +1,4 @@
-import {Bone,CapsuleGeometry,Group,Mesh,MeshStandardMaterial,Object3D,Quaternion,SphereGeometry,Vector3} from 'three';
+import {Bone,CapsuleGeometry,Mesh,MeshStandardMaterial,Object3D,Quaternion,SphereGeometry,Vector3} from 'three';
 
 export type NeutralBuildReport={segments:number;missing:string[];sex:'homme'|'femme'};
 export const CANONICAL_SEGMENTS=[
@@ -34,9 +34,6 @@ export function buildNeutralHumanoid(root:Object3D,sex:'homme'|'femme'):NeutralB
   if(/foot/i.test(name))return .07;
   return .075;
  };
- const owned=new Group();
- owned.name='CME_NEUTRAL_PROXY';
- root.add(owned);
  let segments=0;
  for(const [from,to] of CANONICAL_SEGMENTS){
   const a=bones.get(from.toLowerCase()),b=bones.get(to.toLowerCase());
@@ -44,7 +41,7 @@ export function buildNeutralHumanoid(root:Object3D,sex:'homme'|'femme'):NeutralB
   const start=new Vector3(),end=new Vector3();
   a.getWorldPosition(start);b.getWorldPosition(end);
   const length=start.distanceTo(end);
-  if(length<.005)continue;
+  if(length<.005){missing.push(from+'→'+to+' (longueur nulle)');continue;}
   const r=radius(from);
   const geometry=new CapsuleGeometry(r,Math.max(.001,length-2*r),5,10);
   const mesh=new Mesh(geometry,material());
@@ -55,6 +52,8 @@ export function buildNeutralHumanoid(root:Object3D,sex:'homme'|'femme'):NeutralB
   const direction=end.clone().sub(start).normalize();
   a.getWorldQuaternion(mesh.quaternion);
   mesh.quaternion.invert().multiply(new Quaternion().setFromUnitVectors(new Vector3(0,1,0),direction));
+  mesh.visible=true;
+  mesh.frustumCulled=false;
   a.add(mesh);
   segments++;
  }
@@ -63,6 +62,8 @@ export function buildNeutralHumanoid(root:Object3D,sex:'homme'|'femme'):NeutralB
   const sphere=new Mesh(new SphereGeometry(sex==='femme'?.105:.112,16,12),material());
   sphere.name='CME_NEUTRAL_HEAD';
   sphere.position.set(0,.075,0);
+  sphere.visible=true;
+  sphere.frustumCulled=false;
   head.add(sphere);
  }
  return {segments,missing,sex};
