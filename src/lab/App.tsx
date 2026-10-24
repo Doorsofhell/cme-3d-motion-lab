@@ -3,6 +3,7 @@ import {Canvas,useThree,useFrame} from '@react-three/fiber';
 import {OrbitControls} from '@react-three/drei';
 import {ACESFilmicToneMapping,NeutralToneMapping,SRGBColorSpace,CanvasTexture} from 'three';
 import {Fighter} from './Fighter';
+import {parseCoachPlan,type CoachPlan} from './coachProtocol';
 import {CME_APP_VERSION} from './buildInfo';
 import {captureFighterImage} from './Screenshot';
 import {watchWebGLContext} from './webglRecovery';
@@ -97,8 +98,8 @@ function PerfProbe({onMetrics}:{onMetrics:(metrics:Metrics)=>void}){
  });
  return null;
 }
-function Viewer({actor,discipline,technique,quality,renderStyle,playback,skeleton,onReport,onMetrics,onLog,onIncident,onCaptureReady}:{
- actor:Actor;discipline:string;technique:string;quality:Quality;renderStyle:RenderStyle;
+function Viewer({actor,discipline,technique,coachPlan,quality,renderStyle,playback,skeleton,onReport,onMetrics,onLog,onIncident,onCaptureReady}:{
+ actor:Actor;discipline:string;technique:string;coachPlan:CoachPlan|null;quality:Quality;renderStyle:RenderStyle;
  playback:RefObject<Playback>;skeleton:boolean;onReport:(r:RigReport)=>void;onMetrics:(m:Metrics)=>void;onLog:(message:string)=>void;onIncident:(category:AutoCategory,title:string,details:string)=>void;onCaptureReady:(capture:()=>string|null)=>void;
 }){
  const [ready,setReady]=useState(false),[error,setError]=useState<string|null>(null),[slow,setSlow]=useState(false);
@@ -147,7 +148,7 @@ function Viewer({actor,discipline,technique,quality,renderStyle,playback,skeleto
      <PerfProbe onMetrics={onMetrics}/>
 
      <Suspense fallback={null}>
-      <Fighter actor={actor} outfit={discipline} technique={technique} playback={playback} skeleton={skeleton} quality={quality} renderStyle={renderStyle} onReady={onReady} onReport={onReport}/>
+      <Fighter actor={actor} outfit={discipline} technique={technique} coachPlan={coachPlan} playback={playback} skeleton={skeleton} quality={quality} renderStyle={renderStyle} onReady={onReady} onReport={onReport}/>
      </Suspense>
      <OrbitControls target={[0,1,0]} minDistance={1.35} maxDistance={6} enableDamping dampingFactor={.12}/>
     </Canvas>
@@ -162,6 +163,9 @@ export function App(){
  const [discipline,setDiscipline]=useState('boxe');
  const [nogi,setNogi]=useState(false);
  const [technique,setTechnique]=useState('crochet-avant');
+ const [coachJson,setCoachJson]=useState(JSON.stringify({discipline:'boxe',speech:'Garde haute, jab puis direct.',sequence:[{animationId:'garde',speed:1,repetitions:1},{animationId:'jab',speed:.8,repetitions:1},{animationId:'direct',speed:.9,repetitions:1}]}));
+ const [coachPlan,setCoachPlan]=useState<CoachPlan|null>(null);
+ const [coachError,setCoachError]=useState('');
  const [quality,setQuality]=useState<Quality>('balanced');
  const [renderStyle,setRenderStyle]=useState<RenderStyle>('ultra');
  const [skeleton,setSkeleton]=useState(false);
@@ -247,10 +251,20 @@ export function App(){
   </section>
   <section className="stage" aria-label="Vue de test 3D">
    <div className="stageTitle"><span>{actor==='mma-amara'?'AMARA':'KADIR'} <em>· {renderStyle==='fitness'?'Animation fitness':renderStyle==='comic'?'Roman graphique · héros':'Ultra-réaliste'}</em></span><span className="stagePill">MOTION / IK</span></div>
-   <Viewer actor={actor} discipline={outfit} quality={quality} renderStyle={renderStyle} technique={technique} playback={playback} skeleton={skeleton} onReport={onReport} onMetrics={onMetrics} onLog={onLog} onIncident={autoRecord} onCaptureReady={setScreenshotHandler}/>
+   <Viewer actor={actor} coachPlan={coachPlan} discipline={outfit} quality={quality} renderStyle={renderStyle} technique={technique} playback={playback} skeleton={skeleton} onReport={onReport} onMetrics={onMetrics} onLog={onLog} onIncident={autoRecord} onCaptureReady={setScreenshotHandler}/>
    <div className="stageBottom"><span>{report?report.bones+' os · '+(report.techniqueFound?'Technique disponible':'Garde de secours'):'Initialisation du rig'}</span><span>{report?('Tenue '+outfit+' ✓'):'Chargement'}</span></div>
   </section>
-  <section className="transport" aria-label="Commandes d'animation">
+  <section aria-label="Coach JSON Text-to-Animation" style={{padding:12,display:'grid',gap:8}}>
+<strong>Coach IA · Text-to-Animation (prototype local)</strong>
+<textarea aria-label="Plan JSON du coach" rows={4} value={coachJson} onChange={e=>setCoachJson(e.target.value)} style={{width:'100%',boxSizing:'border-box'}}/>
+<div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+<button onClick={()=>{try{const plan=parseCoachPlan(coachJson);if(plan.discipline!==(outfit==='bjj-nogi'?'bjj':outfit))throw Error('Discipline JSON différente de la discipline sélectionnée');setCoachPlan(plan);setCoachError('');reset();onLog('Plan JSON activé');}catch(e){setCoachError(e instanceof Error?e.message:String(e));}}}>Exécuter le JSON</button>
+<button onClick={()=>{setCoachPlan(null);setCoachError('');reset();}}>Revenir au catalogue</button>
+</div>
+{coachError&&<span role="alert">{coachError}</span>}
+{coachPlan&&<span role="status">Plan actif : {coachPlan.sequence.length} étapes · TTS : {coachPlan.speech}</span>}
+</section>
+<section className="transport" aria-label="Commandes d'animation">
    <div className="transportMain"><button className="playButton" onClick={()=>{journal.record('playback',playing?'Pause de l’animation':'Démarrage de l’animation',{technique,progress:playback.current.progress,speed});setPlaying(x=>!x);}}>{playing?'❚❚':'▶'} <span>{playing?'Pause':'Lecture'}</span></button><button className="resetButton" aria-label="Revenir au début" onClick={()=>{journal.record('playback','Retour au début de l’animation',{technique});reset();}}>↺</button>
     <div className="seek"><input aria-label="Position de lecture" type="range" min="0" max="1000" value={Math.round(progress*1000)} onChange={e=>{setPlaying(false);seek(Number(e.target.value)/1000);}} onPointerUp={()=>journal.record('playback','Positionnement manuel de l’animation',{technique,progress:playback.current.progress})}/><span>{Math.round(progress*100)}%</span></div>
     <select aria-label="Vitesse" className="speed" value={speed} onChange={e=>{journal.record('playback','Vitesse modifiée : '+speed+'× → '+e.target.value+'×',{technique});setSpeed(Number(e.target.value));}}><option value={.25}>¼×</option><option value={.5}>½×</option><option value={1}>1×</option></select>
