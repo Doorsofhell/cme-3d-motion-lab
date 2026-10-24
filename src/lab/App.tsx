@@ -3,6 +3,7 @@ import {Canvas,useThree,useFrame} from '@react-three/fiber';
 import {OrbitControls} from '@react-three/drei';
 import {ACESFilmicToneMapping,NeutralToneMapping,SRGBColorSpace,CanvasTexture} from 'three';
 import {Fighter} from './Fighter';
+import {StudioCoach} from './StudioCoach';
 import {parseCoachPlan,type CoachPlan} from './coachProtocol';
 import {CME_APP_VERSION} from './buildInfo';
 import {captureFighterImage} from './Screenshot';
@@ -173,7 +174,7 @@ export function App(){
  const [progress,setProgress]=useState(0),[playing,setPlaying]=useState(false),[speed,setSpeed]=useState(.5);
  const [report,setReport]=useState<RigReport|null>(null);
  const [extra,setExtra]=useState(false);
- const [tab,setTab]=useState<'lab'|'tracking'|'comparison'|'versions'|'options'>('lab');
+ const [tab,setTab]=useState<'lab'|'tracking'|'comparison'|'versions'|'options'|'studio'>('lab');
  const [clearCacheOnOpen,setClearCacheOnOpen]=useState(autoClearEnabled);
  const [cacheMessage,setCacheMessage]=useState('');
  const [catalogMode,setCatalogMode]=useState<'techniques'|'sequences'>('techniques');
@@ -284,6 +285,7 @@ export function App(){
    <span className="footnote">IA locale expérimentale : entraînement validé en attente</span>
   </section>
   </div>
+  {tab==='studio'&&<StudioCoach/>}
   {tab==='versions'&&<VersionsPanel/>}
   {tab==='options'&&<section className="cmeOptions" aria-label="Options CME-3D">
    <h2>Options du laboratoire</h2>
@@ -314,6 +316,7 @@ export function App(){
    <button className={tab==='lab'?'selected':''} aria-current={tab==='lab'?'page':undefined} onClick={()=>{journal.record('navigation','Ouverture Laboratoire');setTab('lab');setDebug(false);}}>Laboratoire</button>
    <button className={tab==='tracking'?'selected':''} aria-current={tab==='tracking'?'page':undefined} onClick={()=>{journal.record('navigation','Ouverture Suivi des corrections');void known.refresh();setTab('tracking');setDebug(false);}}>Incidents{pendingDrafts.length>0&&<span className="autoTabCount">{pendingDrafts.length}</span>}</button>
    <button className={tab==='comparison'?'selected':''} aria-current={tab==='comparison'?'page':undefined} onClick={openComparison}>Comparatif 3D</button>
+   <button className={tab==='studio'?'selected':''} aria-current={tab==='studio'?'page':undefined} onClick={()=>{setTab('studio');setDebug(false);}}>Studio Coach</button>
    <button className={tab==='versions'?'selected':''} aria-current={tab==='versions'?'page':undefined} onClick={()=>setTab('versions')}>Versions</button>
    <button className={tab==='options'?'selected':''} aria-current={tab==='options'?'page':undefined} onClick={()=>setTab('options')}>Options</button>
   </nav>
