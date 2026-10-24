@@ -2,7 +2,7 @@ import {Mesh,MeshStandardMaterial,MeshToonMaterial,Object3D,Color,type Material}
 import {NATIVE_SKIN_REFERENCE} from './skinTones';
 
 export type NeutralAppearance={
- skin:string;hairColor:string;topColor:string;bottomColor:string;gloveColor:string;eyeColor?:string;
+ skin:string;hairColor:string;topColor:string;bottomColor:string;gloveColor:string;shinColor?:string;eyeColor?:string;
 };
 export type AppearanceZone=keyof NeutralAppearance;
 
@@ -14,9 +14,10 @@ export function appearanceZone(name:string):AppearanceZone|null{
  const id=name.replace(/([a-z])([A-Z])/g,'$1_$2').toLowerCase();
  if(/iris|pupil|eyeball|eye[_. -]/.test(id))return 'eyeColor';
  if(/hair|cheveu|beard|brow|eyelash|cils/.test(id))return 'hairColor';
- if(/glove|mitten|boxing_mitt|gant|handwrap|bandage/.test(id))return 'gloveColor';
- if(/short|pant|trouser|legging|bottom|lowerwear|hakama/.test(id))return 'bottomColor';
- if(/shirt|rash|jersey|top|torso_wear|vest|brassiere|tshirt|t_shirt|kimono|gi_top|uniform/.test(id))return 'topColor';
+ if(/glove|mitten|boxing_mitt|gant|handwrap|bandage|sangle.mma/.test(id))return 'gloveColor';
+ if(/protection|protege.tibia|shinguard|shin.guard|velcro/.test(id))return 'shinColor';
+ if(/short|pantalon|pant|trouser|legging|bottom|lowerwear|hakama/.test(id))return 'bottomColor';
+ if(/shirt|rash|jersey|top|torso_wear|vest|veste|brassiere|tshirt|t_shirt|kimono|gi[_-]|col[_-]|haut|uniform/.test(id))return 'topColor';
  if(/(^|[_. :/-])(skin|body|face|head|neck|arm|leg|hand|foot)([_. :/-]|$)/.test(id)||/^(f021_|m018_|m021_)/.test(id))return 'skin';
  if(/(^|[_. :/-])eyes?([_. :/-]|$)/.test(id))return 'eyeColor';
  return null;
@@ -77,7 +78,7 @@ export function applyNeutralAppearance(root:Object3D,appearance?:NeutralAppearan
 
 /** Count actually recolourable submaterials on the exact (cloned) 3D scene. */
 export function inspectCoachMaterialZones(root:Object3D):Record<AppearanceZone,number>{
- const totals:Record<AppearanceZone,number>={skin:0,hairColor:0,topColor:0,bottomColor:0,gloveColor:0,eyeColor:0};
+ const totals:Record<AppearanceZone,number>={skin:0,hairColor:0,topColor:0,bottomColor:0,gloveColor:0,shinColor:0,eyeColor:0};
  root.traverse(o=>{
   const mesh=o as Mesh;
   if(!mesh.isMesh)return;
