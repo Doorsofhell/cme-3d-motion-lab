@@ -79,12 +79,12 @@ export function StudioCoach(){
  const [report,setReport]=useState<NeutralRigReport|null>(null);
  const support=report?.appearanceSupport;
  const colors=useMemo(()=>({
-  skin:look.skin,hairColor:look.hairColor,eyeColor:look.eyeColor,topColor:look.topColor,bottomColor:look.bottomColor,gloveColor:look.gloveColor
- }),[look.skin,look.hairColor,look.eyeColor,look.topColor,look.bottomColor,look.gloveColor]);
+  skin:look.skin,hairColor:look.hairColor,eyeColor:look.eyeColor,topColor:look.topColor,bottomColor:look.bottomColor,gloveColor:look.gloveColor,shinColor:look.shinColor
+ }),[look.skin,look.hairColor,look.eyeColor,look.topColor,look.bottomColor,look.gloveColor,look.shinColor]);
  const dimensions=useMemo(()=>({height:look.height,shoulders:look.shoulders,muscle:look.muscle,waist:look.waist}),
   [look.height,look.shoulders,look.muscle,look.waist]);
  const faceDimensions=useMemo(()=>({jaw:look.jaw,nose:look.nose,eyes:look.eyes}),[look.jaw,look.nose,look.eyes]);
- const colorAvailable=(key:'skin'|'eyeColor'|'hairColor'|'topColor'|'bottomColor'|'gloveColor')=>!rigMode&&!!support?.colors[key];
+ const colorAvailable=(key:'skin'|'eyeColor'|'hairColor'|'topColor'|'bottomColor'|'gloveColor'|'shinColor')=>!rigMode&&!!support?.colors[key];
  const faceAvailable=(key:'jaw'|'nose'|'eyes')=>!rigMode&&!!support?.shape.faceMorphs[key];
 
  const [androidTelemetry]=useState(()=>{
@@ -133,8 +133,8 @@ export function StudioCoach(){
    <input type="range" min={min} max={max} step=".01" disabled={!enabled} value={look[key]} onChange={e=>update(key,Number(e.target.value))}/>
    {!enabled&&<small>Déformation non disponible sur ce GLB</small>}</label>;
  const color=(key:'skin'|'eyeColor'|'hairColor'|'topColor'|'bottomColor'|'gloveColor'|'shinColor',label:string)=>
-  <label className="coachColor"><span>{label}{key!=='shinColor'&&!colorAvailable(key)&&<small> · maillage non identifié</small>}</span>
-   <input type="color" disabled={key==='shinColor'||rigMode||!colorAvailable(key)} value={look[key]} onChange={e=>update(key,e.target.value)}/></label>;
+  <label className="coachColor"><span>{label}{!colorAvailable(key)&&<small> · maillage non identifié</small>}</span>
+   <input type="color" disabled={rigMode||!colorAvailable(key)} value={look[key]} onChange={e=>update(key,e.target.value)}/></label>;
  const choose=<K extends 'sex'|'hairStyle'|'top'|'bottom'|'gloves'>(key:K,label:string,values:CoachLook[K][],enabled=true)=>
   <label className="coachField"><span>{label}</span>
    <select disabled={!enabled} value={look[key]} onChange={e=>update(key,e.target.value as CoachLook[K])}>
@@ -178,7 +178,7 @@ export function StudioCoach(){
       <button className={look.sex==='homme'?'active':''} onClick={()=>update('sex','homme')}>Homme</button>
       <button className={look.sex==='femme'?'active':''} onClick={()=>update('sex','femme')}>Femme</button>
     </div>
-    <p className="coachCapability" role="status">{rigMode?'Anatomie : modèle neutre ; réglages d’apparence suspendus.':support?('Personnalisation en direct : '+support.shape.torsoVertices+' sommets morphologiques · '+support.colors.skin+' matériaux de peau · '+(support.colors.topColor+support.colors.bottomColor)+' matériaux de tenue · '+support.colors.gloveColor+' matériaux de gants reconnus.'):'Chargement du corps et de sa tenue 3D…'}</p>
+    <p className="coachCapability" role="status">{rigMode?'Anatomie : modèle neutre ; réglages d’apparence suspendus.':support?('Personnalisation en direct : '+support.shape.torsoVertices+' sommets morphologiques · '+support.colors.skin+' matériaux de peau · '+(support.colors.topColor+support.colors.bottomColor)+' matériaux de tenue · '+support.colors.gloveColor+' matériaux de gants reconnus · '+support.colors.shinColor+' matériaux de protège-tibias.'):'Chargement du corps et de sa tenue 3D…'}</p>
     <nav className="coachCategories" aria-label="Personnalisation">{sections.map(item=><button key={item} className={section===item?'active':''} aria-current={section===item?'true':undefined} onClick={()=>setSection(item)}>{sectionNames[item]}</button>)}</nav>
 
     {<details className="coachAdvanced"><summary>Tester les mouvements</summary><div className="coachRigControls">
@@ -194,7 +194,7 @@ export function StudioCoach(){
      {section==='peau'&&<div className="coachSkinEditor"><p className="coachAvailability">Choisissez une carnation naturelle. Le rendu préserve le grain et les détails de la texture du corps, sans superposer une seconde couleur sombre.</p><div className="coachSkinGrid" role="group" aria-label="Carnations naturelles">{SKIN_TONES.map(tone=><button type="button" key={tone.hex} disabled={rigMode||!colorAvailable('skin')} className={`coachSkinTone ${look.skin.toLowerCase()===tone.hex?'active':''}`} aria-pressed={look.skin.toLowerCase()===tone.hex} onClick={()=>update('skin',tone.hex)} title={tone.name}><span className="coachSkinSwatch" style={{backgroundColor:tone.hex}}/><span>{tone.name}</span></button>)}</div><small className="coachSkinHint">{!colorAvailable('skin')?'Aucune zone de peau indépendante reconnue sur ce GLB.': 'Chaque sélection modifie immédiatement le matériau de peau dans cet aperçu.'}</small></div>}
      {section==='cheveux'&&<>{choose('hairStyle','Coiffure',['rase','court','long'],false)}{color('hairColor','Couleur des cheveux')}</>}
      {section==='tenue'&&<><p className="coachAvailability">L’aperçu charge la véritable tenue 3D de la discipline sélectionnée. Les couleurs sont modifiables uniquement sur les parties identifiées.</p><label className="coachField"><span>Tenue de discipline</span><select value={discipline} onChange={e=>{setDiscipline(e.target.value as LabDiscipline);setReport(null);}}>{LAB_DISCIPLINES.map(d=><option key={d} value={d}>{disciplineNames[d]}</option>)}</select></label>{color('topColor','Couleur du haut existant')}{color('bottomColor','Couleur du bas existant')}</>}
-     {section==='protections'&&<><p className="coachAvailability">Les gants éventuels de la tenue de {disciplineNames[discipline]} sont chargés avec son GLB. Seule leur couleur peut être ajustée si un matériau distinct est reconnu ; aucun équipement artificiel n’est ajouté.</p>{color('gloveColor','Couleur des gants existants')}</>}
+     {section==='protections'&&<><p className="coachAvailability">Les gants éventuels de la tenue de {disciplineNames[discipline]} sont chargés avec son GLB. Seule leur couleur peut être ajustée si un matériau distinct est reconnu ; aucun équipement artificiel n’est ajouté.</p>{color('gloveColor','Couleur des gants existants')}{color('shinColor','Couleur des protège-tibias existants')}</>}
     </div>
     <details className="coachAdvanced"><summary>Réglages de morphologie</summary><div className="coachFields">{section==='corps'&&<>{range('height','Taille relative',.9,1.1,!rigMode)}{range('shoulders','Épaules',.75,1.25,!rigMode&&!!support?.shape.torsoVertices)}{range('muscle','Musculature',.7,1.35,!rigMode&&!!support?.shape.torsoVertices)}{range('waist','Taille',.75,1.3,!rigMode&&!!support?.shape.torsoVertices)}</>}</div></details>
     <AndroidDiagnostics telemetry={androidTelemetry} active={true} variant="studio" context={{sexe:look.sex,mode:rigMode?'anatomie':'apparence',discipline,mouvement:motionId}}/>
