@@ -1,0 +1,13 @@
+export type Release={version:string;date:string;title:string;kind:'Fonctionnalité'|'Correction'|'Préparation';items:string[];pr?:number;note?:string};
+/** Historical milestones grounded in the project's delivery log. Deployment status is not inferred from a merged PR. */
+export const releases:Release[]=[
+ {version:'0.7.9',date:'24/10/2026',title:'Historique des versions',kind:'Fonctionnalité',items:['Nouvel onglet Versions dans la navigation inférieure','Chronologie consultable, liens vers les PR et les déploiements GitHub Actions','Séparation des fonctionnalités livrées et des préparations non encore intégrées']},
+ {version:'0.7.7',date:'24/10/2026',title:'Récupération du cache au démarrage',kind:'Correction',items:['Nettoyage anticipé des anciennes références de service worker','Tentative de rechargement de la version courante pour les clients bloqués sur une ancienne version'],pr:15,note:'Le correctif ne garantit pas la réparation de tous les clients dont le navigateur sert encore un ancien HTML.'},
+ {version:'0.7.6',date:'24/10/2026',title:'Démarrage sans blocage',kind:'Correction',items:['Montage immédiat de React avant le nettoyage du cache','Service worker modifié pour ne plus intercepter les ressources de l’application'],pr:14},
+ {version:'0.7.5',date:'23/10/2026',title:'Rendu comics enrichi',kind:'Fonctionnalité',items:['Ombrage comics plus détaillé et palette de sept tons','Contours renforcés sur les matériaux adaptés','Conservation des textures de peau et des détails du visage'],pr:13},
+ {version:'0.7.4',date:'23/10/2026',title:'Options et gestion du cache',kind:'Fonctionnalité',items:['Quatrième onglet Options en bas de page','Nettoyage automatique du cache activé par défaut','Commande manuelle de suppression des caches CME-3D'],pr:12},
+ {version:'0.7.3',date:'23/10/2026',title:'Style Héros comics',kind:'Fonctionnalité',items:['Troisième style graphique Héros comics','Direction artistique originale inspirée des comics de combat, sans reproduction de personnages protégés'],pr:11},
+ {version:'0.7.2',date:'23/10/2026',title:'Référentiel Shadow en lecture seule',kind:'Fonctionnalité',items:['Import de 208 définitions d’exercices Shadow Studio','Catalogue d’enchaînements enrichi sans modifier le dépôt Shadow Studio']},
+ {version:'0.7.1',date:'23/10/2026',title:'Comparatif des moteurs 3D',kind:'Fonctionnalité',items:['Troisième onglet Comparatif 3D','Comparaison CME-3D versus Shadow Studio','Navigation inférieure unifiée']}
+];
+export const preparatoryWork={date:'24/10/2026',title:'Amara — combattante fitness',pr:16,items:['Cahier des charges d’un modèle féminin 3D sculpté et anatomiquement crédible','Refus de la simple déformation du maillage existant','Nouveau modèle GLB non encore produit ni intégré']};
