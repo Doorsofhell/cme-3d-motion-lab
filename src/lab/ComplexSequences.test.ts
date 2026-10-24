@@ -16,6 +16,18 @@ describe('43 enchaînements CME-3D',()=>{
    expect(selected.every(x=>x.discipline===discipline&&x.motions.every(id=>ids.has(id)))).toBe(true);
   }
  });
+ it('enforces six discipline memberships and stable technique identifiers',()=>{
+  const disciplines=['boxe','kickboxing','muaythai','mma','bjj','judo'];
+  expect(techniques).toHaveLength(86);
+  expect(new Set(techniques.map(t=>t.motion)).size).toBe(86);
+  for(const discipline of disciplines){
+   const allowed=new Set(techniques.filter(t=>t.disciplines.includes(discipline)).map(t=>t.motion));
+   expect(allowed.size,discipline).toBeGreaterThan(0);
+   for(const sequence of sequences.filter(s=>s.discipline===discipline)){
+    expect(sequence.motions.every(id=>allowed.has(id)),sequence.id).toBe(true);
+   }
+  }
+ });
  it('préserve le statut expérimental et interdit la certification implicite',()=>{
   expect(sequences.every(x=>x.status==='experimental_not_biomechanically_validated')).toBe(true);
  });
