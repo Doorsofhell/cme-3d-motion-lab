@@ -1,4 +1,5 @@
 import { Author, StanceOffsets, StanceStyle } from '../author';
+import {auditCatalog} from '../../lab/biomechanicsAudit';
 import { Motion, mirrorMotion } from '../motion';
 import type { CoachRig } from '../rig';
 import { balanceKeys } from '../balance';
@@ -26,6 +27,12 @@ export function getLibrary(rig: CoachRig, style: StanceStyle, profile?: { id: st
       for (const k of m.keys) a.openElbows(k.pose);
       if (m.balance) balanceKeys(rig, m);
       lib.set(m.id, m);
+    }
+    // Run diagnostics across every authored movement for this rig and stance.
+    // Do not silently rewrite techniques: findings require biomechanical review.
+    if(import.meta.env.DEV){
+      const findings=auditCatalog(lib.values());
+      if(findings.length)console.warn('[CME biomechanics audit]',findings.length,'findings',findings.slice(0,20));
     }
     perRig.set(key, lib);
   }
