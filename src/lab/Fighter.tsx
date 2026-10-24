@@ -143,7 +143,7 @@ export function Fighter({actor,outfit,technique,coachPlan,playback,skeleton,qual
  },[gltf.scene,clothes.scene,renderStyle,quality,actor]);
  const rig=useMemo(()=>new CoachRig(scene),[scene]);
  const library=useMemo(()=>getLibrary(rig,(outfit==='boxe'?'boxing':outfit.startsWith('bjj')?'bjj':outfit) as 'boxing'|'kickboxing'|'mma'|'muaythai'|'bjj'|'judo'),[rig,outfit]);
- const seq=(rawSequences as Array<{id:string;name:string;discipline:string;motions:string[]}>).find(s=>s.id===technique);
+ const seq=useMemo(()=>(rawSequences as Array<{id:string;name:string;discipline:string;motions:string[]}>).find(s=>s.id===technique),[technique]);
  const motion=library.get(technique)??library.get('garde');
  const seqValid=!!seq&&seq.motions.every(id=>library.has(id));
  const sampler=useMemo(()=>{
@@ -154,7 +154,7 @@ export function Fighter({actor,outfit,technique,coachPlan,playback,skeleton,qual
  const helper=useMemo(()=>new SkeletonHelper(scene),[scene]);
  const lastSample=useRef<number|null>(null);
  const t=useRef(0);
- useEffect(()=>{lastSample.current=null;},[technique,outfit]);
+ useEffect(()=>{lastSample.current=null;t.current=0;},[technique,outfit,coachPlan]);
  useEffect(()=>{
   onReport({bones:helper.bones.length,armClamps:0,footErrorMetres:0,techniqueFound:seq?seqValid:!!library.get(technique),source:seq?'CME-3D · enchaînement expérimental':'CME-3D · bibliothèque de mouvements'});
   onReady();
