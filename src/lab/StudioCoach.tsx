@@ -74,8 +74,17 @@ export function StudioCoach(){
  const [showSkeleton,setShowSkeleton]=useState(false);
  const [report,setReport]=useState<NeutralRigReport|null>(null);
  const importRef=useRef<HTMLInputElement>(null);
+ const previewRef=useRef<HTMLDivElement>(null);
  const lastTap=useRef(0);
- const toggleFullscreen=()=>setPreviewFullscreen(v=>!v);
+ const toggleFullscreen=()=>{
+  const element=previewRef.current;
+  if(!element)return;
+  if(document.fullscreenElement===element){void document.exitFullscreen().catch(()=>setPreviewFullscreen(false));return;}
+  if(document.fullscreenElement){void document.exitFullscreen().then(()=>element.requestFullscreen()).catch(()=>setPreviewFullscreen(v=>!v));return;}
+  if(element.requestFullscreen){void element.requestFullscreen().catch(()=>setPreviewFullscreen(v=>!v));return;}
+  setPreviewFullscreen(v=>!v);
+ };
+ useEffect(()=>{const sync=()=>setPreviewFullscreen(document.fullscreenElement===previewRef.current);document.addEventListener('fullscreenchange',sync);return()=>document.removeEventListener('fullscreenchange',sync);},[]);
  const handleTouchEnd=(event:React.TouchEvent<HTMLDivElement>)=>{
   if((event.target as HTMLElement).closest('button,input,select,summary'))return;
   const now=Date.now();
@@ -101,7 +110,8 @@ export function StudioCoach(){
  return <section className="coachStudio" aria-label="Studio Coach">
   <header className="coachStudioHeader"><div><small>STUDIO COACH</small><h2>Votre combattant</h2></div></header>
   <div className="coachStudioLayout">
-   <div className={`coachPreview ${previewFullscreen?"cmeFullscreen":""}`} onDoubleClick={event=>{if(!(event.target as HTMLElement).closest("button,input,select,summary"))toggleFullscreen();}} onTouchEnd={handleTouchEnd} aria-label="Aperçu 3D du mannequin ; double clic pour agrandir">\n    <button type="button" className="cmeFullscreenToggle" onClick={event=>{event.stopPropagation();toggleFullscreen();}} aria-label={previewFullscreen?"Quitter le plein écran":"Agrandir le coach"}>{previewFullscreen?"Réduire ✕":"⛶"}</button>
+   <div ref={previewRef} className={`coachPreview ${previewFullscreen?"cmeFullscreen":""}`} onDoubleClick={event=>{if(!(event.target as HTMLElement).closest("button,input,select,summary"))toggleFullscreen();}} onTouchEnd={handleTouchEnd} aria-label="Aperçu 3D du mannequin ; double clic pour agrandir">
+    <button type="button" className="cmeFullscreenToggle" onClick={event=>{event.stopPropagation();toggleFullscreen();}} aria-label={previewFullscreen?"Quitter le plein écran":"Agrandir le coach"}>{previewFullscreen?"Réduire ✕":"⛶"}</button>
     <div className="coachRigSwitch" role="group" aria-label="Mode du modèle 3D"><button className={!rigMode?'active':''} aria-pressed={!rigMode} onClick={()=>setRigMode(false)}>Coach</button><button className={rigMode?'active':''} aria-pressed={rigMode} onClick={()=>setRigMode(true)}>Anatomie</button></div>
     <button type="button" className="cmeCameraAuto" aria-label={cameraAuto?'Désactiver la caméra automatique':'Activer la caméra automatique'} title="Caméra pédagogique" aria-pressed={cameraAuto} onClick={()=>setCameraAuto(v=>!v)}>◉ {cameraAuto?'Auto':'Libre'}</button>
     <div className="coachCanvasViewport"><Canvas camera={{position:[0,1.3,4.5],fov:38}} dpr={[1,1.5]} gl={{antialias:true}}>
