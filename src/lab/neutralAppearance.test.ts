@@ -40,6 +40,30 @@ describe('skinned appearance adapter isolation',()=>{
   expect(appearanceZone('tenue:boxing_shirt')).toBe('topColor');
   expect(appearanceZone('body_skin')).toBe('skin');
  });
+ it('reconnaît les noms réels trouvés dans les 14 GLB de tenues',()=>{
+  expect(appearanceZone('cuir-gant-boxe')).toBe('gloveColor');
+  expect(appearanceZone('sangle-mma-#B3122A')).toBe('gloveColor');
+  expect(appearanceZone('protection-#16181D')).toBe('shinColor');
+  expect(appearanceZone('velcro-#B3122A')).toBe('shinColor');
+  expect(appearanceZone('haut-brassiere-#16181D')).toBe('topColor');
+  expect(appearanceZone('gi-#F7F6F2-judo')).toBe('topColor');
+  expect(appearanceZone('col-#F7F6F2-judo')).toBe('topColor');
+  expect(appearanceZone('haut-rash-long-#B3122A')).toBe('topColor');
+  expect(appearanceZone('short-boxe-#B3122A')).toBe('bottomColor');
+  expect(appearanceZone('pantalon-#F2F0EA-bjj')).toBe('bottomColor');
+  expect(appearanceZone('f021_body')).toBe('skin');
+  expect(appearanceZone('m021_head')).toBe('skin');
+ });
+ it('traite les protège-tibias distinctement des gants et des bras',()=>{
+  const root=new Object3D();
+  const glove=new Mesh(new BoxGeometry(),new MeshStandardMaterial({name:'cuir-gant-boxe',color:'#ffffff'}));
+  const shin=new Mesh(new BoxGeometry(),new MeshStandardMaterial({name:'protection-#16181D',color:'#ffffff'}));
+  root.add(glove,shin);
+  expect(inspectCoachMaterialZones(root)).toMatchObject({gloveColor:1,shinColor:1,skin:0});
+  applyNeutralAppearance(root,{skin:'#b97a56',hairColor:'#201713',topColor:'#ffffff',bottomColor:'#888888',gloveColor:'#be4439',shinColor:'#223344'});
+  expect((glove.material as MeshStandardMaterial).color.getHexString()).toBe('be4439');
+  expect((shin.material as MeshStandardMaterial).color.getHexString()).toBe('223344');
+ });
  it('classifies known materials and leaves unknowns untouched',()=>{
   expect(appearanceZone('fighter_face')).toBe('skin');
   expect(appearanceZone('Boxing_Glove')).toBe('gloveColor');
