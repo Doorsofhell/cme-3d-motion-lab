@@ -1,8 +1,8 @@
 import {useEffect,useRef,useState} from 'react';
 import {Canvas} from '@react-three/fiber';
-import {CameraPedagogique} from './CameraPedagogique';
+import {SceneCameraControls,SceneCameraButton,SceneLoadingBoundary} from './SceneControls';
 import {useSceneFullscreen,SceneFullscreenButton} from './SceneFullscreen';
-import {OrbitControls,useGLTF} from '@react-three/drei';
+import {useGLTF} from '@react-three/drei';
 import {NeutralRig,LAB_DISCIPLINES,type LabDiscipline,type NeutralRigReport} from './NeutralRig';
 import './StudioCoach.css';
 import {addSavedCoach,readSavedCoaches,updateSavedCoach,deleteSavedCoach} from './savedCoaches';
@@ -96,12 +96,11 @@ export function StudioCoach(){
    <div ref={sceneFullscreen.ref as React.RefObject<HTMLDivElement>} className={`coachPreview ${sceneFullscreen.fullscreen?"cmeFullscreen":""}`} onDoubleClick={sceneFullscreen.onDoubleClick} onTouchEnd={sceneFullscreen.onTouchEnd} aria-label="Aperçu 3D du mannequin ; double clic pour agrandir">
     <SceneFullscreenButton fullscreen={sceneFullscreen.fullscreen} onClick={sceneFullscreen.toggle}/>
     <div className="coachRigSwitch" role="group" aria-label="Mode du modèle 3D"><button className={!rigMode?'active':''} aria-pressed={!rigMode} onClick={()=>setRigMode(false)}>Coach</button><button className={rigMode?'active':''} aria-pressed={rigMode} onClick={()=>setRigMode(true)}>Anatomie</button></div>
-    <button type="button" className="cmeCameraAuto" aria-label={cameraAuto?'Désactiver la caméra automatique':'Activer la caméra automatique'} title="Caméra pédagogique" aria-pressed={cameraAuto} onClick={()=>setCameraAuto(v=>!v)}>◉ {cameraAuto?'Auto':'Libre'}</button>
+    <SceneCameraButton automatic={cameraAuto} onToggle={()=>setCameraAuto(v=>!v)}/>
     <div className="coachCanvasViewport"><Canvas camera={{position:[0,1.3,4.5],fov:38}} dpr={[1,1.5]} gl={{antialias:true}}>
      <color attach="background" args={['#e6edf6']}/><ambientLight intensity={2}/><directionalLight position={[3,5,4]} intensity={2.6}/>
-     {<NeutralRig key={`${look.sex}-${rigMode?'neutral':'appearance'}`} mode={rigMode?'neutral':'appearance'} sex={look.sex} discipline={discipline} motionId={motionId} playing={playing} speed={1} showSkeleton={showSkeleton} autoCadrage={!cameraAuto} onReport={setReport} appearance={{skin:look.skin,hairColor:look.hairColor,topColor:look.topColor,bottomColor:look.bottomColor,gloveColor:look.gloveColor}} proportions={{height:look.height,shoulders:look.shoulders,muscle:look.muscle,waist:look.waist}}/>}
-     <CameraPedagogique mouvement={motionId} active={cameraAuto}/>
-     {!cameraAuto&&<OrbitControls makeDefault target={[0,1,0]} enablePan={false} minDistance={.5} maxDistance={80}/> }
+     <SceneLoadingBoundary><NeutralRig key={`${look.sex}-${rigMode?'neutral':'appearance'}`} mode={rigMode?'neutral':'appearance'} sex={look.sex} discipline={discipline} motionId={motionId} playing={playing} speed={1} showSkeleton={showSkeleton} autoCadrage={!cameraAuto} onReport={setReport} appearance={{skin:look.skin,hairColor:look.hairColor,topColor:look.topColor,bottomColor:look.bottomColor,gloveColor:look.gloveColor}} proportions={{height:look.height,shoulders:look.shoulders,muscle:look.muscle,waist:look.waist}}/></SceneLoadingBoundary>
+     <SceneCameraControls automatic={cameraAuto} motion={motionId}/>
     </Canvas></div>
     <span className="coachPreviewLabel">{rigMode?'Anatomie 3D':'Aperçu 3D'}</span>
    </div>
