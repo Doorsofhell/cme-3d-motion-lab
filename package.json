@@ -1,13 +1,13 @@
 {
   "name": "@cme-3d/motion-lab",
-  "version": "0.7.22",
+  "version": "0.7.23",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "tsc -p tsconfig.json && vite build",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "vitest run && node scripts/validate-amara.mjs && node scripts/validate-naira.mjs && node scripts/validate-coach-assets.mjs",
+    "test": "vitest run && node scripts/validate-amara.mjs && node scripts/validate-naira.mjs && node scripts/validate-coach-assets.mjs && node scripts/audit-studio-materials.mjs",
     "preview": "vite preview --host 0.0.0.0",
     "test:amara": "node scripts/validate-amara.mjs",
     "test:naira": "node scripts/validate-naira.mjs"

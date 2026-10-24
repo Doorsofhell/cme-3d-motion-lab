@@ -151,7 +151,7 @@ export function Fighter({actor,outfit,technique,coachPlan,playback,skeleton,qual
   if(coachLook)applyCoachLookGeometry(s,coachLook);
   if(renderStyle==='fitness')applyFitnessStyle(s);
   if(renderStyle==='comic')applyComicStyle(s,quality);
-  if(coachLook)applyNeutralAppearance(s,{skin:coachLook.skin,hairColor:coachLook.hairColor,topColor:coachLook.topColor,bottomColor:coachLook.bottomColor,gloveColor:coachLook.gloveColor});
+  if(coachLook)applyNeutralAppearance(s,{skin:coachLook.skin,hairColor:coachLook.hairColor,topColor:coachLook.topColor,bottomColor:coachLook.bottomColor,gloveColor:coachLook.gloveColor,shinColor:coachLook.shinColor});
   return s;
  },[gltf.scene,clothes.scene,renderStyle,quality,actor,coachLook]);
  const rig=useMemo(()=>new CoachRig(scene),[scene]);

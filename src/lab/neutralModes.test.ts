@@ -29,6 +29,7 @@ describe('strict separation of neutral rig and dressed appearance',()=>{
   root.add(skin);
   applyNeutralAppearance(root,{skin:'#b97a56',hairColor:'#201713',topColor:'#252934',bottomColor:'#d6363c',gloveColor:'#d6363c'});
   expect((skin.material as MeshStandardMaterial).map).toBe(map);
-  expect((skin.material as MeshStandardMaterial).color.getHexString()).toBe('b97a56');
+  // La référence ne teinte plus une seconde fois la texture naturelle.
+  expect((skin.material as MeshStandardMaterial).color.getHexString()).toBe('ffffff');
  });
 });
