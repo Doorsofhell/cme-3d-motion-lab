@@ -1,7 +1,18 @@
 import {describe,it,expect} from 'vitest';
-import {Mesh,MeshStandardMaterial,Object3D,BoxGeometry} from 'three';
+import {Mesh,MeshStandardMaterial,MeshToonMaterial,Object3D,BoxGeometry,Texture} from 'three';
 import {appearanceZone,applyNeutralAppearance} from './neutralAppearance';
 describe('skinned appearance adapter isolation',()=>{
+ it('applique les teintes aux matériaux Toon de Fitness/Comics sans perdre les textures',()=>{
+  const root=new Object3D(),sourceMap=new Texture();
+  const face=new Mesh(new BoxGeometry(),new MeshToonMaterial({name:'skin_head-fitness',color:'#ffffff',map:sourceMap}));
+  root.add(face);
+  expect(inspectCoachMaterialZones(root).skin).toBe(1);
+  expect(applyNeutralAppearance(root,{skin:'#aabbcc',hairColor:'#222222',topColor:'#444444',bottomColor:'#666666',gloveColor:'#888888'})).toBe(1);
+  const material=face.material as MeshToonMaterial;
+  expect(material.color.getHexString()).toBe('aabbcc');
+  expect(material.map).toBe(sourceMap);
+ });
+
  it('classifies known materials and leaves unknowns untouched',()=>{
   expect(appearanceZone('fighter_face')).toBe('skin');
   expect(appearanceZone('Boxing_Glove')).toBe('gloveColor');
