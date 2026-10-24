@@ -46,9 +46,8 @@
 .coachQuickChoice button.active,.coachCategories button.active{
  background:#d6363c;border-color:#d6363c;color:white;
 }
-.coachCategories{display:flex;flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-x:contain;gap:7px;padding:2px 0 5px;scrollbar-width:none}
-.coachCategories::-webkit-scrollbar{display:none}
-.coachCategories button{flex:0 0 auto;min-width:94px;font-size:13px}
+.coachCategories{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:7px;padding:2px 0 5px;min-width:0;overflow:visible}
+.coachCategories button{min-width:0;max-width:100%;font-size:13px;white-space:normal;overflow-wrap:anywhere}
 .coachFields{display:flex;flex:1;flex-direction:column;gap:12px;min-width:0;min-height:0;overflow-y:auto;padding:3px}
 .coachField{display:flex;flex-direction:column;gap:6px;font-size:13px;color:#27344a}
 .coachField span{display:flex;justify-content:space-between}
@@ -95,6 +94,9 @@
  .coachFields{overflow:visible}
 }
 @media(max-width:400px){
+ .coachCategories{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .coachCategories button{font-size:12px;padding:8px 6px}
+
  .coachRigSwitch{padding:3px;gap:2px}
  .coachRigSwitch button{min-width:54px;padding:7px 8px;font-size:11px}
 }
