@@ -1,7 +1,6 @@
-import {readFileSync} from 'node:fs';
+import html from '../../index.html?raw';
+import css from './mobileUsability.css?raw';
 import {describe,expect,it} from 'vitest';
-const html=readFileSync(new URL('../../index.html',import.meta.url),'utf8');
-const css=readFileSync(new URL('./mobileUsability.css',import.meta.url),'utf8');
 describe('ergonomie mobile P0',()=>{
  it('charge la feuille dédiée depuis la page principale',()=>{
   expect(html).toContain('/src/lab/mobileUsability.css');
