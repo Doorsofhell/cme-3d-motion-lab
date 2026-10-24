@@ -146,7 +146,7 @@ function Viewer({actor,discipline,technique,coachPlan,quality,renderStyle,playba
     onLog('Contexte WebGL restauré automatiquement');
     setError(v=>v?.startsWith('Contexte graphique perdu')?null:v);
    }
-  });
+  },()=>canvasRef.current===activeCanvas&&activeCanvas.isConnected);
  },[onLog,onIncident,playback,onCaptureReady]);
  useEffect(()=>()=>{canvasRef.current?.cmeCleanup?.();canvasRef.current=null;},[]);
  const dpr=quality==='performance'?1:quality==='balanced'?(mobile()?1.1:1.35):(mobile()?1.4:1.6);
