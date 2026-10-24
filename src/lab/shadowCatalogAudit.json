@@ -1,0 +1,21 @@
+{
+  "source": "Doorsofhell/combat-shadow-studio",
+  "sourceCurrent": "main",
+  "sourceHistory": [
+    "85dcebf8601777363ae2dddf0cc07952ebe973cb"
+  ],
+  "techniqueCount": 75,
+  "exerciseCount": 208,
+  "byDiscipline": {
+    "boxe": 45,
+    "kickboxing": 44,
+    "mma": 44,
+    "muaythai": 44,
+    "bjj": 16,
+    "judo": 15
+  },
+  "missingTechniqueIdsInExercises": [],
+  "affectedExerciseCount": 0,
+  "exerciseIdsUnique": 208,
+  "notes": "Static catalog audit only; execution requires canonical motion coverage and runtime/biomechanical validation."
+}

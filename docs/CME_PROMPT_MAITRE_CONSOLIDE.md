@@ -43,3 +43,9 @@ P2 : optimisation Android et audit A/B biomécanique.
 
 ## Addendum — interface et catalogue
 Parcours : humanoïde neutre, personnalisation, sauvegarde, puis test en Laboratoire. Les profils doivent pouvoir être créés, modifiés et supprimés. Inventorier les techniques, mouvements et enchaînements Shadow en lecture seule, en distinguant données importées et animations réellement validées. Référence détaillée : docs/CME_INTERFACE_CIBLE_CATALOGUE_SHADOW.md.
+
+## Lot catalogue Shadow — audit historique (24/10/2026)
+- Shadow Studio demeure strictement en lecture seule. Sources actuelles et historique accessible des fichiers `src/domain/techniques.ts` et `src/domain/exercises.ts` analysés (commits 8ed768a et 85dcebf).
+- 75 techniques uniques Shadow, 208 exercices déjà présents dans CME, six disciplines. Cinq techniques absentes de `techniques.json` conservées dans `shadowTechniqueInventory.json` : garde-bjj, shizen-tai, tsugi-ashi-avant/arriere/lateral. Références classées sans les déclarer animées.
+- Nouveau panneau de recherche par discipline et statut de correspondance dans le Laboratoire. Le catalogue est un référentiel ; validation biomécanique et exécution effective restent indépendantes.
+- Limite : audit des commits des deux fichiers sources et des données déjà importées, pas certification exhaustive de tous les anciens tags/branches ou de tous les assets d'animation. Toute divergence future doit être traitée sans réinitialiser le prompt maître.
