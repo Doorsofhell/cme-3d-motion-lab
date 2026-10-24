@@ -8,7 +8,7 @@ import {getLibrary} from '../shadow-engine/library';
 import {MotionSampler} from '../shadow-engine/motion';
 import {restoreReferencePose} from './restorePose';
 import {applyNeutralAppearance,applyNeutralRigMaterials,inspectCoachMaterialZones,type NeutralAppearance} from './neutralAppearance';
-import {applyCoachLookGeometry,inspectCoachShapes,type CoachFaceShape} from './coachGeometry';
+import {applyCoachLookGeometry,inspectCoachShapes,type CoachFaceShape,type CoachBodyShape} from './coachGeometry';
 import {CadrageSquelette} from './CadrageSquelette';
 import type {StudioFocusZone} from './studioFocus';
 import {attachOutfit} from '../adapters/outfits';
@@ -30,7 +30,7 @@ export type NeutralRigReport={sex:NeutralSex;discipline:LabDiscipline;motion:str
  */
 type NeutralRigProps={
  sex:NeutralSex;discipline:LabDiscipline;motionId:string;playing:boolean;speed:number;showSkeleton:boolean;
- onReport:(r:NeutralRigReport)=>void;noGi?:boolean;appearance?:NeutralAppearance;proportions?:{height:number;shoulders:number;muscle:number;waist:number};face?:CoachFaceShape;autoCadrage?:boolean;focusZone?:StudioFocusZone;focusRequest?:number;mode?:'neutral'|'appearance';
+ onReport:(r:NeutralRigReport)=>void;noGi?:boolean;appearance?:NeutralAppearance;proportions?:CoachBodyShape & {height:number};face?:CoachFaceShape;autoCadrage?:boolean;focusZone?:StudioFocusZone;focusRequest?:number;mode?:'neutral'|'appearance';
 };
 /** Appearance uses a genuine, already-shipped outfit GLB.
  * Neutral anatomy does not fetch or display an outfit.
@@ -80,6 +80,10 @@ function RigBody({sex,discipline,motionId,playing,speed,showSkeleton,onReport,ap
     shoulders:proportions?.shoulders??1,
     muscle:proportions?.muscle??1,
     waist:proportions?.waist??1,
+    sex:proportions?.sex,
+    roundness:proportions?.roundness??1,
+    hips:proportions?.hips??1,
+    thighs:proportions?.thighs??1,
     jaw:face?.jaw??1,
     nose:face?.nose??1,
     eyes:face?.eyes??1
@@ -88,7 +92,7 @@ function RigBody({sex,discipline,motionId,playing,speed,showSkeleton,onReport,ap
    // Anatomie reste rigoureusement neutre, y compris après changement de profil.
    scene.scale.setScalar(1);
   }
- },[scene,mode,proportions?.height,proportions?.shoulders,proportions?.muscle,proportions?.waist,face?.jaw,face?.nose,face?.eyes]);
+ },[scene,mode,proportions?.height,proportions?.shoulders,proportions?.muscle,proportions?.waist,proportions?.sex,proportions?.roundness,proportions?.hips,proportions?.thighs,face?.jaw,face?.nose,face?.eyes]);
  const rig=useMemo(()=>new CoachRig(scene),[scene]);
  const library=useMemo(()=>getLibrary(rig,discipline),[rig,discipline]);
  const motion=library.get(motionId)??library.get('garde');
