@@ -1,4 +1,4 @@
-import {describe,it,expect} from 'vitest';
+import {describe,it,expect,vi} from 'vitest';
 import {Bone,BoxGeometry,BufferAttribute,Group,Mesh,MeshStandardMaterial,Skeleton,SkinnedMesh} from 'three';
 import {applyCoachBodyShape,applyCoachFaceShapes,applyCoachLookGeometry,inspectCoachShapes} from './coachGeometry';
 import {applyNeutralAppearance,inspectCoachMaterialZones} from './neutralAppearance';
@@ -92,6 +92,35 @@ describe('Studio Coach — déformations GLB non destructives',()=>{
   expect(face.morphTargetInfluences[0]).toBe(0);
   expect(root.scale.x).toBe(1);
   expect(bones.every((bone,i)=>bone.position.equals(initialBones[i]))).toBe(true);
+ });
+ it('ajuste le tissu du haut avec une marge minime sans changer les os ou le corps source',()=>{
+  const {root,mesh,original,bones}=skinnedTorso();
+  const coatSource=original.clone();
+  coatSource.userData.cmeOwned=true;
+  const garment=new SkinnedMesh(coatSource,new MeshStandardMaterial({name:'shirt_top'}));
+  garment.name='tenue:haut';
+  garment.bind(mesh.skeleton);
+  root.add(garment);
+  const disposeCoat=vi.spyOn(coatSource,'dispose');
+  const disposeBody=vi.spyOn(original,'dispose');
+  const before=Array.from(original.getAttribute('position').array);
+  const pose=bones.map(b=>b.position.clone());
+  const shape={shoulders:1.2,muscle:1.25,waist:.92};
+  applyCoachBodyShape(root,shape);
+  const sourceX=original.getAttribute('position').getX(0);
+  const bodyX=mesh.geometry.getAttribute('position').getX(0);
+  const clothX=garment.geometry.getAttribute('position').getX(0);
+  expect(Math.abs(clothX/sourceX)).toBeGreaterThan(Math.abs(bodyX/sourceX));
+  expect(garment.geometry.userData.cmeOwned).toBe(true);
+  expect(disposeCoat).toHaveBeenCalledTimes(1);
+  expect(disposeBody).not.toHaveBeenCalled();
+  const current=Array.from(garment.geometry.getAttribute('position').array);
+  applyCoachBodyShape(root,shape);
+  expect(Array.from(garment.geometry.getAttribute('position').array)).toEqual(current);
+  expect(disposeCoat).toHaveBeenCalledTimes(1);
+  applyCoachBodyShape(root,neutral);
+  expect(Array.from(garment.geometry.getAttribute('position').array)).toEqual(before);
+  expect(bones.every((b,i)=>b.position.equals(pose[i]))).toBe(true);
  });
  it('classe chaque sous-matériau par priorité avant le nom de maillage parent',()=>{
   const root=new Group();
