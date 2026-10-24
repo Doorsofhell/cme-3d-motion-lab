@@ -24,9 +24,9 @@ export type NeutralRigReport={sex:NeutralSex;discipline:LabDiscipline;motion:str
  * Both use the SAME CoachRig / MotionSampler implementation. No changes to canonical motion code.
  * These are neutralized reference rigs, NOT new independently certified anatomical assets.
  */
-export function NeutralRig({sex,discipline,motionId,playing,speed,showSkeleton,onReport,appearance,mode='neutral'}:{
+export function NeutralRig({sex,discipline,motionId,playing,speed,showSkeleton,onReport,appearance,proportions,mode='neutral'}:{
  sex:NeutralSex;discipline:LabDiscipline;motionId:string;playing:boolean;speed:number;showSkeleton:boolean;
- onReport:(r:NeutralRigReport)=>void;appearance?:NeutralAppearance;mode?:'neutral'|'appearance';
+ onReport:(r:NeutralRigReport)=>void;appearance?:NeutralAppearance;proportions?:{height:number;shoulders:number;muscle:number;waist:number};mode?:'neutral'|'appearance';
 }){
  const url=import.meta.env.BASE_URL+'fighters/'+NEUTRAL_ASSETS[sex]+'/photo.glb';
  const gltf=useGLTF(url,import.meta.env.BASE_URL+'draco/');
@@ -55,6 +55,18 @@ export function NeutralRig({sex,discipline,motionId,playing,speed,showSkeleton,o
   return root;
  },[gltf.scene,mode,sex]);
  useEffect(()=>{if(mode==='appearance')applyNeutralAppearance(scene,appearance);},[scene,appearance,mode]);
+ useEffect(()=>{
+  const height=proportions?.height??1;
+  scene.scale.set(height,height,height);
+  scene.traverse(object=>{
+   const mesh=object as Mesh;
+   if(!mesh.isMesh||!mesh.name.startsWith('CME_NEUTRAL_'))return;
+   const name=mesh.name.toLowerCase();
+   const volume=proportions?.muscle??1;
+   const width=name.includes('spine')||name.includes('shoulder')?(proportions?.shoulders??1):name.includes('hips')?(proportions?.waist??1):volume;
+   mesh.scale.set(width,1,volume);
+  });
+ },[scene,proportions?.height,proportions?.shoulders,proportions?.muscle,proportions?.waist]);
  const rig=useMemo(()=>new CoachRig(scene),[scene]);
  const library=useMemo(()=>getLibrary(rig,discipline),[rig,discipline]);
  const motion=library.get(motionId)??library.get('garde');

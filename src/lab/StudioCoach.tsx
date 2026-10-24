@@ -19,8 +19,8 @@ export type CoachLook={
 export const defaultCoachLook:CoachLook={
  sex:'homme',height:1,shoulders:1,muscle:1,waist:1,jaw:1,nose:1,eyes:1,
  skin:'#b97a56',eyeColor:'#4a2f1e',hairStyle:'court',hairColor:'#201713',
- top:'rashguard',topColor:'#252934',bottom:'short',bottomColor:'#d6363c',
- gloves:'boxe',gloveColor:'#d6363c',shins:false,shinColor:'#20232c'
+ top:'aucun',topColor:'#252934',bottom:'short',bottomColor:'#d6363c',
+ gloves:'aucun',gloveColor:'#d6363c',shins:false,shinColor:'#20232c'
 };
 const clamp=(v:number,min:number,max:number)=>Math.min(max,Math.max(min,Number.isFinite(v)?v:min));
 export function normalizeCoachLook(input:Partial<CoachLook>):CoachLook{
@@ -61,8 +61,8 @@ export function StudioCoach(){
  const [selectedId,setSelectedId]=useState<string|null>(()=>{try{return localStorage.getItem('cme-selected-coach');}catch{return null;}});
  const [section,setSection]=useState<Category>('corps');
  const [message,setMessage]=useState('');
- const [rigMode,setRigMode]=useState(true);
- const [cameraAuto,setCameraAuto]=useState(true);
+ const [rigMode,setRigMode]=useState(false);
+ const [cameraAuto,setCameraAuto]=useState(false);
  const [previewFullscreen,setPreviewFullscreen]=useState(false);
  useEffect(()=>{const close=(event:KeyboardEvent)=>{if(event.key==='Escape')setPreviewFullscreen(false);};window.addEventListener('keydown',close);return()=>window.removeEventListener('keydown',close);},[]);
  const [advancedOpen,setAdvancedOpen]=useState(false);
@@ -89,18 +89,18 @@ export function StudioCoach(){
  const removeCoach=()=>{if(!selectedId||!window.confirm('Supprimer définitivement ce coach de cet appareil ?'))return;try{deleteSavedCoach(localStorage,selectedId);if(localStorage.getItem('cme-lab-coach')===selectedId)localStorage.removeItem('cme-lab-coach');localStorage.removeItem('cme-selected-coach');setSelectedId(null);setLook(defaultCoachLook);window.dispatchEvent(new Event('cme-coaches-changed'));setMessage('Coach supprimé.');}catch{setMessage('Suppression impossible.');}};
  const exportJson=()=>{const json=JSON.stringify({schema:'cme-coach-look-v1',look},null,2);const blob=new Blob([json],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='cme-coach-look.json';a.click();URL.revokeObjectURL(url);setMessage('Configuration exportée : apparence uniquement, sans modification du moteur.');};
  return <section className="coachStudio" aria-label="Studio Coach">
-  <header className="coachStudioHeader"><div><small>STUDIO COACH</small><h2>Votre combattant</h2><p>Choisissez un modèle et personnalisez son apparence.</p></div></header>
+  <header className="coachStudioHeader"><div><small>STUDIO COACH</small><h2>Votre combattant</h2></div></header>
   <div className="coachStudioLayout">
    <div className={`coachPreview ${previewFullscreen?"cmeFullscreen":""}`} onDoubleClick={()=>setPreviewFullscreen(v=>!v)} aria-label="Aperçu 3D du mannequin ; double clic pour agrandir">\n    <button type="button" className="cmeFullscreenToggle" onClick={()=>setPreviewFullscreen(v=>!v)} aria-label={previewFullscreen?"Quitter le plein écran":"Agrandir le coach"}>{previewFullscreen?"Réduire ✕":"⛶"}</button>
-    <div className="coachRigSwitch" role="group" aria-label="Mode du modèle 3D"><button className={!rigMode?'active':''} aria-pressed={!rigMode} onClick={()=>setRigMode(false)}>Apparence</button><button className={rigMode?'active':''} aria-pressed={rigMode} onClick={()=>setRigMode(true)}>Rig neutre</button></div>
-    <button type="button" className="cmeCameraAuto" aria-pressed={cameraAuto} onClick={()=>setCameraAuto(v=>!v)}>Caméra pédagogique : {cameraAuto?'auto':'libre'}</button>
+    <div className="coachRigSwitch" role="group" aria-label="Mode du modèle 3D"><button className={!rigMode?'active':''} aria-pressed={!rigMode} onClick={()=>setRigMode(false)}>Coach</button><button className={rigMode?'active':''} aria-pressed={rigMode} onClick={()=>setRigMode(true)}>Anatomie</button></div>
+    <button type="button" className="cmeCameraAuto" aria-label={cameraAuto?'Désactiver la caméra automatique':'Activer la caméra automatique'} title="Caméra pédagogique" aria-pressed={cameraAuto} onClick={()=>setCameraAuto(v=>!v)}>◉ {cameraAuto?'Auto':'Libre'}</button>
     <Canvas camera={{position:[0,1.05,3.4],fov:38}} dpr={[1,1.5]} gl={{antialias:true}}>
-     <color attach="background" args={['#171920']}/><ambientLight intensity={1.4}/><directionalLight position={[3,5,4]} intensity={2.1}/>
-     <NeutralRig key={`${look.sex}-${rigMode?'neutral':'appearance'}`} mode={rigMode?'neutral':'appearance'} sex={look.sex} discipline={discipline} motionId={motionId} playing={playing} speed={1} showSkeleton={showSkeleton} onReport={setReport} appearance={{skin:look.skin,hairColor:look.hairColor,topColor:look.topColor,bottomColor:look.bottomColor,gloveColor:look.gloveColor}}/>
+     <color attach="background" args={['#e6edf6']}/><ambientLight intensity={2}/><directionalLight position={[3,5,4]} intensity={2.6}/>
+     <NeutralRig key={`${look.sex}-${rigMode?'neutral':'appearance'}`} mode={rigMode?'neutral':'appearance'} sex={look.sex} discipline={discipline} motionId={motionId} playing={playing} speed={1} showSkeleton={showSkeleton} onReport={setReport} appearance={{skin:look.skin,hairColor:look.hairColor,topColor:look.topColor,bottomColor:look.bottomColor,gloveColor:look.gloveColor}} proportions={{height:look.height,shoulders:look.shoulders,muscle:look.muscle,waist:look.waist}}/>
      <CameraPedagogique mouvement={motionId} active={cameraAuto}/>
      {!cameraAuto&&<OrbitControls target={[0,.9,0]} enablePan={false} minDistance={2.2} maxDistance={5}/> }
     </Canvas>
-    <span className="coachPreviewLabel">{rigMode?'Humanoïde de test monochrome · squelette partagé · équipements séparés masqués':'Modèle habillé · apparence personnalisable sur matériaux identifiés'}</span>
+    <span className="coachPreviewLabel">{rigMode?'Anatomie 3D':'Aperçu 3D'}</span>
    </div>
    <div className="coachEditor">
     <div className="coachQuickChoice" role="group" aria-label="Choisir le modèle">
@@ -108,7 +108,7 @@ export function StudioCoach(){
       <button className={look.sex==='femme'?'active':''} onClick={()=>update('sex','femme')}>Femme</button>
     </div>
     <nav className="coachCategories" aria-label="Personnalisation">{sections.map(item=><button key={item} className={section===item?'active':''} aria-current={section===item?'true':undefined} onClick={()=>setSection(item)}>{sectionNames[item]}</button>)}</nav>
-    <h3 className="coachSectionTitle">{sectionNames[section]}</h3>
+
     {<details className="coachAdvanced"><summary>Tester les mouvements</summary><div className="coachRigControls">
       <label>Discipline <select value={discipline} onChange={e=>{setDiscipline(e.target.value as LabDiscipline);setReport(null);}}>{LAB_DISCIPLINES.map(d=><option key={d} value={d}>{d}</option>)}</select></label>
       <label>Mouvement <input value={motionId} onChange={e=>setMotionId(e.target.value)} placeholder="garde"/></label>
@@ -121,10 +121,10 @@ export function StudioCoach(){
      {section==='visage'&&<>{range('jaw','Mâchoire',.8,1.2)}{range('nose','Nez',.8,1.2)}{range('eyes','Yeux',.8,1.2)}{color('eyeColor','Couleur des yeux')}</>}
      {section==='peau'&&color('skin','Teint')}
      {section==='cheveux'&&<>{choose('hairStyle','Coiffure',['rase','court','long'])}{color('hairColor','Couleur des cheveux')}</>}
-     {section==='tenue'&&<>{choose('top','Haut',['rashguard','tshirt','aucun'])}{color('topColor','Couleur du haut')}{choose('bottom','Bas',['short','legging'])}{color('bottomColor','Couleur du bas')}</>}
-     {section==='protections'&&<>{choose('gloves','Gants',['boxe','mma','aucun'])}{color('gloveColor','Couleur des gants')}<label className="coachField"><span>Protège-tibias</span><input type="checkbox" checked={look.shins} onChange={e=>update('shins',e.target.checked)}/></label>{color('shinColor','Couleur des protections')}</>}
+     {section==='tenue'&&<><p className="coachAvailability">Les tenues personnalisées nécessitent un modèle 3D compatible. Aucune tenue non visible n’est annoncée comme portée.</p>{color('topColor','Couleur du haut existant')}{color('bottomColor','Couleur du bas existant')}</>}
+     {section==='protections'&&<><p className="coachAvailability">Les équipements ajoutés seront proposés lorsque leurs maillages 3D seront disponibles.</p>{color('gloveColor','Couleur des gants existants')}</>}
     </div>
-    <details className="coachAdvanced"><summary>Réglages avancés</summary><div className="coachFields">{section==='corps'&&<>{range('height','Taille relative',.9,1.1)}{range('shoulders','Épaules',.75,1.25)}{range('muscle','Musculature',.7,1.35)}{range('waist','Taille',.75,1.3)}</>}</div></details>
+    <details className="coachAdvanced"><summary>Réglages de morphologie</summary><div className="coachFields">{section==='corps'&&<>{range('height','Taille relative',.9,1.1)}{range('shoulders','Épaules',.75,1.25)}{range('muscle','Musculature',.7,1.35)}{range('waist','Taille',.75,1.3)}</>}</div></details>
     <div className="coachCrud"><button type="button" onClick={newCoach}>Nouveau</button><button type="button" className="coachSave" onClick={saveCoach}>{selectedId?'Enregistrer les modifications':'Créer et enregistrer le coach'}</button>{selectedId&&<button type="button" onClick={removeCoach}>Supprimer</button>}</div>
     <button className="coachReset" onClick={()=>{setLook(defaultCoachLook);setMessage('Apparence réinitialisée');}}>Réinitialiser le personnage</button>
     <details className="coachAdvanced" open={advancedOpen} onToggle={e=>setAdvancedOpen(e.currentTarget.open)}><summary>Gestion du profil <span>Importer · Exporter</span></summary><div className="coachActions">
