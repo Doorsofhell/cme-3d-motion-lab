@@ -126,3 +126,24 @@ A — stabilisation et non-régression d'abord ; B — personnalisation dynamiqu
 - **Recette encore ouverte** : test sur Android physique en mode équilibré, six disciplines, Kadir/Amara, rotations, changement homme/femme en alternance, plein écran et reprise contexte WebGL ; consigner version du navigateur, écran, qualité, p05/p50/p95, temps de préparation GLB. Aucun FPS de téléphone réel revendiqué à la livraison logicielle.
 
 **Priorités suivantes** : P0 recette matérielle et validation des temps/régressions ; P1 tests biomécaniques des six disciplines et morphologies réellement appliquées ; P1 benchmark Shadow lecture seule ; P2 Naïra (assets originaux). Shadow Studio reste inchangé.
+
+## Lot C validé — Personnalisation GLB dynamique 0.7.20 (24/10/2026)
+
+### Audit vérifié avant intervention
+- Le Studio proposait des curseurs de mâchoire, nez, yeux, épaules, musculature et taille dont seuls les réglages de hauteur étaient effectivement liés à la scène skinnée. Les autres valeurs étaient essentiellement mémorisées dans le profil.
+- L'adaptateur de couleurs classait parfois une tenue comme `peau` parce que le nom du mesh parent contenait « body ». L'inspection des matériaux doit précéder ce repli.
+- Le mode Anatomie neutre était affiché à l'entrée du Studio, alors que ce mode masque volontairement les textures/couleurs d'apparence : incompréhension pour un utilisateur qui personnalise un coach.
+- Les GLB existants peuvent ne contenir aucun morph target pour les yeux/nez/mâchoire ni mesh distinct de cheveux/tenue. Ne jamais inventer leur disponibilité.
+
+### Corrections incluses
+- `src/lab/coachGeometry.ts` : déformations modestes du torse sur **une copie de la géométrie skinnée** uniquement lorsque le GLB fournit des poids de skinning identifiables pour la colonne et les hanches. Modifie les positions des sommets associés, avec contrôle d'idempotence et conservation des os, matrices de liaison, attributs de skinning, bibliothèques et mouvements. Aucune forme ajoutée par primitives.
+- Les morph targets faciaux **explicitement nommés** « jawWide/Narrow », « noseWide/Narrow » ou « eyesBig/Small » sont appliqués s'ils existent. Aucun système de morphing visage générique ne peut fonctionner sans les cibles présentes dans les assets.
+- `neutralAppearance.ts` : application des teintes peau, cheveux, iris, haut, bas et gants uniquement aux matériaux identifiés, en privilégiant leurs noms sur ceux de l'objet parent. Conservation des textures et matériaux source par clonage.
+- Studio Coach : **mode Coach texturé par défaut**, mode Anatomie neutre conservé pour les essais, état des capacités détectées affiché. Curseurs ou couleurs non applicables au GLB chargés **désactivés**, avec raison lisible. Choix de coiffures non activé tant qu'il manque des maillages adaptés. Les profils enregistrés et leur schéma restent compatibles.
+- Les géométries locales marquées `cmeOwned` sont libérées lors du changement de scène. L'original GLB reste en cache Drei non modifié.
+
+### Contrôle qualité / limites ouvertes
+- Tests de l'absence de modification des os/poids et des géométries d'origine, non-accumulation des curseurs, retour à l'état neutre, détection des blendshapes et des matériaux.
+- Aucun changement dans `src/shadow-engine`, `src/core` ni dans `Doorsofhell/combat-shadow-studio`.
+- Les nouveaux GLB professionnels, coiffures, équipements et tissus dédiés restent **P1 / dépendance asset**. Ne pas prétendre que les morph targets faciaux existent sur Kadir ou Amara sans inspection de leurs noms réels.
+- L'évaluation visuelle Android, les interpenetrations géométriques sous animations et la validation biomécanique des six disciplines restent ouvertes ; la CI seule ne les certifie.
