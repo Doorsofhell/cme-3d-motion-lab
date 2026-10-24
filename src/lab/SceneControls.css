@@ -1,0 +1,35 @@
+/* Scene controls shared by Laboratoire and Studio Coach; no screen-specific offsets. */
+.cmeSceneToolbar{
+ position:absolute;top:8px;left:8px;right:8px;z-index:12;
+ display:flex;flex-wrap:wrap;align-items:flex-start;gap:8px;
+ pointer-events:none;max-width:calc(100% - 16px);
+}
+.cmeSceneToolbar>*{pointer-events:auto}
+.cmeSceneToolbarModes{display:flex;align-items:center;gap:4px;min-width:0;max-width:100%}
+.cmeSceneToolbarActions{display:flex;align-items:center;gap:6px;margin-left:auto;flex:none}
+.cmeSceneToolbar--lab{left:auto;justify-content:flex-end}
+.cmeSceneToolbar button{box-sizing:border-box;min-height:44px;touch-action:manipulation}
+.cmeSceneToolbar .cmeCameraAuto,.cmeSceneToolbar .cmeFullscreenToggle{
+ position:static;inset:auto;top:auto;right:auto;left:auto;z-index:auto;
+ display:inline-flex;align-items:center;justify-content:center;flex:none;
+ min-width:44px;min-height:44px;max-width:none;width:auto;height:auto;
+ margin:0;padding:8px 11px;white-space:nowrap;line-height:1.15;
+ border:1px solid #d4dce8;border-radius:12px;background:#ffffffed;color:#253147;
+}
+.cmeSceneToolbar--lab .cmeFullscreenToggle{
+ background:#252934e8;color:#f5f5f5;border-color:#555b69;
+}
+.cmeSceneToolbar .cmeCameraAuto:focus-visible,.cmeSceneToolbar .cmeFullscreenToggle:focus-visible{
+ outline:3px solid #d6363c;outline-offset:2px;
+}
+.cmeSceneLoading{
+ position:absolute;left:50%;bottom:58px;transform:translateX(-50%);z-index:10;
+ max-width:calc(100% - 24px);white-space:normal;text-align:center;
+ padding:9px 13px;border-radius:11px;background:#20232ce8;color:#fff;
+ font-size:12px;pointer-events:none;
+}
+@media(max-width:400px){
+ .cmeSceneToolbar{gap:5px}
+ .cmeSceneToolbarActions{gap:5px}
+ .cmeSceneToolbar .cmeCameraAuto{padding:8px 7px}
+}
