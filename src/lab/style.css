@@ -313,3 +313,15 @@ button{min-height:36px}
 .labMoreMenu button{width:100%;min-height:46px;border:0;background:transparent;color:#f5f5f5;border-radius:10px;text-align:left;padding:10px 14px;font-size:13px}
 .labMoreMenu button:hover,.labMoreMenu button:focus-visible{background:#373a45}
 @media(max-width:760px){.labTabs{gap:3px;padding-left:4px;padding-right:4px}.labTabs button span{font-size:10px}}
+
+/* Studio mobile scroll contract: one vertical scroll owner between fixed header and tabs. */
+.labApp:has(.coachStudio){min-height:0;overflow:hidden}
+.labApp:has(.coachStudio) .coachStudio{flex:1 1 auto;min-height:0;height:auto;max-height:100%;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;scrollbar-gutter:stable}
+.labApp:has(.coachStudio) .labTabs{flex:0 0 auto;z-index:12}
+@media(max-width:760px){
+ .labApp:has(.coachStudio){height:100dvh;max-height:100dvh;display:flex;flex-direction:column}
+ .labApp:has(.coachStudio) .coachStudio{display:block!important;min-height:0!important;overflow-y:auto!important;touch-action:pan-y!important;padding-bottom:32px!important}
+ .labApp:has(.coachStudio) .coachStudioLayout{display:flex;flex-direction:column;overflow:visible!important;max-height:none!important}
+ .labApp:has(.coachStudio) .coachEditor{overflow:visible!important;flex:none;max-height:none!important}
+ .labApp:has(.coachStudio) .coachPreview{position:relative!important;flex:0 0 auto;height:clamp(245px,37dvh,390px)}
+}
