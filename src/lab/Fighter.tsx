@@ -97,7 +97,7 @@ export function applyComicStyle(root:Object3D,quality:Quality){
   if(quality!=='performance' && !mesh.userData.cmeComicOutline && !materials.some(m=>m.transparent && m.opacity<1)){
    const outline=mesh.clone(false) as Mesh;
    outline.name=mesh.name+'-ink-contour';
-   outline.material=new MeshToonMaterial({color:'#080d1a',side:BackSide,skin­ning:undefined} as never);
+   outline.material=new MeshToonMaterial({color:'#080d1a',side:BackSide});
    outline.scale.multiplyScalar(1.012);
    outline.userData.cmeComicOutline=true;
    if(mesh instanceof SkinnedMesh && outline instanceof SkinnedMesh){
