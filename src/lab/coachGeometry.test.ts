@@ -1,5 +1,5 @@
 import {describe,it,expect} from 'vitest';
-import {Bone,BoxGeometry,BufferAttribute,Color,Group,Mesh,MeshStandardMaterial,Skeleton,SkinnedMesh} from 'three';
+import {Bone,BoxGeometry,BufferAttribute,Group,Mesh,MeshStandardMaterial,Skeleton,SkinnedMesh} from 'three';
 import {applyCoachBodyShape,applyCoachFaceShapes,inspectCoachShapes} from './coachGeometry';
 import {applyNeutralAppearance,inspectCoachMaterialZones} from './neutralAppearance';
 
@@ -85,6 +85,8 @@ describe('Studio Coach — déformations GLB non destructives',()=>{
   const materials=skin.material as MeshStandardMaterial[];
   expect(materials[0].color.getHexString()).toBe('ff0000');
   expect(materials[1].color.getHexString()).toBe('22ff88');
-  expect(materials[2].color.equals(new Color(colors.skin))).toBe(true);
+  // An explicitly unknown sub-material must not become skin merely because
+  // it is attached under a mesh named "skin_body".
+  expect(materials[2].color.getHexString()).toBe('777777');
  });
 });
