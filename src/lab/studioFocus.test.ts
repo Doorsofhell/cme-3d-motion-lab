@@ -21,6 +21,7 @@ function mannequin(){
 describe('P0 — cadrage contextuel Studio Coach',()=>{
  it('associe les catégories aux zones anatomiques attendues',()=>{
   expect(focusForSection('corps')).toBe('corps');
+  expect(focusForSection('silhouette')).toBe('hanches');
   expect(focusForSection('visage')).toBe('visage');
   expect(focusForSection('cheveux')).toBe('cheveux');
   expect(focusForSection('peau')).toBe('peau');

@@ -1,6 +1,6 @@
 {
   "name": "@cme-3d/motion-lab",
-  "version": "0.7.24",
+  "version": "0.7.25",
   "private": true,
   "type": "module",
   "scripts": {

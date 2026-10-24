@@ -13,9 +13,10 @@ import {SKIN_TONES} from './skinTones';
 import {focusForSection,focusForSetting,FOCUS_LABELS,type StudioFocusZone} from './studioFocus';
 import {addSavedCoach,readSavedCoaches,updateSavedCoach,deleteSavedCoach} from './savedCoaches';
 
-type Category='corps'|'visage'|'peau'|'cheveux'|'tenue'|'protections';
+type Category='corps'|'silhouette'|'visage'|'peau'|'cheveux'|'tenue'|'protections';
 export type CoachLook={
  sex:'homme'|'femme';height:number;shoulders:number;muscle:number;waist:number;
+ roundness:number;hips:number;thighs:number;
  jaw:number;nose:number;eyes:number;skin:string;eyeColor:string;
  hairStyle:'rase'|'court'|'long';hairColor:string;
  top:'rashguard'|'tshirt'|'aucun';topColor:string;
@@ -24,7 +25,7 @@ export type CoachLook={
  shins:boolean;shinColor:string;
 };
 export const defaultCoachLook:CoachLook={
- sex:'homme',height:1,shoulders:1,muscle:1,waist:1,jaw:1,nose:1,eyes:1,
+ sex:'homme',height:1,shoulders:1,muscle:1,waist:1,roundness:1,hips:1,thighs:1,jaw:1,nose:1,eyes:1,
  skin:'#b97a56',eyeColor:'#4a2f1e',hairStyle:'court',hairColor:'#201713',
  top:'aucun',topColor:'#252934',bottom:'short',bottomColor:'#d6363c',
  gloves:'aucun',gloveColor:'#d6363c',shins:false,shinColor:'#20232c'
@@ -32,13 +33,15 @@ export const defaultCoachLook:CoachLook={
 const clamp=(v:number,min:number,max:number)=>Math.min(max,Math.max(min,Number.isFinite(v)?v:min));
 export function normalizeCoachLook(input:Partial<CoachLook>):CoachLook{
  const out={...defaultCoachLook,...input};
- const num=(k:'height'|'shoulders'|'muscle'|'waist'|'jaw'|'nose'|'eyes',a:number,b:number)=>{out[k]=clamp(out[k],a,b);};
+ const num=(k:'height'|'shoulders'|'muscle'|'waist'|'roundness'|'hips'|'thighs'|'jaw'|'nose'|'eyes',a:number,b:number)=>{out[k]=clamp(out[k],a,b);};
  num('height',.9,1.1);num('shoulders',.75,1.25);num('muscle',.7,1.35);num('waist',.75,1.3);
  num('jaw',.8,1.2);num('nose',.8,1.2);num('eyes',.8,1.2);
+ num('roundness',.7,1.3);num('hips',.75,1.35);num('thighs',.75,1.3);
  for(const k of ['skin','eyeColor','hairColor','topColor','bottomColor','gloveColor','shinColor'] as const){
   if(!/^#[0-9a-fA-F]{6}$/.test(out[k]))out[k]=defaultCoachLook[k];
  }
  if(!['homme','femme'].includes(out.sex))out.sex='homme';
+ if(out.sex!=='femme'){out.roundness=1;out.hips=1;out.thighs=1;}
  if(!['rase','court','long'].includes(out.hairStyle))out.hairStyle='court';
  if(!['rashguard','tshirt','aucun'].includes(out.top))out.top='rashguard';
  if(!['short','legging'].includes(out.bottom))out.bottom='short';
@@ -53,19 +56,20 @@ export function parseCoachLookJson(text:string):CoachLook{
  if(doc.schema!=='cme-coach-look-v1')throw Error('Version de profil non prise en charge');
  if(!doc.look||typeof doc.look!=='object'||Array.isArray(doc.look))throw Error('Apparence absente');
  const input=doc.look as Record<string,unknown>;
- const required=Object.keys(defaultCoachLook);
- if(required.some(k=>!(k in input)))throw Error('Profil incomplet');
- for(const k of required){
+ const legacy=Object.keys(defaultCoachLook).filter(k=>!['roundness','hips','thighs'].includes(k));
+ if(legacy.some(k=>!(k in input)))throw Error('Profil incomplet');
+ for(const k of Object.keys(defaultCoachLook)){
+  if(!(k in input))continue;
   const expected=typeof defaultCoachLook[k as keyof CoachLook];
   if(typeof input[k]!==expected)throw Error('Type de paramètre incorrect : '+k);
  }
  return normalizeCoachLook(input as CoachLook);
 }
-const sections:Category[]=['corps','visage','peau','cheveux','tenue','protections'];
-const sectionNames:Record<Category,string>={corps:'Morphologie',visage:'Visage',peau:'Peau',cheveux:'Cheveux',tenue:'Tenue',protections:'Protections'};
+const sections:Category[]=['corps','silhouette','visage','peau','cheveux','tenue','protections'];
+const sectionNames:Record<Category,string>={corps:'Morphologie',silhouette:'Silhouette femme',visage:'Visage',peau:'Peau',cheveux:'Cheveux',tenue:'Tenue',protections:'Protections'};
 const disciplineNames:Record<LabDiscipline,string>={boxing:'Boxe anglaise',kickboxing:'Kick-boxing',muaythai:'Muay-thaï',mma:'MMA',bjj:'JJB',judo:'Judo'};
 export function StudioCoach(){
- const [look,setLook]=useState<CoachLook>(()=>{try{const id=localStorage.getItem('cme-selected-coach');return readSavedCoaches(localStorage).find(x=>x.id===id)?.look??defaultCoachLook;}catch{return defaultCoachLook;}});
+ const [look,setLook]=useState<CoachLook>(()=>{try{const id=localStorage.getItem('cme-selected-coach');return normalizeCoachLook(readSavedCoaches(localStorage).find(x=>x.id===id)?.look??defaultCoachLook);}catch{return defaultCoachLook;}});
  const [selectedId,setSelectedId]=useState<string|null>(()=>{try{return localStorage.getItem('cme-selected-coach');}catch{return null;}});
  const [section,setSection]=useState<Category>('corps');
  const [message,setMessage]=useState('');
@@ -87,8 +91,9 @@ export function StudioCoach(){
  const colors=useMemo(()=>({
   skin:look.skin,hairColor:look.hairColor,eyeColor:look.eyeColor,topColor:look.topColor,bottomColor:look.bottomColor,gloveColor:look.gloveColor,shinColor:look.shinColor
  }),[look.skin,look.hairColor,look.eyeColor,look.topColor,look.bottomColor,look.gloveColor,look.shinColor]);
- const dimensions=useMemo(()=>({height:look.height,shoulders:look.shoulders,muscle:look.muscle,waist:look.waist}),
-  [look.height,look.shoulders,look.muscle,look.waist]);
+ const dimensions=useMemo(()=>({height:look.height,shoulders:look.shoulders,muscle:look.muscle,waist:look.waist,
+  sex:look.sex,roundness:look.roundness,hips:look.hips,thighs:look.thighs}),
+  [look.height,look.shoulders,look.muscle,look.waist,look.sex,look.roundness,look.hips,look.thighs]);
  const faceDimensions=useMemo(()=>({jaw:look.jaw,nose:look.nose,eyes:look.eyes}),[look.jaw,look.nose,look.eyes]);
  const colorAvailable=(key:'skin'|'eyeColor'|'hairColor'|'topColor'|'bottomColor'|'gloveColor'|'shinColor')=>!rigMode&&!!support?.colors[key];
  const faceAvailable=(key:'jaw'|'nose'|'eyes')=>!rigMode&&!!support?.shape.faceMorphs[key];
@@ -131,11 +136,11 @@ export function StudioCoach(){
  },[report?.sex]);
  const importRef=useRef<HTMLInputElement>(null);
  const update=<K extends keyof CoachLook>(key:K,value:CoachLook[K])=>{
-  if(key==='sex'&&look.sex!==value){beginRigLoad(value as CoachLook['sex'],rigMode,'switch');setReport(null);}
+  if(key==='sex'&&look.sex!==value){beginRigLoad(value as CoachLook['sex'],rigMode,'switch');setReport(null);setSection('corps');recenter('corps');}
   if(key!=='sex')selectFocus(focusForSetting(key,section));
   setLook(l=>normalizeCoachLook({...l,[key]:value}));
  };
- const range=(key:'height'|'shoulders'|'muscle'|'waist'|'jaw'|'nose'|'eyes',label:string,min:number,max:number,enabled=true)=>
+ const range=(key:'height'|'shoulders'|'muscle'|'waist'|'roundness'|'hips'|'thighs'|'jaw'|'nose'|'eyes',label:string,min:number,max:number,enabled=true)=>
   <label className="coachField"><span>{label} <b>{look[key].toFixed(2)}</b></span>
    <input type="range" min={min} max={max} step=".01" disabled={!enabled} value={look[key]} onFocus={()=>selectFocus(focusForSetting(key,section))} onChange={e=>update(key,Number(e.target.value))}/>
    {!enabled&&<small>Déformation non disponible sur ce GLB</small>}</label>;
@@ -187,7 +192,7 @@ export function StudioCoach(){
     </div>
     <div className="coachFocusLine" role="status"><span>Cadre : {cameraAuto?'caméra pédagogique':FOCUS_LABELS[focusZone]}</span><button type="button" onClick={()=>{setCameraAuto(false);recenter('corps');}}>Vue entière</button></div>
     <p className="coachCapability" role="status">{rigMode?'Anatomie : modèle neutre ; réglages d’apparence suspendus.':support?('Personnalisation en direct : '+support.shape.torsoVertices+' sommets morphologiques · '+support.colors.skin+' matériaux de peau · '+(support.colors.topColor+support.colors.bottomColor)+' matériaux de tenue · '+support.colors.gloveColor+' matériaux de gants reconnus · '+support.colors.shinColor+' matériaux de protège-tibias.'):'Chargement du corps et de sa tenue 3D…'}</p>
-    <nav className="coachCategories" aria-label="Personnalisation">{sections.map(item=><button key={item} className={section===item?'active':''} aria-current={section===item?'true':undefined} onClick={()=>{setSection(item);recenter(focusForSection(item));}}>{sectionNames[item]}</button>)}</nav>
+    <nav className="coachCategories" aria-label="Personnalisation">{sections.filter(item=>item!=='silhouette'||look.sex==='femme').map(item=><button key={item} className={section===item?'active':''} aria-current={section===item?'true':undefined} onClick={()=>{setSection(item);recenter(focusForSection(item));}}>{sectionNames[item]}</button>)}</nav>
 
     {<details className="coachAdvanced"><summary>Tester les mouvements</summary><div className="coachRigControls">
       <label>Discipline <select value={discipline} onChange={e=>{setDiscipline(e.target.value as LabDiscipline);setReport(null);}}>{LAB_DISCIPLINES.map(d=><option key={d} value={d}>{d}</option>)}</select></label>
@@ -198,6 +203,7 @@ export function StudioCoach(){
      </div></details>}
     <div className="coachFields">
      {section==='corps'&&<><div className="coachQuickChoice"><button disabled={rigMode||!support?.shape.torsoVertices} onClick={()=>{recenter('corps');setLook(l=>normalizeCoachLook({...l,muscle:.8,shoulders:.85,waist:.9}));}}>Fin</button><button disabled={rigMode||!support?.shape.torsoVertices} onClick={()=>{recenter('corps');setLook(l=>normalizeCoachLook({...l,muscle:1,shoulders:1,waist:1}));}}>Standard</button><button disabled={rigMode||!support?.shape.torsoVertices} onClick={()=>{recenter('corps');setLook(l=>normalizeCoachLook({...l,muscle:1.25,shoulders:1.2,waist:1.05}));}}>Athlétique</button></div></>}
+     {section==='silhouette'&&look.sex==='femme'&&<div className="coachFemaleShapes"><p className="coachAvailability">Volumes féminins sur les vrais sommets skinnés : les vêtements suivent les mêmes poids de squelette. Chaque curseur agit immédiatement, sans changer les mouvements.</p>{range('roundness','Rondeur générale',.7,1.3,!rigMode&&!!support?.shape.torsoVertices)}{range('hips','Largeur des hanches',.75,1.35,!rigMode&&!!support?.shape.hipVertices)}{range('thighs','Volume des cuisses',.75,1.3,!rigMode&&!!support?.shape.thighVertices)}<p className="coachAvailability">Poitrine anatomiquement distincte, fessiers isolés et coupes de cheveux : nouveaux morphs ou maillages dédiés encore nécessaires. Aucun réglage fictif n’est proposé.</p></div>}
      {section==='visage'&&<>{range('jaw','Mâchoire',.8,1.2,faceAvailable('jaw'))}{range('nose','Nez',.8,1.2,faceAvailable('nose'))}{range('eyes','Yeux',.8,1.2,faceAvailable('eyes'))}{color('eyeColor','Couleur des yeux')}</>}
      {section==='peau'&&<div className="coachSkinEditor"><p className="coachAvailability">Choisissez une carnation naturelle. Le rendu préserve le grain et les détails de la texture du corps, sans superposer une seconde couleur sombre.</p><div className="coachSkinGrid" role="group" aria-label="Carnations naturelles">{SKIN_TONES.map(tone=><button type="button" key={tone.hex} disabled={rigMode||!colorAvailable('skin')} className={`coachSkinTone ${look.skin.toLowerCase()===tone.hex?'active':''}`} aria-pressed={look.skin.toLowerCase()===tone.hex} onClick={()=>{selectFocus('peau');update('skin',tone.hex);}} title={tone.name}><span className="coachSkinSwatch" style={{backgroundColor:tone.hex}}/><span>{tone.name}</span></button>)}</div><small className="coachSkinHint">{!colorAvailable('skin')?'Aucune zone de peau indépendante reconnue sur ce GLB.': 'Chaque sélection modifie immédiatement le matériau de peau dans cet aperçu.'}</small></div>}
      {section==='cheveux'&&<>{choose('hairStyle','Coiffure',['rase','court','long'],false)}{color('hairColor','Couleur des cheveux')}</>}

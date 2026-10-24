@@ -190,3 +190,11 @@ A — stabilisation et non-régression d'abord ; B — personnalisation dynamiqu
 **P0 validation non encore certifiée :** recette tactile sur Android physique (changement de rubrique, double tap plein écran, geste libre, retour à vue générale, deux sexes, six disciplines, FPS p50/p95). Sans capture/vision/mocap/vidéo. Ne toucher ni Shadow Studio ni les animations canoniques.
 
 **Audit GLB vérifié en CI :** consulter [`docs/CME_AUDIT_CAPACITES_PERSONNALISATION_3D.md`](CME_AUDIT_CAPACITES_PERSONNALISATION_3D.md) — 2 matériaux de peau par corps, 0 morph target sur les 2 corps, 0 coiffure distincte et 14 tenues catégorisées. Les nouvelles personnalisations féminines restent un chantier d'assets, non une fonctionnalité déjà active.
+
+## 24/10/2026 — Lot P1 0.7.25 : variations féminines procédurales skinnées
+
+**Livré techniquement :** nouvelle rubrique `Silhouette femme` (uniquement sur Amara) comprenant **Rondeur générale**, **Largeur des hanches** et **Volume des cuisses**. Chaque contrôle est **réel**, limité en amplitude, modifie la copie du maillage skinné via l'influence des os Spine/Hips/LeftUpLeg/RightUpLeg ; mêmes modifications sur les tenues skinnées attachées et sur le combattant du Laboratoire utilisant le coach sauvegardé. La géométrie source, les os, les weights, les bind matrices et les samplers canoniques sont préservés. Les contrôles sont désactivés si les influences sont absentes. Le cadrage contextuel affiche bassin, jambes et corps selon le curseur. Compatibilité v1 des anciens profils, normalisation des nouvelles valeurs, reset et répétition de curseur sans accumulation.
+
+**Limite visuelle explicite :** ce sont des ajustements de proportions localisés via skinning, **pas de véritables morph targets sculptés**. La définition anatomique précise d'une poitrine, des fessiers séparés et des coupes de cheveux exige encore de vrais assets ; ne pas activer de fausses commandes. La tenue peut nécessiter retouches et revue visuelle 360°. Valider sur appareil Android physique pour les deux sexes, six disciplines, changements de vue, variantes de tenues et performances.
+
+**Lot suivant recommandé :** production / intégration d'une bibliothèque licenciée de maillages ou blendshapes féminins (poitrine, fessiers, visages et cheveux), testés séparément, sans modifier les mouvements canoniques ou Shadow Studio.
