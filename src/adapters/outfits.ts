@@ -1,4 +1,5 @@
 import { Bone, BufferAttribute, Material, Mesh, MeshPhysicalMaterial, MeshStandardMaterial, Object3D, Skeleton, SkinnedMesh, SRGBColorSpace, DoubleSide } from 'three';
+import {cloneOwnedGeometry} from './geometryOwnership';
 function hiddenKeys(s:string):Set<string>{
  const bytes=Uint8Array.from(atob(s),c=>c.charCodeAt(0)),dv=new DataView(bytes.buffer),keys=new Set<string>();
  for(let o=0;o+6<=bytes.length;o+=6)keys.add(`${dv.getInt16(o,true)},${dv.getInt16(o+2,true)},${dv.getInt16(o+4,true)}`);return keys;
@@ -32,8 +33,7 @@ export function attachOutfit(body:Object3D,outfit:Object3D,lowCost=false):{garme
  let hiding:{keys:string;scale:number}|null=null;const garments:SkinnedMesh[]=[];
  outfit.traverse(o=>{if(o.userData?.hideBody)hiding={keys:String(o.userData.hideBody),scale:Number(o.userData.hideScale??1000)};if((o as SkinnedMesh).isSkinnedMesh)garments.push(o as SkinnedMesh);});
  for(const g of garments){
-  const mesh=new SkinnedMesh(g.geometry.clone(),material(g.material as Material,lowCost));mesh.name='tenue:'+g.name;
-  mesh.geometry.userData.cmeOwned=true;
+  const mesh=new SkinnedMesh(cloneOwnedGeometry(g.geometry),material(g.material as Material,lowCost));mesh.name='tenue:'+g.name;
   mesh.position.copy(g.position);mesh.quaternion.copy(g.quaternion);mesh.scale.copy(g.scale);
   const skeleton=new Skeleton(g.skeleton.bones.map(b=>bones.get(b.name)??b),g.skeleton.boneInverses);
   anchor.parent?.add(mesh);mesh.updateMatrixWorld(true);mesh.bind(skeleton,g.bindMatrix);
@@ -43,7 +43,7 @@ export function attachOutfit(body:Object3D,outfit:Object3D,lowCost=false):{garme
  if(hiding){
   const h=hiding as {keys:string;scale:number};const keys=hiddenKeys(h.keys);
   for(const skin of skins){
-   const old=skin.geometry,geo=old.clone(),p=geo.getAttribute('position');
+   const old=skin.geometry,geo=cloneOwnedGeometry(old),p=geo.getAttribute('position');
    const indices=geo.index?Array.from(geo.index.array):Array.from({length:p.count},(_,i)=>i);
    // A garment's coverage map must never amputate the real forearms.
    // Preserve vertices weighted to shoulder, upper arm or forearm bones;
@@ -60,7 +60,7 @@ export function attachOutfit(body:Object3D,outfit:Object3D,lowCost=false):{garme
     }
    }
    const r=maskBody(p.array,indices,keys,h.scale,keep);hiddenVertices+=r.matched;
-   geo.setIndex(new BufferAttribute(p.count>65535?new Uint32Array(r.index):new Uint16Array(r.index),1));geo.userData.cmeOwned=true;skin.geometry=geo;
+   geo.setIndex(new BufferAttribute(p.count>65535?new Uint32Array(r.index):new Uint16Array(r.index),1));skin.geometry=geo;
   }
  }
  return {garments:garments.length,hiddenVertices};
