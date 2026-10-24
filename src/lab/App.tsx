@@ -4,7 +4,8 @@ import {OrbitControls} from '@react-three/drei';
 import {ACESFilmicToneMapping,NeutralToneMapping,SRGBColorSpace,CanvasTexture} from 'three';
 import {Fighter} from './Fighter';
 import {StudioCoach} from './StudioCoach';
-import {readSavedCoaches,type SavedCoach} from './savedCoaches';
+import {readSavedCoaches,findSavedCoach,coachSourceActor,type SavedCoach} from './savedCoaches';
+import type {CoachLook} from './StudioCoach';
 import {parseCoachPlan,type CoachPlan} from './coachProtocol';
 import {CME_APP_VERSION} from './buildInfo';
 import {captureFighterImage} from './Screenshot';
@@ -22,10 +23,10 @@ import {useAutoIncidentQueue,type AutoCategory} from './AutoIncidents';
 import {autoClearEnabled,setAutoClearEnabled,clearApplicationCache} from './cachePolicy';
 import './style.css';
 
-function SavedCoachLibrary({openCoach}:{openCoach:(id:string)=>void}){
+function SavedCoachLibrary({openCoach,selectedId}:{openCoach:(id:string)=>void;selectedId:string|null}){
  const [coaches,setCoaches]=useState<SavedCoach[]>(()=>{try{return readSavedCoaches(localStorage);}catch{return [];}});
  useEffect(()=>{const refresh=()=>{try{setCoaches(readSavedCoaches(localStorage));}catch{setCoaches([]);}};window.addEventListener('cme-coaches-changed',refresh);return()=>window.removeEventListener('cme-coaches-changed',refresh);},[]);
- return <section className="savedCoachLibrary" aria-label="Coachs créés"><h3>Mes coachs ({coaches.length})</h3>{coaches.length===0?<p>Créez votre premier coach dans Studio Coach. Il apparaîtra ici.</p>:<div className="savedCoachItems">{coaches.map(c=><button key={c.id} onClick={()=>openCoach(c.id)}><strong>{c.name}</strong><small>{c.look.sex} · Profil d'apparence</small></button>)}</div>}<small>Profils locaux : les mouvements restent ceux du moteur canonique ; personnalisation 3D encore partielle.</small></section>;
+ return <section className="savedCoachLibrary" aria-label="Coachs créés"><h3>Mes coachs ({coaches.length})</h3>{coaches.length===0?<p>Créez votre premier coach dans Studio Coach. Il apparaîtra ici.</p>:<div className="savedCoachItems">{coaches.map(c=><button key={c.id} aria-pressed={selectedId===c.id} onClick={()=>openCoach(c.id)}><strong>{c.name}{selectedId===c.id?' ✓':''}</strong><small>{c.look.sex} · Profil d'apparence</small></button>)}</div>}<small>Sélectionnez un coach pour le faire exécuter les mouvements du Laboratoire. Morphologie et équipements personnalisés : rendu encore partiel.</small></section>;
 }
 type Actor='mma-kadir'|'mma-amara'|'mma-naira';
 type TechniqueEntry={id:string;name:string;category:string;disciplines:string[];motion:string};
@@ -106,9 +107,9 @@ function PerfProbe({onMetrics}:{onMetrics:(metrics:Metrics)=>void}){
  });
  return null;
 }
-function Viewer({actor,discipline,technique,coachPlan,quality,renderStyle,playback,skeleton,onReport,onMetrics,onLog,onIncident,onCaptureReady}:{
+function Viewer({actor,discipline,technique,coachPlan,quality,renderStyle,playback,skeleton,onReport,onMetrics,onLog,onIncident,onCaptureReady,coachLook}:{
  actor:Actor;discipline:string;technique:string;coachPlan:CoachPlan|null;quality:Quality;renderStyle:RenderStyle;
- playback:RefObject<Playback>;skeleton:boolean;onReport:(r:RigReport)=>void;onMetrics:(m:Metrics)=>void;onLog:(message:string)=>void;onIncident:(category:AutoCategory,title:string,details:string)=>void;onCaptureReady:(capture:()=>string|null)=>void;
+ playback:RefObject<Playback>;skeleton:boolean;coachLook?:CoachLook|null;onReport:(r:RigReport)=>void;onMetrics:(m:Metrics)=>void;onLog:(message:string)=>void;onIncident:(category:AutoCategory,title:string,details:string)=>void;onCaptureReady:(capture:()=>string|null)=>void;
 }){
  const [ready,setReady]=useState(false),[error,setError]=useState<string|null>(null),[slow,setSlow]=useState(false);
  const [retry,setRetry]=useState(0);
@@ -156,7 +157,7 @@ function Viewer({actor,discipline,technique,coachPlan,quality,renderStyle,playba
      <PerfProbe onMetrics={onMetrics}/>
 
      <Suspense fallback={null}>
-      <Fighter actor={actor} outfit={discipline} technique={technique} coachPlan={coachPlan} playback={playback} skeleton={skeleton} quality={quality} renderStyle={renderStyle} onReady={onReady} onReport={onReport}/>
+      <Fighter actor={actor} outfit={discipline} technique={technique} coachPlan={coachPlan} playback={playback} skeleton={skeleton} quality={quality} renderStyle={renderStyle} onReady={onReady} onReport={onReport} coachLook={coachLook}/>
      </Suspense>
      <OrbitControls target={[0,1,0]} minDistance={1.35} maxDistance={6} enableDamping dampingFactor={.12}/>
     </Canvas>
@@ -168,6 +169,8 @@ function Viewer({actor,discipline,technique,coachPlan,quality,renderStyle,playba
 }
 export function App(){
  const [actor,setActor]=useState<Actor>('mma-amara');
+ const [selectedCoach,setSelectedCoach]=useState<SavedCoach|null>(null);
+ const selectSavedCoach=(id:string)=>{try{const saved=findSavedCoach(localStorage,id);if(!saved)return;setSelectedCoach(saved);setActor(coachSourceActor(saved));localStorage.setItem('cme-lab-coach',id);setReport(null);setProgress(0);}catch{/* unavailable local storage */}};
  const [discipline,setDiscipline]=useState('boxe');
  const [nogi,setNogi]=useState(false);
  const [technique,setTechnique]=useState('crochet-avant');
@@ -260,7 +263,7 @@ export function App(){
   </section>
   <section className="stage" aria-label="Vue de test 3D">
    <div className="stageTitle"><span>{actor==='mma-amara'?'AMARA':'KADIR'} <em>· {renderStyle==='fitness'?'Animation fitness':renderStyle==='comic'?'Roman graphique · héros':'Ultra-réaliste'}</em></span><span className="stagePill">MOTION / IK</span></div>
-   <Viewer actor={actor} coachPlan={coachPlan} discipline={outfit} quality={quality} renderStyle={renderStyle} technique={technique} playback={playback} skeleton={skeleton} onReport={onReport} onMetrics={onMetrics} onLog={onLog} onIncident={autoRecord} onCaptureReady={setScreenshotHandler}/>
+   <Viewer coachLook={selectedCoach?.look??null} actor={actor} coachPlan={coachPlan} discipline={outfit} quality={quality} renderStyle={renderStyle} technique={technique} playback={playback} skeleton={skeleton} onReport={onReport} onMetrics={onMetrics} onLog={onLog} onIncident={autoRecord} onCaptureReady={setScreenshotHandler}/>
    <div className="stageBottom"><span>{report?report.bones+' os · '+(report.techniqueFound?'Technique disponible':'Garde de secours'):'Initialisation du rig'}</span><span>{report?('Tenue '+outfit+' ✓'):'Chargement'}</span></div>
   </section>
   <section aria-label="Coach JSON Text-to-Animation" style={{padding:12,display:'grid',gap:8}}>
@@ -292,7 +295,7 @@ export function App(){
    <span className="footnote">IA locale expérimentale : entraînement validé en attente</span>
   </section>
   </div>
-  {tab==='lab'&&<SavedCoachLibrary openCoach={id=>{try{localStorage.setItem('cme-selected-coach',id);}catch{}setTab('studio');}}/>}
+  {tab==='lab'&&<SavedCoachLibrary selectedId={selectedCoach?.id??null} openCoach={selectSavedCoach}/>}
   {tab==='studio'&&<StudioCoach/>}
   {tab==='versions'&&<VersionsPanel/>}
   {tab==='options'&&<section className="cmeOptions" aria-label="Options CME-3D">
