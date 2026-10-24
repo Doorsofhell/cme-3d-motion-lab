@@ -12,6 +12,7 @@ import './StudioCoach.css';
 import {SKIN_TONES} from './skinTones';
 import {focusForSection,focusForSetting,FOCUS_LABELS,type StudioFocusZone} from './studioFocus';
 import {addSavedCoach,readSavedCoaches,updateSavedCoach,deleteSavedCoach} from './savedCoaches';
+import {studioTechniqueCatalog} from './studioTechniqueCatalog';
 
 type Category='corps'|'silhouette'|'visage'|'peau'|'cheveux'|'tenue'|'protections';
 export type CoachLook={
@@ -84,6 +85,7 @@ export function StudioCoach(){
  const [discipline,setDiscipline]=useState<LabDiscipline>('boxing');
  const [noGi,setNoGi]=useState(false);
  const [motionId,setMotionId]=useState('garde');
+ const catalog=useMemo(()=>studioTechniqueCatalog(discipline),[discipline]);
  const [playing,setPlaying]=useState(true);
  const [showSkeleton,setShowSkeleton]=useState(false);
  const [report,setReport]=useState<NeutralRigReport|null>(null);
@@ -196,8 +198,11 @@ export function StudioCoach(){
     <nav className="coachCategories" aria-label="Personnalisation">{sections.filter(item=>item!=='silhouette'||look.sex==='femme').map(item=><button key={item} className={section===item?'active':''} aria-current={section===item?'true':undefined} onClick={()=>{setSection(item);recenter(focusForSection(item));}}>{sectionNames[item]}</button>)}</nav>
 
     {<details className="coachAdvanced"><summary>Tester les mouvements</summary><div className="coachRigControls">
-      <label>Discipline <select value={discipline} onChange={e=>{setDiscipline(e.target.value as LabDiscipline);setReport(null);}}>{LAB_DISCIPLINES.map(d=><option key={d} value={d}>{d}</option>)}</select></label>
-      <label>Mouvement <input value={motionId} onChange={e=>setMotionId(e.target.value)} placeholder="garde"/></label>
+      <label>Discipline <select value={discipline} onChange={e=>{setDiscipline(e.target.value as LabDiscipline);setMotionId('garde');setReport(null);}}>{LAB_DISCIPLINES.map(d=><option key={d} value={d}>{disciplineNames[d]}</option>)}</select></label>
+      <label>Technique / enchaînement <select aria-label="Technique ou enchaînement" value={motionId} onChange={e=>{setMotionId(e.target.value);setPlaying(true);}}>
+       <optgroup label="Techniques">{catalog.filter(m=>m.kind==='technique').map(m=><option key={m.id} value={m.id} disabled={!!report&&!report.motions.find(x=>x.id===m.id)?.supported}>{m.label}</option>)}</optgroup>
+       <optgroup label="Enchaînements">{catalog.filter(m=>m.kind==='sequence').map(m=><option key={m.id} value={m.id} disabled={!!report&&!report.motions.find(x=>x.id===m.id)?.supported}>{m.label}</option>)}</optgroup>
+      </select></label>
       <button onClick={()=>setPlaying(v=>!v)}>{playing?'Pause':'Lecture'}</button>
       <label><input type="checkbox" checked={showSkeleton} onChange={e=>setShowSkeleton(e.target.checked)}/> Squelette</label>
       <small>{report?report.available?`${report.bones} os · ${report.duration.toFixed(2)} s`:'Mouvement indisponible : garde de secours':'Chargement du rig…'}</small>
