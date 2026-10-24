@@ -40,6 +40,20 @@ describe('Studio Coach : cohérence tactile Android',()=>{
   expect(framing).toContain('camera.position.lerp(aim.position,speed)');
   expect(css).toContain('.coachFocusLine button');
  });
+ it('n’expose les nouveaux curseurs que sur un modèle femme et active le zoom par zone',()=>{
+  const studio=readFileSync(new URL('./StudioCoach.tsx',import.meta.url),'utf8');
+  const focus=readFileSync(new URL('./studioFocus.ts',import.meta.url),'utf8');
+  const rig=readFileSync(new URL('./NeutralRig.tsx',import.meta.url),'utf8');
+  expect(studio).toContain("item!=='silhouette'||look.sex==='femme'");
+  expect(studio).toContain("section==='silhouette'&&look.sex==='femme'");
+  expect(studio).toContain("range('hips','Largeur des hanches'");
+  expect(studio).toContain("range('thighs','Volume des cuisses'");
+  expect(studio).toContain("range('roundness','Rondeur générale'");
+  expect(focus).toContain("silhouette:'hanches'");
+  expect(rig).toContain("roundness:proportions?.roundness??1");
+  expect(rig).toContain("thighs:proportions?.thighs??1");
+  expect(rig).toContain("hips:proportions?.hips??1");
+ });
  it('préserve les boutons tactiles accessibles et la barre commune',()=>{
   expect(css).toContain('min-height:44px');
   expect(controls).toContain('export function SceneToolbar');
