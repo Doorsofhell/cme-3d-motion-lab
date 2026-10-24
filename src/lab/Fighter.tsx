@@ -2,7 +2,7 @@ import {useEffect,useMemo,useRef,type RefObject} from 'react';
 import {useFrame} from '@react-three/fiber';
 import {useGLTF} from '@react-three/drei';
 import {clone} from 'three/examples/jsm/utils/SkeletonUtils.js';
-import {SkeletonHelper,type Mesh,type Object3D,MeshStandardMaterial,MeshToonMaterial,DoubleSide,DataTexture,RedFormat,UnsignedByteType,NearestFilter,Color} from 'three';
+import {SkeletonHelper,type Mesh,type Object3D,MeshStandardMaterial,MeshToonMaterial,DoubleSide,DataTexture,RedFormat,UnsignedByteType,NearestFilter,Color,BackSide} from 'three';
 import {CoachRig} from '../shadow-engine/rig';
 import {getLibrary} from '../shadow-engine/library';
 import {MotionSampler} from '../shadow-engine/motion';
@@ -54,11 +54,16 @@ function applyFitnessStyle(root:Object3D){
   mesh.material=Array.isArray(mesh.material)?styled:styled[0];
  });
 }
-/** Original graphic-novel rendering: anatomically faithful 3D geometry with bold ink-like contrast. */
-function applyComicStyle(root:Object3D){
+/** Original comic-book hero aesthetic: sculpted light, textured skin and restrained ink silhouettes. */
+const comicGradient=new DataTexture(new Uint8Array([24,48,83,127,178,223,251]),7,1,RedFormat,UnsignedByteType);
+comicGradient.magFilter=NearestFilter;
+comicGradient.minFilter=NearestFilter;
+comicGradient.needsUpdate=true;
+function applyComicStyle(root:Object3D,quality:Quality){
+ const outlines:Object3D[]=[];
  root.traverse(o=>{
   const mesh=o as Mesh;
-  if(!mesh.isMesh)return;
+  if(!mesh.isMesh||mesh.userData.cmeComicOutline)return;
   const materials=Array.isArray(mesh.material)?mesh.material:[mesh.material];
   const styled=materials.map(base=>{
    const old=base as MeshStandardMaterial;
@@ -69,11 +74,12 @@ function applyComicStyle(root:Object3D){
    const shorts=/short-|ceinture-/.test(name);
    const shoes=/chaussure/.test(name);
    const trim=/liseré-/.test(name);
-   const color=skin?'#f4e2d1':gloves?'#a92937':top?'#243e65':shorts?'#17283f':shoes?'#dce3ec':trim?'#e5b965':'#dce2e9';
+   const color=skin?'#ffffff':gloves?'#b72e42':top?'#263e68':shorts?'#192d4c':shoes?'#d9e3ee':trim?'#efc26c':'#b9c6d5';
    const material=new MeshToonMaterial({
-    name:old.name+'-graphic-novel',color:new Color(color),
+    name:old.name+'-hero-ink',color:new Color(color),
+    // Keep actual skin pigmentation, facial detail and anatomical normal maps.
     map:skin?(old.map??null):null,
-    gradientMap:fitnessGradient,normalMap:old.normalMap??null,
+    gradientMap:comicGradient,normalMap:old.normalMap??null,
     normalScale:old.normalScale?.clone(),vertexColors:old.vertexColors,
     side:top?DoubleSide:old.side,transparent:old.transparent,
     opacity:old.opacity,alphaTest:old.alphaTest
@@ -82,7 +88,19 @@ function applyComicStyle(root:Object3D){
    return material;
   });
   mesh.material=Array.isArray(mesh.material)?styled:styled[0];
+  // Lightweight ink silhouette on desktop/detail mode; avoid doubled skinned
+  // geometry and extra draw calls on mobile or low-performance devices.
+  if(quality==='detail'&&!('isSkinnedMesh' in mesh && mesh.isSkinnedMesh)){
+   const outline=mesh.clone(false) as Mesh;
+   outline.name=mesh.name+'-ink-contour';
+   outline.material=new MeshToonMaterial({color:'#101725',side:BackSide});
+   outline.scale.multiplyScalar(1.012);
+   outline.userData.cmeComicOutline=true;
+   outlines.push(outline);
+   mesh.add(outline);
+  }
  });
+ return outlines;
 }
 export function Fighter({actor,outfit,technique,playback,skeleton,quality,renderStyle,onReport,onReady}:{
  actor:'mma-kadir'|'mma-amara';outfit:string;technique:string;playback:RefObject<Playback>;skeleton:boolean;
@@ -99,7 +117,7 @@ export function Fighter({actor,outfit,technique,playback,skeleton,quality,render
   enhanceHumanMaterial(s,quality==='performance');
   attachOutfit(s,clothes.scene,quality==='performance');
   if(renderStyle==='fitness')applyFitnessStyle(s);
-  if(renderStyle==='comic')applyComicStyle(s);
+  if(renderStyle==='comic')applyComicStyle(s,quality);
   return s;
  },[gltf.scene,clothes.scene,renderStyle,quality]);
  const rig=useMemo(()=>new CoachRig(scene),[scene]);
