@@ -106,16 +106,17 @@ export function applyCoachBodyShape(root:Object3D,shape:CoachBodyShape):number{
   const hips=female?clamp(shape.hips??1,.75,1.35)-1:0;
   const thighs=female?clamp(shape.thighs??1,.75,1.3)-1:0;
   const bust=female?clamp(shape.bust??1,.75,1.35)-1:0;
-  const sourceWidth=state.geometry.boundingBox?.max.x??0;
-  const widthScale=Math.max(.1,Math.abs(sourceWidth));
-  // Use local front (+Z) vertices influenced by chest bones. This modest
-  // approximation is not a replacement for anatomical breast blendshapes.
-  let sumX=0,sumY=0,sumZ=0,count=0;
+  // Compute the anterior chest envelope from the reference geometry rather
+  // than assuming that BufferGeometry.boundingBox was precalculated.
+  let sumX=0,sumY=0,sumZ=0,count=0,minChestX=Infinity,maxChestX=-Infinity;
   if(Math.abs(bust)>.0001){
    for(let j=0;j<state.weights.length/3;j++)if(state.weights[j*3]>.5){
-    sumX+=ref[j*3];sumY+=ref[j*3+1];sumZ+=ref[j*3+2];count++;
+    const xx=ref[j*3],yy=ref[j*3+1],zz=ref[j*3+2];
+    sumX+=xx;sumY+=yy;sumZ+=zz;count++;
+    minChestX=Math.min(minChestX,xx);maxChestX=Math.max(maxChestX,xx);
    }
   }
+  const widthScale=count?Math.max(.1,(maxChestX-minChestX)*.5):.1;
   const chestCenterX=count?sumX/count:0,chestCenterY=count?sumY/count:0,chestCenterZ=count?sumZ/count:0;
   // Extra cloth clearance is deliberately tiny, weighted only to chest/hips.
   // It reduces poke-through for attached garments; it is not collision detection.
