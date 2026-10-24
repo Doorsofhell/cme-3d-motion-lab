@@ -132,3 +132,9 @@
 .coachSkinSwatch{display:block;width:38px;height:38px;border:1px solid #0002;border-radius:50%;box-shadow:inset 0 0 0 2px #fff6}
 .coachSkinHint{display:block;font-size:12px;color:#69758a;line-height:1.45}
 @media(max-width:400px){.coachSkinTone{font-size:10px}.coachSkinSwatch{width:34px;height:34px}}
+
+/* P0 contextual camera: shared skeletal focus, a single small toolbar on mobile. */
+.coachFocusLine{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;min-width:0;padding:3px 2px;color:#4c596d;font-size:12px}
+.coachFocusLine span{min-width:0;flex:1 1 130px}
+.coachFocusLine button{box-sizing:border-box;min-height:44px;padding:8px 12px;border-radius:10px;border:1px solid #d7dfeb;background:#f5f7fb;color:#263448;cursor:pointer}
+.coachFocusLine button:focus-visible{outline:3px solid #d6363c;outline-offset:2px}
