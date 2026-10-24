@@ -7,5 +7,7 @@ describe('biomechanics motion audit',()=>{
  it('accepts finite, ordered key poses',()=>expect(auditMotion(motion)).toEqual([]));
  it('rejects backwards key timing',()=>expect(auditMotion({...motion,keys:[{t:0,pose},{t:0,pose}]}).some(f=>f.code==='TIME_ORDER')).toBe(true));
  it('detects unsafe pelvis displacement',()=>expect(auditMotion({...motion,keys:[{t:0,pose},{t:.1,pose:{...pose,hips:{x:2,y:1,z:0}}}]}).some(f=>f.code==='HIP_SPEED')).toBe(true));
+ it('flags planted foot horizontal sliding',()=>expect(auditMotion({...motion,keys:[{t:0,pose},{t:1,pose:{...pose,footL:{...pose.footL,ball:{x:.08,y:0,z:0}}}}]}).some(f=>f.code==='PLANTED_FOOT_SLIDE')).toBe(true));
+ it('allows stable planted foot pivots',()=>expect(auditMotion({...motion,keys:[{t:0,pose},{t:1,pose:{...pose,footL:{...pose.footL,yaw:1}}}]}).some(f=>f.code==='PLANTED_FOOT_SLIDE')).toBe(false));
  it('detects ground penetration and invalid impacts',()=>expect(auditCatalog([{...motion,impacts:[2],keys:[{t:0,pose:{...pose,footL:{...pose.footL,ball:{x:0,y:-.1,z:0}}}},{t:1,pose}]}]).map(f=>f.code)).toEqual(expect.arrayContaining(['GROUND_PENETRATION','IMPACT_TIME'])));
 });
