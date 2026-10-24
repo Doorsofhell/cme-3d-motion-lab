@@ -121,3 +121,8 @@
  .coachPreview .cmeFullscreenToggle{right:8px!important;top:8px!important;min-width:43px!important}
  .coachCategories{overscroll-behavior-x:contain}
 }
+
+/* Le mode plein écran natif doit couvrir l'écran, même dans le conteneur défilant Studio. */
+.coachPreview:fullscreen,.coachPreview:-webkit-full-screen{position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;max-width:none!important;max-height:none!important;min-height:100dvh!important;border-radius:0!important;z-index:2147483647!important;background:#e6edf6!important}
+.coachPreview:fullscreen .coachCanvasViewport,.coachPreview:-webkit-full-screen .coachCanvasViewport{position:absolute!important;inset:0!important;width:100%!important;height:100%!important}
+.coachPreview:fullscreen .coachRigSwitch,.coachPreview:fullscreen .cmeFullscreenToggle,.coachPreview:fullscreen .cmeCameraAuto{z-index:20!important}
