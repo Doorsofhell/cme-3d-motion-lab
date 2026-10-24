@@ -56,8 +56,8 @@ export function applyFitnessStyle(root:Object3D){
   mesh.material=Array.isArray(mesh.material)?styled:styled[0];
  });
 }
-/** Original comic-book hero aesthetic: sculpted light, textured skin and restrained ink silhouettes. */
-const comicGradient=new DataTexture(new Uint8Array([24,48,83,127,178,223,251]),7,1,RedFormat,UnsignedByteType);
+/** Adult-animation cel shading: three hard light bands, bold ink and high-contrast costume colours. */
+const comicGradient=new DataTexture(new Uint8Array([36,122,245]),3,1,RedFormat,UnsignedByteType);
 comicGradient.magFilter=NearestFilter;
 comicGradient.minFilter=NearestFilter;
 comicGradient.needsUpdate=true;
@@ -76,10 +76,10 @@ export function applyComicStyle(root:Object3D,quality:Quality){
    const shorts=/short-|ceinture-/.test(name);
    const shoes=/chaussure/.test(name);
    const trim=/liseré-/.test(name);
-   const color=skin?'#ffffff':gloves?'#b72e42':top?'#263e68':shorts?'#192d4c':shoes?'#d9e3ee':trim?'#efc26c':'#b9c6d5';
+   const color=skin?'#e4c2ad':gloves?'#d7374c':top?'#315b9b':shorts?'#24385f':shoes?'#e1e9ef':trim?'#f5bc4d':'#9ab3cf';
    const material=new MeshToonMaterial({
     name:old.name+'-hero-ink',
-    color:old.map&&!skin?new Color(color).lerp(new Color('#ffffff'),.62):new Color(color),
+    color:old.map&&!skin?new Color(color).lerp(new Color('#ffffff'),.30):new Color(color),
     // Keep actual skin pigmentation, facial detail and anatomical normal maps.
     map:old.map??null,
     gradientMap:comicGradient,normalMap:old.normalMap??null,alphaMap:old.alphaMap??null,
@@ -96,8 +96,8 @@ export function applyComicStyle(root:Object3D,quality:Quality){
   if(quality==='detail'&&!('isSkinnedMesh' in mesh && mesh.isSkinnedMesh)){
    const outline=mesh.clone(false) as Mesh;
    outline.name=mesh.name+'-ink-contour';
-   outline.material=new MeshToonMaterial({color:'#101725',side:BackSide});
-   outline.scale.multiplyScalar(1.012);
+   outline.material=new MeshToonMaterial({color:'#080d1a',side:BackSide});
+   outline.scale.multiplyScalar(1.018);
    outline.userData.cmeComicOutline=true;
    outlines.push(outline);
    mesh.add(outline);
