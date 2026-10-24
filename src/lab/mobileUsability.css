@@ -1,25 +1,24 @@
-.labApp{overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain}
-.labTabs{position:sticky;bottom:0;z-index:30}
-.labApp:has(.stage) .stage{flex:0 0 auto;height:58dvh;min-height:330px}
-.labApp .transport{flex:0 0 auto}
-.labApp .quickBar{flex:0 0 auto}
-.labApp .labTechnicalDetails{flex:0 0 auto}
-.labApp:has(.coachStudio) .coachPreview{height:55dvh}
-.stage.cmeFullscreen{height:100dvh!important}
-@media(max-height:650px){.labApp:has(.stage) .stage{height:57dvh;min-height:270px}}
-
-/* Règles chargées après la feuille historique : priorité à l'usage tactile. */
-.labApp{height:100dvh;min-height:0;overflow-y:auto!important;overflow-x:hidden!important;display:flex;flex-direction:column;gap:8px;padding-bottom:max(8px,env(safe-area-inset-bottom))}
+/* Single mobile shell; the Studio preview owns its own sizing. */
+.labApp{
+ height:100dvh;min-height:0;display:flex;flex-direction:column;gap:8px;
+ overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior-y:contain;
+ padding-bottom:max(8px,env(safe-area-inset-bottom));
+}
 .labHeader{position:sticky;top:0;z-index:20;flex-shrink:0;background:#101116}
-.labTabs{order:99;position:sticky!important;bottom:0!important;z-index:30;flex-shrink:0;margin-top:auto;background:#171920!important}
-.labApp:has(.stage) .stage{height:clamp(330px,58dvh,740px)!important;min-height:330px!important;flex:0 0 auto!important}
+.labTabs{
+ order:99;position:sticky!important;bottom:0!important;z-index:30;
+ flex-shrink:0;margin-top:auto;background:#171920!important;
+}
+.labApp:has(.stage) .stage:not(.cmeFullscreen){
+ flex:0 0 auto!important;height:clamp(330px,58dvh,740px)!important;
+ min-height:330px!important;
+}
 .labApp .stage .viewer{flex:1 1 auto;min-height:0}
 .labApp .quickBar,.labApp .transport,.labApp .labTechnicalDetails{flex-shrink:0}
 .labApp .quickBar button,.labApp .quickBar select,.labApp .transport button{min-height:44px}
 .labApp:has(.stage.cmeFullscreen){overflow:hidden!important}
 .labApp .stage.cmeFullscreen{height:100dvh!important;min-height:0!important;z-index:1001!important}
 .labApp:has(.coachStudio) .coachStudio{overflow-y:auto;min-height:0}
-.labApp:has(.coachStudio) .coachPreview{height:clamp(330px,55dvh,700px)!important}
 @media(max-width:760px){
  .labApp{padding:6px 8px max(6px,env(safe-area-inset-bottom))}
  .labApp .quickBar{overflow-x:auto;overscroll-behavior-x:contain}
@@ -28,6 +27,7 @@
  .labApp:has(.coachStudio) .coachStudioLayout{overflow:visible}
 }
 @media(max-height:650px){
- .labApp:has(.stage) .stage{height:clamp(270px,57dvh,430px)!important;min-height:270px!important}
- .labApp:has(.coachStudio) .coachPreview{height:clamp(270px,52dvh,430px)!important}
+ .labApp:has(.stage) .stage:not(.cmeFullscreen){
+  height:clamp(270px,57dvh,430px)!important;min-height:270px!important;
+ }
 }

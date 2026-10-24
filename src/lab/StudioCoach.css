@@ -1,128 +1,100 @@
-.coachStudio{flex:1;min-height:0;display:flex;flex-direction:column;gap:12px;overflow:auto;padding:10px 2px 18px;color:var(--c-text,#f5f5f5)}.coachStudioHeader{display:flex;align-items:center;justify-content:space-between;gap:12px}.coachStudioHeader h2{margin:3px 0 0;font-size:22px}.coachStudioHeader small{color:var(--c-gold,#c8a96b);letter-spacing:.1em;font-size:10px}.coachStudioHeader button,.coachActions button{background:#2a2e39;border:1px solid rgba(255,255,255,.15);color:#f5f5f5;border-radius:12px;padding:12px;min-height:44px}.coachStudioLayout{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(290px,1fr);gap:12px;flex:1;min-height:0}.coachPreview{background:#171920;border:1px solid rgba(255,255,255,.12);border-radius:20px;position:relative;min-height:340px;overflow:hidden}.coachPreview canvas{touch-action:none}.coachPreviewLabel{position:absolute;bottom:12px;left:12px;right:12px;background:rgba(16,17,22,.84);color:#d6d7dd;padding:8px;border-radius:10px;font-size:11px;pointer-events:none}.coachEditor{background:#20232c;border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:12px;min-height:0}.coachCategories{display:flex;flex-wrap:wrap;gap:6px}.coachCategories button{border:1px solid rgba(255,255,255,.12);background:#2a2e39;color:#d6d7dd;border-radius:999px;padding:10px 12px;min-height:42px}.coachCategories button.active{background:#d6363c;border-color:#d6363c;color:white}.coachFields{display:flex;flex-direction:column;gap:14px;overflow:auto;flex:1;padding:4px}.coachField{display:flex;flex-direction:column;gap:8px;font-size:13px}.coachField span{display:flex;justify-content:space-between}.coachField b{color:#c8a96b}.coachField input[type=range]{width:100%;accent-color:#d6363c}.coachField select{min-height:42px;background:#2a2e39;color:white;border:1px solid rgba(255,255,255,.16);border-radius:10px}.coachColor{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px}.coachColor input{width:56px;height:40px;background:transparent;border:0}.coachActions{display:flex;gap:8px;flex-wrap:wrap}.coachActions button:first-child{background:#d6363c;border-color:#d6363c}.coachStatus{font-size:12px;color:#4cc38a;margin:0}@media(max-width:760px){.coachStudioLayout{grid-template-columns:1fr;grid-template-rows:minmax(250px,38dvh) auto}.coachPreview{min-height:250px}.coachEditor{min-height:260px}.coachStudioHeader h2{font-size:19px}.coachStudio{padding-bottom:12px}}
-.coachRigSwitch{position:absolute;z-index:2;top:10px;left:10px;display:flex;gap:4px;background:#20232ce8;padding:4px;border-radius:14px}.coachRigSwitch button{border:0;border-radius:10px;padding:9px 12px;background:#2a2e39;color:#f5f5f5}.coachRigSwitch button.active{background:#d6363c;color:white}.coachRigControls{display:flex;flex-wrap:wrap;align-items:center;gap:9px;background:#171920;border-radius:12px;padding:12px}.coachRigControls label{display:flex;align-items:center;gap:7px;font-size:12px}.coachRigControls input:not([type=checkbox]){max-width:110px}.coachRigControls select,.coachRigControls input{background:#2a2e39;color:white;border:1px solid #4c4e59;border-radius:8px;padding:6px}.coachRigControls button{background:#d6363c;color:white;border:0;border-radius:10px;padding:9px 12px}.coachRigControls small{color:#c8a96b}
-
-/* Progressive-disclosure studio: the animated preview remains central, controls stay lightweight. */
-.coachStudio{gap:10px;padding:6px 2px 8px}
-.coachStudioHeader{padding:4px 6px}
-.coachStudioHeader h2{font-size:clamp(19px,3vw,25px);font-weight:750;letter-spacing:-.025em}
-.coachStudioHeader p{font-size:12px;color:#a6a8b3;margin:5px 0 0}
-.coachStudioHeader>button{font-size:12px;padding:9px 12px;min-height:40px}
-.coachStudioLayout{grid-template-columns:minmax(0,1.35fr) minmax(280px,.85fr);gap:10px}
-.coachPreview{border-radius:22px;background:radial-gradient(ellipse at 50% 30%,#30323d,#15161b 75%);min-height:320px}
-.coachEditor{background:#1d1f27;border-radius:20px;padding:12px;gap:10px}
-.coachCategories{display:flex;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding:2px 0 7px;gap:5px}
-.coachCategories::-webkit-scrollbar{display:none}
-.coachCategories button{flex-shrink:0;border-radius:12px;min-height:42px;padding:10px 13px;font-size:12px}
-.coachFields{gap:12px;padding:3px}
-.coachField{gap:6px}
-.coachRigControls{gap:7px;padding:9px;border:1px solid rgba(255,255,255,.08)}
-.coachRigSwitch{top:12px;left:12px;border:1px solid rgba(255,255,255,.1)}
-.coachAdvanced{border-top:1px solid rgba(255,255,255,.1);padding-top:10px}
-.coachAdvanced summary{cursor:pointer;display:flex;justify-content:space-between;gap:10px;font-size:12px;color:#e7e7ec;padding:8px 3px}
-.coachAdvanced summary span{font-size:11px;color:#a6a8b3}
-.coachActions{padding:9px 0}
-.coachPreviewLabel{font-size:10px;background:rgba(16,17,22,.78)}
-@media(max-width:760px){
- .coachStudioLayout{grid-template-columns:1fr;grid-template-rows:minmax(240px,40dvh) minmax(0,1fr);overflow:auto}
- .coachPreview{position:sticky;top:0;z-index:2;min-height:240px}
- .coachEditor{min-height:0;overflow:visible}
- .coachStudioHeader p{font-size:11px}
- .coachStudio{overflow:auto}
+/* Studio Coach: one source of truth for layout, preview and touch controls. */
+.coachStudio{
+ display:flex;flex:1;min-height:0;min-width:0;flex-direction:column;gap:10px;
+ box-sizing:border-box;overflow-x:hidden;overflow-y:auto;padding:12px;
+ border-radius:18px;background:#f6f8fc;color:#202737;
 }
-
-/* Guided mobile-first coach creation: no sideways page overflow, clear progressive choices. */
-.coachStudio,.coachStudioLayout,.coachEditor,.coachPreview{min-width:0;max-width:100%;box-sizing:border-box}
-.coachStudio{overflow-x:hidden}
-.coachStudioLayout{overflow:visible}
+.coachStudioHeader{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:2px 4px}
+.coachStudioHeader small{color:#66758b;font-weight:800;letter-spacing:.1em;font-size:10px}
+.coachStudioHeader h2{color:#162032;margin:2px 0;font-size:clamp(19px,3vw,25px);font-weight:750;letter-spacing:-.025em}
+.coachStudioLayout{
+ display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,.85fr);
+ flex:1;min-width:0;min-height:0;gap:12px;
+}
+.coachPreview{
+ box-sizing:border-box;position:relative;min-width:0;max-width:100%;
+ min-height:370px;overflow:hidden;isolation:isolate;border-radius:22px;
+ border:1px solid #d4dce8;background:radial-gradient(ellipse at 50% 36%,#e7edf5,#cbd6e4);
+}
+.coachCanvasViewport{position:absolute;inset:0;z-index:0;overflow:hidden;border-radius:inherit}
+.coachCanvasViewport canvas{display:block;width:100%;height:100%;touch-action:none}
+.coachPreviewLabel{
+ position:absolute;z-index:2;bottom:12px;left:12px;max-width:calc(100% - 24px);
+ padding:7px 10px;border-radius:10px;background:#ffffffd9;color:#35445b;
+ font-size:12px;overflow-wrap:anywhere;pointer-events:none;
+}
+.coachRigSwitch{
+ display:flex;align-items:center;gap:3px;min-width:0;padding:4px;
+ border:1px solid #d7dfeb;border-radius:14px;background:#ffffffed;
+}
+.coachRigSwitch button{
+ flex:none;min-height:44px;min-width:58px;padding:8px 11px;border:0;border-radius:10px;
+ background:#eef2f8;color:#38465b;font-size:12px;
+}
+.coachRigSwitch button.active{background:#d6363c;color:#fff}
+.coachEditor{
+ box-sizing:border-box;display:flex;flex-direction:column;gap:10px;min-width:0;min-height:0;
+ padding:12px;border:1px solid #e0e6ef;border-radius:20px;
+ background:#fff;color:#202737;box-shadow:0 10px 28px #2531470b;
+}
 .coachQuickChoice{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:8px}
-.coachQuickChoice button{min-height:48px;padding:10px;border:1px solid rgba(255,255,255,.14);border-radius:14px;background:#2a2e39;color:#f5f5f5;font-weight:600}
-.coachQuickChoice button.active{border-color:#d6363c;background:rgba(214,54,60,.18)}
-.coachCategories{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));overflow:visible;gap:7px}
-.coachCategories button{min-width:0;white-space:normal;min-height:52px;font-size:12px;padding:8px 5px;border-radius:13px}
+.coachQuickChoice button,.coachCategories button{
+ box-sizing:border-box;min-height:48px;padding:8px 12px;
+ border:1px solid #dfe5ee;border-radius:12px;background:#f1f4f9;
+ color:#344257;font-weight:600;
+}
+.coachQuickChoice button.active,.coachCategories button.active{
+ background:#d6363c;border-color:#d6363c;color:white;
+}
+.coachCategories{display:flex;flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-x:contain;gap:7px;padding:2px 0 5px;scrollbar-width:none}
+.coachCategories::-webkit-scrollbar{display:none}
+.coachCategories button{flex:0 0 auto;min-width:94px;font-size:13px}
+.coachFields{display:flex;flex:1;flex-direction:column;gap:12px;min-width:0;min-height:0;overflow-y:auto;padding:3px}
+.coachField{display:flex;flex-direction:column;gap:6px;font-size:13px;color:#27344a}
+.coachField span{display:flex;justify-content:space-between}
+.coachField b{color:#b52d36}
+.coachField input[type=range]{width:100%;accent-color:#d6363c}
+.coachField select,.coachRigControls select,.coachRigControls input{
+ box-sizing:border-box;min-height:42px;border:1px solid #d4dce8;border-radius:10px;
+ background:#f4f6fa;color:#253147;
+}
+.coachColor{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px;color:#27344a}
+.coachColor input{width:56px;height:40px;background:transparent;border:0}
+.coachAdvanced{min-width:0;padding-top:10px;border-top:1px solid #e2e7f0}
+.coachAdvanced>summary{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:44px;cursor:pointer;font-size:12px;color:#27344a}
+.coachAdvanced summary span{font-size:11px;color:#65758c}
+.coachRigControls{display:flex;flex-wrap:wrap;align-items:center;gap:7px;padding:9px;border:1px solid #e2e7f0;border-radius:12px;background:#f7f9fd}
+.coachRigControls label{display:flex;align-items:center;gap:7px;font-size:12px}
+.coachRigControls input:not([type=checkbox]){max-width:110px}
+.coachRigControls button{min-height:44px;padding:9px 12px;border:0;border-radius:10px;background:#d6363c;color:#fff}
+.coachRigControls small{color:#7d5d24}
+.coachCrud,.coachActions{display:flex;flex-wrap:wrap;gap:8px}
+.coachCrud button,.coachActions button{
+ min-height:44px;padding:10px 12px;border:1px solid #dfe5ee;border-radius:12px;
+ background:#f1f4f9;color:#344257;
+}
+.coachCrud .coachSave,.coachActions button:first-child{background:#d6363c;border-color:#d6363c;color:#fff}
+.coachReset{align-self:flex-start;min-height:44px;border:0;background:transparent;color:#65758c;text-decoration:underline;font-size:12px}
+.coachAvailability{margin:0;padding:10px;border-radius:12px;background:#f3f6fb;color:#65758c;font-size:12px;line-height:1.5}
+.coachStatus{margin:0;color:#147f5c;font-size:12px}
 .coachSectionTitle{margin:2px 0 0;font-size:15px;font-weight:700}
-.coachReset{border:0;background:transparent;color:#a6a8b3;text-decoration:underline;font-size:12px;min-height:40px;align-self:flex-start}
-.coachAdvanced{min-width:0}
-.coachAdvanced>summary{min-height:44px;align-items:center}
-.coachPreview{overflow:hidden}
-.coachPreviewLabel{white-space:normal;overflow-wrap:anywhere}
+.coachPreview.cmeFullscreen,.coachPreview:fullscreen,.coachPreview:-webkit-full-screen{
+ position:fixed;inset:0;width:100vw;height:100dvh;max-width:none;max-height:none;
+ min-height:100dvh;z-index:2147483647;border:0;border-radius:0;
+ background:#e6edf6;overflow:hidden;
+}
+.coachPreview.cmeFullscreen .coachCanvasViewport,.coachPreview:fullscreen .coachCanvasViewport{
+ position:absolute;inset:0;width:100%;height:100%;
+}
 @media(max-width:760px){
- .coachStudio{width:100%;padding:6px 0 12px}
+ .coachStudio{padding:9px}
  .coachStudioLayout{display:flex;flex-direction:column;gap:12px}
- .coachPreview{position:relative;top:auto;width:100%;height:clamp(270px,40dvh,440px);flex:none}
- .coachEditor{width:100%;padding:12px;overflow:visible}
- .coachCategories{grid-template-columns:repeat(3,minmax(0,1fr))}
- .coachStudioHeader{padding:6px 10px}
- .coachStudioHeader h2{font-size:22px}
- .coachRigSwitch button{font-size:12px;padding:8px 10px}
+ .coachPreview{flex:0 0 auto;min-height:260px;height:clamp(330px,55dvh,700px)}
+ .coachPreview.cmeFullscreen,.coachPreview:fullscreen,.coachPreview:-webkit-full-screen{height:100dvh;min-height:100dvh}
+ .coachEditor{min-height:260px;overflow:visible}
+ .coachFields{overflow:visible}
 }
-
-/* Studio Coach clair : contrôles contextuels et prévisualisation prioritaire. */
-.coachStudio{color:#202737!important;background:#f6f8fc!important;border-radius:18px;padding:12px!important;gap:10px!important}
-.coachStudioHeader{padding:2px 4px!important}
-.coachStudioHeader small{color:#66758b!important;font-weight:800}
-.coachStudioHeader h2{color:#162032!important;margin:2px 0!important}
-.coachStudioHeader p{display:none}
-.coachStudioLayout{gap:12px!important}
-.coachPreview{background:radial-gradient(ellipse at 50% 36%,#e7edf5,#cbd6e4)!important;border:1px solid #d4dce8!important;min-height:370px!important}
-.coachPreviewLabel{background:#ffffffd9!important;color:#35445b!important;left:12px!important;right:auto!important;bottom:12px!important;font-size:12px!important;padding:7px 10px!important}
-.coachRigSwitch{top:10px!important;left:10px!important;right:auto!important;background:#ffffffed!important;border:1px solid #d7dfeb!important;padding:4px!important;max-width:calc(100% - 145px)!important}
-.coachRigSwitch button{background:#eef2f8!important;color:#38465b!important;min-height:44px!important;padding:8px 11px!important;font-size:12px!important}
-.coachRigSwitch button.active{background:#d6363c!important;color:white!important}
-.coachPreview .cmeCameraAuto{top:10px!important;right:62px!important;left:auto!important;width:auto!important;max-width:105px!important;min-height:44px!important;padding:7px 9px!important;background:#ffffffed!important;color:#253147!important;border:1px solid #d4dce8!important;font-size:12px!important;white-space:nowrap!important}
-.coachPreview .cmeFullscreenToggle{right:10px!important;top:10px!important;background:#ffffffed!important;color:#253147!important;border:1px solid #d4dce8!important}
-.coachEditor{background:#ffffff!important;border:1px solid #e0e6ef!important;box-shadow:0 10px 28px #2531470b!important;color:#202737!important}
-.coachQuickChoice button,.coachCategories button{background:#f1f4f9!important;color:#344257!important;border:1px solid #dfe5ee!important}
-.coachQuickChoice button.active,.coachCategories button.active{background:#d6363c!important;border-color:#d6363c!important;color:#fff!important}
-.coachCategories{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;scrollbar-width:none!important;gap:7px!important;padding-bottom:5px!important}
-.coachCategories button{flex:0 0 auto!important;min-width:94px!important;min-height:48px!important;border-radius:12px!important;font-size:13px!important;padding:8px 12px!important}
-.coachField,.coachColor,.coachAdvanced summary{color:#27344a!important}
-.coachField select,.coachRigControls select,.coachRigControls input{background:#f4f6fa!important;color:#253147!important;border:1px solid #d4dce8!important}
-.coachField b{color:#b52d36!important}
-.coachAdvanced{border-color:#e2e7f0!important}
-.coachCrud button,.coachActions button{min-height:44px!important;border-radius:12px!important}
-.coachAvailability{margin:0;color:#65758c;font-size:12px;line-height:1.5;background:#f3f6fb;padding:10px;border-radius:12px}
-.coachStatus{color:#147f5c!important}
-@media(max-width:760px){
- .coachStudio{padding:9px!important}
- .coachStudioLayout{display:flex!important;flex-direction:column!important}
- .coachPreview{height:clamp(340px,55dvh,700px)!important;flex:none!important}
- .coachEditor{padding:12px!important}
- .coachRigSwitch{max-width:calc(100% - 154px)!important}
- .coachRigSwitch button{padding:7px 9px!important;font-size:11px!important}
+@media(max-width:400px){
+ .coachRigSwitch{padding:3px;gap:2px}
+ .coachRigSwitch button{min-width:54px;padding:7px 8px;font-size:11px}
 }
-
-/* P0 Android : les commandes ne doivent jamais masquer la scène ou se chevaucher. */
-.coachPreview{isolation:isolate}
-.coachRigSwitch{z-index:5!important;max-width:calc(100% - 155px)!important}
-.coachPreview .cmeCameraAuto,.coachPreview .cmeFullscreenToggle{z-index:5!important}
-.coachPreview canvas{display:block;width:100%;height:100%}
-@media(max-width:420px){
- .coachRigSwitch{left:8px!important;top:8px!important;gap:2px!important;padding:3px!important;max-width:calc(100% - 143px)!important}
- .coachRigSwitch button{min-height:42px!important;padding:7px 8px!important;font-size:11px!important}
- .coachPreview .cmeCameraAuto{right:56px!important;top:8px!important;max-width:73px!important;font-size:11px!important;padding:7px 5px!important}
- .coachPreview .cmeFullscreenToggle{right:8px!important;top:8px!important;min-width:42px!important;min-height:42px!important}
- .coachPreviewLabel{bottom:10px!important;left:10px!important}
-}
-
-/* Studio Android P1 : un seul bandeau de commandes, scène indépendante. */
-.coachPreview{display:flex;flex-direction:column;isolation:isolate}
-.coachCanvasViewport{position:absolute;inset:0;z-index:0;overflow:hidden;border-radius:inherit;touch-action:manipulation}
-.coachCanvasViewport canvas{display:block;width:100%!important;height:100%!important}
-.coachRigSwitch{left:10px!important;top:10px!important;right:auto!important;z-index:6!important;max-width:none!important;gap:3px!important}
-.coachRigSwitch button{min-width:58px!important;min-height:44px!important}
-.coachPreview .cmeCameraAuto{right:64px!important;top:10px!important;z-index:6!important;max-width:90px!important;min-width:64px!important}
-.coachPreview .cmeFullscreenToggle{right:10px!important;top:10px!important;z-index:6!important;min-width:44px!important;min-height:44px!important}
-.coachPreviewLabel{z-index:3!important;right:auto!important;max-width:calc(100% - 24px)}
-.coachPreview.cmeFullscreen{position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;max-width:none!important;min-height:100dvh!important;z-index:9999!important;border-radius:0!important}
-@media(max-width:440px){
- .coachRigSwitch{left:8px!important;top:8px!important;padding:3px!important}
- .coachRigSwitch button{min-width:54px!important;padding:7px 8px!important;font-size:11px!important}
- .coachPreview .cmeCameraAuto{right:59px!important;top:8px!important;min-width:57px!important;max-width:72px!important;padding:6px 5px!important;font-size:11px!important}
- .coachPreview .cmeFullscreenToggle{right:8px!important;top:8px!important;min-width:43px!important}
- .coachCategories{overscroll-behavior-x:contain}
-}
-
-/* Le mode plein écran natif doit couvrir l'écran, même dans le conteneur défilant Studio. */
-.coachPreview:fullscreen,.coachPreview:-webkit-full-screen{position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;max-width:none!important;max-height:none!important;min-height:100dvh!important;border-radius:0!important;z-index:2147483647!important;background:#e6edf6!important}
-.coachPreview:fullscreen .coachCanvasViewport,.coachPreview:-webkit-full-screen .coachCanvasViewport{position:absolute!important;inset:0!important;width:100%!important;height:100%!important}
-.coachPreview:fullscreen .coachRigSwitch,.coachPreview:fullscreen .cmeFullscreenToggle,.coachPreview:fullscreen .cmeCameraAuto{z-index:20!important}
