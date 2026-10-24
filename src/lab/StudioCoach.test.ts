@@ -19,10 +19,7 @@ describe('Studio Coach appearance isolation',()=>{
   expect('motion' in result).toBe(false);expect('skeleton' in result).toBe(false);
  });
  it('conserve les profils JSON antérieurs sans nouveaux volumes féminins',()=>{
-  const legacy={...defaultCoachLook};
-  delete (legacy as Record<string,unknown>).roundness;
-  delete (legacy as Record<string,unknown>).hips;
-  delete (legacy as Record<string,unknown>).thighs;
+  const legacy=Object.fromEntries(Object.entries(defaultCoachLook).filter(([key])=>!['roundness','hips','thighs'].includes(key)));
   const parsed=parseCoachLookJson(JSON.stringify({schema:'cme-coach-look-v1',look:{...legacy,sex:'femme'}}));
   expect(parsed.roundness).toBe(1);expect(parsed.hips).toBe(1);expect(parsed.thighs).toBe(1);
  });
