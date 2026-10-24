@@ -64,3 +64,6 @@ A — stabilisation et non-régression d'abord ; B — personnalisation dynamiqu
 
 ## 24/10/2026 — Retour Android et priorité ergonomique Studio Coach
 Capture réelle : boutons superposés, mannequin invisible, réglages non dynamiques, rashguard sélectionné sans être porté. Priorité à une interface claire et premium, aperçu 3D visible, actions contextuelles et aucun texte superflu. Ne jamais prétendre qu'une tenue est portée si le maillage correspondant n'est pas réellement rendu. Corriger les régressions avant de poursuivre B/C. Conserver le choix libre prioritaire et Shadow inchangé.
+
+## 24/10/2026 — Cohérence systématique des composants (décision validée)
+Toute fonction identique doit utiliser un composant partagé unique dans Laboratoire, Studio Coach et Comparatif 3D : plein écran natif, double-tap/double-clic, boutons, caméra, menus, états de chargement, navigation et retours utilisateur. Interdire les implémentations divergentes et l'accumulation de correctifs CSS locaux. Réutiliser les mêmes libellés français, cibles tactiles accessibles et conventions de mise en page. Le premier composant mutualisé est `src/lab/SceneFullscreen.tsx`. Préserver les humanoïdes GLB validés et ne pas modifier Shadow. Tester la cohérence sur Android avant de clore chaque lot.
