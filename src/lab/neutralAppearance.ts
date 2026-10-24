@@ -75,7 +75,7 @@ export function applyNeutralRigMaterials(root:Object3D):number{
   mesh.visible=true;
   const materials=Array.isArray(mesh.material)?mesh.material:[mesh.material];
   for(const material of materials){
-   if(!(material instanceof MeshStandardMaterial)&&!(material instanceof MeshToonMaterial))continue;
+   if(!(material instanceof MeshStandardMaterial))continue;
    material.color.set('#a7abb2');
    material.map=null;
    material.emissiveMap=null;
