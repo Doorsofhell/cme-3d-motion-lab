@@ -7,9 +7,7 @@ import {CoachRig} from '../shadow-engine/rig';
 import {getLibrary} from '../shadow-engine/library';
 import {MotionSampler} from '../shadow-engine/motion';
 import {restoreReferencePose} from './restorePose';
-import {applyNeutralAppearance,type NeutralAppearance} from './neutralAppearance';
-import {buildNeutralHumanoid} from './canonicalNeutralBody';
-import {masquerApparenceSource} from './neutralVisibility';
+import {applyNeutralAppearance,applyNeutralRigMaterials,type NeutralAppearance} from './neutralAppearance';
 import {CadrageSquelette} from './CadrageSquelette';
 
 export const LAB_DISCIPLINES=['boxing','kickboxing','muaythai','mma','bjj','judo'] as const;
@@ -34,11 +32,8 @@ export function NeutralRig({sex,discipline,motionId,playing,speed,showSkeleton,o
  const scene=useMemo(()=>{
   const root=clone(gltf.scene) as Object3D;
   restoreReferencePose(root);
-  if(mode==='neutral'){
-   masquerApparenceSource(root);
-   const result=buildNeutralHumanoid(root,sex);
-   if(result.segments<12)throw new Error('Rig neutre incomplet : '+result.segments+' segments');
-  }
+  // Préserver la géométrie humaine skinnée du GLB ; ne jamais la remplacer par des capsules.
+  if(mode==='neutral')applyNeutralRigMaterials(root);
   root.traverse(o=>{
    const m=o as Mesh;
    if(!m.isMesh)return;
