@@ -217,7 +217,7 @@ export function App(){
  const [moreOpen,setMoreOpen]=useState(false);
  const stageFullscreen=useSceneFullscreen();
 
- const [tab,setTab]=useState<'lab'|'tracking'|'comparison'|'versions'|'options'|'studio'>('lab');
+ const [tab,setTab]=useState<'lab'|'gallery'|'tracking'|'comparison'|'versions'|'options'|'studio'|'technical'>('studio');
  useEffect(()=>{const open=()=>setTab('lab');window.addEventListener('cme-open-lab-coach',open);return()=>window.removeEventListener('cme-open-lab-coach',open);},[]);
  const [pageVisible,setPageVisible]=useState(()=>typeof document==='undefined'||document.visibilityState==='visible');
  useEffect(()=>{const sync=()=>setPageVisible(document.visibilityState==='visible');document.addEventListener('visibilitychange',sync);return()=>document.removeEventListener('visibilitychange',sync);},[]);
@@ -355,9 +355,10 @@ export function App(){
   </section></details>
   </div>
   {tab==='lab'&&<ShadowCatalogPanel/>}
-  {tab==='lab'&&<SavedCoachLibrary selectedId={selectedCoach?.id??null} openCoach={selectSavedCoach} editCoach={id=>{try{localStorage.setItem('cme-selected-coach',id);}catch{}setTab('studio');}}/>}
+  {tab==='gallery'&&<section className="cmeCoachGallery" aria-label="Galerie Coachs"><header><h2>Galerie Coachs</h2><p>Choisissez un combattant enregistré. Sa configuration est partagée avec Studio et le banc d'essai.</p></header><SavedCoachLibrary selectedId={selectedCoach?.id??null} openCoach={id=>{selectSavedCoach(id);setTab('lab');}} editCoach={id=>{try{localStorage.setItem('cme-selected-coach',id);}catch{}setTab('studio');}}/><button className="galleryCreate" type="button" onClick={()=>setTab('studio')}>Créer un combattant dans Studio</button></section>}
   {tab==='studio'&&<StudioCoach/>}
   {tab==='versions'&&<VersionsPanel/>}
+  {tab==='technical'&&<section className="cmeTechnicalScreen" aria-label="Centre technique"><h2>Centre technique</h2><p>Les diagnostics et outils avancés sont regroupés ici, séparément du parcours de personnalisation.</p><button type="button" onClick={()=>{setTab('lab');setDebug(true);}}>Ouvrir les diagnostics du moteur</button><button type="button" onClick={()=>setTab('tracking')}>Voir les incidents</button></section>}
   {tab==='options'&&<section className="cmeOptions" aria-label="Options CME-3D">
    <h2>Options du laboratoire</h2>
    <label className="cacheOption"><input type="checkbox" checked={clearCacheOnOpen} onChange={e=>{const enabled=e.target.checked;setClearCacheOnOpen(enabled);setAutoClearEnabled(enabled);setCacheMessage(enabled?'Vidage automatique activé pour chaque ouverture.':'Vidage automatique désactivé.');}}/><span><strong>Vider automatiquement le cache à chaque ouverture</strong><small>Activé par défaut. Supprime les caches CME-3D et désactive son service worker avant le chargement du moteur. Les préférences locales sont conservées.</small></span></label>
@@ -384,17 +385,18 @@ export function App(){
   {tab==='lab'&&incidentOpen&&<IncidentReporter context={incidentContext} image={snapshot} onCapture={captureNow} onClose={()=>setIncidentOpen(false)}/>}
   {!!reportText&&<div className="reportFallback" role="dialog" aria-label="Rapport complet CME-3D"><div className="reportFallbackInner"><div className="reportFallbackHead"><strong>Rapport complet · Copier vers ChatGPT</strong><button onClick={()=>setReportText('')} aria-label="Fermer le rapport">×</button></div><p>La copie automatique n’est pas autorisée par ton navigateur. Sélectionne le texte ci-dessous puis copie-le pour me l’envoyer ici.</p><textarea aria-label="Texte complet du rapport" value={reportText} readOnly onFocus={e=>e.currentTarget.select()}/><button onClick={()=>{if(navigator.clipboard?.writeText)void navigator.clipboard.writeText(reportText).then(()=>{setReportText('');onLog('Rapport copié manuellement');});}}>Réessayer la copie</button></div></div>}
  <nav className="labTabs" aria-label="Navigation principale CME-3D">
-   <button className={tab==='lab'?'selected':''} aria-current={tab==='lab'?'page':undefined} onClick={()=>{journal.record('navigation','Ouverture Laboratoire');setTab('lab');setDebug(false);}}>◉ <span>Laboratoire</span></button>
-   <button className={tab==='studio'?'selected':''} aria-current={tab==='studio'?'page':undefined} onClick={()=>{setTab('studio');setDebug(false);}}>♙ <span>Studio Coach</span></button>
-   <button className={tab==='comparison'?'selected':''} aria-current={tab==='comparison'?'page':undefined} onClick={openComparison}>⇄ <span>Comparatif 3D</span></button>
-   <div className="labMore">
-    <button className={['tracking','versions','options'].includes(tab)?'selected':''} aria-haspopup="true" aria-expanded={moreOpen} aria-controls="cmeMoreMenu" onClick={()=>setMoreOpen(v=>!v)}>⋯ <span>Plus</span>{pendingDrafts.length>0&&<i className="labMoreDot"/>}</button>
-    {moreOpen&&<div id="cmeMoreMenu" className="labMoreMenu" role="group" aria-label="Fonctions complémentaires">
-      <button onClick={()=>{journal.record('navigation','Ouverture Suivi des corrections');void known.refresh();setTab('tracking');setDebug(false);setMoreOpen(false);}}>Incidents {pendingDrafts.length>0&&`(${pendingDrafts.length})`}</button>
-      <button onClick={()=>{setTab('versions');setMoreOpen(false);}}>Versions</button>
-      <button onClick={()=>{setTab('options');setMoreOpen(false);}}>Options</button>
-    </div>}
-   </div>
-  </nav>
+  <button className={tab==='studio'||tab==='lab'?'selected':''} aria-current={tab==='studio'||tab==='lab'?'page':undefined} onClick={()=>{setTab('studio');setDebug(false);setMoreOpen(false);}}>♙ <span>Studio</span></button>
+  <button className={tab==='gallery'?'selected':''} aria-current={tab==='gallery'?'page':undefined} onClick={()=>{setTab('gallery');setMoreOpen(false);setDebug(false);}}>♧ <span>Galerie Coachs</span></button>
+  <button className={tab==='comparison'?'selected':''} aria-current={tab==='comparison'?'page':undefined} onClick={openComparison}>⇄ <span>Comparatif</span></button>
+  <div className="labMore">
+   <button className={['tracking','versions','options','technical'].includes(tab)?'selected':''} aria-haspopup="true" aria-expanded={moreOpen} aria-controls="cmeMoreMenu" onClick={()=>setMoreOpen(v=>!v)}>⋯ <span>Plus</span>{pendingDrafts.length>0&&<i className="labMoreDot"/>}</button>
+   {moreOpen&&<div id="cmeMoreMenu" className="labMoreMenu" role="group" aria-label="Fonctions complémentaires">
+    <button onClick={()=>{setTab('versions');setMoreOpen(false);}}>✦ Nouveautés</button>
+    <button onClick={()=>{setTab('technical');setMoreOpen(false);}}>◈ Centre technique</button>
+    <button onClick={()=>{journal.record('navigation','Ouverture Suivi des corrections');void known.refresh();setTab('tracking');setDebug(false);setMoreOpen(false);}}>⚑ Incidents {pendingDrafts.length>0&&`(${pendingDrafts.length})`}</button>
+    <button onClick={()=>{setTab('options');setMoreOpen(false);}}>⚙ Paramètres</button>
+   </div>}
+  </div>
+ </nav>
  </main>;
 }
