@@ -354,3 +354,5 @@ button{min-height:36px}
 .coachPreview.cmeFullscreen .coachRigSwitch{position:absolute;left:12px;top:12px;z-index:8;max-width:calc(100% - 90px)}
 .coachPreview.cmeFullscreen .coachPreviewLabel{position:absolute;bottom:12px;left:12px;z-index:8}
 @media(max-width:650px){.labApp:has(.stage) .stage{min-height:clamp(320px,57dvh,620px)}.labApp:has(.coachStudio) .coachPreview{height:clamp(310px,48dvh,540px)!important}}
+
+.cmeCameraAuto{position:absolute;z-index:7;right:62px;top:8px;min-height:44px;padding:8px 12px;background:#252934ee;color:#f5f5f5;border:1px solid #555b69;border-radius:12px;font-weight:650}.coachPreview.cmeFullscreen .cmeCameraAuto{right:72px}.coachPreview.cmeFullscreen .cmeFullscreenToggle{right:12px}
