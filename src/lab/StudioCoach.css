@@ -116,3 +116,19 @@
 .coachField small,.coachColor small{font-size:11px;font-weight:400;color:#777f91}
 .coachField input:disabled,.coachField select:disabled,.coachColor input:disabled,
 .coachQuickChoice button:disabled{opacity:.55;cursor:not-allowed}
+
+/* Responsive 44px targets: accessible, natural skin swatches with an active outline. */
+.coachSkinEditor{display:flex;flex-direction:column;gap:12px;min-width:0}
+.coachSkinGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.coachSkinTone{
+ display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+ box-sizing:border-box;min-height:72px;min-width:0;padding:6px 3px;
+ background:#f6f8fb;color:#35445b;border:2px solid transparent;border-radius:12px;
+ font-size:11px;overflow-wrap:anywhere;cursor:pointer;
+}
+.coachSkinTone.active{border-color:#c6333d;background:#fff7f7}
+.coachSkinTone:focus-visible{outline:3px solid #8e3648;outline-offset:2px}
+.coachSkinTone:disabled{opacity:.5;cursor:not-allowed}
+.coachSkinSwatch{display:block;width:38px;height:38px;border:1px solid #0002;border-radius:50%;box-shadow:inset 0 0 0 2px #fff6}
+.coachSkinHint{display:block;font-size:12px;color:#69758a;line-height:1.45}
+@media(max-width:400px){.coachSkinTone{font-size:10px}.coachSkinSwatch{width:34px;height:34px}}
