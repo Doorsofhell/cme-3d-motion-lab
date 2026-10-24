@@ -108,3 +108,9 @@
 }
 .coachWebglAlert span{flex:1 1 150px}
 .coachWebglAlert button{min-height:44px;padding:8px 10px;background:#f1f4f9;color:#263448;border:0;border-radius:10px}
+
+/* Capabilities are measured from the loaded GLB, never implied by the profile schema. */
+.coachCapability{margin:0;padding:9px 11px;border:1px solid #d7dfeb;border-radius:12px;background:#eaf0f8;color:#31435c;font-size:12px;line-height:1.5}
+.coachField small,.coachColor small{font-size:11px;font-weight:400;color:#777f91}
+.coachField input:disabled,.coachField select:disabled,.coachColor input:disabled,
+.coachQuickChoice button:disabled{opacity:.55;cursor:not-allowed}

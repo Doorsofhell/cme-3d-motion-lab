@@ -1,4 +1,4 @@
-import {useCallback,useEffect,useRef,useState} from 'react';
+import {useCallback,useEffect,useMemo,useRef,useState} from 'react';
 import {Canvas} from '@react-three/fiber';
 import {SceneCameraControls,SceneCameraButton,SceneLoadingBoundary,SceneToolbar,SceneLoadingIndicator} from './SceneControls';
 import {useSceneFullscreen,SceneFullscreenButton} from './SceneFullscreen';
@@ -66,7 +66,7 @@ export function StudioCoach(){
  const [selectedId,setSelectedId]=useState<string|null>(()=>{try{return localStorage.getItem('cme-selected-coach');}catch{return null;}});
  const [section,setSection]=useState<Category>('corps');
  const [message,setMessage]=useState('');
- const [rigMode,setRigMode]=useState(true);
+ const [rigMode,setRigMode]=useState(false);
  const [cameraAuto,setCameraAuto]=useState(false);
  const sceneFullscreen=useSceneFullscreen();
  const [advancedOpen,setAdvancedOpen]=useState(false);
@@ -75,6 +75,16 @@ export function StudioCoach(){
  const [playing,setPlaying]=useState(true);
  const [showSkeleton,setShowSkeleton]=useState(false);
  const [report,setReport]=useState<NeutralRigReport|null>(null);
+ const support=report?.appearanceSupport;
+ const colors=useMemo(()=>({
+  skin:look.skin,hairColor:look.hairColor,eyeColor:look.eyeColor,topColor:look.topColor,bottomColor:look.bottomColor,gloveColor:look.gloveColor
+ }),[look.skin,look.hairColor,look.eyeColor,look.topColor,look.bottomColor,look.gloveColor]);
+ const dimensions=useMemo(()=>({height:look.height,shoulders:look.shoulders,muscle:look.muscle,waist:look.waist}),
+  [look.height,look.shoulders,look.muscle,look.waist]);
+ const faceDimensions=useMemo(()=>({jaw:look.jaw,nose:look.nose,eyes:look.eyes}),[look.jaw,look.nose,look.eyes]);
+ const colorAvailable=(key:'skin'|'eyeColor'|'hairColor'|'topColor'|'bottomColor'|'gloveColor')=>!rigMode&&!!support?.colors[key];
+ const faceAvailable=(key:'jaw'|'nose'|'eyes')=>!rigMode&&!!support?.shape.faceMorphs[key];
+
  const [androidTelemetry]=useState(()=>{
   const meter=new AndroidTelemetry('studio');
   meter.beginLoad(look.sex+'/'+(rigMode?'anatomie':'apparence'),'initial',performance.now());
@@ -116,9 +126,18 @@ export function StudioCoach(){
   if(key==='sex'&&look.sex!==value){beginRigLoad(value as CoachLook['sex'],rigMode,'switch');setReport(null);}
   setLook(l=>normalizeCoachLook({...l,[key]:value}));
  };
- const range=(key:'height'|'shoulders'|'muscle'|'waist'|'jaw'|'nose'|'eyes',label:string,min:number,max:number)=><label className="coachField"><span>{label} <b>{look[key].toFixed(2)}</b></span><input type="range" min={min} max={max} step=".01" value={look[key]} onChange={e=>update(key,Number(e.target.value))}/></label>;
- const color=(key:'skin'|'eyeColor'|'hairColor'|'topColor'|'bottomColor'|'gloveColor'|'shinColor',label:string)=><label className="coachColor"><span>{label}</span><input type="color" value={look[key]} onChange={e=>update(key,e.target.value)}/></label>;
- const choose=<K extends 'sex'|'hairStyle'|'top'|'bottom'|'gloves'>(key:K,label:string,values:CoachLook[K][])=><label className="coachField"><span>{label}</span><select value={look[key]} onChange={e=>update(key,e.target.value as CoachLook[K])}>{values.map(v=><option key={v} value={v}>{v}</option>)}</select></label>;
+ const range=(key:'height'|'shoulders'|'muscle'|'waist'|'jaw'|'nose'|'eyes',label:string,min:number,max:number,enabled=true)=>
+  <label className="coachField"><span>{label} <b>{look[key].toFixed(2)}</b></span>
+   <input type="range" min={min} max={max} step=".01" disabled={!enabled} value={look[key]} onChange={e=>update(key,Number(e.target.value))}/>
+   {!enabled&&<small>Déformation non disponible sur ce GLB</small>}</label>;
+ const color=(key:'skin'|'eyeColor'|'hairColor'|'topColor'|'bottomColor'|'gloveColor'|'shinColor',label:string)=>
+  <label className="coachColor"><span>{label}{key!=='shinColor'&&!colorAvailable(key)&&<small> · maillage non identifié</small>}</span>
+   <input type="color" disabled={key==='shinColor'||rigMode||!colorAvailable(key)} value={look[key]} onChange={e=>update(key,e.target.value)}/></label>;
+ const choose=<K extends 'sex'|'hairStyle'|'top'|'bottom'|'gloves'>(key:K,label:string,values:CoachLook[K][],enabled=true)=>
+  <label className="coachField"><span>{label}</span>
+   <select disabled={!enabled} value={look[key]} onChange={e=>update(key,e.target.value as CoachLook[K])}>
+    {values.map(v=><option key={v} value={v}>{v}</option>)}</select>
+   {!enabled&&<small>Maillage/asset distinct non disponible</small>}</label>;
  const importJson=async(file:File|undefined)=>{
   if(!file)return;
   try{
@@ -143,7 +162,7 @@ export function StudioCoach(){
     <div className="coachCanvasViewport"><Canvas key={canvasRetry} onCreated={onCanvasCreated} camera={{position:[0,1.3,4.5],fov:38}} dpr={[1,1.5]} gl={{antialias:true}}>
      <AndroidFrameProbe telemetry={androidTelemetry}/>
      <color attach="background" args={['#e6edf6']}/><ambientLight intensity={2}/><directionalLight position={[3,5,4]} intensity={2.6}/>
-     <SceneLoadingBoundary><NeutralRig key={`${look.sex}-${rigMode?'neutral':'appearance'}`} mode={rigMode?'neutral':'appearance'} sex={look.sex} discipline={discipline} motionId={motionId} playing={playing} speed={1} showSkeleton={showSkeleton} autoCadrage={!cameraAuto} onReport={handleRigReport} appearance={{skin:look.skin,hairColor:look.hairColor,topColor:look.topColor,bottomColor:look.bottomColor,gloveColor:look.gloveColor}} proportions={{height:look.height,shoulders:look.shoulders,muscle:look.muscle,waist:look.waist}}/></SceneLoadingBoundary>
+     <SceneLoadingBoundary><NeutralRig key={`${look.sex}-${rigMode?'neutral':'appearance'}`} mode={rigMode?'neutral':'appearance'} sex={look.sex} discipline={discipline} motionId={motionId} playing={playing} speed={1} showSkeleton={showSkeleton} autoCadrage={!cameraAuto} onReport={handleRigReport} appearance={colors} proportions={dimensions} face={faceDimensions}/></SceneLoadingBoundary>
      <SceneCameraControls automatic={cameraAuto} motion={motionId}/>
     </Canvas></div>
     <span className="coachPreviewLabel">{rigMode?'Anatomie 3D':'Aperçu 3D'}</span>
@@ -157,6 +176,7 @@ export function StudioCoach(){
       <button className={look.sex==='homme'?'active':''} onClick={()=>update('sex','homme')}>Homme</button>
       <button className={look.sex==='femme'?'active':''} onClick={()=>update('sex','femme')}>Femme</button>
     </div>
+    <p className="coachCapability" role="status">{rigMode?'Mode Anatomie : modèle neutre pour les tests. Les réglages d’apparence ne sont pas appliqués.':support?('Apparence GLB active : '+support.shape.torsoVertices+' sommets du torse identifiés · '+Object.values(support.colors).reduce((total,count)=>total+count,0)+' matériaux personnalisables.'):'Analyse des matériaux et déformations du modèle…'}</p>
     <nav className="coachCategories" aria-label="Personnalisation">{sections.map(item=><button key={item} className={section===item?'active':''} aria-current={section===item?'true':undefined} onClick={()=>setSection(item)}>{sectionNames[item]}</button>)}</nav>
 
     {<details className="coachAdvanced"><summary>Tester les mouvements</summary><div className="coachRigControls">
@@ -167,14 +187,14 @@ export function StudioCoach(){
       <small>{report?report.available?`${report.bones} os · ${report.duration.toFixed(2)} s`:'Mouvement indisponible : garde de secours':'Chargement du rig…'}</small>
      </div></details>}
     <div className="coachFields">
-     {section==='corps'&&<><div className="coachQuickChoice"><button onClick={()=>setLook(l=>normalizeCoachLook({...l,muscle:.8,shoulders:.85,waist:.9}))}>Fin</button><button onClick={()=>setLook(l=>normalizeCoachLook({...l,muscle:1,shoulders:1,waist:1}))}>Standard</button><button onClick={()=>setLook(l=>normalizeCoachLook({...l,muscle:1.25,shoulders:1.2,waist:1.05}))}>Athlétique</button></div></>}
-     {section==='visage'&&<>{range('jaw','Mâchoire',.8,1.2)}{range('nose','Nez',.8,1.2)}{range('eyes','Yeux',.8,1.2)}{color('eyeColor','Couleur des yeux')}</>}
+     {section==='corps'&&<><div className="coachQuickChoice"><button disabled={rigMode||!support?.shape.torsoVertices} onClick={()=>setLook(l=>normalizeCoachLook({...l,muscle:.8,shoulders:.85,waist:.9}))}>Fin</button><button disabled={rigMode||!support?.shape.torsoVertices} onClick={()=>setLook(l=>normalizeCoachLook({...l,muscle:1,shoulders:1,waist:1}))}>Standard</button><button disabled={rigMode||!support?.shape.torsoVertices} onClick={()=>setLook(l=>normalizeCoachLook({...l,muscle:1.25,shoulders:1.2,waist:1.05}))}>Athlétique</button></div></>}
+     {section==='visage'&&<>{range('jaw','Mâchoire',.8,1.2,faceAvailable('jaw'))}{range('nose','Nez',.8,1.2,faceAvailable('nose'))}{range('eyes','Yeux',.8,1.2,faceAvailable('eyes'))}{color('eyeColor','Couleur des yeux')}</>}
      {section==='peau'&&color('skin','Teint')}
-     {section==='cheveux'&&<>{choose('hairStyle','Coiffure',['rase','court','long'])}{color('hairColor','Couleur des cheveux')}</>}
+     {section==='cheveux'&&<>{choose('hairStyle','Coiffure',['rase','court','long'],false)}{color('hairColor','Couleur des cheveux')}</>}
      {section==='tenue'&&<><p className="coachAvailability">Les tenues personnalisées nécessitent un modèle 3D compatible. Aucune tenue non visible n’est annoncée comme portée.</p>{color('topColor','Couleur du haut existant')}{color('bottomColor','Couleur du bas existant')}</>}
      {section==='protections'&&<><p className="coachAvailability">Les équipements ajoutés seront proposés lorsque leurs maillages 3D seront disponibles.</p>{color('gloveColor','Couleur des gants existants')}</>}
     </div>
-    <details className="coachAdvanced"><summary>Réglages de morphologie</summary><div className="coachFields">{section==='corps'&&<>{range('height','Taille relative',.9,1.1)}{range('shoulders','Épaules',.75,1.25)}{range('muscle','Musculature',.7,1.35)}{range('waist','Taille',.75,1.3)}</>}</div></details>
+    <details className="coachAdvanced"><summary>Réglages de morphologie</summary><div className="coachFields">{section==='corps'&&<>{range('height','Taille relative',.9,1.1,!rigMode)}{range('shoulders','Épaules',.75,1.25,!rigMode&&!!support?.shape.torsoVertices)}{range('muscle','Musculature',.7,1.35,!rigMode&&!!support?.shape.torsoVertices)}{range('waist','Taille',.75,1.3,!rigMode&&!!support?.shape.torsoVertices)}</>}</div></details>
     <AndroidDiagnostics telemetry={androidTelemetry} active={true} variant="studio" context={{sexe:look.sex,mode:rigMode?'anatomie':'apparence',discipline,mouvement:motionId}}/>
     <div className="coachCrud"><button type="button" onClick={newCoach}>Nouveau</button><button type="button" className="coachSave" onClick={saveCoach}>{selectedId?'Enregistrer les modifications':'Créer et enregistrer le coach'}</button>{selectedId&&<button type="button" onClick={removeCoach}>Supprimer</button>}</div>
     <button className="coachReset" onClick={()=>{setLook(defaultCoachLook);setMessage('Apparence réinitialisée');}}>Réinitialiser le personnage</button>

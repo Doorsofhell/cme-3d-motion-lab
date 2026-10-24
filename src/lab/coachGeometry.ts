@@ -1,0 +1,114 @@
+import {BufferAttribute,Mesh,Object3D,SkinnedMesh,type BufferGeometry} from 'three';
+
+export type CoachBodyShape={shoulders:number;muscle:number;waist:number};
+export type CoachFaceShape={jaw:number;nose:number;eyes:number};
+export type FaceControl=keyof CoachFaceShape;
+export type CoachShapeSupport={torsoVertices:number;faceMorphs:Record<FaceControl,number>};
+type Cache={geometry:BufferGeometry;reference:Float32Array;weights:Float32Array};
+const cache=new WeakMap<SkinnedMesh,Cache>();
+const clamp=(n:number,a:number,b:number)=>Math.max(a,Math.min(b,Number.isFinite(n)?n:1));
+const boneName=(name:string)=>name.toLowerCase().replace(/^.*(?:mixamorig|armature[|:_-])/, '').replace(/[^a-z0-9]/g,'');
+const isChest=(name:string)=>/^(spine[12]|upperchest|chest|clavicle|shoulder)/.test(name);
+const isHips=(name:string)=>/^(hips|pelvis|spine$|lowerback)/.test(name);
+const shapeMorph=(name:string):{control:FaceControl;direction:-1|1}|null=>{
+ const key=name.toLowerCase().replace(/[^a-z0-9]/g,'');
+ const matches=[
+  [/^jaw(wide|width|large|broad|big)$/, 'jaw',1],
+  [/^jaw(narrow|small|thin)$/, 'jaw',-1],
+  [/^nose(wide|width|big|large)$/, 'nose',1],
+  [/^nose(narrow|small|thin)$/, 'nose',-1],
+  [/^eye(s)?(large|big|wide|size)$/, 'eyes',1],
+  [/^eye(s)?(small|narrow|thin)$/, 'eyes',-1]
+ ] as const;
+ for(const [pattern,control,direction] of matches)if(pattern.test(key))return {control,direction};
+ return null;
+};
+/** Detect blend shapes explicitly named for proportions; expression/speech targets are excluded. */
+export function inspectCoachShapes(root:Object3D):CoachShapeSupport{
+ const result:CoachShapeSupport={torsoVertices:0,faceMorphs:{jaw:0,nose:0,eyes:0}};
+ root.traverse(o=>{
+  const mesh=o as Mesh;
+  if(!mesh.isMesh)return;
+  if(mesh instanceof SkinnedMesh){
+   const weights=computeTorsoWeights(mesh);
+   if(weights)result.torsoVertices+=weights.filter(w=>w>.4).length;
+  }
+  for(const name of Object.keys(mesh.morphTargetDictionary??{})){
+   const match=shapeMorph(name);
+   if(match)result.faceMorphs[match.control]++;
+  }
+ });
+ return result;
+}
+function computeTorsoWeights(mesh:SkinnedMesh):Float32Array|null{
+ const geo=mesh.geometry,positions=geo.getAttribute('position');
+ const joints=geo.getAttribute('skinIndex'),skinWeights=geo.getAttribute('skinWeight');
+ if(!positions||!joints||!skinWeights||!mesh.skeleton?.bones.length)return null;
+ const isChestBone=mesh.skeleton.bones.map(b=>isChest(boneName(b.name)));
+ const isHipBone=mesh.skeleton.bones.map(b=>isHips(boneName(b.name)));
+ if(!isChestBone.some(Boolean)&&!isHipBone.some(Boolean))return null;
+ const result=new Float32Array(positions.count*2);
+ for(let i=0;i<positions.count;i++){
+  for(let k=0;k<4;k++){
+   const id=joints.getComponent(i,k),weight=skinWeights.getComponent(i,k);
+   if(isChestBone[id])result[i*2]+=weight;
+   if(isHipBone[id])result[i*2+1]+=weight;
+  }
+ }
+ return result;
+}
+/**
+ * Shape real skinned GLB geometry without touching bones, bind matrices, skinIndex,
+ * skinWeight, motion samplers or the cached GLTF. Vertex changes are intentionally
+ * modest (under 10%) and restricted to vertices weighted to torso bones.
+ */
+export function applyCoachBodyShape(root:Object3D,shape:CoachBodyShape):number{
+ let modified=0;
+ root.traverse(o=>{
+  if(!(o instanceof SkinnedMesh))return;
+  let state=cache.get(o);
+  if(!state){
+   const weights=computeTorsoWeights(o);
+   if(!weights||!weights.some(x=>x>.4))return;
+   if(!cache.has(o)&&Math.abs(shape.shoulders-1)<.001&&Math.abs(shape.muscle-1)<.001&&Math.abs(shape.waist-1)<.001)return;
+   const source=o.geometry.getAttribute('position');
+   const newGeo=o.geometry.clone();
+   newGeo.userData.cmeOwned=true;
+   const pos=newGeo.getAttribute('position') as BufferAttribute;
+   state={geometry:newGeo,reference:new Float32Array(source.array as ArrayLike<number>),weights};
+   cache.set(o,state);o.geometry=newGeo;
+  }
+  const position=state.geometry.getAttribute('position') as BufferAttribute;
+  const ref=state.reference;
+  const shoulder=clamp(shape.shoulders,.75,1.25)-1;
+  const muscle=clamp(shape.muscle,.7,1.35)-1;
+  const waist=clamp(shape.waist,.75,1.3)-1;
+  for(let i=0;i<position.count;i++){
+   const chest=state.weights[i*2],hips=state.weights[i*2+1];
+   const torso=Math.min(1,chest+hips);
+   // The waist/shoulders volumes follow relevant skin weights, not broad mesh names.
+   const width=1+shoulder*.25*chest+waist*.28*hips+muscle*.12*torso;
+   const depth=1+muscle*.14*torso+waist*.12*hips;
+   position.setXYZ(i,ref[i*3]*width,ref[i*3+1],ref[i*3+2]*depth);
+   if(torso>.4)modified++;
+  }
+  position.needsUpdate=true;
+  state.geometry.computeBoundingBox();state.geometry.computeBoundingSphere();
+ });
+ return modified;
+}
+/** Use only morph targets proven to exist on each cloned mesh. */
+export function applyCoachFaceShapes(root:Object3D,shape:CoachFaceShape):number{
+ let affected=0;
+ root.traverse(o=>{
+  const mesh=o as Mesh;
+  if(!mesh.isMesh||!mesh.morphTargetInfluences||!mesh.morphTargetDictionary)return;
+  for(const [name,index] of Object.entries(mesh.morphTargetDictionary)){
+   const match=shapeMorph(name);if(!match)continue;
+   const value=clamp(shape[match.control],.8,1.2)-1;
+   const influence=Math.min(1,Math.max(0,match.direction*value*4));
+   mesh.morphTargetInfluences[index]=influence;affected++;
+  }
+ });
+ return affected;
+}
