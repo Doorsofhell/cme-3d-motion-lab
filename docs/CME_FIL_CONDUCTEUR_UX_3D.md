@@ -60,3 +60,6 @@ La bibliothèque du Laboratoire ne renvoie plus simplement vers Studio Coach : l
 
 ## Lot catalogue Shadow — 24/10/2026
 Audit en lecture seule des versions actuelle et initiale de techniques/exercices : 75 techniques distinctes, 208 exercices déjà importés, cinq références Shadow absentes du catalogue de techniques CME. Ajout d'un inventaire séparé, tests de déduplication et panneau de consultation. Les états « mappé » et « biomécaniquement validé » restent distincts ; vérification exhaustive des anciens assets et du retargeting toujours en attente.
+
+## 24/10 — Priorité ergonomie et non-régression
+P0 : grande scène de test, double clic/tap pour plein écran, commandes techniques repliées, Studio Coach en mode rig neutre par défaut. À confirmer sur Android réel : présence et qualité visuelle du rig neutre, actualisation des meshes pendant chaque modification, double tap tactile, absence de débordement vertical et performances. Les tests CI ne remplacent pas cette validation visuelle. Maintenir compatibilité future des acteurs et profils avec Shadow sans toucher son dépôt.
