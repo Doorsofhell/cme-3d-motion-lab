@@ -5,7 +5,7 @@ import {Fighter} from './Fighter';
 import {StudioCoach} from './StudioCoach';
 import {useSceneFullscreen,SceneFullscreenButton} from './SceneFullscreen';
 import {SceneCameraControls,SceneToolbar,SceneLoadingIndicator} from './SceneControls';
-import {shouldRenderLabFrames} from './sceneRuntime';
+import {shouldRenderLabFrames,shouldMonitorLabLoading} from './sceneRuntime';
 import {AndroidTelemetry} from './androidTelemetry';
 import {AndroidDiagnostics,AndroidFrameProbe} from './AndroidDiagnostics';
 import {ShadowCatalogPanel} from './ShadowCatalogPanel';
@@ -125,13 +125,15 @@ function Viewer({actor,discipline,technique,coachPlan,quality,renderStyle,playba
   setReady(false);setSlow(false);
   telemetry.beginLoad(actor+'/'+discipline,retry>0?'retry':telemetry.loads.length===0?'initial':'switch',performance.now());
  },[actor,discipline,retry,telemetry]);
- useEffect(()=>{setReady(false);setSlow(false);},[renderStyle]);
- // Timeout never appears once a coach is ready.
+ // Un changement de style ne recharge pas les GLB : conserver le signal de rig prêt.
+ // Sinon l'effet parent pouvait effacer le onReady() de Fighter (effet enfant),
+ // puis créer une fausse alerte 24 secondes après le rendu effectif.
+ // Le chronomètre ne tourne que si le Laboratoire est visible et actif.
  useEffect(()=>{
-  if(ready||error)return;
+  if(!shouldMonitorLabLoading(active,ready,error))return;
   const id=window.setTimeout(()=>{setSlow(true);onIncident('loading','Chargement 3D anormalement long','Coach '+actor+', tenue '+discipline+' : aucun signal de fin de chargement après 24 secondes');},24000);
   return()=>window.clearTimeout(id);
- },[ready,error,retry,actor,discipline,onIncident]);
+ },[active,ready,error,retry,actor,discipline,onIncident]);
  const onReady=useCallback(()=>{
   setReady(true);setSlow(false);
   const load=telemetry.finishLoad(actor+'/'+discipline,performance.now());
