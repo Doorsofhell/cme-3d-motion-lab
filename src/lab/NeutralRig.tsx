@@ -7,7 +7,8 @@ import {CoachRig} from '../shadow-engine/rig';
 import {getLibrary} from '../shadow-engine/library';
 import {MotionSampler} from '../shadow-engine/motion';
 import {restoreReferencePose} from './restorePose';
-import {applyNeutralAppearance,applyNeutralRigMaterials,type NeutralAppearance} from './neutralAppearance';
+import {applyNeutralAppearance,type NeutralAppearance} from './neutralAppearance';
+import {buildNeutralHumanoid} from './canonicalNeutralBody';
 
 export const LAB_DISCIPLINES=['boxing','kickboxing','muaythai','mma','bjj','judo'] as const;
 export type LabDiscipline=typeof LAB_DISCIPLINES[number];
@@ -31,6 +32,10 @@ export function NeutralRig({sex,discipline,motionId,playing,speed,showSkeleton,o
  const scene=useMemo(()=>{
   const root=clone(gltf.scene) as Object3D;
   restoreReferencePose(root);
+  if(mode==='neutral'){
+   root.traverse(o=>{const m=o as Mesh;if(m.isMesh)m.visible=false;});
+   buildNeutralHumanoid(root,sex);
+  }
   root.traverse(o=>{
    const m=o as Mesh;
    if(!m.isMesh)return;
@@ -45,8 +50,8 @@ export function NeutralRig({sex,discipline,motionId,playing,speed,showSkeleton,o
    }
   });
   return root;
- },[gltf.scene]);
- useEffect(()=>{if(mode==='neutral')applyNeutralRigMaterials(scene);else applyNeutralAppearance(scene,appearance);},[scene,appearance,mode]);
+ },[gltf.scene,mode,sex]);
+ useEffect(()=>{if(mode==='appearance')applyNeutralAppearance(scene,appearance);},[scene,appearance,mode]);
  const rig=useMemo(()=>new CoachRig(scene),[scene]);
  const library=useMemo(()=>getLibrary(rig,discipline),[rig,discipline]);
  const motion=library.get(motionId)??library.get('garde');
