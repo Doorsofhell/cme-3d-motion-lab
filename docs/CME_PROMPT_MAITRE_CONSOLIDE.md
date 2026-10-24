@@ -67,3 +67,10 @@ Capture réelle : boutons superposés, mannequin invisible, réglages non dynami
 
 ## 24/10/2026 — Cohérence systématique des composants (décision validée)
 Toute fonction identique doit utiliser un composant partagé unique dans Laboratoire, Studio Coach et Comparatif 3D : plein écran natif, double-tap/double-clic, boutons, caméra, menus, états de chargement, navigation et retours utilisateur. Interdire les implémentations divergentes et l'accumulation de correctifs CSS locaux. Réutiliser les mêmes libellés français, cibles tactiles accessibles et conventions de mise en page. Le premier composant mutualisé est `src/lab/SceneFullscreen.tsx`. Préserver les humanoïdes GLB validés et ne pas modifier Shadow. Tester la cohérence sur Android avant de clore chaque lot.
+
+## 24/10/2026 — Audit global C validé, suivi additif
+- Référence avant intervention : `main` au commit `e9c32f5` (PR #83, déploiement GitHub Pages réussi). Audit croisé du parcours, moteur Three.js/R3F, gestion GPU, GLB, documentation et qualité.
+- 0.7.18 traite le rendu caché du Laboratoire et les chargements GLB prématurés ; la performance Android réelle reste à mesurer. Comparatif : suppression du texte parasite ; aucune mesure du moteur Shadow ajoutée artificiellement.
+- Trois espaces principaux + Plus déjà implémentés : conserver cette navigation. Ne pas réouvrir les anciens problèmes comme fonctionnalités manquantes sans vérification préalable.
+- Atlas : 306 gestes uniques, 43 combinaisons proposées, **aucune validation biomécanique certifiée** d'après `COUVERTURE.json`. P0 recette Android réelle ; P1 fixtures des six disciplines, humains neutres de qualité, morphs appliqués, A/B quantitatif ; P2 profils FPS et Naïra originale dépendante d'assets autorisés.
+- Mettre systématiquement à jour `docs/CME_FIL_CONDUCTEUR_UX_3D.md`, ne jamais prétendre que CI ou Pages certifient l'UX tactile ou l'anatomie, conserver Shadow strictement en lecture seule et les interdictions de capture/analyse vidéo.
