@@ -23,7 +23,7 @@ export class CoachPlanSampler{
   this.duration=this.timeline.duration;
  }
  sample(time:number):ResolvedPose{
-  const t=Math.max(0,Math.min(this.duration-1e-7,time));
+  const t=Number.isFinite(time)?Math.max(0,Math.min(this.duration-1e-7,time)):0;
   const clips=this.timeline.clips;
   const found=clips.findIndex(c=>t<c.end);
   const index=found<0?clips.length-1:found;
@@ -36,7 +36,8 @@ export class CoachPlanSampler{
   const blendWindow=Math.min(.12,(clip.end-clip.start)*.18,(prev.end-prev.start)*.18);
   if(blendWindow<=0||t>=clip.start+blendWindow)return current;
   const prior=this.samplers.get(prev.id)!;
-  const from=prior.sample(prior.duration);
+  const previousLocal=Math.max(0,Math.min(prior.duration,(t-prev.start)*prev.speed));
+  const from=prior.sample(previousLocal);
   const u=(t-clip.start)/blendWindow;
   return blendResolved(from,current,u*u*(3-2*u));
  }
