@@ -1,4 +1,4 @@
-import {Suspense,Component,useCallback,useEffect,useMemo,useRef,useState,type ReactNode,type RefObject} from 'react';
+import {Suspense,Component,useCallback,useEffect,useLayoutEffect,useMemo,useRef,useState,type ReactNode,type RefObject} from 'react';
 import {Canvas,useThree,useFrame} from '@react-three/fiber';
 import {ACESFilmicToneMapping,NeutralToneMapping,SRGBColorSpace,CanvasTexture} from 'three';
 import {Fighter} from './Fighter';
@@ -121,7 +121,7 @@ function Viewer({actor,discipline,technique,coachPlan,quality,renderStyle,playba
  const canvasRef=useRef<(HTMLCanvasElement & {cmeCleanup?:()=>void})|null>(null);
  const captureContext=useRef({actor,discipline,technique,renderStyle});
  captureContext.current={actor,discipline,technique,renderStyle};
- useEffect(()=>{
+ useLayoutEffect(()=>{
   setReady(false);setSlow(false);
   telemetry.beginLoad(actor+'/'+discipline,retry>0?'retry':telemetry.loads.length===0?'initial':'switch',performance.now());
  },[actor,discipline,retry,telemetry]);
