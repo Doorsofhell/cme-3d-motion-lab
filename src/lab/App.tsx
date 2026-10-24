@@ -1,10 +1,10 @@
 import {Suspense,Component,useCallback,useEffect,useMemo,useRef,useState,type ReactNode,type RefObject} from 'react';
 import {Canvas,useThree,useFrame} from '@react-three/fiber';
-import {OrbitControls} from '@react-three/drei';
 import {ACESFilmicToneMapping,NeutralToneMapping,SRGBColorSpace,CanvasTexture} from 'three';
 import {Fighter} from './Fighter';
 import {StudioCoach} from './StudioCoach';
 import {useSceneFullscreen,SceneFullscreenButton} from './SceneFullscreen';
+import {SceneCameraControls} from './SceneControls';
 import {ShadowCatalogPanel} from './ShadowCatalogPanel';
 import {readSavedCoaches,findSavedCoach,coachSourceActor,type SavedCoach} from './savedCoaches';
 import type {CoachLook} from './StudioCoach';
@@ -161,7 +161,7 @@ function Viewer({actor,discipline,technique,coachPlan,quality,renderStyle,playba
      <Suspense fallback={null}>
       <Fighter actor={actor} outfit={discipline} technique={technique} coachPlan={coachPlan} playback={playback} skeleton={skeleton} quality={quality} renderStyle={renderStyle} onReady={onReady} onReport={onReport} coachLook={coachLook}/>
      </Suspense>
-     <OrbitControls target={[0,1,0]} minDistance={1.35} maxDistance={6} enableDamping dampingFactor={.12}/>
+     <SceneCameraControls target={[0,1,0]} minDistance={1.35} maxDistance={6}/>
     </Canvas>
    </ErrorBoundary>
    {!error&&!ready&&<div className="viewerOverlay" role="status"><span className="spinner"/>Chargement du coach…{slow&&<span className="muted">Le chargement dépasse 24 s. Connexion ou décodage 3D lent.</span>}</div>}
