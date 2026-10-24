@@ -14,6 +14,7 @@ import {focusForSection,focusForSetting,FOCUS_LABELS,type StudioFocusZone} from 
 import {addSavedCoach,readSavedCoaches,updateSavedCoach,deleteSavedCoach} from './savedCoaches';
 import {studioTechniqueCatalog} from './studioTechniqueCatalog';
 import {activeShapeGroups,applyShapePreset,randomShapeLook,type ShapeGroup} from './visualShapePresets';
+import {MorphThumbnail} from './MorphThumbnail';
 
 type Category='corps'|'silhouette'|'visage'|'peau'|'cheveux'|'tenue'|'protections';
 export type CoachLook={
@@ -110,6 +111,7 @@ export function StudioCoach(){
  const [webglStatus,setWebglStatus]=useState('');
  const [canvasRetry,setCanvasRetry]=useState(0);
  const canvasCleanup=useRef<(()=>void)|null>(null);
+ const portraitCanvas=useRef<HTMLCanvasElement|null>(null);
  useEffect(()=>()=>{canvasCleanup.current?.();canvasCleanup.current=null;},[]);
  const beginRigLoad=(sex:CoachLook['sex'],mode:boolean,kind:LoadKind)=>{
   androidTelemetry.beginLoad(sex+'/'+(mode?'anatomie':'apparence'),kind,performance.now());
@@ -119,6 +121,7 @@ export function StudioCoach(){
   setReport(value);
  },[androidTelemetry,rigMode]);
  const onCanvasCreated=useCallback(({gl}:{gl:{domElement:HTMLCanvasElement}})=>{
+  portraitCanvas.current=gl.domElement;
   canvasCleanup.current?.();
   canvasCleanup.current=watchWebGLContext(gl.domElement,{
    onLost:()=>{
@@ -145,7 +148,7 @@ export function StudioCoach(){
   setLook(l=>normalizeCoachLook({...l,[key]:value}));
  };
  const isShapeSupported=(group:ShapeGroup)=>!rigMode&&!!support&&(group.requires==='torso'?support.shape.torsoVertices>0:group.requires==='hip'?support.shape.hipVertices>0:group.requires==='thigh'?support.shape.thighVertices>0:group.requires==='bust'?support.shape.bustVertices>0:!!support.shape.faceMorphs[group.id as 'jaw'|'nose'|'eyes']);
- const shapePicker=(ids:string[])=><div className="coachShapeGroups">{activeShapeGroups(look.sex).filter(g=>ids.includes(g.id)).map(g=><section key={g.id} className="coachShapeGroup"><div className="coachShapeGroupTitle"><strong>{g.label}</strong><span>{isShapeSupported(g)?'Formes actives':'Asset 3D manquant'}</span></div><div className="coachShapeGrid">{g.presets.map(p=><button key={p.id} type="button" disabled={!isShapeSupported(g)} className={'coachShapeOption'+(Math.abs(look[g.id]-p.value)<.001?' active':'')} aria-pressed={Math.abs(look[g.id]-p.value)<.001} onClick={()=>{setTestingMotion(false);setPlaying(false);setMotionId('garde');setLook(v=>normalizeCoachLook(applyShapePreset(v,g.id,p.value)));recenter(g.zone);}}><span className="coachShapeSymbol" aria-hidden="true">{p.symbol}</span><span>{p.label}</span></button>)}</div></section>)}</div>;
+ const shapePicker=(ids:string[])=><div className="coachShapeGroups">{activeShapeGroups(look.sex).filter(g=>ids.includes(g.id)).map(g=><section key={g.id} className="coachShapeGroup"><div className="coachShapeGroupTitle"><strong>{g.label}</strong><span>{isShapeSupported(g)?'Formes actives':'Asset 3D manquant'}</span></div><div className="coachShapeGrid">{g.presets.map(p=><button key={p.id} type="button" disabled={!isShapeSupported(g)} className={'coachShapeOption'+(Math.abs(look[g.id]-p.value)<.001?' active':'')} aria-pressed={Math.abs(look[g.id]-p.value)<.001} onClick={()=>{setTestingMotion(false);setPlaying(false);setMotionId('garde');setLook(v=>normalizeCoachLook(applyShapePreset(v,g.id,p.value)));recenter(g.zone);}}><MorphThumbnail part={g.id} value={p.value}/><span>{p.label}</span></button>)}</div></section>)}</div>;
  const range=(key:'height'|'shoulders'|'muscle'|'waist'|'roundness'|'hips'|'thighs'|'bust'|'jaw'|'nose'|'eyes',label:string,min:number,max:number,enabled=true)=>
   <label className="coachField"><span>{label} <b>{look[key].toFixed(2)}</b></span>
    <input type="range" min={min} max={max} step=".01" disabled={!enabled} value={look[key]} onFocus={()=>selectFocus(focusForSetting(key,section))} onChange={e=>update(key,Number(e.target.value))}/>
@@ -167,7 +170,9 @@ export function StudioCoach(){
    setLook(next);setMessage('Profil importé et paramètres validés.');
   }catch(error){setMessage('Import refusé : '+(error instanceof Error?error.message:'fichier invalide'));}
  };
- const saveCoach=()=>{try{const existing=readSavedCoaches(localStorage).find(c=>c.id===selectedId);const name=window.prompt('Nom du coach',existing?.name??(look.sex==='homme'?'Coach homme':'Coach femme'))?.trim();if(!name)return;const id=existing?.id??crypto.randomUUID();const profile={id,name:name.slice(0,60),createdAt:existing?.createdAt??new Date().toISOString(),look:normalizeCoachLook(look)};if(existing)updateSavedCoach(localStorage,profile);else addSavedCoach(localStorage,profile);localStorage.setItem('cme-selected-coach',id);localStorage.setItem('cme-lab-coach',id);setSelectedId(id);window.dispatchEvent(new Event('cme-coaches-changed'));setMessage(existing?'Coach mis à jour et sélectionné dans le Laboratoire.':'Coach enregistré et sélectionné dans le Laboratoire.');}catch{setMessage('Enregistrement impossible sur cet appareil.');}};
+ const saveCoach=()=>{try{const existing=readSavedCoaches(localStorage).find(c=>c.id===selectedId);const name=window.prompt('Nom du coach',existing?.name??(look.sex==='homme'?'Coach homme':'Coach femme'))?.trim();if(!name)return;const id=existing?.id??crypto.randomUUID();let portrait=existing?.portrait;
+  try{if(!testingMotion&&!rigMode&&report?.appearanceSupport){const source=portraitCanvas.current;if(source&&source.width>0&&source.height>0){const dest=document.createElement('canvas');dest.width=240;dest.height=300;const ctx=dest.getContext('2d');if(ctx){ctx.fillStyle='#dce5ee';ctx.fillRect(0,0,240,300);ctx.drawImage(source,0,0,source.width,source.height,0,0,240,300);portrait=dest.toDataURL('image/jpeg',.76);}}}}catch{/* Context unreadable: retain old portrait. */}
+  const profile={id,name:name.slice(0,60),createdAt:existing?.createdAt??new Date().toISOString(),look:normalizeCoachLook(look),portrait};if(existing)updateSavedCoach(localStorage,profile);else addSavedCoach(localStorage,profile);localStorage.setItem('cme-selected-coach',id);localStorage.setItem('cme-lab-coach',id);setSelectedId(id);window.dispatchEvent(new Event('cme-coaches-changed'));setMessage(existing?'Coach mis à jour et sélectionné dans le Laboratoire.':'Coach enregistré et sélectionné dans le Laboratoire.');}catch{setMessage('Enregistrement impossible sur cet appareil.');}};
  const newCoach=()=>{if(look.sex!=='homme')beginRigLoad('homme',rigMode,'switch');setSelectedId(null);setLook(defaultCoachLook);try{localStorage.removeItem('cme-selected-coach');}catch{}setMessage('Nouveau personnage : choisissez un modèle neutre, puis personnalisez-le.');};
  const removeCoach=()=>{if(!selectedId||!window.confirm('Supprimer définitivement ce coach de cet appareil ?'))return;try{deleteSavedCoach(localStorage,selectedId);if(localStorage.getItem('cme-lab-coach')===selectedId)localStorage.removeItem('cme-lab-coach');localStorage.removeItem('cme-selected-coach');setSelectedId(null);setLook(defaultCoachLook);window.dispatchEvent(new Event('cme-coaches-changed'));setMessage('Coach supprimé.');}catch{setMessage('Suppression impossible.');}};
  const exportJson=()=>{const json=JSON.stringify({schema:'cme-coach-look-v1',look},null,2);const blob=new Blob([json],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='cme-coach-look.json';a.click();URL.revokeObjectURL(url);setMessage('Configuration exportée : apparence uniquement, sans modification du moteur.');};
@@ -179,7 +184,7 @@ export function StudioCoach(){
      <div className="coachRigSwitch" role="group" aria-label="Mode du modèle 3D"><button type="button" className={!rigMode?'active':''} aria-pressed={!rigMode} onClick={()=>{if(rigMode){beginRigLoad(look.sex,false,'mode');setRigMode(false);}}}>Coach</button><button type="button" className={rigMode?'active':''} aria-pressed={rigMode} onClick={()=>{if(!rigMode){beginRigLoad(look.sex,true,'mode');setRigMode(true);}}}>Anatomie</button></div>
     </SceneToolbar>
     <SceneLoadingIndicator/>
-    <div className="coachCanvasViewport"><Canvas key={canvasRetry} onCreated={onCanvasCreated} camera={{position:[0,1.3,4.5],fov:38}} dpr={[1,1.5]} gl={{antialias:true}}>
+    <div className="coachCanvasViewport"><Canvas key={canvasRetry} onCreated={onCanvasCreated} camera={{position:[0,1.3,4.5],fov:38}} dpr={[1,1.5]} gl={{antialias:true,preserveDrawingBuffer:true}}>
      <AndroidFrameProbe telemetry={androidTelemetry}/>
      <color attach="background" args={['#e6edf6']}/><hemisphereLight args={['#fff8ef','#677388',1.05]}/><ambientLight intensity={0.65}/><directionalLight position={[3,5,4]} intensity={1.55}/>
      <SceneLoadingBoundary><NeutralRig key={`${look.sex}-${rigMode?'neutral':'appearance'}`} mode={rigMode?'neutral':'appearance'} sex={look.sex} discipline={discipline} noGi={noGi} motionId={testingMotion?motionId:'garde'} creationPose={!testingMotion} playing={testingMotion&&playing} speed={1} showSkeleton={showSkeleton} autoCadrage={!cameraAuto} focusZone={focusZone} focusRequest={focusRequest} onReport={handleRigReport} appearance={colors} proportions={dimensions} face={faceDimensions}/></SceneLoadingBoundary>
