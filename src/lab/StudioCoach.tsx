@@ -75,6 +75,7 @@ export function StudioCoach(){
  const [look,setLook]=useState<CoachLook>(()=>{try{const id=localStorage.getItem('cme-selected-coach');return normalizeCoachLook(readSavedCoaches(localStorage).find(x=>x.id===id)?.look??defaultCoachLook);}catch{return defaultCoachLook;}});
  const [selectedId,setSelectedId]=useState<string|null>(()=>{try{return localStorage.getItem('cme-selected-coach');}catch{return null;}});
  const [section,setSection]=useState<Category>('corps');
+ const [expandedShape,setExpandedShape]=useState<string|null>(null);
  const [message,setMessage]=useState('');
  const [rigMode,setRigMode]=useState(false);
  const [cameraAuto,setCameraAuto]=useState(false);
@@ -148,7 +149,21 @@ export function StudioCoach(){
   setLook(l=>normalizeCoachLook({...l,[key]:value}));
  };
  const isShapeSupported=(group:ShapeGroup)=>!rigMode&&!!support&&(group.requires==='torso'?support.shape.torsoVertices>0:group.requires==='hip'?support.shape.hipVertices>0:group.requires==='thigh'?support.shape.thighVertices>0:group.requires==='bust'?support.shape.bustVertices>0:!!support.shape.faceMorphs[group.id as 'jaw'|'nose'|'eyes']);
- const shapePicker=(ids:string[])=><div className="coachShapeGroups">{activeShapeGroups(look.sex).filter(g=>ids.includes(g.id)).map(g=><section key={g.id} className="coachShapeGroup"><div className="coachShapeGroupTitle"><strong>{g.label}</strong><span>{isShapeSupported(g)?'Formes actives':'Asset 3D manquant'}</span></div><div className="coachShapeGrid">{g.presets.map(p=><button key={p.id} type="button" disabled={!isShapeSupported(g)} className={'coachShapeOption'+(Math.abs(look[g.id]-p.value)<.001?' active':'')} aria-pressed={Math.abs(look[g.id]-p.value)<.001} onClick={()=>{setTestingMotion(false);setPlaying(false);setMotionId('garde');setLook(v=>normalizeCoachLook(applyShapePreset(v,g.id,p.value)));recenter(g.zone);}}><MorphThumbnail part={g.id} value={p.value}/><span>{p.label}</span></button>)}</div></section>)}</div>;
+ const shapePicker=(ids:string[])=><div className="coachShapeGroups">{activeShapeGroups(look.sex).filter(g=>ids.includes(g.id)).map(g=>{
+  const enabled=isShapeSupported(g);
+  const selected=g.presets.reduce((best,p)=>Math.abs(p.value-look[g.id])<Math.abs(best.value-look[g.id])?p:best,g.presets[0]);
+  const open=expandedShape===g.id;
+  return <section key={g.id} className={'coachShapeGroup'+(open?' is-open':'')}>
+   <button type="button" className="coachShapeZoneCard" aria-expanded={open} aria-controls={'shape-panel-'+g.id} onClick={()=>{setExpandedShape(v=>v===g.id?null:g.id);recenter(g.zone);}}>
+    <MorphThumbnail part={g.id} value={selected.value}/>
+    <span className="coachShapeZoneInfo"><strong>{g.label}</strong><small>{enabled?'Forme actuelle : '+selected.label:'Choix indisponible sur ce modèle'}</small></span>
+    <span className="coachShapeChevron" aria-hidden="true">{open?'−':'+'}</span>
+   </button>
+   {open&&<div id={'shape-panel-'+g.id} className="coachShapePanel" role="group" aria-label={'Choisir une forme : '+g.label}>
+    {enabled?<div className="coachShapeGrid">{g.presets.map(p=><button key={p.id} type="button" className={'coachShapeOption'+(Math.abs(look[g.id]-p.value)<.001?' active':'')} aria-pressed={Math.abs(look[g.id]-p.value)<.001} onClick={()=>{setTestingMotion(false);setPlaying(false);setMotionId('garde');setLook(v=>normalizeCoachLook(applyShapePreset(v,g.id,p.value)));recenter(g.zone);}}><MorphThumbnail part={g.id} value={p.value}/><span>{p.label}</span></button>)}</div>:<p className="coachAvailability">Ce modèle 3D ne possède pas encore les déformations nécessaires à cette zone.</p>}
+   </div>}
+  </section>;
+ })}</div>;
  const range=(key:'height'|'shoulders'|'muscle'|'waist'|'roundness'|'hips'|'thighs'|'bust'|'jaw'|'nose'|'eyes',label:string,min:number,max:number,enabled=true)=>
   <label className="coachField"><span>{label} <b>{look[key].toFixed(2)}</b></span>
    <input type="range" min={min} max={max} step=".01" disabled={!enabled} value={look[key]} onFocus={()=>selectFocus(focusForSetting(key,section))} onChange={e=>update(key,Number(e.target.value))}/>
