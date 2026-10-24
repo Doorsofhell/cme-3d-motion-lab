@@ -72,3 +72,10 @@ Conserver intégralement les consignes précédentes. Chaque proposition de suiv
 
 ## Ordre de travail validé : A → B → C (24/10/2026)
 A — stabilisation et non-régression d'abord ; B — personnalisation dynamique complète de Studio Coach ensuite ; C — biomécanique et caméra avancée enfin. Les choix libres restent prioritaires. Lot A : rendre testable séparément le masquage des matériaux sources sans supprimer les os descendants, vérifier les matériaux multiples et les deux sexes. Ne pas certifier un test visuel Android sans essai réel. Les PR brouillon antérieures nécessitent une revue de conflits avant toute fusion. Shadow reste en lecture seule.
+
+## Lot A — 24/10/2026 : stabilisation transversale et tests de contrat
+- PR #79 : mutualisation du hook et du bouton plein écran Laboratoire / Studio Coach ; déploiement Pages validé.
+- PR #80 : protection contre les doubles événements tactiles Android ; CI validée et fusion dans `main`.
+- Ajout de tests de contrat pour empêcher une nouvelle divergence de plein écran, contrôler la préservation des GLB et vérifier la présence du préchargement homme/femme.
+- Restent à valider sur Android réel : plein écran, rotation, gestes de caméra, temps de chargement et chevauchements ; une CI verte ne certifie pas ces comportements.
+- Suite ordonnée : composants caméra et chargement mutualisés, suppression des CSS contradictoires, contrôle visuel, puis B et C. Ne pas modifier Shadow.
