@@ -4,6 +4,7 @@ import {OrbitControls} from '@react-three/drei';
 import {ACESFilmicToneMapping,NeutralToneMapping,SRGBColorSpace,CanvasTexture} from 'three';
 import {Fighter} from './Fighter';
 import {StudioCoach} from './StudioCoach';
+import {useSceneFullscreen,SceneFullscreenButton} from './SceneFullscreen';
 import {ShadowCatalogPanel} from './ShadowCatalogPanel';
 import {readSavedCoaches,findSavedCoach,coachSourceActor,type SavedCoach} from './savedCoaches';
 import type {CoachLook} from './StudioCoach';
@@ -186,8 +187,8 @@ export function App(){
  const [report,setReport]=useState<RigReport|null>(null);
  const [extra,setExtra]=useState(false);
  const [moreOpen,setMoreOpen]=useState(false);
- const [stageFullscreen,setStageFullscreen]=useState(false);
- useEffect(()=>{const close=(event:KeyboardEvent)=>{if(event.key==='Escape')setStageFullscreen(false);};window.addEventListener('keydown',close);return()=>window.removeEventListener('keydown',close);},[]);
+ const stageFullscreen=useSceneFullscreen();
+
  const [tab,setTab]=useState<'lab'|'tracking'|'comparison'|'versions'|'options'|'studio'>('lab');
  const [clearCacheOnOpen,setClearCacheOnOpen]=useState(autoClearEnabled);
  const [cacheMessage,setCacheMessage]=useState('');
@@ -265,7 +266,7 @@ export function App(){
    <label><span>Discipline</span><select aria-label="Discipline" value={discipline} onChange={e=>{journal.record('discipline','Discipline : '+discipline+' → '+e.target.value,{coach:actor,style:renderStyle});reset();setDiscipline(e.target.value);setTechnique(techniques.find(t=>t.disciplines.includes(e.target.value))?.motion??'garde');onLog('Discipline : '+e.target.value);}}>{disciplines.map(([id,name])=><option key={id} value={id}>{name}</option>)}</select></label>
    <label><span>{technique.startsWith('seq-')?'Enchaînement':'Technique'} · {currentTechniques.length}</span><div className="motionSelector"><button type="button" className="catalogButton" aria-label="Choisir une technique" onClick={()=>{setCatalogMode('techniques');setCatalogOpen(true);setQuery('');}}><span>{techniqueLabel}</span><strong>⌕</strong></button><button type="button" className="comboChoose" aria-label="Choisir un enchaînement complexe" onClick={()=>{setCatalogMode('sequences');setCatalogOpen(true);setQuery('');}}>×{currentSequences.length}</button></div></label>
   </section>
-  <section className={`stage ${stageFullscreen?"cmeFullscreen":""}`} aria-label="Vue de test 3D" onDoubleClick={()=>setStageFullscreen(v=>!v)}>\n   <button type="button" className="cmeFullscreenToggle" onClick={()=>setStageFullscreen(v=>!v)} aria-label={stageFullscreen?"Quitter le plein écran":"Agrandir le coach"}>{stageFullscreen?"Réduire ✕":"⛶"}</button>
+  <section ref={stageFullscreen.ref as React.RefObject<HTMLElement>} className={`stage ${stageFullscreen.fullscreen?"cmeFullscreen":""}`} aria-label="Vue de test 3D" onDoubleClick={stageFullscreen.onDoubleClick} onTouchEnd={stageFullscreen.onTouchEnd}>\n   <SceneFullscreenButton fullscreen={stageFullscreen.fullscreen} onClick={stageFullscreen.toggle}/>
    <div className="stageTitle"><span>{actor==='mma-amara'?'AMARA':'KADIR'} <em>· {renderStyle==='fitness'?'Animation fitness':renderStyle==='comic'?'Roman graphique · héros':'Ultra-réaliste'}</em></span><span className="stagePill">MOTION / IK</span></div>
    {selectedCoach&&<div className="labSelectedCoach" role="status">Coach personnalisé : <strong>{selectedCoach.name}</strong> · {selectedCoach.look.sex} · animations canoniques</div>}
    <Viewer coachLook={selectedCoach?.look??null} actor={actor} coachPlan={coachPlan} discipline={outfit} quality={quality} renderStyle={renderStyle} technique={technique} playback={playback} skeleton={skeleton} onReport={onReport} onMetrics={onMetrics} onLog={onLog} onIncident={autoRecord} onCaptureReady={setScreenshotHandler}/>
