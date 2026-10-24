@@ -10,6 +10,7 @@ import {restoreReferencePose} from './restorePose';
 import {applyNeutralAppearance,type NeutralAppearance} from './neutralAppearance';
 import {buildNeutralHumanoid} from './canonicalNeutralBody';
 import {masquerApparenceSource} from './neutralVisibility';
+import {CadrageSquelette} from './CadrageSquelette';
 
 export const LAB_DISCIPLINES=['boxing','kickboxing','muaythai','mma','bjj','judo'] as const;
 export type LabDiscipline=typeof LAB_DISCIPLINES[number];
@@ -24,9 +25,9 @@ export type NeutralRigReport={sex:NeutralSex;discipline:LabDiscipline;motion:str
  * Both use the SAME CoachRig / MotionSampler implementation. No changes to canonical motion code.
  * These are neutralized reference rigs, NOT new independently certified anatomical assets.
  */
-export function NeutralRig({sex,discipline,motionId,playing,speed,showSkeleton,onReport,appearance,proportions,mode='neutral'}:{
+export function NeutralRig({sex,discipline,motionId,playing,speed,showSkeleton,onReport,appearance,proportions,autoCadrage=false,mode='neutral'}:{
  sex:NeutralSex;discipline:LabDiscipline;motionId:string;playing:boolean;speed:number;showSkeleton:boolean;
- onReport:(r:NeutralRigReport)=>void;appearance?:NeutralAppearance;proportions?:{height:number;shoulders:number;muscle:number;waist:number};mode?:'neutral'|'appearance';
+ onReport:(r:NeutralRigReport)=>void;appearance?:NeutralAppearance;proportions?:{height:number;shoulders:number;muscle:number;waist:number};autoCadrage?:boolean;mode?:'neutral'|'appearance';
 }){
  const url=import.meta.env.BASE_URL+'fighters/'+NEUTRAL_ASSETS[sex]+'/photo.glb';
  const gltf=useGLTF(url,import.meta.env.BASE_URL+'draco/');
@@ -90,5 +91,5 @@ export function NeutralRig({sex,discipline,motionId,playing,speed,showSkeleton,o
   rig.apply(sampler.sample(time.current));
   if(showSkeleton)skeleton.updateMatrixWorld(true);
  });
- return <group><primitive object={scene}/>{showSkeleton&&<primitive object={skeleton}/>}</group>;
+ return <group><primitive object={scene}/><CadrageSquelette racine={scene} actif={autoCadrage}/>{showSkeleton&&<primitive object={skeleton}/>}</group>;
 }
