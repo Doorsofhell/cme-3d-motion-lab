@@ -61,3 +61,6 @@ Conserver intégralement les consignes précédentes. Chaque proposition de suiv
 
 ## Ordre de travail validé : A → B → C (24/10/2026)
 A — stabilisation et non-régression d'abord ; B — personnalisation dynamique complète de Studio Coach ensuite ; C — biomécanique et caméra avancée enfin. Les choix libres restent prioritaires. Lot A : rendre testable séparément le masquage des matériaux sources sans supprimer les os descendants, vérifier les matériaux multiples et les deux sexes. Ne pas certifier un test visuel Android sans essai réel. Les PR brouillon antérieures nécessitent une revue de conflits avant toute fusion. Shadow reste en lecture seule.
+
+## 24/10/2026 — Retour Android et priorité ergonomique Studio Coach
+Capture réelle : boutons superposés, mannequin invisible, réglages non dynamiques, rashguard sélectionné sans être porté. Priorité à une interface claire et premium, aperçu 3D visible, actions contextuelles et aucun texte superflu. Ne jamais prétendre qu'une tenue est portée si le maillage correspondant n'est pas réellement rendu. Corriger les régressions avant de poursuivre B/C. Conserver le choix libre prioritaire et Shadow inchangé.
