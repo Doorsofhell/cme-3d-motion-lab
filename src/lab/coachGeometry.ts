@@ -1,10 +1,10 @@
 import {BufferAttribute,Mesh,Object3D,SkinnedMesh,type BufferGeometry} from 'three';
 import {cloneOwnedGeometry} from '../adapters/geometryOwnership';
 
-export type CoachBodyShape={shoulders:number;muscle:number;waist:number;sex?:'homme'|'femme';roundness?:number;hips?:number;thighs?:number};
+export type CoachBodyShape={shoulders:number;muscle:number;waist:number;sex?:'homme'|'femme';roundness?:number;hips?:number;thighs?:number;bust?:number};
 export type CoachFaceShape={jaw:number;nose:number;eyes:number};
 export type FaceControl=keyof CoachFaceShape;
-export type CoachShapeSupport={torsoVertices:number;hipVertices:number;thighVertices:number;faceMorphs:Record<FaceControl,number>};
+export type CoachShapeSupport={torsoVertices:number;hipVertices:number;thighVertices:number;bustVertices:number;faceMorphs:Record<FaceControl,number>};
 type Cache={geometry:BufferGeometry;reference:Float32Array;weights:Float32Array};
 const cache=new WeakMap<SkinnedMesh,Cache>();
 const clamp=(n:number,a:number,b:number)=>Math.max(a,Math.min(b,Number.isFinite(n)?n:1));
@@ -27,7 +27,7 @@ const shapeMorph=(name:string):{control:FaceControl;direction:-1|1}|null=>{
 };
 /** Detect blend shapes explicitly named for proportions; expression/speech targets are excluded. */
 export function inspectCoachShapes(root:Object3D):CoachShapeSupport{
- const result:CoachShapeSupport={torsoVertices:0,hipVertices:0,thighVertices:0,faceMorphs:{jaw:0,nose:0,eyes:0}};
+ const result:CoachShapeSupport={torsoVertices:0,hipVertices:0,thighVertices:0,bustVertices:0,faceMorphs:{jaw:0,nose:0,eyes:0}};
  root.traverse(o=>{
   const mesh=o as Mesh;
   if(!mesh.isMesh)return;
@@ -36,6 +36,7 @@ export function inspectCoachShapes(root:Object3D):CoachShapeSupport{
    if(weights){
     for(let i=0;i<weights.length;i+=3){
      if(weights[i]+weights[i+1]>.4)result.torsoVertices++;
+     if(weights[i]>.5)result.bustVertices++;
      if(weights[i+1]+weights[i+2]*.4>.4)result.hipVertices++;
      if(weights[i+2]>.4)result.thighVertices++;
     }
@@ -82,7 +83,7 @@ export function applyCoachBodyShape(root:Object3D,shape:CoachBodyShape):number{
    if(!weights||!weights.some(x=>x>.4))return;
    const female=shape.sex==='femme';
    const femaleNeutral=!female||[
-    shape.roundness??1,shape.hips??1,shape.thighs??1
+    shape.roundness??1,shape.hips??1,shape.thighs??1,shape.bust??1
    ].every(v=>Math.abs(v-1)<.001);
    if(!cache.has(o)&&Math.abs(shape.shoulders-1)<.001&&Math.abs(shape.muscle-1)<.001&&Math.abs(shape.waist-1)<.001&&femaleNeutral)return;
    const previous=o.geometry;
@@ -104,10 +105,22 @@ export function applyCoachBodyShape(root:Object3D,shape:CoachBodyShape):number{
   const roundness=female?clamp(shape.roundness??1,.7,1.3)-1:0;
   const hips=female?clamp(shape.hips??1,.75,1.35)-1:0;
   const thighs=female?clamp(shape.thighs??1,.75,1.3)-1:0;
+  const bust=female?clamp(shape.bust??1,.75,1.35)-1:0;
+  const sourceWidth=state.geometry.boundingBox?.max.x??0;
+  const widthScale=Math.max(.1,Math.abs(sourceWidth));
+  // Use local front (+Z) vertices influenced by chest bones. This modest
+  // approximation is not a replacement for anatomical breast blendshapes.
+  let sumX=0,sumY=0,sumZ=0,count=0;
+  if(Math.abs(bust)>.0001){
+   for(let j=0;j<state.weights.length/3;j++)if(state.weights[j*3]>.5){
+    sumX+=ref[j*3];sumY+=ref[j*3+1];sumZ+=ref[j*3+2];count++;
+   }
+  }
+  const chestCenterX=count?sumX/count:0,chestCenterY=count?sumY/count:0,chestCenterZ=count?sumZ/count:0;
   // Extra cloth clearance is deliberately tiny, weighted only to chest/hips.
   // It reduces poke-through for attached garments; it is not collision detection.
   const clothClearance=o.name.startsWith('tenue:')
-   ?Math.min(.012,Math.max(Math.abs(shoulder),Math.abs(muscle),Math.abs(waist),Math.abs(hips),Math.abs(thighs),Math.abs(roundness))*.04):0;
+   ?Math.min(.012,Math.max(Math.abs(shoulder),Math.abs(muscle),Math.abs(waist),Math.abs(hips),Math.abs(thighs),Math.abs(roundness),Math.abs(bust))*.04):0;
   for(let i=0;i<position.count;i++){
    const chest=state.weights[i*3],pelvis=state.weights[i*3+1],upperLeg=state.weights[i*3+2];
    const torso=Math.min(1,chest+pelvis);
@@ -119,10 +132,17 @@ export function applyCoachBodyShape(root:Object3D,shape:CoachBodyShape):number{
     hips*.22*hipRegion+thighs*.19*upperLeg+roundness*.095*fullness+clothClearance*extent;
    const depth=1+muscle*.14*torso+waist*.12*pelvis+
     hips*.095*hipRegion+thighs*.11*upperLeg+roundness*.105*fullness+clothClearance*extent;
-   position.setXYZ(i,ref[i*3]*width,ref[i*3+1],ref[i*3+2]*depth);
+   const x=ref[i*3],y=ref[i*3+1],z=ref[i*3+2];
+   const front=count>0&&z>chestCenterZ;
+   const nx=(Math.abs(x-chestCenterX)-widthScale*.38)/(widthScale*.38);
+   const ny=(y-chestCenterY)/(widthScale*.72);
+   const localized=front?Math.exp(-nx*nx*1.8-ny*ny*1.7):0;
+   const projection=bust*.24*widthScale*chest*localized;
+   position.setXYZ(i,x*width,y,z*depth+projection);
    if(extent>.4)modified++;
   }
   position.needsUpdate=true;
+  state.geometry.computeVertexNormals();
   state.geometry.computeBoundingBox();state.geometry.computeBoundingSphere();
  });
  return modified;
