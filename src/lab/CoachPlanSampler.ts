@@ -25,7 +25,8 @@ export class CoachPlanSampler{
  sample(time:number):ResolvedPose{
   const t=Math.max(0,Math.min(this.duration-1e-7,time));
   const clips=this.timeline.clips;
-  const index=Math.max(0,clips.findIndex(c=>t<c.end));
+  const found=clips.findIndex(c=>t<c.end);
+  const index=found<0?clips.length-1:found;
   const clip=clips[index];
   const sampler=this.samplers.get(clip.id)!;
   const local=(t-clip.start)*clip.speed;
