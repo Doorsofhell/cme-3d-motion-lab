@@ -1,7 +1,7 @@
 import {useEffect,useRef,useState} from 'react';
 import {Canvas} from '@react-three/fiber';
 import {CameraPedagogique} from './CameraPedagogique';
-import {OrbitControls} from '@react-three/drei';
+import {OrbitControls,useGLTF} from '@react-three/drei';
 import {NeutralRig,LAB_DISCIPLINES,type LabDiscipline,type NeutralRigReport} from './NeutralRig';
 import './StudioCoach.css';
 import {addSavedCoach,readSavedCoaches,updateSavedCoach,deleteSavedCoach} from './savedCoaches';
@@ -56,6 +56,8 @@ export function parseCoachLookJson(text:string):CoachLook{
 }
 const sections:Category[]=['corps','visage','peau','cheveux','tenue','protections'];
 const sectionNames:Record<Category,string>={corps:'Morphologie',visage:'Visage',peau:'Peau',cheveux:'Cheveux',tenue:'Tenue',protections:'Protections'};
+useGLTF.preload(import.meta.env.BASE_URL+'fighters/mma-kadir/photo.glb',import.meta.env.BASE_URL+'draco/');
+useGLTF.preload(import.meta.env.BASE_URL+'fighters/mma-amara/photo.glb',import.meta.env.BASE_URL+'draco/');
 export function StudioCoach(){
  const [look,setLook]=useState<CoachLook>(()=>{try{const id=localStorage.getItem('cme-selected-coach');return readSavedCoaches(localStorage).find(x=>x.id===id)?.look??defaultCoachLook;}catch{return defaultCoachLook;}});
  const [selectedId,setSelectedId]=useState<string|null>(()=>{try{return localStorage.getItem('cme-selected-coach');}catch{return null;}});
@@ -72,6 +74,14 @@ export function StudioCoach(){
  const [showSkeleton,setShowSkeleton]=useState(false);
  const [report,setReport]=useState<NeutralRigReport|null>(null);
  const importRef=useRef<HTMLInputElement>(null);
+ const lastTap=useRef(0);
+ const toggleFullscreen=()=>setPreviewFullscreen(v=>!v);
+ const handleTouchEnd=(event:React.TouchEvent<HTMLDivElement>)=>{
+  if((event.target as HTMLElement).closest('button,input,select,summary'))return;
+  const now=Date.now();
+  if(now-lastTap.current<350){event.preventDefault();toggleFullscreen();lastTap.current=0;}
+  else lastTap.current=now;
+ };
  const update=<K extends keyof CoachLook>(key:K,value:CoachLook[K])=>setLook(l=>normalizeCoachLook({...l,[key]:value}));
  const range=(key:'height'|'shoulders'|'muscle'|'waist'|'jaw'|'nose'|'eyes',label:string,min:number,max:number)=><label className="coachField"><span>{label} <b>{look[key].toFixed(2)}</b></span><input type="range" min={min} max={max} step=".01" value={look[key]} onChange={e=>update(key,Number(e.target.value))}/></label>;
  const color=(key:'skin'|'eyeColor'|'hairColor'|'topColor'|'bottomColor'|'gloveColor'|'shinColor',label:string)=><label className="coachColor"><span>{label}</span><input type="color" value={look[key]} onChange={e=>update(key,e.target.value)}/></label>;
@@ -91,15 +101,15 @@ export function StudioCoach(){
  return <section className="coachStudio" aria-label="Studio Coach">
   <header className="coachStudioHeader"><div><small>STUDIO COACH</small><h2>Votre combattant</h2></div></header>
   <div className="coachStudioLayout">
-   <div className={`coachPreview ${previewFullscreen?"cmeFullscreen":""}`} onDoubleClick={()=>setPreviewFullscreen(v=>!v)} aria-label="Aperçu 3D du mannequin ; double clic pour agrandir">\n    <button type="button" className="cmeFullscreenToggle" onClick={()=>setPreviewFullscreen(v=>!v)} aria-label={previewFullscreen?"Quitter le plein écran":"Agrandir le coach"}>{previewFullscreen?"Réduire ✕":"⛶"}</button>
+   <div className={`coachPreview ${previewFullscreen?"cmeFullscreen":""}`} onDoubleClick={event=>{if(!(event.target as HTMLElement).closest("button,input,select,summary"))toggleFullscreen();}} onTouchEnd={handleTouchEnd} aria-label="Aperçu 3D du mannequin ; double clic pour agrandir">\n    <button type="button" className="cmeFullscreenToggle" onClick={event=>{event.stopPropagation();toggleFullscreen();}} aria-label={previewFullscreen?"Quitter le plein écran":"Agrandir le coach"}>{previewFullscreen?"Réduire ✕":"⛶"}</button>
     <div className="coachRigSwitch" role="group" aria-label="Mode du modèle 3D"><button className={!rigMode?'active':''} aria-pressed={!rigMode} onClick={()=>setRigMode(false)}>Coach</button><button className={rigMode?'active':''} aria-pressed={rigMode} onClick={()=>setRigMode(true)}>Anatomie</button></div>
     <button type="button" className="cmeCameraAuto" aria-label={cameraAuto?'Désactiver la caméra automatique':'Activer la caméra automatique'} title="Caméra pédagogique" aria-pressed={cameraAuto} onClick={()=>setCameraAuto(v=>!v)}>◉ {cameraAuto?'Auto':'Libre'}</button>
-    <Canvas camera={{position:[0,1.3,4.5],fov:38}} dpr={[1,1.5]} gl={{antialias:true}}>
+    <div className="coachCanvasViewport"><Canvas camera={{position:[0,1.3,4.5],fov:38}} dpr={[1,1.5]} gl={{antialias:true}}>
      <color attach="background" args={['#e6edf6']}/><ambientLight intensity={2}/><directionalLight position={[3,5,4]} intensity={2.6}/>
      {<NeutralRig key={`${look.sex}-${rigMode?'neutral':'appearance'}`} mode={rigMode?'neutral':'appearance'} sex={look.sex} discipline={discipline} motionId={motionId} playing={playing} speed={1} showSkeleton={showSkeleton} autoCadrage={!cameraAuto} onReport={setReport} appearance={{skin:look.skin,hairColor:look.hairColor,topColor:look.topColor,bottomColor:look.bottomColor,gloveColor:look.gloveColor}} proportions={{height:look.height,shoulders:look.shoulders,muscle:look.muscle,waist:look.waist}}/>}
      <CameraPedagogique mouvement={motionId} active={cameraAuto}/>
      {!cameraAuto&&<OrbitControls makeDefault target={[0,1,0]} enablePan={false} minDistance={.5} maxDistance={80}/> }
-    </Canvas>
+    </Canvas></div>
     <span className="coachPreviewLabel">{rigMode?'Anatomie 3D':'Aperçu 3D'}</span>
    </div>
    <div className="coachEditor">
