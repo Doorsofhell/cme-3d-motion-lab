@@ -118,11 +118,17 @@ export function applyCoachBodyShape(root:Object3D,shape:CoachBodyShape):number{
   }
   const widthScale=count?Math.max(.1,(maxChestX-minChestX)*.5):.1;
   const chestCenterX=count?sumX/count:0,chestCenterY=count?sumY/count:0,chestCenterZ=count?sumZ/count:0;
+  const neutralShape=shoulder===0&&muscle===0&&waist===0&&roundness===0&&hips===0&&thighs===0&&bust===0;
   // Extra cloth clearance is deliberately tiny, weighted only to chest/hips.
   // It reduces poke-through for attached garments; it is not collision detection.
   const clothClearance=o.name.startsWith('tenue:')
    ?Math.min(.012,Math.max(Math.abs(shoulder),Math.abs(muscle),Math.abs(waist),Math.abs(hips),Math.abs(thighs),Math.abs(roundness),Math.abs(bust))*.04):0;
   for(let i=0;i<position.count;i++){
+   if(neutralShape){
+    // Exact byte-level neutral restoration, including IEEE-754 negative zero.
+    position.setXYZ(i,ref[i*3],ref[i*3+1],ref[i*3+2]);
+    continue;
+   }
    const chest=state.weights[i*3],pelvis=state.weights[i*3+1],upperLeg=state.weights[i*3+2];
    const torso=Math.min(1,chest+pelvis);
    // All deformations use REAL skinning influence: no changes to bones or skinning data.
