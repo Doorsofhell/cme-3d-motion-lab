@@ -29,7 +29,7 @@ export type NeutralRigReport={sex:NeutralSex;discipline:LabDiscipline;motion:str
  */
 type NeutralRigProps={
  sex:NeutralSex;discipline:LabDiscipline;motionId:string;playing:boolean;speed:number;showSkeleton:boolean;
- onReport:(r:NeutralRigReport)=>void;appearance?:NeutralAppearance;proportions?:{height:number;shoulders:number;muscle:number;waist:number};face?:CoachFaceShape;autoCadrage?:boolean;mode?:'neutral'|'appearance';
+ onReport:(r:NeutralRigReport)=>void;noGi?:boolean;appearance?:NeutralAppearance;proportions?:{height:number;shoulders:number;muscle:number;waist:number};face?:CoachFaceShape;autoCadrage?:boolean;mode?:'neutral'|'appearance';
 };
 /** Appearance uses a genuine, already-shipped outfit GLB.
  * Neutral anatomy does not fetch or display an outfit.
@@ -38,7 +38,7 @@ export function NeutralRig(props:NeutralRigProps){
  return props.mode==='appearance'?<OutfittedRig {...props}/>:<RigBody {...props}/>;
 }
 function OutfittedRig(props:NeutralRigProps){
- const costume=props.discipline==='boxing'?'boxe':props.discipline;
+ const costume=props.discipline==='boxing'?'boxe':props.discipline==='bjj'&&props.noGi?'bjj-nogi':props.discipline;
  const url=import.meta.env.BASE_URL+'fighters/'+NEUTRAL_ASSETS[props.sex]+'/tenues/'+costume+'.glb';
  const {scene}=useGLTF(url,import.meta.env.BASE_URL+'draco/');
  return <RigBody {...props} outfitScene={scene}/>;
