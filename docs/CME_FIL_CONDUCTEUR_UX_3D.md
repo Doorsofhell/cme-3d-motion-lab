@@ -79,3 +79,36 @@ A — stabilisation et non-régression d'abord ; B — personnalisation dynamiqu
 - Ajout de tests de contrat pour empêcher une nouvelle divergence de plein écran, contrôler la préservation des GLB et vérifier la présence du préchargement homme/femme.
 - Restent à valider sur Android réel : plein écran, rotation, gestes de caméra, temps de chargement et chevauchements ; une CI verte ne certifie pas ces comportements.
 - Suite ordonnée : composants caméra et chargement mutualisés, suppression des CSS contradictoires, contrôle visuel, puis B et C. Ne pas modifier Shadow.
+
+## Audit consolidé du 24/10/2026 — référence `main` e9c32f5 et lot 0.7.18
+
+### Constats vérifiés dans le code et dans GitHub Actions
+- La PR #83 (barre 3D commune, CSS rationalisé, plein écran Android et progression GLB) a été fusionnée ; GitHub Pages a terminé son déploiement avec succès. Ce résultat CI/CD **n'est pas** une validation visuelle sur téléphone.
+- La navigation basse demandée est déjà présente : **Laboratoire**, **Studio Coach**, **Comparatif 3D**, **Plus** (Incidents, Versions, Options). Les anciens paragraphes du fil conducteur parlant de six onglets principaux sont historiques et ne décrivent plus la version courante.
+- `SceneFullscreen` et `SceneControls` sont effectivement partagés entre Laboratoire et Studio ; les humanoïdes GLB existants ont été préservés.
+- Anomalie de performance identifiée : le `Canvas` du Laboratoire reste monté derrière `display:none` lorsqu'un autre onglet est sélectionné, alors que `frameloop="always"` rendait continuellement la scène masquée. Correctif 0.7.18 : `frameloop="never"` hors Laboratoire / onglet navigateur masqué, avec reprise `always` au retour ; la progression UI ne se rafraîchit plus en arrière-plan.
+- Anomalie de chargement identifiée : le `StudioCoach` lançait les deux `useGLTF.preload` au chargement du module, dès l'ouverture du Laboratoire. Correctif 0.7.18 : préchargement du GLB opposé **après** initialisation du premier humanoïde Studio ; cache Drei inchangé. Latence réelle non mesurée.
+- Anomalie de contenu identifiée : séquence littérale `\\n` affichable entre protocole et actions du Comparatif 3D ; supprimée en 0.7.18.
+- Le comparatif présente des métadonnées GitHub et les métriques CME seulement. Les FPS Shadow et l'analyse A/B des trajectoires ne sont **pas disponibles**, donc aucune supériorité moteur n'est établie.
+- L'Atlas `docs/biomecanique/COUVERTURE.json` indique **306 mouvements uniques**, **43 combinaisons proposées**, mais **0 mouvement et 0 combinaison 3D certifiés**. Le catalogue de l'application et l'Atlas n'ont pas le même périmètre.
+- Studio Coach conserve des réglages encore partiellement visuels (visage, coiffure, morphs de maillage et équipements) ; ne pas les présenter comme actifs sur tous les GLB. Naïra n'est pas un personnage 3D original livré.
+
+### Ordonnancement des chantiers
+
+| Priorité | Chantier / décision | Situation et condition de clôture |
+| --- | --- | --- |
+| **P0 — livré en code 0.7.18** | Suspendre la scène WebGL masquée, retarder le préchargement GLB et nettoyer le Comparatif | Vérifier TypeScript, tests, build, fusion et workflow Pages. Gain de FPS/autonomie **non chiffré** tant qu'Android n'a pas été instrumenté. |
+| **P0 — ouvert** | Recette Android sur appareil réel | Inspecter homme/femme, six disciplines, plein écran, double tap, caméra, défilement, clavier, absence de chevauchements, reprise WebGL et séquences ; relever modèle/OS/navigateur/FPS. |
+| **P1 — ouvert** | Validation biomécanique quantitative de l'Atlas | Fixtures canoniques, trajectoires, points d'appui, glissement, contacts, angles, transitions et tests par discipline et sexe ; distinguer mappé, animable et validé. |
+| **P1 — ouvert** | Vrais deux humanoïdes neutres professionnels | Assets autorisés/licenciés, maillages et poids de skinning vérifiés, squelette identique, revue 360° ; les proxies actuels ne valent pas certification. |
+| **P1 — ouvert** | Personnalisation Studio appliquée à la géométrie | Mapping réel morphs/visage/cheveux/tenues/protections, vérifications des meshes et conservation des animations sans promettre des tenues inexistantes. |
+| **P1 — ouvert** | Comparatif moteur CME versus Shadow | Exécuter les deux moteurs à protocole et hardware équivalents ; source Shadow **lecture seule**, aucune donnée inventée. |
+| **P2 — ouvert** | Profilage et stratégie qualité Android | FPS p50/p95 en charge réelle, latence premier GLB/changement de sexe, allocations VRAM, perte de contexte, rechargements et consommation GPU. |
+| **P2 — bloqué par asset** | Naïra originale premium | Sculpture/UV/PBR/rigging/7 tenues puis contrôles G0–G6 et validation artistique ; aucun mannequin primitif de substitution comme produit final. |
+| **P2 — ouvert** | Traçabilité complète des releases | Version visible, manifeste de preuves, comparaison SHA déployé et déclenchement de la recette sur appareil. |
+
+### Non-régression et exclusions
+- Code de locomotion, contacts et bibliothèque de mouvement canoniques **inchangés** dans ce lot. Aucun fichier ni modification dans `Doorsofhell/combat-shadow-studio`.
+- Les tests automatiques couvrent le contrat de visibilité de l'onglet et la politique de préchargement. Ils ne mesurent ni l'utilisation GPU ni les FPS matériels.
+- La CI et le déploiement sont des preuves distinctes de la validation sur Android ; conserver explicitement les éléments non observés dans le prochain compte-rendu.
+- Interdictions maintenues : capture par caméra de l'utilisateur, analyse vidéo, upload vidéo, reconnaissance de mouvements par vision.

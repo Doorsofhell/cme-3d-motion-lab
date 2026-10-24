@@ -3,6 +3,7 @@ import {Canvas} from '@react-three/fiber';
 import {SceneCameraControls,SceneCameraButton,SceneLoadingBoundary,SceneToolbar,SceneLoadingIndicator} from './SceneControls';
 import {useSceneFullscreen,SceneFullscreenButton} from './SceneFullscreen';
 import {useGLTF} from '@react-three/drei';
+import {alternateRigAsset} from './sceneRuntime';
 import {NeutralRig,LAB_DISCIPLINES,type LabDiscipline,type NeutralRigReport} from './NeutralRig';
 import './StudioCoach.css';
 import {addSavedCoach,readSavedCoaches,updateSavedCoach,deleteSavedCoach} from './savedCoaches';
@@ -57,8 +58,6 @@ export function parseCoachLookJson(text:string):CoachLook{
 }
 const sections:Category[]=['corps','visage','peau','cheveux','tenue','protections'];
 const sectionNames:Record<Category,string>={corps:'Morphologie',visage:'Visage',peau:'Peau',cheveux:'Cheveux',tenue:'Tenue',protections:'Protections'};
-useGLTF.preload(import.meta.env.BASE_URL+'fighters/mma-kadir/photo.glb',import.meta.env.BASE_URL+'draco/');
-useGLTF.preload(import.meta.env.BASE_URL+'fighters/mma-amara/photo.glb',import.meta.env.BASE_URL+'draco/');
 export function StudioCoach(){
  const [look,setLook]=useState<CoachLook>(()=>{try{const id=localStorage.getItem('cme-selected-coach');return readSavedCoaches(localStorage).find(x=>x.id===id)?.look??defaultCoachLook;}catch{return defaultCoachLook;}});
  const [selectedId,setSelectedId]=useState<string|null>(()=>{try{return localStorage.getItem('cme-selected-coach');}catch{return null;}});
@@ -73,6 +72,13 @@ export function StudioCoach(){
  const [playing,setPlaying]=useState(true);
  const [showSkeleton,setShowSkeleton]=useState(false);
  const [report,setReport]=useState<NeutralRigReport|null>(null);
+ // Ne pas charger les deux GLB au démarrage du Laboratoire. Précharger
+ // l'autre silhouette seulement une fois le modèle courant effectivement prêt.
+ useEffect(()=>{
+  if(!report)return;
+  const other=alternateRigAsset(report.sex);
+  useGLTF.preload(import.meta.env.BASE_URL+'fighters/'+other+'/photo.glb',import.meta.env.BASE_URL+'draco/');
+ },[report?.sex]);
  const importRef=useRef<HTMLInputElement>(null);
  const update=<K extends keyof CoachLook>(key:K,value:CoachLook[K])=>setLook(l=>normalizeCoachLook({...l,[key]:value}));
  const range=(key:'height'|'shoulders'|'muscle'|'waist'|'jaw'|'nose'|'eyes',label:string,min:number,max:number)=><label className="coachField"><span>{label} <b>{look[key].toFixed(2)}</b></span><input type="range" min={min} max={max} step=".01" value={look[key]} onChange={e=>update(key,Number(e.target.value))}/></label>;
