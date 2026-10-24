@@ -3,7 +3,7 @@ import {Canvas} from '@react-three/fiber';
 import {OrbitControls} from '@react-three/drei';
 import {NeutralRig,LAB_DISCIPLINES,type LabDiscipline,type NeutralRigReport} from './NeutralRig';
 import './StudioCoach.css';
-import {addSavedCoach,readSavedCoaches} from './savedCoaches';
+import {addSavedCoach,readSavedCoaches,updateSavedCoach,deleteSavedCoach} from './savedCoaches';
 
 type Category='corps'|'visage'|'peau'|'cheveux'|'tenue'|'protections';
 export type CoachLook={
@@ -57,6 +57,7 @@ const sections:Category[]=['corps','visage','peau','cheveux','tenue','protection
 const sectionNames:Record<Category,string>={corps:'Morphologie',visage:'Visage',peau:'Peau',cheveux:'Cheveux',tenue:'Tenue',protections:'Protections'};
 export function StudioCoach(){
  const [look,setLook]=useState<CoachLook>(()=>{try{const id=localStorage.getItem('cme-selected-coach');return readSavedCoaches(localStorage).find(x=>x.id===id)?.look??defaultCoachLook;}catch{return defaultCoachLook;}});
+ const [selectedId,setSelectedId]=useState<string|null>(()=>{try{return localStorage.getItem('cme-selected-coach');}catch{return null;}});
  const [section,setSection]=useState<Category>('corps');
  const [message,setMessage]=useState('');
  const [rigMode,setRigMode]=useState(false);
@@ -79,7 +80,9 @@ export function StudioCoach(){
    setLook(next);setMessage('Profil importé et paramètres validés.');
   }catch(error){setMessage('Import refusé : '+(error instanceof Error?error.message:'fichier invalide'));}
  };
- const saveCoach=()=>{try{const name=window.prompt('Nom du coach',look.sex==='homme'?'Coach homme':'Coach femme')?.trim();if(!name)return;const id=crypto.randomUUID();addSavedCoach(localStorage,{id,name:name.slice(0,60),createdAt:new Date().toISOString(),look});localStorage.setItem('cme-selected-coach',id);window.dispatchEvent(new Event('cme-coaches-changed'));setMessage('Coach enregistré dans la bibliothèque du Laboratoire sur cet appareil.');}catch{setMessage('Enregistrement impossible sur cet appareil.');}};
+ const saveCoach=()=>{try{const existing=readSavedCoaches(localStorage).find(c=>c.id===selectedId);const name=window.prompt('Nom du coach',existing?.name??(look.sex==='homme'?'Coach homme':'Coach femme'))?.trim();if(!name)return;const id=existing?.id??crypto.randomUUID();const profile={id,name:name.slice(0,60),createdAt:existing?.createdAt??new Date().toISOString(),look};if(existing)updateSavedCoach(localStorage,profile);else addSavedCoach(localStorage,profile);setSelectedId(id);localStorage.setItem('cme-selected-coach',id);window.dispatchEvent(new Event('cme-coaches-changed'));setMessage(existing?'Modifications du coach enregistrées.':'Nouveau coach enregistré et disponible dans le Laboratoire.');}catch{setMessage('Enregistrement impossible sur cet appareil.');}};
+ const newCoach=()=>{setSelectedId(null);setLook(defaultCoachLook);try{localStorage.removeItem('cme-selected-coach');}catch{}setMessage('Nouveau personnage : choisissez un modèle neutre, puis personnalisez-le.');};
+ const removeCoach=()=>{if(!selectedId||!window.confirm('Supprimer définitivement ce coach de cet appareil ?'))return;try{deleteSavedCoach(localStorage,selectedId);if(localStorage.getItem('cme-lab-coach')===selectedId)localStorage.removeItem('cme-lab-coach');localStorage.removeItem('cme-selected-coach');setSelectedId(null);setLook(defaultCoachLook);window.dispatchEvent(new Event('cme-coaches-changed'));setMessage('Coach supprimé.');}catch{setMessage('Suppression impossible.');}};
  const exportJson=()=>{const json=JSON.stringify({schema:'cme-coach-look-v1',look},null,2);const blob=new Blob([json],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='cme-coach-look.json';a.click();URL.revokeObjectURL(url);setMessage('Configuration exportée : apparence uniquement, sans modification du moteur.');};
  return <section className="coachStudio" aria-label="Studio Coach">
   <header className="coachStudioHeader"><div><small>STUDIO COACH</small><h2>Votre combattant</h2><p>Choisissez un modèle et personnalisez son apparence.</p></div></header>
@@ -116,7 +119,7 @@ export function StudioCoach(){
      {section==='protections'&&<>{choose('gloves','Gants',['boxe','mma','aucun'])}{color('gloveColor','Couleur des gants')}<label className="coachField"><span>Protège-tibias</span><input type="checkbox" checked={look.shins} onChange={e=>update('shins',e.target.checked)}/></label>{color('shinColor','Couleur des protections')}</>}
     </div>
     <details className="coachAdvanced"><summary>Réglages avancés</summary><div className="coachFields">{section==='corps'&&<>{range('height','Taille relative',.9,1.1)}{range('shoulders','Épaules',.75,1.25)}{range('muscle','Musculature',.7,1.35)}{range('waist','Taille',.75,1.3)}</>}</div></details>
-    <button className="coachSave" onClick={saveCoach}>Enregistrer ce coach dans le Laboratoire</button>
+    <div className="coachCrud"><button type="button" onClick={newCoach}>Nouveau</button><button type="button" className="coachSave" onClick={saveCoach}>{selectedId?'Enregistrer les modifications':'Créer et enregistrer le coach'}</button>{selectedId&&<button type="button" onClick={removeCoach}>Supprimer</button>}</div>
     <button className="coachReset" onClick={()=>{setLook(defaultCoachLook);setMessage('Apparence réinitialisée');}}>Réinitialiser le personnage</button>
     <details className="coachAdvanced" open={advancedOpen} onToggle={e=>setAdvancedOpen(e.currentTarget.open)}><summary>Gestion du profil <span>Importer · Exporter</span></summary><div className="coachActions">
       <button onClick={exportJson}>Exporter JSON</button>
