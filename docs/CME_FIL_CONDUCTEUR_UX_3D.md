@@ -219,3 +219,7 @@ A — stabilisation et non-régression d'abord ; B — personnalisation dynamiqu
 ## 25/10/2026 — v0.7.28 : atlas morphologique visuel et posture de création sans combat
 
 Premier lot du cahier des charges « Character Creator Premium » : grilles de formes anatomiques réelles (épaules, musculature, taille, silhouette féminine, poitrine, hanches, cuisses), options faciales seulement si blendshapes présents, randomiseur filtré selon capacités effectives du rig, sélection active. Le Studio doit rester à la pose de référence sans sampler sportif et ne jouer les animations que pendant les tests explicites. Préserver les fichiers sources GLB, les gestes canoniques et Shadow. À poursuivre : atlas visuel d’icônes anatomiques détaillées dessinées, nouveaux morphs faciaux professionnels, vraie matière peau et textures spécialisées, coiffures, galerie avec vignettes, fusion complète Studio/Lab et comparaison métrique réelle. Aucun paramètre fictif.
+
+
+## 25/10/2026 — 0.7.29 — croquis de morphologie et galerie illustrée
+Les cartes morphologiques doivent montrer une silhouette ou un visage reconnaissable, pas des glyphes. Vignettes SVG générées d'après l'intensité du preset. Lors de la sauvegarde, capturer l'image réelle du combattant affiché dans Studio et l'enregistrer dans le profil existant; afficher les captures dans la Galerie Coachs. Ne pas perdre les anciens profils sans portrait. Approfondir ensuite les vignettes artistiques haut de gamme et les captures caméra standardisées, avec vérification WebGL Android physique.
