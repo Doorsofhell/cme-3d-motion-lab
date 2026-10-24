@@ -1,4 +1,4 @@
-import {Suspense,Component,useCallback,useEffect,useMemo,useRef,useState,type ReactNode,type RefObject} from 'react';
+import {Suspense,Component,useCallback,useEffect,useLayoutEffect,useMemo,useRef,useState,type ReactNode,type RefObject} from 'react';
 import {Canvas,useThree,useFrame} from '@react-three/fiber';
 import {ACESFilmicToneMapping,NeutralToneMapping,SRGBColorSpace,CanvasTexture} from 'three';
 import {Fighter} from './Fighter';
@@ -6,6 +6,8 @@ import {StudioCoach} from './StudioCoach';
 import {useSceneFullscreen,SceneFullscreenButton} from './SceneFullscreen';
 import {SceneCameraControls,SceneToolbar,SceneLoadingIndicator} from './SceneControls';
 import {shouldRenderLabFrames} from './sceneRuntime';
+import {AndroidTelemetry} from './androidTelemetry';
+import {AndroidDiagnostics,AndroidFrameProbe} from './AndroidDiagnostics';
 import {ShadowCatalogPanel} from './ShadowCatalogPanel';
 import {readSavedCoaches,findSavedCoach,coachSourceActor,type SavedCoach} from './savedCoaches';
 import type {CoachLook} from './StudioCoach';
@@ -110,23 +112,31 @@ function PerfProbe({onMetrics}:{onMetrics:(metrics:Metrics)=>void}){
  });
  return null;
 }
-function Viewer({actor,discipline,technique,coachPlan,quality,renderStyle,playback,skeleton,onReport,onMetrics,onLog,onIncident,onCaptureReady,coachLook,active}:{
+function Viewer({actor,discipline,technique,coachPlan,quality,renderStyle,playback,skeleton,onReport,onMetrics,onLog,onIncident,onCaptureReady,coachLook,active,telemetry}:{
  actor:Actor;discipline:string;technique:string;coachPlan:CoachPlan|null;quality:Quality;renderStyle:RenderStyle;
- playback:RefObject<Playback>;skeleton:boolean;active:boolean;coachLook?:CoachLook|null;onReport:(r:RigReport)=>void;onMetrics:(m:Metrics)=>void;onLog:(message:string)=>void;onIncident:(category:AutoCategory,title:string,details:string)=>void;onCaptureReady:(capture:()=>string|null)=>void;
+ playback:RefObject<Playback>;skeleton:boolean;active:boolean;telemetry:AndroidTelemetry;coachLook?:CoachLook|null;onReport:(r:RigReport)=>void;onMetrics:(m:Metrics)=>void;onLog:(message:string)=>void;onIncident:(category:AutoCategory,title:string,details:string)=>void;onCaptureReady:(capture:()=>string|null)=>void;
 }){
  const [ready,setReady]=useState(false),[error,setError]=useState<string|null>(null),[slow,setSlow]=useState(false);
  const [retry,setRetry]=useState(0);
  const canvasRef=useRef<(HTMLCanvasElement & {cmeCleanup?:()=>void})|null>(null);
  const captureContext=useRef({actor,discipline,technique,renderStyle});
  captureContext.current={actor,discipline,technique,renderStyle};
- useEffect(()=>{setReady(false);setSlow(false);},[actor,discipline,renderStyle]);
+ useLayoutEffect(()=>{
+  setReady(false);setSlow(false);
+  telemetry.beginLoad(actor+'/'+discipline,retry>0?'retry':telemetry.loads.length===0?'initial':'switch',performance.now());
+ },[actor,discipline,retry,telemetry]);
+ useEffect(()=>{setReady(false);setSlow(false);},[renderStyle]);
  // Timeout never appears once a coach is ready.
  useEffect(()=>{
   if(ready||error)return;
   const id=window.setTimeout(()=>{setSlow(true);onIncident('loading','Chargement 3D anormalement long','Coach '+actor+', tenue '+discipline+' : aucun signal de fin de chargement après 24 secondes');},24000);
   return()=>window.clearTimeout(id);
  },[ready,error,retry,actor,discipline,onIncident]);
- const onReady=useCallback(()=>{setReady(true);setSlow(false);onLog('Coach et tenue décodés, rig initialisé');},[onLog]);
+ const onReady=useCallback(()=>{
+  setReady(true);setSlow(false);
+  const load=telemetry.finishLoad(actor+'/'+discipline,performance.now());
+  onLog('Coach et tenue décodés, rig initialisé'+(load?' · '+load.durationMs+' ms':''));
+ },[actor,discipline,onLog,telemetry]);
  // Retain one GPU context when users change render style, coach or outfit.
  const gl=useMemo(()=>({alpha:false,antialias:!mobile(),powerPreference:'default' as const}),[]);
  const onCreated=useCallback(({gl:renderer,scene:argumentsScene,camera:argumentsCamera}:Parameters<NonNullable<React.ComponentProps<typeof Canvas>['onCreated']>>[0])=>{
@@ -140,16 +150,18 @@ function Viewer({actor,discipline,technique,coachPlan,quality,renderStyle,playba
   canvasRef.current=activeCanvas;
   activeCanvas.cmeCleanup=watchWebGLContext(activeCanvas,{
    onLost:()=>{
+    telemetry.recordContextLost(performance.now());
     onLog('WebGL perdu pendant l’utilisation : récupération en cours');
     onIncident('webgl','Perte du contexte graphique WebGL','Contexte WebGL perdu pendant une session active');
     setError('Contexte graphique perdu : restauration automatique attendue. Relancer si nécessaire.');
    },
    onRestored:()=>{
+    telemetry.recordContextRestored(performance.now());
     onLog('Contexte WebGL restauré automatiquement');
     setError(v=>v?.startsWith('Contexte graphique perdu')?null:v);
    }
   });
- },[onLog,onIncident,playback,onCaptureReady]);
+ },[onLog,onIncident,playback,onCaptureReady,telemetry]);
  useEffect(()=>()=>{canvasRef.current?.cmeCleanup?.();canvasRef.current=null;},[]);
  const dpr=quality==='performance'?1:quality==='balanced'?(mobile()?1.1:1.35):(mobile()?1.4:1.6);
  return <div className="viewer">
@@ -158,6 +170,7 @@ function Viewer({actor,discipline,technique,coachPlan,quality,renderStyle,playba
      <color attach="background" args={[renderStyle==='fitness'?'#e7eeef':renderStyle==='comic'?'#111827':'#1d252c']}/>
      <Lights quality={quality} renderStyle={renderStyle}/>
      <PerfProbe onMetrics={onMetrics}/>
+      <AndroidFrameProbe telemetry={telemetry}/>
 
      <Suspense fallback={null}>
       <Fighter actor={actor} outfit={discipline} technique={technique} coachPlan={coachPlan} playback={playback} skeleton={skeleton} quality={quality} renderStyle={renderStyle} onReady={onReady} onReport={onReport} coachLook={coachLook}/>
@@ -194,6 +207,7 @@ export function App(){
  const [pageVisible,setPageVisible]=useState(()=>typeof document==='undefined'||document.visibilityState==='visible');
  useEffect(()=>{const sync=()=>setPageVisible(document.visibilityState==='visible');document.addEventListener('visibilitychange',sync);return()=>document.removeEventListener('visibilitychange',sync);},[]);
  const labActive=shouldRenderLabFrames(tab,pageVisible);
+ const [androidTelemetry]=useState(()=>new AndroidTelemetry('laboratoire'));
  const [clearCacheOnOpen,setClearCacheOnOpen]=useState(autoClearEnabled);
  const [cacheMessage,setCacheMessage]=useState('');
  const [catalogMode,setCatalogMode]=useState<'techniques'|'sequences'>('techniques');
@@ -228,12 +242,15 @@ export function App(){
  const exportReport=useCallback(()=>{
   journal.record('debug','Export du rapport intégral de la session vers ChatGPT');
   const text=buildFullReport(journal.snapshot(),incidentContext,autoDrafts,metrics,report,playback.current,
-   known.issues.map(x=>({number:x.number,state:x.state,title:x.title,url:x.html_url})));
+   known.issues.map(x=>({number:x.number,state:x.state,title:x.title,url:x.html_url})))+
+   '\\n\\nG. INSTRUMENTATION ANDROID (mesures locales)\\n'+
+   androidTelemetry.exportReport({coach:actor,discipline,technique,rendu:renderStyle,qualite:quality},
+   {userAgent:navigator.userAgent,viewport:[innerWidth,innerHeight],dpr:devicePixelRatio});
   if(navigator.clipboard?.writeText){
    void navigator.clipboard.writeText(text).then(()=>onLog('Rapport complet copié : '+text.length+' caractères'))
     .catch(()=>{setReportText(text);onLog('Presse-papiers indisponible : rapport affiché pour sélection manuelle');});
   }else setReportText(text);
- },[journal.record,journal.snapshot,incidentContext,autoDrafts,metrics,report,known.issues,onLog]);
+ },[journal.record,journal.snapshot,incidentContext,autoDrafts,metrics,report,known.issues,onLog,androidTelemetry,actor,discipline,technique,renderStyle,quality]);
  useEffect(()=>{
   const fail=(e:ErrorEvent)=>onLog('JS : '+String(e.message).slice(0,180));
   const reject=(e:PromiseRejectionEvent)=>onLog('PROMISE : '+String(e.reason).slice(0,180));
@@ -274,11 +291,12 @@ export function App(){
    <SceneToolbar actions={<SceneFullscreenButton fullscreen={stageFullscreen.fullscreen} onClick={stageFullscreen.toggle}/>}/>
    <div className="stageTitle"><span>{actor==='mma-amara'?'AMARA':'KADIR'} <em>· {renderStyle==='fitness'?'Animation fitness':renderStyle==='comic'?'Roman graphique · héros':'Ultra-réaliste'}</em></span><span className="stagePill">MOTION / IK</span></div>
    {selectedCoach&&<div className="labSelectedCoach" role="status">Coach personnalisé : <strong>{selectedCoach.name}</strong> · {selectedCoach.look.sex} · animations canoniques</div>}
-   <Viewer active={labActive} coachLook={selectedCoach?.look??null} actor={actor} coachPlan={coachPlan} discipline={outfit} quality={quality} renderStyle={renderStyle} technique={technique} playback={playback} skeleton={skeleton} onReport={onReport} onMetrics={onMetrics} onLog={onLog} onIncident={autoRecord} onCaptureReady={setScreenshotHandler}/>
+   <Viewer active={labActive} telemetry={androidTelemetry} coachLook={selectedCoach?.look??null} actor={actor} coachPlan={coachPlan} discipline={outfit} quality={quality} renderStyle={renderStyle} technique={technique} playback={playback} skeleton={skeleton} onReport={onReport} onMetrics={onMetrics} onLog={onLog} onIncident={autoRecord} onCaptureReady={setScreenshotHandler}/>
    <SceneLoadingIndicator/>
    <div className="stageBottom"><span>{report?report.bones+' os · '+(report.techniqueFound?'Technique disponible':'Garde de secours'):'Initialisation du rig'}</span><span>{report?('Tenue '+outfit+' ✓'):'Chargement'}</span></div>
   </section>
-  <details className="labTechnicalDetails"><summary>Outils techniques · Coach IA JSON</summary><section aria-label="Coach JSON Text-to-Animation" style={{padding:12,display:'grid',gap:8}}>
+  <AndroidDiagnostics telemetry={androidTelemetry} active={labActive} context={{coach:actor,discipline,technique,qualite:quality,rendu:renderStyle}}/>
+   <details className="labTechnicalDetails"><summary>Outils techniques · Coach IA JSON</summary><section aria-label="Coach JSON Text-to-Animation" style={{padding:12,display:'grid',gap:8}}>
 <strong>Coach IA · Text-to-Animation (prototype local)</strong>
 <textarea aria-label="Plan JSON du coach" rows={4} value={coachJson} onChange={e=>setCoachJson(e.target.value)} style={{width:'100%',boxSizing:'border-box'}}/>
 <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>

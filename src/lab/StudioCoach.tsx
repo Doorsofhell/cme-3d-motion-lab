@@ -1,9 +1,12 @@
-import {useEffect,useRef,useState} from 'react';
+import {useCallback,useEffect,useRef,useState} from 'react';
 import {Canvas} from '@react-three/fiber';
 import {SceneCameraControls,SceneCameraButton,SceneLoadingBoundary,SceneToolbar,SceneLoadingIndicator} from './SceneControls';
 import {useSceneFullscreen,SceneFullscreenButton} from './SceneFullscreen';
 import {useGLTF} from '@react-three/drei';
 import {alternateRigAsset} from './sceneRuntime';
+import {watchWebGLContext} from './webglRecovery';
+import {AndroidTelemetry,type LoadKind} from './androidTelemetry';
+import {AndroidDiagnostics,AndroidFrameProbe} from './AndroidDiagnostics';
 import {NeutralRig,LAB_DISCIPLINES,type LabDiscipline,type NeutralRigReport} from './NeutralRig';
 import './StudioCoach.css';
 import {addSavedCoach,readSavedCoaches,updateSavedCoach,deleteSavedCoach} from './savedCoaches';
@@ -72,6 +75,35 @@ export function StudioCoach(){
  const [playing,setPlaying]=useState(true);
  const [showSkeleton,setShowSkeleton]=useState(false);
  const [report,setReport]=useState<NeutralRigReport|null>(null);
+ const [androidTelemetry]=useState(()=>{
+  const meter=new AndroidTelemetry('studio');
+  meter.beginLoad(look.sex+'/'+(rigMode?'anatomie':'apparence'),'initial',performance.now());
+  return meter;
+ });
+ const [webglStatus,setWebglStatus]=useState('');
+ const [canvasRetry,setCanvasRetry]=useState(0);
+ const canvasCleanup=useRef<(()=>void)|null>(null);
+ useEffect(()=>()=>{canvasCleanup.current?.();canvasCleanup.current=null;},[]);
+ const beginRigLoad=(sex:CoachLook['sex'],mode:boolean,kind:LoadKind)=>{
+  androidTelemetry.beginLoad(sex+'/'+(mode?'anatomie':'apparence'),kind,performance.now());
+ };
+ const handleRigReport=useCallback((value:NeutralRigReport)=>{
+  androidTelemetry.finishLoad(value.sex+'/'+(rigMode?'anatomie':'apparence'),performance.now());
+  setReport(value);
+ },[androidTelemetry,rigMode]);
+ const onCanvasCreated=useCallback(({gl}:{gl:{domElement:HTMLCanvasElement}})=>{
+  canvasCleanup.current?.();
+  canvasCleanup.current=watchWebGLContext(gl.domElement,{
+   onLost:()=>{
+    androidTelemetry.recordContextLost(performance.now());
+    setWebglStatus('Contexte WebGL perdu. La scène peut être relancée.');
+   },
+   onRestored:()=>{
+    androidTelemetry.recordContextRestored(performance.now());
+    setWebglStatus('Contexte WebGL restauré. Vérifier le mannequin et les commandes.');
+   }
+  });
+ },[androidTelemetry]);
  // Ne pas charger les deux GLB au démarrage du Laboratoire. Précharger
  // l'autre silhouette seulement une fois le modèle courant effectivement prêt.
  useEffect(()=>{
@@ -80,7 +112,10 @@ export function StudioCoach(){
   useGLTF.preload(import.meta.env.BASE_URL+'fighters/'+other+'/photo.glb',import.meta.env.BASE_URL+'draco/');
  },[report?.sex]);
  const importRef=useRef<HTMLInputElement>(null);
- const update=<K extends keyof CoachLook>(key:K,value:CoachLook[K])=>setLook(l=>normalizeCoachLook({...l,[key]:value}));
+ const update=<K extends keyof CoachLook>(key:K,value:CoachLook[K])=>{
+  if(key==='sex'&&look.sex!==value){beginRigLoad(value as CoachLook['sex'],rigMode,'switch');setReport(null);}
+  setLook(l=>normalizeCoachLook({...l,[key]:value}));
+ };
  const range=(key:'height'|'shoulders'|'muscle'|'waist'|'jaw'|'nose'|'eyes',label:string,min:number,max:number)=><label className="coachField"><span>{label} <b>{look[key].toFixed(2)}</b></span><input type="range" min={min} max={max} step=".01" value={look[key]} onChange={e=>update(key,Number(e.target.value))}/></label>;
  const color=(key:'skin'|'eyeColor'|'hairColor'|'topColor'|'bottomColor'|'gloveColor'|'shinColor',label:string)=><label className="coachColor"><span>{label}</span><input type="color" value={look[key]} onChange={e=>update(key,e.target.value)}/></label>;
  const choose=<K extends 'sex'|'hairStyle'|'top'|'bottom'|'gloves'>(key:K,label:string,values:CoachLook[K][])=><label className="coachField"><span>{label}</span><select value={look[key]} onChange={e=>update(key,e.target.value as CoachLook[K])}>{values.map(v=><option key={v} value={v}>{v}</option>)}</select></label>;
@@ -89,11 +124,12 @@ export function StudioCoach(){
   try{
    if(file.size>100_000)throw Error('Fichier trop volumineux');
    const next=parseCoachLookJson(await file.text());
+   if(next.sex!==look.sex)beginRigLoad(next.sex,rigMode,'switch');
    setLook(next);setMessage('Profil importé et paramètres validés.');
   }catch(error){setMessage('Import refusé : '+(error instanceof Error?error.message:'fichier invalide'));}
  };
  const saveCoach=()=>{try{const existing=readSavedCoaches(localStorage).find(c=>c.id===selectedId);const name=window.prompt('Nom du coach',existing?.name??(look.sex==='homme'?'Coach homme':'Coach femme'))?.trim();if(!name)return;const id=existing?.id??crypto.randomUUID();const profile={id,name:name.slice(0,60),createdAt:existing?.createdAt??new Date().toISOString(),look};if(existing)updateSavedCoach(localStorage,profile);else addSavedCoach(localStorage,profile);setSelectedId(id);localStorage.setItem('cme-selected-coach',id);window.dispatchEvent(new Event('cme-coaches-changed'));setMessage(existing?'Modifications du coach enregistrées.':'Nouveau coach enregistré et disponible dans le Laboratoire.');}catch{setMessage('Enregistrement impossible sur cet appareil.');}};
- const newCoach=()=>{setSelectedId(null);setLook(defaultCoachLook);try{localStorage.removeItem('cme-selected-coach');}catch{}setMessage('Nouveau personnage : choisissez un modèle neutre, puis personnalisez-le.');};
+ const newCoach=()=>{if(look.sex!=='homme')beginRigLoad('homme',rigMode,'switch');setSelectedId(null);setLook(defaultCoachLook);try{localStorage.removeItem('cme-selected-coach');}catch{}setMessage('Nouveau personnage : choisissez un modèle neutre, puis personnalisez-le.');};
  const removeCoach=()=>{if(!selectedId||!window.confirm('Supprimer définitivement ce coach de cet appareil ?'))return;try{deleteSavedCoach(localStorage,selectedId);if(localStorage.getItem('cme-lab-coach')===selectedId)localStorage.removeItem('cme-lab-coach');localStorage.removeItem('cme-selected-coach');setSelectedId(null);setLook(defaultCoachLook);window.dispatchEvent(new Event('cme-coaches-changed'));setMessage('Coach supprimé.');}catch{setMessage('Suppression impossible.');}};
  const exportJson=()=>{const json=JSON.stringify({schema:'cme-coach-look-v1',look},null,2);const blob=new Blob([json],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='cme-coach-look.json';a.click();URL.revokeObjectURL(url);setMessage('Configuration exportée : apparence uniquement, sans modification du moteur.');};
  return <section className="coachStudio" aria-label="Studio Coach">
@@ -101,15 +137,20 @@ export function StudioCoach(){
   <div className="coachStudioLayout">
    <div ref={sceneFullscreen.ref as React.RefObject<HTMLDivElement>} className={`coachPreview ${sceneFullscreen.fullscreen?"cmeFullscreen":""}`} onDoubleClick={sceneFullscreen.onDoubleClick} onTouchEnd={sceneFullscreen.onTouchEnd} aria-label="Aperçu 3D du mannequin ; double clic pour agrandir">
     <SceneToolbar variant="studio" actions={<><SceneCameraButton automatic={cameraAuto} onToggle={()=>setCameraAuto(v=>!v)}/><SceneFullscreenButton fullscreen={sceneFullscreen.fullscreen} onClick={sceneFullscreen.toggle}/></>}>
-     <div className="coachRigSwitch" role="group" aria-label="Mode du modèle 3D"><button type="button" className={!rigMode?'active':''} aria-pressed={!rigMode} onClick={()=>setRigMode(false)}>Coach</button><button type="button" className={rigMode?'active':''} aria-pressed={rigMode} onClick={()=>setRigMode(true)}>Anatomie</button></div>
+     <div className="coachRigSwitch" role="group" aria-label="Mode du modèle 3D"><button type="button" className={!rigMode?'active':''} aria-pressed={!rigMode} onClick={()=>{if(rigMode){beginRigLoad(look.sex,false,'mode');setRigMode(false);}}}>Coach</button><button type="button" className={rigMode?'active':''} aria-pressed={rigMode} onClick={()=>{if(!rigMode){beginRigLoad(look.sex,true,'mode');setRigMode(true);}}}>Anatomie</button></div>
     </SceneToolbar>
     <SceneLoadingIndicator/>
-    <div className="coachCanvasViewport"><Canvas camera={{position:[0,1.3,4.5],fov:38}} dpr={[1,1.5]} gl={{antialias:true}}>
+    <div className="coachCanvasViewport"><Canvas key={canvasRetry} onCreated={onCanvasCreated} camera={{position:[0,1.3,4.5],fov:38}} dpr={[1,1.5]} gl={{antialias:true}}>
+     <AndroidFrameProbe telemetry={androidTelemetry}/>
      <color attach="background" args={['#e6edf6']}/><ambientLight intensity={2}/><directionalLight position={[3,5,4]} intensity={2.6}/>
-     <SceneLoadingBoundary><NeutralRig key={`${look.sex}-${rigMode?'neutral':'appearance'}`} mode={rigMode?'neutral':'appearance'} sex={look.sex} discipline={discipline} motionId={motionId} playing={playing} speed={1} showSkeleton={showSkeleton} autoCadrage={!cameraAuto} onReport={setReport} appearance={{skin:look.skin,hairColor:look.hairColor,topColor:look.topColor,bottomColor:look.bottomColor,gloveColor:look.gloveColor}} proportions={{height:look.height,shoulders:look.shoulders,muscle:look.muscle,waist:look.waist}}/></SceneLoadingBoundary>
+     <SceneLoadingBoundary><NeutralRig key={`${look.sex}-${rigMode?'neutral':'appearance'}`} mode={rigMode?'neutral':'appearance'} sex={look.sex} discipline={discipline} motionId={motionId} playing={playing} speed={1} showSkeleton={showSkeleton} autoCadrage={!cameraAuto} onReport={handleRigReport} appearance={{skin:look.skin,hairColor:look.hairColor,topColor:look.topColor,bottomColor:look.bottomColor,gloveColor:look.gloveColor}} proportions={{height:look.height,shoulders:look.shoulders,muscle:look.muscle,waist:look.waist}}/></SceneLoadingBoundary>
      <SceneCameraControls automatic={cameraAuto} motion={motionId}/>
     </Canvas></div>
     <span className="coachPreviewLabel">{rigMode?'Anatomie 3D':'Aperçu 3D'}</span>
+    {webglStatus&&<div className="coachWebglAlert" role="status"><span>{webglStatus}</span>
+     <button type="button" onClick={()=>{beginRigLoad(look.sex,rigMode,'retry');setWebglStatus('');setCanvasRetry(v=>v+1);}}>Relancer la scène 3D</button>
+     <button type="button" aria-label="Masquer le diagnostic WebGL" onClick={()=>setWebglStatus('')}>×</button>
+    </div>}
    </div>
    <div className="coachEditor">
     <div className="coachQuickChoice" role="group" aria-label="Choisir le modèle">
@@ -134,6 +175,7 @@ export function StudioCoach(){
      {section==='protections'&&<><p className="coachAvailability">Les équipements ajoutés seront proposés lorsque leurs maillages 3D seront disponibles.</p>{color('gloveColor','Couleur des gants existants')}</>}
     </div>
     <details className="coachAdvanced"><summary>Réglages de morphologie</summary><div className="coachFields">{section==='corps'&&<>{range('height','Taille relative',.9,1.1)}{range('shoulders','Épaules',.75,1.25)}{range('muscle','Musculature',.7,1.35)}{range('waist','Taille',.75,1.3)}</>}</div></details>
+    <AndroidDiagnostics telemetry={androidTelemetry} active={true} variant="studio" context={{sexe:look.sex,mode:rigMode?'anatomie':'apparence',discipline,mouvement:motionId}}/>
     <div className="coachCrud"><button type="button" onClick={newCoach}>Nouveau</button><button type="button" className="coachSave" onClick={saveCoach}>{selectedId?'Enregistrer les modifications':'Créer et enregistrer le coach'}</button>{selectedId&&<button type="button" onClick={removeCoach}>Supprimer</button>}</div>
     <button className="coachReset" onClick={()=>{setLook(defaultCoachLook);setMessage('Apparence réinitialisée');}}>Réinitialiser le personnage</button>
     <details className="coachAdvanced" open={advancedOpen} onToggle={e=>setAdvancedOpen(e.currentTarget.open)}><summary>Gestion du profil <span>Importer · Exporter</span></summary><div className="coachActions">

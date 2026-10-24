@@ -51,3 +51,8 @@ Les références aux PR #42/#43/#44 et à « 86 gestes » dans les étapes initi
 - **G6** : valider la réussite du workflow de déploiement lié au SHA fusionné ; confirmation HTTP, version réellement affichée et contrôle physique doivent être distingués.
 
 Une PR peut être fusionnée après G1 vert en indiquant honnêtement G2–G6 partiels. Ne pas désigner la livraison comme totalement certifiée tant que les autres portes ne sont pas documentées.
+
+## Instrumentation G4 — livraison 0.7.19
+Le panneau « Diagnostic Android » permet de collecter un **échantillon réel**, mais ne constitue pas une recette effectuée. Conditions minimales : mode qualité « Équilibrée », scène visible, 5 secondes de chauffe suivies de 60 secondes de mesure, résultat marqué `complete`, identification du modèle/OS/navigateur (sans identifiants privés), discipline, coach, style, résolution et DPR. Consigner les FPS p05/p50/p95 et les pertes de trame >50 ms. Les fenêtres sont d'environ une seconde et les percentiles ne sont pas assimilables à une moyenne.
+Pour les deux sexes et chacune des six disciplines, répéter les scénarios représentatifs sans changer d'onglet pendant la mesure. Tester séparément latence d'affichage initial, changement de sexe à chaud et reprise après perte WebGL. Ne pas déclarer G4 réussi en cas de métriques manquantes, session interrompue, performance <30 FPS soutenus sur le smartphone de référence ou rendu visuellement dégradé.
+L'export JSON est réalisé localement et ne transfère pas automatiquement des données. Aucun accès caméra ni vidéo.

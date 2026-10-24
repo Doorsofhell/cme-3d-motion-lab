@@ -112,3 +112,17 @@ A — stabilisation et non-régression d'abord ; B — personnalisation dynamiqu
 - Les tests automatiques couvrent le contrat de visibilité de l'onglet et la politique de préchargement. Ils ne mesurent ni l'utilisation GPU ni les FPS matériels.
 - La CI et le déploiement sont des preuves distinctes de la validation sur Android ; conserver explicitement les éléments non observés dans le prochain compte-rendu.
 - Interdictions maintenues : capture par caméra de l'utilisateur, analyse vidéo, upload vidéo, reconnaissance de mouvements par vision.
+
+## Lot A validé — Instrumentation Android 0.7.19 (24/10/2026)
+
+**Objectif** : mesurer sur un smartphone réel, sans prétendre qu'une CI peut reproduire sa performance.
+
+- **Laboratoire et Studio Coach** : composant `AndroidDiagnostics` et sonde R3F partagés ; panneau replié, sans nouvelle barre superposée à la scène. Bouton « Démarrer la mesure 60 s » : 5 secondes de chauffe puis 60 fenêtres FPS d'environ une seconde. FPS p05, p50, p95, p95 du temps entre images, nombre d'images au-delà de 50 ms. Mesure complète seulement lorsque les 60 fenêtres ont été recueillies.
+- **Intégrité de session** : si l'utilisateur quitte la scène, masque la page, perd WebGL ou interrompt les images pendant plus de 1,5 seconde, la mesure est marquée **interrompue** et ne peut pas être utilisée pour certifier 30 FPS. Chaque relance efface les données FPS de la mesure antérieure mais conserve les observations GLB/WebGL de la session en mémoire.
+- **Latence GLB** : chronométrage sur `performance.now()` du choix du coach/tenue, du changement de sexe et du mode Anatomie/Apparence jusqu'au retour « rig initialisé ». Valeur composite (réseau, cache, décodage, montage React) et **non** durée réseau seule. L'autre silhouette est préchargée après initialisation ; les comparaisons « premier chargement » et « changement » doivent identifier les effets du cache.
+- **Récupération WebGL** : comptage des pertes/restaurations et latence entre les événements ; conserver le bouton de relance du Laboratoire et proposer une relance manuelle visible sur Studio Coach. Une restauration d'événement ne prouve pas à elle seule que le rendu visuel ou le squelette est correct.
+- **Traçabilité** : bouton de copie de rapport JSON `CME3D_ANDROID_TELEMETRY_V1` avec données navigateur/viewport, contexte technique, échantillons et événements, sans appel réseau. Les mesures sont locales, sans caméra ni vidéo. Le rapport de session du Laboratoire inclut le même diagnostic.
+- **Tests unitaires** : percentiles avec interpolation, 60 fenêtres, interruptions, mesures de changement GLB et WebGL, contrat d'intégration des deux écrans. Tests TypeScript et build GitHub Actions requis avant fusion.
+- **Recette encore ouverte** : test sur Android physique en mode équilibré, six disciplines, Kadir/Amara, rotations, changement homme/femme en alternance, plein écran et reprise contexte WebGL ; consigner version du navigateur, écran, qualité, p05/p50/p95, temps de préparation GLB. Aucun FPS de téléphone réel revendiqué à la livraison logicielle.
+
+**Priorités suivantes** : P0 recette matérielle et validation des temps/régressions ; P1 tests biomécaniques des six disciplines et morphologies réellement appliquées ; P1 benchmark Shadow lecture seule ; P2 Naïra (assets originaux). Shadow Studio reste inchangé.
