@@ -1,6 +1,7 @@
 import {useRef,useState} from 'react';
 import {Canvas} from '@react-three/fiber';
 import {OrbitControls} from '@react-three/drei';
+import {NeutralRig,LAB_DISCIPLINES,type LabDiscipline,type NeutralRigReport} from './NeutralRig';
 import './StudioCoach.css';
 
 type Category='corps'|'visage'|'peau'|'cheveux'|'tenue'|'protections';
@@ -77,6 +78,12 @@ export function StudioCoach(){
  const [look,setLook]=useState<CoachLook>(defaultCoachLook);
  const [section,setSection]=useState<Category>('corps');
  const [message,setMessage]=useState('');
+ const [rigMode,setRigMode]=useState(false);
+ const [discipline,setDiscipline]=useState<LabDiscipline>('boxing');
+ const [motionId,setMotionId]=useState('garde');
+ const [playing,setPlaying]=useState(true);
+ const [showSkeleton,setShowSkeleton]=useState(false);
+ const [report,setReport]=useState<NeutralRigReport|null>(null);
  const importRef=useRef<HTMLInputElement>(null);
  const update=<K extends keyof CoachLook>(key:K,value:CoachLook[K])=>setLook(l=>normalizeCoachLook({...l,[key]:value}));
  const range=(key:'height'|'shoulders'|'muscle'|'waist'|'jaw'|'nose'|'eyes',label:string,min:number,max:number)=><label className="coachField"><span>{label} <b>{look[key].toFixed(2)}</b></span><input type="range" min={min} max={max} step=".01" value={look[key]} onChange={e=>update(key,Number(e.target.value))}/></label>;
@@ -95,14 +102,23 @@ export function StudioCoach(){
   <header className="coachStudioHeader"><div><small>STUDIO COACH · PROTOTYPE 3D</small><h2>Créer un combattant</h2></div><button onClick={()=>{setLook(defaultCoachLook);setMessage('Apparence réinitialisée');}}>Réinitialiser</button></header>
   <div className="coachStudioLayout">
    <div className="coachPreview" aria-label="Aperçu 3D permanent du mannequin personnalisable">
+    <div className="coachRigSwitch"><button className={!rigMode?'active':''} onClick={()=>setRigMode(false)}>Apparence</button><button className={rigMode?'active':''} onClick={()=>setRigMode(true)}>Rig animé</button></div>
     <Canvas camera={{position:[0,1.05,3.4],fov:38}} dpr={[1,1.5]} gl={{antialias:true}}>
      <color attach="background" args={['#171920']}/><ambientLight intensity={1.4}/><directionalLight position={[3,5,4]} intensity={2.1}/>
-     <Mannequin look={look}/><OrbitControls target={[0,.65,0]} enablePan={false} minDistance={2.2} maxDistance={5}/>
+     {rigMode?<NeutralRig sex={look.sex} discipline={discipline} motionId={motionId} playing={playing} speed={1} showSkeleton={showSkeleton} onReport={setReport}/>:<Mannequin look={look}/>}
+     <OrbitControls target={[0,.65,0]} enablePan={false} minDistance={2.2} maxDistance={5}/>
     </Canvas>
-    <span className="coachPreviewLabel">Mannequin procédural · aperçu d'apparence, non rig canonique validé</span>
+    <span className="coachPreviewLabel">{rigMode?'Rig Mixamo existant · moteur canonique partagé · personnalisation non encore transférée':'Mannequin procédural · aperçu d’apparence, non rig canonique validé'}</span>
    </div>
    <div className="coachEditor">
     <nav className="coachCategories" aria-label="Catégories de personnalisation">{sections.map(s=><button key={s} className={section===s?'active':''} onClick={()=>setSection(s)}>{({corps:'Corps',visage:'Visage',peau:'Peau',cheveux:'Cheveux',tenue:'Tenue',protections:'Protections'} as Record<Category,string>)[s]}</button>)}</nav>
+    {rigMode&&<div className="coachRigControls">
+      <label>Discipline <select value={discipline} onChange={e=>{setDiscipline(e.target.value as LabDiscipline);setReport(null);}}>{LAB_DISCIPLINES.map(d=><option key={d} value={d}>{d}</option>)}</select></label>
+      <label>Mouvement <input value={motionId} onChange={e=>setMotionId(e.target.value)} placeholder="garde"/></label>
+      <button onClick={()=>setPlaying(v=>!v)}>{playing?'Pause':'Lecture'}</button>
+      <label><input type="checkbox" checked={showSkeleton} onChange={e=>setShowSkeleton(e.target.checked)}/> Squelette</label>
+      <small>{report?report.available?`${report.bones} os · ${report.duration.toFixed(2)} s`:'Mouvement indisponible : garde de secours':'Chargement du rig…'}</small>
+     </div>}
     <div className="coachFields">
      {section==='corps'&&<>{choose('sex','Base morphologique',['homme','femme'])}{range('height','Taille relative',.9,1.1)}{range('shoulders','Épaules',.75,1.25)}{range('muscle','Musculature',.7,1.35)}{range('waist','Taille',.75,1.3)}</>}
      {section==='visage'&&<>{range('jaw','Mâchoire',.8,1.2)}{range('nose','Nez',.8,1.2)}{range('eyes','Yeux',.8,1.2)}{color('eyeColor','Couleur des yeux')}</>}
