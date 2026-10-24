@@ -2,6 +2,7 @@
   {
     "id": "garde",
     "name": "Position de garde",
+    "motion": "garde",
     "category": "garde",
     "disciplines": [
       "boxe",
@@ -9,7 +10,6 @@
       "mma",
       "muaythai"
     ],
-    "motion": "garde",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -17,6 +17,7 @@
   {
     "id": "pas-avant",
     "name": "Pas avant",
+    "motion": "pas-avant",
     "category": "deplacement",
     "disciplines": [
       "boxe",
@@ -24,7 +25,6 @@
       "mma",
       "muaythai"
     ],
-    "motion": "pas-avant",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -32,6 +32,7 @@
   {
     "id": "pas-arriere",
     "name": "Pas arrière",
+    "motion": "pas-arriere",
     "category": "deplacement",
     "disciplines": [
       "boxe",
@@ -39,7 +40,6 @@
       "mma",
       "muaythai"
     ],
-    "motion": "pas-arriere",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -47,6 +47,7 @@
   {
     "id": "pas-gauche",
     "name": "Pas latéral gauche",
+    "motion": "pas-gauche",
     "category": "deplacement",
     "disciplines": [
       "boxe",
@@ -54,7 +55,6 @@
       "mma",
       "muaythai"
     ],
-    "motion": "pas-gauche",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -62,6 +62,7 @@
   {
     "id": "pas-droite",
     "name": "Pas latéral droit",
+    "motion": "pas-droite",
     "category": "deplacement",
     "disciplines": [
       "boxe",
@@ -69,7 +70,6 @@
       "mma",
       "muaythai"
     ],
-    "motion": "pas-droite",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -77,6 +77,7 @@
   {
     "id": "pivot-droite",
     "name": "Pivot",
+    "motion": "pivot-droite",
     "category": "deplacement",
     "disciplines": [
       "boxe",
@@ -84,7 +85,6 @@
       "mma",
       "muaythai"
     ],
-    "motion": "pivot-droite",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -92,6 +92,7 @@
   {
     "id": "pivot-gauche",
     "name": "Pivot extérieur",
+    "motion": "pivot-gauche",
     "category": "deplacement",
     "disciplines": [
       "boxe",
@@ -99,7 +100,6 @@
       "mma",
       "muaythai"
     ],
-    "motion": "pivot-gauche",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -107,6 +107,7 @@
   {
     "id": "sortie-angle",
     "name": "Sortie d’angle",
+    "motion": "sortie-angle",
     "category": "deplacement",
     "disciplines": [
       "boxe",
@@ -114,7 +115,6 @@
       "mma",
       "muaythai"
     ],
-    "motion": "sortie-angle",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -122,6 +122,7 @@
   {
     "id": "jab",
     "name": "Jab",
+    "motion": "jab",
     "category": "poing",
     "disciplines": [
       "boxe",
@@ -129,7 +130,6 @@
       "mma",
       "muaythai"
     ],
-    "motion": "jab",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -137,6 +137,7 @@
   {
     "id": "direct",
     "name": "Direct arrière",
+    "motion": "direct",
     "category": "poing",
     "disciplines": [
       "boxe",
@@ -144,7 +145,6 @@
       "mma",
       "muaythai"
     ],
-    "motion": "direct",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -152,6 +152,7 @@
   {
     "id": "jab-corps",
     "name": "Jab au corps",
+    "motion": "jab-corps",
     "category": "poing",
     "disciplines": [
       "boxe",
@@ -159,7 +160,6 @@
       "mma",
       "muaythai"
     ],
-    "motion": "jab-corps",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -167,6 +167,7 @@
   {
     "id": "direct-corps",
     "name": "Direct au corps",
+    "motion": "direct-corps",
     "category": "poing",
     "disciplines": [
       "boxe",
@@ -174,7 +175,6 @@
       "mma",
       "muaythai"
     ],
-    "motion": "direct-corps",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -182,6 +182,7 @@
   {
     "id": "crochet-avant",
     "name": "Crochet gauche",
+    "motion": "crochet-avant",
     "category": "poing",
     "disciplines": [
       "boxe",
@@ -189,7 +190,6 @@
       "mma",
       "muaythai"
     ],
-    "motion": "crochet-avant",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -197,6 +197,7 @@
   {
     "id": "crochet-arriere",
     "name": "Crochet droit",
+    "motion": "crochet-arriere",
     "category": "poing",
     "disciplines": [
       "boxe",
@@ -204,7 +205,6 @@
       "mma",
       "muaythai"
     ],
-    "motion": "crochet-arriere",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -212,6 +212,7 @@
   {
     "id": "crochet-avant-corps",
     "name": "Crochet gauche au corps",
+    "motion": "crochet-avant-corps",
     "category": "poing",
     "disciplines": [
       "boxe",
@@ -219,7 +220,6 @@
       "mma",
       "muaythai"
     ],
-    "motion": "crochet-avant-corps",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -227,6 +227,7 @@
   {
     "id": "crochet-arriere-corps",
     "name": "Crochet droit au corps",
+    "motion": "crochet-arriere-corps",
     "category": "poing",
     "disciplines": [
       "boxe",
@@ -234,7 +235,6 @@
       "mma",
       "muaythai"
     ],
-    "motion": "crochet-arriere-corps",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -242,6 +242,7 @@
   {
     "id": "uppercut-avant",
     "name": "Uppercut gauche",
+    "motion": "uppercut-avant",
     "category": "poing",
     "disciplines": [
       "boxe",
@@ -249,7 +250,6 @@
       "mma",
       "muaythai"
     ],
-    "motion": "uppercut-avant",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -257,6 +257,7 @@
   {
     "id": "uppercut-arriere",
     "name": "Uppercut droit",
+    "motion": "uppercut-arriere",
     "category": "poing",
     "disciplines": [
       "boxe",
@@ -264,7 +265,19 @@
       "mma",
       "muaythai"
     ],
-    "motion": "uppercut-arriere",
+    "sourceRef": "main",
+    "availability": "listed_in_cme_unvalidated",
+    "canonicalMotionListed": true
+  },
+  {
+    "id": "overhand",
+    "name": "Overhand",
+    "motion": "overhand",
+    "category": "poing",
+    "disciplines": [
+      "mma",
+      "kickboxing"
+    ],
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -272,6 +285,7 @@
   {
     "id": "esquive-droite",
     "name": "Esquive extérieure",
+    "motion": "esquive-droite",
     "category": "defense",
     "disciplines": [
       "boxe",
@@ -279,7 +293,6 @@
       "mma",
       "muaythai"
     ],
-    "motion": "esquive-droite",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -287,6 +300,7 @@
   {
     "id": "esquive-gauche",
     "name": "Esquive intérieure",
+    "motion": "esquive-gauche",
     "category": "defense",
     "disciplines": [
       "boxe",
@@ -294,7 +308,6 @@
       "mma",
       "muaythai"
     ],
-    "motion": "esquive-gauche",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -302,6 +315,7 @@
   {
     "id": "roll-droite",
     "name": "Rotation sous le crochet (roll)",
+    "motion": "roll-droite",
     "category": "defense",
     "disciplines": [
       "boxe",
@@ -309,7 +323,6 @@
       "mma",
       "muaythai"
     ],
-    "motion": "roll-droite",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -317,6 +330,7 @@
   {
     "id": "roll-gauche",
     "name": "Roll de l’autre côté",
+    "motion": "roll-gauche",
     "category": "defense",
     "disciplines": [
       "boxe",
@@ -324,7 +338,6 @@
       "mma",
       "muaythai"
     ],
-    "motion": "roll-gauche",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -332,6 +345,7 @@
   {
     "id": "blocage-haut",
     "name": "Blocage haut",
+    "motion": "blocage-haut",
     "category": "defense",
     "disciplines": [
       "boxe",
@@ -339,7 +353,6 @@
       "mma",
       "muaythai"
     ],
-    "motion": "blocage-haut",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -347,6 +360,7 @@
   {
     "id": "blocage-corps-avant",
     "name": "Blocage au corps",
+    "motion": "blocage-corps-avant",
     "category": "defense",
     "disciplines": [
       "boxe",
@@ -354,7 +368,6 @@
       "mma",
       "muaythai"
     ],
-    "motion": "blocage-corps-avant",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -362,6 +375,7 @@
   {
     "id": "parade",
     "name": "Parade",
+    "motion": "parade",
     "category": "defense",
     "disciplines": [
       "boxe",
@@ -369,7 +383,6 @@
       "mma",
       "muaythai"
     ],
-    "motion": "parade",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -377,6 +390,7 @@
   {
     "id": "retrait",
     "name": "Retrait de buste",
+    "motion": "retrait",
     "category": "defense",
     "disciplines": [
       "boxe",
@@ -384,7 +398,6 @@
       "mma",
       "muaythai"
     ],
-    "motion": "retrait",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -392,13 +405,13 @@
   {
     "id": "check-avant",
     "name": "Check (blocage tibia)",
+    "motion": "check-avant",
     "category": "defense",
     "disciplines": [
       "kickboxing",
       "mma",
       "muaythai"
     ],
-    "motion": "check-avant",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -406,13 +419,52 @@
   {
     "id": "check-arriere",
     "name": "Check jambe arrière",
+    "motion": "check-arriere",
     "category": "defense",
     "disciplines": [
       "kickboxing",
       "mma",
       "muaythai"
     ],
-    "motion": "check-arriere",
+    "sourceRef": "main",
+    "availability": "listed_in_cme_unvalidated",
+    "canonicalMotionListed": true
+  },
+  {
+    "id": "front-kick-avant",
+    "name": "Front kick avant",
+    "motion": "front-kick-avant",
+    "category": "pied",
+    "disciplines": [
+      "kickboxing",
+      "mma"
+    ],
+    "sourceRef": "main",
+    "availability": "listed_in_cme_unvalidated",
+    "canonicalMotionListed": true
+  },
+  {
+    "id": "front-kick-arriere",
+    "name": "Front kick arrière",
+    "motion": "front-kick-arriere",
+    "category": "pied",
+    "disciplines": [
+      "kickboxing",
+      "mma"
+    ],
+    "sourceRef": "main",
+    "availability": "listed_in_cme_unvalidated",
+    "canonicalMotionListed": true
+  },
+  {
+    "id": "teep-avant",
+    "name": "Teep",
+    "motion": "teep-avant",
+    "category": "pied",
+    "disciplines": [
+      "muaythai",
+      "mma"
+    ],
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -420,11 +472,11 @@
   {
     "id": "teep-arriere",
     "name": "Teep arrière",
+    "motion": "teep-arriere",
     "category": "pied",
     "disciplines": [
       "muaythai"
     ],
-    "motion": "teep-arriere",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -432,13 +484,13 @@
   {
     "id": "low-kick-arriere",
     "name": "Low kick droit",
+    "motion": "low-kick-arriere",
     "category": "pied",
     "disciplines": [
       "kickboxing",
       "mma",
       "muaythai"
     ],
-    "motion": "low-kick-arriere",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -446,13 +498,13 @@
   {
     "id": "low-kick-avant",
     "name": "Low kick gauche",
+    "motion": "low-kick-avant",
     "category": "pied",
     "disciplines": [
       "kickboxing",
       "mma",
       "muaythai"
     ],
-    "motion": "low-kick-avant",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -460,13 +512,13 @@
   {
     "id": "middle-kick-arriere",
     "name": "Middle kick droit",
+    "motion": "middle-kick-arriere",
     "category": "pied",
     "disciplines": [
       "kickboxing",
       "mma",
       "muaythai"
     ],
-    "motion": "middle-kick-arriere",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -474,13 +526,13 @@
   {
     "id": "middle-kick-avant",
     "name": "Middle kick gauche",
+    "motion": "middle-kick-avant",
     "category": "pied",
     "disciplines": [
       "kickboxing",
       "mma",
       "muaythai"
     ],
-    "motion": "middle-kick-avant",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -488,13 +540,13 @@
   {
     "id": "high-kick-arriere",
     "name": "High kick droit",
+    "motion": "high-kick-arriere",
     "category": "pied",
     "disciplines": [
       "kickboxing",
       "mma",
       "muaythai"
     ],
-    "motion": "high-kick-arriere",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -502,13 +554,26 @@
   {
     "id": "high-kick-avant",
     "name": "High kick gauche",
+    "motion": "high-kick-avant",
     "category": "pied",
     "disciplines": [
       "kickboxing",
       "mma",
       "muaythai"
     ],
-    "motion": "high-kick-avant",
+    "sourceRef": "main",
+    "availability": "listed_in_cme_unvalidated",
+    "canonicalMotionListed": true
+  },
+  {
+    "id": "roundhouse-arriere",
+    "name": "Roundhouse kick",
+    "motion": "roundhouse-arriere",
+    "category": "pied",
+    "disciplines": [
+      "kickboxing",
+      "mma"
+    ],
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -516,11 +581,24 @@
   {
     "id": "roundhouse-avant",
     "name": "Roundhouse jambe avant",
+    "motion": "roundhouse-avant",
     "category": "pied",
     "disciplines": [
       "kickboxing"
     ],
-    "motion": "roundhouse-avant",
+    "sourceRef": "main",
+    "availability": "listed_in_cme_unvalidated",
+    "canonicalMotionListed": true
+  },
+  {
+    "id": "genou-direct-arriere",
+    "name": "Genou direct",
+    "motion": "genou-direct-arriere",
+    "category": "genou",
+    "disciplines": [
+      "muaythai",
+      "mma"
+    ],
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -528,11 +606,11 @@
   {
     "id": "genou-direct-avant",
     "name": "Genou direct avant",
+    "motion": "genou-direct-avant",
     "category": "genou",
     "disciplines": [
       "muaythai"
     ],
-    "motion": "genou-direct-avant",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -540,11 +618,11 @@
   {
     "id": "genou-circulaire-arriere",
     "name": "Genou circulaire",
+    "motion": "genou-circulaire-arriere",
     "category": "genou",
     "disciplines": [
       "muaythai"
     ],
-    "motion": "genou-circulaire-arriere",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -552,11 +630,11 @@
   {
     "id": "genou-circulaire-avant",
     "name": "Genou circulaire avant",
+    "motion": "genou-circulaire-avant",
     "category": "genou",
     "disciplines": [
       "muaythai"
     ],
-    "motion": "genou-circulaire-avant",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -564,11 +642,11 @@
   {
     "id": "coude-horizontal-avant",
     "name": "Coude horizontal gauche",
+    "motion": "coude-horizontal-avant",
     "category": "coude",
     "disciplines": [
       "muaythai"
     ],
-    "motion": "coude-horizontal-avant",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -576,11 +654,11 @@
   {
     "id": "coude-horizontal-arriere",
     "name": "Coude horizontal droit",
+    "motion": "coude-horizontal-arriere",
     "category": "coude",
     "disciplines": [
       "muaythai"
     ],
-    "motion": "coude-horizontal-arriere",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -588,11 +666,11 @@
   {
     "id": "coude-diagonal-arriere",
     "name": "Coude diagonal descendant",
+    "motion": "coude-diagonal-arriere",
     "category": "coude",
     "disciplines": [
       "muaythai"
     ],
-    "motion": "coude-diagonal-arriere",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -600,11 +678,11 @@
   {
     "id": "coude-diagonal-avant",
     "name": "Coude diagonal avant",
+    "motion": "coude-diagonal-avant",
     "category": "coude",
     "disciplines": [
       "muaythai"
     ],
-    "motion": "coude-diagonal-avant",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -612,11 +690,11 @@
   {
     "id": "coude-montant-arriere",
     "name": "Coude remontant",
+    "motion": "coude-montant-arriere",
     "category": "coude",
     "disciplines": [
       "muaythai"
     ],
-    "motion": "coude-montant-arriere",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -624,11 +702,11 @@
   {
     "id": "coude-montant-avant",
     "name": "Coude remontant avant",
+    "motion": "coude-montant-avant",
     "category": "coude",
     "disciplines": [
       "muaythai"
     ],
-    "motion": "coude-montant-avant",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -636,11 +714,11 @@
   {
     "id": "clinch-tirage",
     "name": "Clinch simulé (tirage)",
+    "motion": "clinch-tirage",
     "category": "clinch",
     "disciplines": [
       "muaythai"
     ],
-    "motion": "clinch-tirage",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -648,11 +726,11 @@
   {
     "id": "genou-clinch",
     "name": "Genou dans le clinch",
+    "motion": "genou-direct-arriere-clinch",
     "category": "clinch",
     "disciplines": [
       "muaythai"
     ],
-    "motion": "genou-direct-arriere-clinch",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -660,11 +738,11 @@
   {
     "id": "genou-circulaire-clinch",
     "name": "Genou circulaire dans le clinch",
+    "motion": "genou-circulaire-arriere-clinch",
     "category": "clinch",
     "disciplines": [
       "muaythai"
     ],
-    "motion": "genou-circulaire-arriere-clinch",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -672,6 +750,7 @@
   {
     "id": "feinte-jab",
     "name": "Feinte de jab",
+    "motion": "feinte-jab",
     "category": "feinte",
     "disciplines": [
       "boxe",
@@ -679,7 +758,6 @@
       "mma",
       "muaythai"
     ],
-    "motion": "feinte-jab",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -687,6 +765,7 @@
   {
     "id": "feinte-epaule",
     "name": "Feinte d’épaule",
+    "motion": "feinte-epaule",
     "category": "feinte",
     "disciplines": [
       "boxe",
@@ -694,7 +773,6 @@
       "mma",
       "muaythai"
     ],
-    "motion": "feinte-epaule",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -702,11 +780,11 @@
   {
     "id": "feinte-lutte",
     "name": "Feinte de lutte",
+    "motion": "feinte-lutte",
     "category": "feinte",
     "disciplines": [
       "mma"
     ],
-    "motion": "feinte-lutte",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -714,11 +792,11 @@
   {
     "id": "changement-niveau",
     "name": "Changement de niveau",
+    "motion": "changement-niveau",
     "category": "lutte",
     "disciplines": [
       "mma"
     ],
-    "motion": "changement-niveau",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -726,11 +804,11 @@
   {
     "id": "entree-lutte",
     "name": "Entrée en double-leg (solo)",
+    "motion": "entree-lutte",
     "category": "lutte",
     "disciplines": [
       "mma"
     ],
-    "motion": "entree-lutte",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -738,11 +816,11 @@
   {
     "id": "sprawl",
     "name": "Sprawl",
+    "motion": "sprawl",
     "category": "lutte",
     "disciplines": [
       "mma"
     ],
-    "motion": "sprawl",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -750,11 +828,11 @@
   {
     "id": "defense-lutte",
     "name": "Défense d’entrée en lutte",
+    "motion": "defense-lutte",
     "category": "lutte",
     "disciplines": [
       "mma"
     ],
-    "motion": "defense-lutte",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -762,12 +840,12 @@
   {
     "id": "descente-sol",
     "name": "Descente contrôlée au sol",
+    "motion": "descente-sol",
     "category": "sol",
     "disciplines": [
       "mma",
       "bjj"
     ],
-    "motion": "descente-sol",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -775,12 +853,12 @@
   {
     "id": "sortie-hanche",
     "name": "Sortie de hanche (shrimp)",
+    "motion": "sortie-hanche",
     "category": "sol",
     "disciplines": [
       "mma",
       "bjj"
     ],
-    "motion": "sortie-hanche",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -788,12 +866,12 @@
   {
     "id": "releve-technique",
     "name": "Relevé technique",
+    "motion": "releve-technique",
     "category": "sol",
     "disciplines": [
       "mma",
       "bjj"
     ],
-    "motion": "releve-technique",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -801,23 +879,36 @@
   {
     "id": "garde-bjj",
     "name": "Posture debout de grappling",
+    "motion": "garde",
     "category": "garde",
     "disciplines": [
       "bjj"
     ],
-    "motion": "garde",
     "sourceRef": "main",
     "availability": "source_only_not_in_cme",
     "canonicalMotionListed": true
   },
   {
+    "id": "pont",
+    "name": "Pont (upa)",
+    "motion": "pont",
+    "category": "sol",
+    "disciplines": [
+      "bjj",
+      "mma"
+    ],
+    "sourceRef": "main",
+    "availability": "listed_in_cme_unvalidated",
+    "canonicalMotionListed": true
+  },
+  {
     "id": "retention-garde",
     "name": "Rétention de garde (solo)",
+    "motion": "retention-garde",
     "category": "sol",
     "disciplines": [
       "bjj"
     ],
-    "motion": "retention-garde",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -825,11 +916,11 @@
   {
     "id": "changement-base",
     "name": "Changement de base",
+    "motion": "changement-base",
     "category": "sol",
     "disciplines": [
       "bjj"
     ],
-    "motion": "changement-base",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -837,11 +928,11 @@
   {
     "id": "shizen-tai",
     "name": "Shizen-tai (posture naturelle)",
+    "motion": "garde",
     "category": "garde",
     "disciplines": [
       "judo"
     ],
-    "motion": "garde",
     "sourceRef": "main",
     "availability": "source_only_not_in_cme",
     "canonicalMotionListed": true
@@ -849,11 +940,11 @@
   {
     "id": "tsugi-ashi-avant",
     "name": "Tsugi-ashi avant",
+    "motion": "pas-avant",
     "category": "deplacement",
     "disciplines": [
       "judo"
     ],
-    "motion": "pas-avant",
     "sourceRef": "main",
     "availability": "source_only_not_in_cme",
     "canonicalMotionListed": true
@@ -861,11 +952,11 @@
   {
     "id": "tsugi-ashi-arriere",
     "name": "Tsugi-ashi arrière",
+    "motion": "pas-arriere",
     "category": "deplacement",
     "disciplines": [
       "judo"
     ],
-    "motion": "pas-arriere",
     "sourceRef": "main",
     "availability": "source_only_not_in_cme",
     "canonicalMotionListed": true
@@ -873,11 +964,11 @@
   {
     "id": "tsugi-ashi-lateral",
     "name": "Tsugi-ashi latéral",
+    "motion": "pas-gauche",
     "category": "deplacement",
     "disciplines": [
       "judo"
     ],
-    "motion": "pas-gauche",
     "sourceRef": "main",
     "availability": "source_only_not_in_cme",
     "canonicalMotionListed": true
@@ -885,11 +976,11 @@
   {
     "id": "tai-sabaki",
     "name": "Tai-sabaki (rotation du corps)",
+    "motion": "tai-sabaki",
     "category": "deplacement",
     "disciplines": [
       "judo"
     ],
-    "motion": "tai-sabaki",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -897,11 +988,11 @@
   {
     "id": "kuzushi",
     "name": "Kuzushi (déséquilibre, solo)",
+    "motion": "kuzushi",
     "category": "projection",
     "disciplines": [
       "judo"
     ],
-    "motion": "kuzushi",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
@@ -909,11 +1000,11 @@
   {
     "id": "uchikomi-seoi",
     "name": "Uchikomi de seoi-nage (solo)",
+    "motion": "uchikomi-seoi",
     "category": "projection",
     "disciplines": [
       "judo"
     ],
-    "motion": "uchikomi-seoi",
     "sourceRef": "main",
     "availability": "listed_in_cme_unvalidated",
     "canonicalMotionListed": true
