@@ -5,6 +5,7 @@ import {Fighter} from './Fighter';
 import {StudioCoach} from './StudioCoach';
 import {useSceneFullscreen,SceneFullscreenButton} from './SceneFullscreen';
 import {SceneCameraControls,SceneToolbar,SceneLoadingIndicator} from './SceneControls';
+import {shouldRenderLabFrames} from './sceneRuntime';
 import {ShadowCatalogPanel} from './ShadowCatalogPanel';
 import {readSavedCoaches,findSavedCoach,coachSourceActor,type SavedCoach} from './savedCoaches';
 import type {CoachLook} from './StudioCoach';
@@ -192,7 +193,7 @@ export function App(){
  const [tab,setTab]=useState<'lab'|'tracking'|'comparison'|'versions'|'options'|'studio'>('lab');
  const [pageVisible,setPageVisible]=useState(()=>typeof document==='undefined'||document.visibilityState==='visible');
  useEffect(()=>{const sync=()=>setPageVisible(document.visibilityState==='visible');document.addEventListener('visibilitychange',sync);return()=>document.removeEventListener('visibilitychange',sync);},[]);
- const labActive=tab==='lab'&&pageVisible;
+ const labActive=shouldRenderLabFrames(tab,pageVisible);
  const [clearCacheOnOpen,setClearCacheOnOpen]=useState(autoClearEnabled);
  const [cacheMessage,setCacheMessage]=useState('');
  const [catalogMode,setCatalogMode]=useState<'techniques'|'sequences'>('techniques');
