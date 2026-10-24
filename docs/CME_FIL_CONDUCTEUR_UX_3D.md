@@ -72,3 +72,6 @@ Conserver intégralement les consignes précédentes. Chaque proposition de suiv
 
 ## Ordre de travail validé : A → B → C (24/10/2026)
 A — stabilisation et non-régression d'abord ; B — personnalisation dynamique complète de Studio Coach ensuite ; C — biomécanique et caméra avancée enfin. Les choix libres restent prioritaires. Lot A : rendre testable séparément le masquage des matériaux sources sans supprimer les os descendants, vérifier les matériaux multiples et les deux sexes. Ne pas certifier un test visuel Android sans essai réel. Les PR brouillon antérieures nécessitent une revue de conflits avant toute fusion. Shadow reste en lecture seule.
+
+## Nouvelle piste physique (24/10/2026)
+Évaluer Rapier et Jolt comme adaptateurs physiques interchangeables ; comparer également MuJoCo, Bullet et Simbody pour leurs usages spécifiques. Ne pas remplacer le moteur cinématique ni introduire de dépendance sans benchmark mobile et validation biomécanique. Étude et contrat dans `docs/ETUDE_MOTEURS_PHYSIQUES_CME_3D.md`. Préserver l'ordre A → B → C, choix libre prioritaire et dépôt Shadow inchangé.
