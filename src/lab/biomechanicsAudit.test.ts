@@ -10,4 +10,8 @@ describe('biomechanics motion audit',()=>{
  it('flags planted foot horizontal sliding',()=>expect(auditMotion({...motion,keys:[{t:0,pose},{t:1,pose:{...pose,footL:{...pose.footL,ball:{x:.08,y:0,z:0}}}}]}).some(f=>f.code==='PLANTED_FOOT_SLIDE')).toBe(true));
  it('allows stable planted foot pivots',()=>expect(auditMotion({...motion,keys:[{t:0,pose},{t:1,pose:{...pose,footL:{...pose.footL,yaw:1}}}]}).some(f=>f.code==='PLANTED_FOOT_SLIDE')).toBe(false));
  it('detects ground penetration and invalid impacts',()=>expect(auditCatalog([{...motion,impacts:[2],keys:[{t:0,pose:{...pose,footL:{...pose.footL,ball:{x:0,y:-.1,z:0}}}},{t:1,pose}]}]).map(f=>f.code)).toEqual(expect.arrayContaining(['GROUND_PENETRATION','IMPACT_TIME'])));
+ it('rejects a chain transition beyond the final key',()=>expect(auditMotion({...motion,chainAt:2}).map(f=>f.code)).toContain('CHAIN_TIME'));
+ it('rejects non-finite travel displacement',()=>expect(auditMotion({...motion,travel:{x:NaN,z:0,yaw:0}}).map(f=>f.code)).toContain('TRAVEL_NONFINITE'));
+ it('rejects unordered and repeated impact times',()=>expect(auditMotion({...motion,impacts:[.7,.5,.5]}).map(f=>f.code)).toContain('IMPACT_ORDER'));
+ it('accepts valid chaining, travel and ordered impacts',()=>expect(auditMotion({...motion,chainAt:.8,travel:{x:.1,z:0,yaw:.2},impacts:[.2,.7]})).toEqual([]));
 });
