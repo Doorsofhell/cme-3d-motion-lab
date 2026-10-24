@@ -3,6 +3,7 @@ import {Canvas} from '@react-three/fiber';
 import {SceneCameraControls,SceneCameraButton,SceneLoadingBoundary,SceneToolbar,SceneLoadingIndicator} from './SceneControls';
 import {useSceneFullscreen,SceneFullscreenButton} from './SceneFullscreen';
 import {useGLTF} from '@react-three/drei';
+import {alternateRigAsset} from './sceneRuntime';
 import {NeutralRig,LAB_DISCIPLINES,type LabDiscipline,type NeutralRigReport} from './NeutralRig';
 import './StudioCoach.css';
 import {addSavedCoach,readSavedCoaches,updateSavedCoach,deleteSavedCoach} from './savedCoaches';
@@ -75,7 +76,7 @@ export function StudioCoach(){
  // l'autre silhouette seulement une fois le modèle courant effectivement prêt.
  useEffect(()=>{
   if(!report)return;
-  const other=report.sex==='homme'?'mma-amara':'mma-kadir';
+  const other=alternateRigAsset(report.sex);
   useGLTF.preload(import.meta.env.BASE_URL+'fighters/'+other+'/photo.glb',import.meta.env.BASE_URL+'draco/');
  },[report?.sex]);
  const importRef=useRef<HTMLInputElement>(null);
