@@ -38,3 +38,34 @@ export function applyNeutralAppearance(root:Object3D,appearance?:NeutralAppearan
  });
  return count;
 }
+
+/** Neutral test mode: homogeneous matte surface, without skin or costume textures.
+ * Hide only explicitly named detachable equipment meshes. Some source GLBs have
+ * clothing fused into the body mesh; that geometry cannot be removed safely here.
+ * A certified bare neutral rig will require a dedicated asset.
+ */
+export function applyNeutralRigMaterials(root:Object3D):number{
+ let count=0;
+ root.traverse(object=>{
+  const mesh=object as Mesh;
+  if(!mesh.isMesh)return;
+  const id=mesh.name.toLowerCase();
+  if(/(^|[_. -])(gloves?|shinguards?|headgear|helmet|pads?|shoes?)([_. -]|$)/.test(id)){
+   mesh.visible=false;
+   return;
+  }
+  mesh.visible=true;
+  const materials=Array.isArray(mesh.material)?mesh.material:[mesh.material];
+  for(const material of materials){
+   if(!(material instanceof MeshStandardMaterial))continue;
+   material.color.set('#a7abb2');
+   material.map=null;
+   material.emissiveMap=null;
+   material.roughness=.92;
+   material.metalness=0;
+   material.needsUpdate=true;
+   count++;
+  }
+ });
+ return count;
+}
