@@ -19,7 +19,7 @@ import {useAutoIncidentQueue,type AutoCategory} from './AutoIncidents';
 import {autoClearEnabled,setAutoClearEnabled,clearApplicationCache} from './cachePolicy';
 import './style.css';
 
-type Actor='mma-kadir'|'mma-amara';
+type Actor='mma-kadir'|'mma-amara'|'mma-naira';
 type TechniqueEntry={id:string;name:string;category:string;disciplines:string[];motion:string};
 const techniques=(rawTechniques as TechniqueEntry[]).filter((t,i,a)=>a.findIndex(x=>x.motion===t.motion)===i);
 type SequenceEntry={id:string;name:string;discipline:string;motions:string[];status:string};
@@ -119,7 +119,7 @@ function Viewer({actor,discipline,technique,quality,renderStyle,playback,skeleto
  const onCreated=useCallback(({gl:renderer,scene:argumentsScene,camera:argumentsCamera}:Parameters<NonNullable<React.ComponentProps<typeof Canvas>['onCreated']>>[0])=>{
   const canvas=renderer.domElement;
   onCaptureReady(()=>{const current=captureContext.current;return captureFighterImage(canvas,()=>{renderer.render(argumentsScene,argumentsCamera);},{
-   actor:current.actor==='mma-amara'?'Amara':'Kadir',discipline:current.discipline,technique:current.technique,
+   actor:current.actor==='mma-amara'?'Amara':current.actor==='mma-naira'?'Naïra (prototype cloné)':'Kadir',discipline:current.discipline,technique:current.technique,
    renderStyle:current.renderStyle,progress:playback.current.progress
   });});
   canvasRef.current?.cmeCleanup?.();
@@ -241,7 +241,7 @@ export function App(){
   
   <div className="labContent" style={{display:tab==='lab'?'contents':'none'}}>
   <section className="quickBar" aria-label="Sélection de test">
-   <label><span>Coach</span><select aria-label="Coach" value={actor} onChange={e=>{journal.record('coach','Changement de coach : '+actor+' → '+e.target.value);reset();setActor(e.target.value as Actor);}}>{fighterRoster.map(f=><option key={f.id} value={f.id} disabled={f.status!=='available'}>{f.name}{f.status==='in-production'?' · en création':''}</option>)}</select></label>
+   <label><span>Coach</span><select aria-label="Coach" value={actor} onChange={e=>{journal.record('coach','Changement de coach : '+actor+' → '+e.target.value);reset();setActor(e.target.value as Actor);}}>{fighterRoster.map(f=><option key={f.id} value={f.id} disabled={f.status!=='available'&&f.id!=='mma-naira'}>{f.name}{f.status==='in-production'?' · prototype cloné (non validé)':''}</option>)}</select></label>
    <label><span>Discipline</span><select aria-label="Discipline" value={discipline} onChange={e=>{journal.record('discipline','Discipline : '+discipline+' → '+e.target.value,{coach:actor,style:renderStyle});reset();setDiscipline(e.target.value);setTechnique(techniques.find(t=>t.disciplines.includes(e.target.value))?.motion??'garde');onLog('Discipline : '+e.target.value);}}>{disciplines.map(([id,name])=><option key={id} value={id}>{name}</option>)}</select></label>
    <label><span>{technique.startsWith('seq-')?'Enchaînement':'Technique'} · {currentTechniques.length}</span><div className="motionSelector"><button type="button" className="catalogButton" aria-label="Choisir une technique" onClick={()=>{setCatalogMode('techniques');setCatalogOpen(true);setQuery('');}}><span>{techniqueLabel}</span><strong>⌕</strong></button><button type="button" className="comboChoose" aria-label="Choisir un enchaînement complexe" onClick={()=>{setCatalogMode('sequences');setCatalogOpen(true);setQuery('');}}>×{currentSequences.length}</button></div></label>
   </section>
