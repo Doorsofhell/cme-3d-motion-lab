@@ -74,6 +74,7 @@ function Mannequin({look}:{look:CoachLook}){
  </group>;
 }
 const sections:Category[]=['corps','visage','peau','cheveux','tenue','protections'];
+const sectionNames:Record<Category,string>={corps:'Morphologie',visage:'Visage',peau:'Peau',cheveux:'Cheveux',tenue:'Tenue',protections:'Protections'};
 export function StudioCoach(){
  const [look,setLook]=useState<CoachLook>(defaultCoachLook);
  const [section,setSection]=useState<Category>('corps');
@@ -100,34 +101,41 @@ export function StudioCoach(){
  };
  const exportJson=()=>{const json=JSON.stringify({schema:'cme-coach-look-v1',look},null,2);const blob=new Blob([json],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='cme-coach-look.json';a.click();URL.revokeObjectURL(url);setMessage('Configuration exportée : apparence uniquement, sans modification du moteur.');};
  return <section className="coachStudio" aria-label="Studio Coach">
-  <header className="coachStudioHeader"><div><small>CME-3D / STUDIO COACH</small><h2>Créer un coach</h2><p>Un modèle, six disciplines. Personnalisez puis testez.</p></div><button onClick={()=>{setLook(defaultCoachLook);setMessage('Apparence réinitialisée');}}>Réinitialiser</button></header>
+  <header className="coachStudioHeader"><div><small>STUDIO COACH</small><h2>Votre combattant</h2><p>Choisissez un modèle et personnalisez son apparence.</p></div></header>
   <div className="coachStudioLayout">
    <div className="coachPreview" aria-label="Aperçu 3D permanent du mannequin personnalisable">
     <div className="coachRigSwitch"><button className={!rigMode?'active':''} onClick={()=>setRigMode(false)}>Apparence</button><button className={rigMode?'active':''} onClick={()=>setRigMode(true)}>Rig animé</button></div>
     <Canvas camera={{position:[0,1.05,3.4],fov:38}} dpr={[1,1.5]} gl={{antialias:true}}>
      <color attach="background" args={['#171920']}/><ambientLight intensity={1.4}/><directionalLight position={[3,5,4]} intensity={2.1}/>
-     {rigMode?<NeutralRig sex={look.sex} discipline={discipline} motionId={motionId} playing={playing} speed={1} showSkeleton={showSkeleton} onReport={setReport}/>:<Mannequin look={look}/>}
+     {rigMode?<NeutralRig sex={look.sex} discipline={discipline} motionId={motionId} playing={playing} speed={1} showSkeleton={showSkeleton} onReport={setReport} appearance={{skin:look.skin,hairColor:look.hairColor,topColor:look.topColor,bottomColor:look.bottomColor,gloveColor:look.gloveColor}}/>:<Mannequin look={look}/>}
      <OrbitControls target={[0,.65,0]} enablePan={false} minDistance={2.2} maxDistance={5}/>
     </Canvas>
-    <span className="coachPreviewLabel">{rigMode?'Rig Mixamo existant · moteur canonique partagé · personnalisation non encore transférée':'Mannequin procédural · aperçu d’apparence, non rig canonique validé'}</span>
+    <span className="coachPreviewLabel">{rigMode?'Modèle riggé · couleurs appliquées aux matériaux identifiables':'Aperçu simplifié · non riggé'}</span>
    </div>
    <div className="coachEditor">
-    <nav className="coachCategories" aria-label="Catégories de personnalisation">{sections.map(s=><button key={s} className={section===s?'active':''} onClick={()=>setSection(s)}>{({corps:'Corps',visage:'Visage',peau:'Peau',cheveux:'Cheveux',tenue:'Tenue',protections:'Protections'} as Record<Category,string>)[s]}</button>)}</nav>
-    {rigMode&&<div className="coachRigControls">
+    <div className="coachQuickChoice" role="group" aria-label="Choisir le modèle">
+      <button className={look.sex==='homme'?'active':''} onClick={()=>update('sex','homme')}>Homme</button>
+      <button className={look.sex==='femme'?'active':''} onClick={()=>update('sex','femme')}>Femme</button>
+    </div>
+    <nav className="coachCategories" aria-label="Personnalisation">{sections.map(item=><button key={item} className={section===item?'active':''} aria-current={section===item?'true':undefined} onClick={()=>setSection(item)}>{sectionNames[item]}</button>)}</nav>
+    <h3 className="coachSectionTitle">{sectionNames[section]}</h3>
+    {rigMode&&<details className="coachAdvanced"><summary>Tester les mouvements</summary><div className="coachRigControls">
       <label>Discipline <select value={discipline} onChange={e=>{setDiscipline(e.target.value as LabDiscipline);setReport(null);}}>{LAB_DISCIPLINES.map(d=><option key={d} value={d}>{d}</option>)}</select></label>
       <label>Mouvement <input value={motionId} onChange={e=>setMotionId(e.target.value)} placeholder="garde"/></label>
       <button onClick={()=>setPlaying(v=>!v)}>{playing?'Pause':'Lecture'}</button>
       <label><input type="checkbox" checked={showSkeleton} onChange={e=>setShowSkeleton(e.target.checked)}/> Squelette</label>
       <small>{report?report.available?`${report.bones} os · ${report.duration.toFixed(2)} s`:'Mouvement indisponible : garde de secours':'Chargement du rig…'}</small>
-     </div>}
+     </div></details>}
     <div className="coachFields">
-     {section==='corps'&&<>{choose('sex','Base morphologique',['homme','femme'])}{range('height','Taille relative',.9,1.1)}{range('shoulders','Épaules',.75,1.25)}{range('muscle','Musculature',.7,1.35)}{range('waist','Taille',.75,1.3)}</>}
+     {section==='corps'&&<><div className="coachQuickChoice"><button onClick={()=>setLook(l=>normalizeCoachLook({...l,muscle:.8,shoulders:.85,waist:.9}))}>Fin</button><button onClick={()=>setLook(l=>normalizeCoachLook({...l,muscle:1,shoulders:1,waist:1}))}>Standard</button><button onClick={()=>setLook(l=>normalizeCoachLook({...l,muscle:1.25,shoulders:1.2,waist:1.05}))}>Athlétique</button></div></>}
      {section==='visage'&&<>{range('jaw','Mâchoire',.8,1.2)}{range('nose','Nez',.8,1.2)}{range('eyes','Yeux',.8,1.2)}{color('eyeColor','Couleur des yeux')}</>}
      {section==='peau'&&color('skin','Teint')}
      {section==='cheveux'&&<>{choose('hairStyle','Coiffure',['rase','court','long'])}{color('hairColor','Couleur des cheveux')}</>}
      {section==='tenue'&&<>{choose('top','Haut',['rashguard','tshirt','aucun'])}{color('topColor','Couleur du haut')}{choose('bottom','Bas',['short','legging'])}{color('bottomColor','Couleur du bas')}</>}
      {section==='protections'&&<>{choose('gloves','Gants',['boxe','mma','aucun'])}{color('gloveColor','Couleur des gants')}<label className="coachField"><span>Protège-tibias</span><input type="checkbox" checked={look.shins} onChange={e=>update('shins',e.target.checked)}/></label>{color('shinColor','Couleur des protections')}</>}
     </div>
+    <details className="coachAdvanced"><summary>Réglages avancés</summary><div className="coachFields">{section==='corps'&&<>{range('height','Taille relative',.9,1.1)}{range('shoulders','Épaules',.75,1.25)}{range('muscle','Musculature',.7,1.35)}{range('waist','Taille',.75,1.3)}</>}</div></details>
+    <button className="coachReset" onClick={()=>{setLook(defaultCoachLook);setMessage('Apparence réinitialisée');}}>Réinitialiser le personnage</button>
     <details className="coachAdvanced" open={advancedOpen} onToggle={e=>setAdvancedOpen(e.currentTarget.open)}><summary>Gestion du profil <span>Importer · Exporter</span></summary><div className="coachActions">
       <button onClick={exportJson}>Exporter JSON</button>
       <button onClick={()=>importRef.current?.click()}>Importer JSON</button>
