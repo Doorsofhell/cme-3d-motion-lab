@@ -40,3 +40,14 @@ No camera capture, motion capture, video upload or video analysis.
 ## Explicit exclusions
 
 Do not silently alter Combat Shadow Studio. No video or camera-based workflows. Do not claim visual or biomechanical validation from static tests alone.
+
+## Mise à jour vérifiée du 24/10/2026 — qualité de la version 0.7.18
+Les références aux PR #42/#43/#44 et à « 86 gestes » dans les étapes initiales constituent un **historique**, et non la priorité de chantier à appliquer sans nouvel audit.
+
+- **G1** : couvert par les workflows GitHub de pull request (TypeScript, Vitest, scripts de validation des modèles, build), à vérifier sur le SHA de la PR.
+- **G2/G3** : couverture partielle de contrats et scripts. Aucune validation biomécanique des 306 gestes de l'Atlas ni des 43 combinaisons n'est enregistrée dans le fichier `COUVERTURE.json`.
+- **G4** : non certifié ; la désactivation du rendu WebGL hors écran est une optimisation théorique, pas un FPS mesuré sur smartphone.
+- **G5** : différences de matériaux testées, sans approbation visuelle reproductible des trois styles sur Android.
+- **G6** : valider la réussite du workflow de déploiement lié au SHA fusionné ; confirmation HTTP, version réellement affichée et contrôle physique doivent être distingués.
+
+Une PR peut être fusionnée après G1 vert en indiquant honnêtement G2–G6 partiels. Ne pas désigner la livraison comme totalement certifiée tant que les autres portes ne sont pas documentées.
