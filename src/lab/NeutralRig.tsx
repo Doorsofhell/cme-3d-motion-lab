@@ -33,7 +33,6 @@ export function NeutralRig({sex,discipline,motionId,playing,speed,showSkeleton,o
   const root=clone(gltf.scene) as Object3D;
   restoreReferencePose(root);
   // Préserver la géométrie humaine skinnée du GLB ; ne jamais la remplacer par des capsules.
-  if(mode==='neutral')applyNeutralRigMaterials(root);
   root.traverse(o=>{
    const m=o as Mesh;
    if(!m.isMesh)return;
@@ -48,6 +47,7 @@ export function NeutralRig({sex,discipline,motionId,playing,speed,showSkeleton,o
     p.needsUpdate=true;
    }
   });
+  if(mode==='neutral')applyNeutralRigMaterials(root);
   return root;
  },[gltf.scene,mode,sex]);
  useEffect(()=>{if(mode==='appearance')applyNeutralAppearance(scene,appearance);},[scene,appearance,mode]);
