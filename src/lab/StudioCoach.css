@@ -180,3 +180,8 @@
 .coachShapeOption:disabled{opacity:.38;cursor:not-allowed}
 .coachShapeOption:focus-visible{outline:3px solid #d6363c;outline-offset:2px}
 @media(max-width:420px){.coachShapeGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.coachShapeOption{min-height:68px}.coachShapeSymbol{font-size:26px}}
+
+.coachShapeOption .coachMorphIllustration{display:block;width:76px;max-width:100%;height:88px;filter:drop-shadow(0 2px 3px #0002)}
+.coachShapeOption{min-height:122px;padding:8px 4px;gap:3px}
+.coachShapeOption span:last-child{font-size:11px;line-height:1.2}
+@media(max-width:420px){.coachShapeOption{min-height:110px}.coachShapeOption .coachMorphIllustration{height:77px}}
