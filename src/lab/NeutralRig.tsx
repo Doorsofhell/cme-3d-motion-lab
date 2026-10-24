@@ -45,7 +45,8 @@ export function NeutralRig({sex,discipline,motionId,playing,speed,showSkeleton,o
    for(const material of (Array.isArray(m.material)?m.material:[m.material])){
     const p=material as MeshStandardMaterial;
     if(!p.color)continue;
-    if(m.userData.cmeHiddenSource){p.transparent=true;p.opacity=0;p.depthWrite=false;p.colorWrite=false;}\n    p.roughness=.88;
+    if(m.userData.cmeHiddenSource){p.transparent=true;p.opacity=0;p.depthWrite=false;p.colorWrite=false;}
+    p.roughness=.88;
     p.metalness=0;
     p.needsUpdate=true;
    }
