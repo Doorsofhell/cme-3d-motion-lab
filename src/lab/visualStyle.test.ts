@@ -48,6 +48,21 @@ describe('CME-3D toon costume detail and adult comics',()=>{
   expect((outlines[0] as SkinnedMesh).skeleton).toBe(skinned.skeleton);
   expect(outlines[0].parent).toBe(skinned);
  });
+ it('uses stronger silhouette in detail than balanced without touching source scale',()=>{
+  const balanced=makeCoachMaterial('short-boxe',false);
+  const detail=makeCoachMaterial('short-boxe',false);
+  const b=applyComicStyle(balanced.root,'balanced');
+  const d=applyComicStyle(detail.root,'detail');
+  expect(b).toHaveLength(1);
+  expect(d).toHaveLength(1);
+  expect(d[0].scale.x).toBeGreaterThan(b[0].scale.x);
+  expect(balanced.mesh.scale.x).toBe(1);
+  expect(detail.mesh.scale.x).toBe(1);
+ });
+ it('does not add an opaque ink shell over translucent garments',()=>{
+  const {root}=makeCoachMaterial('brassiere');
+  expect(applyComicStyle(root,'detail')).toHaveLength(0);
+ });
  it('skips the extra ink draw call in performance tier',()=>{
   const {root}=makeCoachMaterial('haut-boxe',false);
   expect(applyComicStyle(root,'performance')).toHaveLength(0);
