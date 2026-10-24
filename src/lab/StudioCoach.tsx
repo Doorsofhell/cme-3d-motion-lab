@@ -95,8 +95,8 @@ export function StudioCoach(){
     <div className="coachRigSwitch" role="group" aria-label="Mode du modèle 3D"><button className={!rigMode?'active':''} aria-pressed={!rigMode} onClick={()=>setRigMode(false)}>Coach</button><button className={rigMode?'active':''} aria-pressed={rigMode} onClick={()=>setRigMode(true)}>Anatomie</button></div>
     <button type="button" className="cmeCameraAuto" aria-label={cameraAuto?'Désactiver la caméra automatique':'Activer la caméra automatique'} title="Caméra pédagogique" aria-pressed={cameraAuto} onClick={()=>setCameraAuto(v=>!v)}>◉ {cameraAuto?'Auto':'Libre'}</button>
     <Canvas camera={{position:[0,1.05,3.4],fov:38}} dpr={[1,1.5]} gl={{antialias:true}}>
-     <color attach="background" args={['#171920']}/><ambientLight intensity={1.4}/><directionalLight position={[3,5,4]} intensity={2.1}/>
-     <NeutralRig key={`${look.sex}-${rigMode?'neutral':'appearance'}`} mode={rigMode?'neutral':'appearance'} sex={look.sex} discipline={discipline} motionId={motionId} playing={playing} speed={1} showSkeleton={showSkeleton} onReport={setReport} appearance={{skin:look.skin,hairColor:look.hairColor,topColor:look.topColor,bottomColor:look.bottomColor,gloveColor:look.gloveColor}}/>
+     <color attach="background" args={['#e6edf6']}/><ambientLight intensity={2}/><directionalLight position={[3,5,4]} intensity={2.6}/>
+     <NeutralRig key={`${look.sex}-${rigMode?'neutral':'appearance'}`} mode={rigMode?'neutral':'appearance'} sex={look.sex} discipline={discipline} motionId={motionId} playing={playing} speed={1} showSkeleton={showSkeleton} onReport={setReport} appearance={{skin:look.skin,hairColor:look.hairColor,topColor:look.topColor,bottomColor:look.bottomColor,gloveColor:look.gloveColor}} proportions={{height:look.height,shoulders:look.shoulders,muscle:look.muscle,waist:look.waist}}/>
      <CameraPedagogique mouvement={motionId} active={cameraAuto}/>
      {!cameraAuto&&<OrbitControls target={[0,.9,0]} enablePan={false} minDistance={2.2} maxDistance={5}/> }
     </Canvas>
