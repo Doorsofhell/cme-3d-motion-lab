@@ -2,6 +2,7 @@ import {describe,it,expect,vi} from 'vitest';
 import {Bone,BoxGeometry,BufferAttribute,Group,Mesh,MeshStandardMaterial,Skeleton,SkinnedMesh} from 'three';
 import {applyCoachBodyShape,applyCoachFaceShapes,applyCoachLookGeometry,inspectCoachShapes} from './coachGeometry';
 import {applyNeutralAppearance,inspectCoachMaterialZones} from './neutralAppearance';
+import {cloneOwnedGeometry} from '../adapters/geometryOwnership';
 
 function skinnedTorso(){
  const geo=new BoxGeometry(1,2,1);
@@ -52,6 +53,15 @@ describe('Studio Coach — déformations GLB non destructives',()=>{
   applyCoachBodyShape(root,neutral);
   expect(Array.from(mesh.geometry.getAttribute('position').array)).toEqual(Array.from(positions));
  });
+ it('ne transfère jamais le marquage propriété vers la géométrie GLB source',()=>{
+  const {original}=skinnedTorso();
+  const owned=cloneOwnedGeometry(original);
+  expect(owned).not.toBe(original);
+  expect(owned.userData.cmeOwned).toBe(true);
+  expect(original.userData.cmeOwned).not.toBe(true);
+  owned.userData.customFlag='local';
+  expect(original.userData.customFlag).toBeUndefined();
+ });
  it('n’altère aucun mesh non skinné ou dénué de squelette de torse',()=>{
   const group=new Group();
   const mesh=new Mesh(new BoxGeometry(),new MeshStandardMaterial());
@@ -95,8 +105,8 @@ describe('Studio Coach — déformations GLB non destructives',()=>{
  });
  it('ajuste le tissu du haut avec une marge minime sans changer les os ou le corps source',()=>{
   const {root,mesh,original,bones}=skinnedTorso();
-  const coatSource=original.clone();
-  coatSource.userData.cmeOwned=true;
+  const coatSource=cloneOwnedGeometry(original);
+  expect(original.userData.cmeOwned).not.toBe(true);
   const garment=new SkinnedMesh(coatSource,new MeshStandardMaterial({name:'shirt_top'}));
   garment.name='tenue:haut';
   garment.bind(mesh.skeleton);
