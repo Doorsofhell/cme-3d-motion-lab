@@ -2,7 +2,7 @@ import {useEffect,useMemo,useRef,type RefObject} from 'react';
 import {useFrame} from '@react-three/fiber';
 import {useGLTF} from '@react-three/drei';
 import {clone} from 'three/examples/jsm/utils/SkeletonUtils.js';
-import {SkeletonHelper,type Mesh,type Object3D,MeshStandardMaterial,MeshToonMaterial,DoubleSide,DataTexture,RedFormat,UnsignedByteType,NearestFilter,Color,BackSide} from 'three';
+import {SkeletonHelper,type Mesh,type Object3D,MeshStandardMaterial,MeshToonMaterial,DoubleSide,DataTexture,RedFormat,UnsignedByteType,NearestFilter,Color,BackSide,SkinnedMesh} from 'three';
 import {CoachRig} from '../shadow-engine/rig';
 import {getLibrary} from '../shadow-engine/library';
 import {MotionSampler} from '../shadow-engine/motion';
@@ -91,14 +91,19 @@ export function applyComicStyle(root:Object3D,quality:Quality){
    return material;
   });
   mesh.material=Array.isArray(mesh.material)?styled:styled[0];
-  // Lightweight ink silhouette on desktop/detail mode; avoid doubled skinned
-  // geometry and extra draw calls on mobile or low-performance devices.
-  if(quality==='detail'&&!('isSkinnedMesh' in mesh && mesh.isSkinnedMesh)){
+  // Inverted-hull outline supports animated SkinnedMesh as well as static meshes.
+  // Keep the original skeleton/bind matrix; only the ink shell is offset.
+  // Performance tier omits the extra draw call, balanced/detail retain the ink.
+  if(quality!=='performance' && !mesh.userData.cmeComicOutline && !materials.some(m=>m.transparent && m.opacity<1)){
    const outline=mesh.clone(false) as Mesh;
    outline.name=mesh.name+'-ink-contour';
-   outline.material=new MeshToonMaterial({color:'#080d1a',side:BackSide});
-   outline.scale.multiplyScalar(1.018);
+   outline.material=new MeshToonMaterial({color:'#080d1a',side:BackSide,skin­ning:undefined} as never);
+   outline.scale.multiplyScalar(1.012);
    outline.userData.cmeComicOutline=true;
+   if(mesh instanceof SkinnedMesh && outline instanceof SkinnedMesh){
+    outline.bind(mesh.skeleton,mesh.bindMatrix);
+    outline.bindMode=mesh.bindMode;
+   }
    outlines.push(outline);
    mesh.add(outline);
   }
