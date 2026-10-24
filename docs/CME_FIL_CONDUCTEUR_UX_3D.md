@@ -28,3 +28,13 @@ Le mannequin procédural montre une anatomie simplifiée et des vêtements gross
 
 ## Critères de livraison
 TypeScript + tests + build Pages verts, aucun changement dans le moteur canonique, GitHub Pages vérifié, tests Android et visuels encore explicitement signalés comme non certifiés.
+
+## Correction du 24/10 — séparation impérative des modes 3D
+L'utilisateur a confirmé sur capture Android : **Rig neutre** = humanoïde d'étude monochrome, sans texture de peau ni équipement distinctif, destiné exclusivement aux tests des mouvements. **Apparence** = combattant humain texturé, habillé et personnalisable. Le mannequin procédural ne doit plus être exposé comme résultat visuel.
+
+- Mode Apparence sélectionné par défaut ; source GLB riggée texturée.
+- Mode Rig neutre : matériau gris mat uniforme, textures supprimées, accessoires séparables explicitement identifiés masqués.
+- Les deux modes sont remontés indépendamment afin d'éviter les fuites de matériaux.
+- Ne pas prétendre qu'un GLB habillé devient un humanoïde anatomiquement nu par simple changement de matériau : la géométrie des vêtements fusionnés nécessite de vrais assets neutres.
+- Garder la personnalisation progressive, les catégories lisibles, les trois espaces principaux, le menu Plus et la charte Shadow.
+- Proposer à chaque étape des choix prédéfinis pertinents pour le prochain lot, en conservant ce fil conducteur.
