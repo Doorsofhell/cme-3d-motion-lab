@@ -16,6 +16,16 @@ describe('Studio Coach : cohérence tactile Android',()=>{
   expect(fighter).toContain('applyCoachLookGeometry(s,coachLook)');
   expect(fighter).not.toContain('applyCoachBodyShape(s,');
  });
+ it('charge les véritables tenues de discipline uniquement en mode Apparence',()=>{
+  const rig=readFileSync(new URL('./NeutralRig.tsx',import.meta.url),'utf8');
+  const studio=readFileSync(new URL('./StudioCoach.tsx',import.meta.url),'utf8');
+  expect(rig).toContain("props.mode==='appearance'?<OutfittedRig");
+  expect(rig).toContain("attachOutfit(root,outfitScene,true)");
+  expect(rig).toContain("'/tenues/'+costume+'.glb'");
+  expect(studio).toContain('SKIN_TONES.map(');
+  expect(studio).toContain('coachSkinGrid');
+  expect(css).toContain('grid-template-columns:repeat(4,minmax(0,1fr))');
+ });
  it('préserve les boutons tactiles accessibles et la barre commune',()=>{
   expect(css).toContain('min-height:44px');
   expect(controls).toContain('export function SceneToolbar');
