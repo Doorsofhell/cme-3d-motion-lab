@@ -99,7 +99,9 @@ export function applyNeutralRigMaterials(root:Object3D):number{
   const mesh=object as Mesh;
   if(!mesh.isMesh)return;
   const id=mesh.name.toLowerCase();
-  if(/(^|[_. -])(gloves?|shinguards?|headgear|helmet|pads?|shoes?)([_. -]|$)/.test(id)){
+  // Strict anatomy: never show any independently attached clothing, footwear
+  // or protection, even when an upstream GLB accidentally contains such meshes.
+  if(/(^|[_. :/-])(tenue|garment|clothing|shirt|rashguard|shorts?|pants?|pantalon|brassiere|vest|veste|gi|kimono|gloves?|gants?|shinguards?|headgear|helmet|pads?|shoes?|chaussure)([_. :/-]|$)/.test(id)){
    mesh.visible=false;
    return;
   }
