@@ -1,5 +1,5 @@
 import {describe,expect,it} from 'vitest';
-import {Bone,Mesh,Object3D} from 'three';
+import {Bone,Mesh,Object3D,MeshStandardMaterial} from 'three';
 import {buildNeutralHumanoid,CANONICAL_SEGMENTS} from './canonicalNeutralBody';
 import {LAB_DISCIPLINES,NEUTRAL_ASSETS} from './NeutralRig';
 import {getLibrary} from '../shadow-engine/library';
@@ -41,5 +41,21 @@ describe('canonical neutral humanoid proxy',()=>{
   expect(typeof CoachRig).toBe('function');
   expect(typeof MotionSampler).toBe('function');
   expect(typeof getLibrary).toBe('function');
+ });
+});
+
+describe('neutral rendering regression guards',()=>{
+ it.each(['homme','femme'] as const)('keeps generated study surfaces visible for %s',sex=>{
+  const root=skeleton();buildNeutralHumanoid(root,sex);
+  const meshes:Mesh[]=[];root.traverse(o=>{const m=o as Mesh;if(m.isMesh&&m.name.startsWith('CME_NEUTRAL_'))meshes.push(m);});
+  expect(meshes.length).toBeGreaterThan(12);
+  for(const m of meshes){expect(m.visible).toBe(true);expect(m.frustumCulled).toBe(false);expect((m.material as MeshStandardMaterial).color.getHexString()).toBe('a7abb2');}
+ });
+ it('does not hide the canonical bones when an ancestor source mesh is transparent',()=>{
+  const root=skeleton();const result=buildNeutralHumanoid(root,'homme');
+  expect(result.segments).toBeGreaterThan(12);
+  const sample=root.getObjectByName('CME_NEUTRAL_LeftArm_LeftForeArm');
+  expect(sample).toBeTruthy();
+  expect(sample?.parent?.type).toBe('Bone');
  });
 });
