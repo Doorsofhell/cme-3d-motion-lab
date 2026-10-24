@@ -20,3 +20,16 @@ export function coachSourceActor(coach:SavedCoach):'mma-kadir'|'mma-amara'{
 export function findSavedCoach(storage:Pick<Storage,'getItem'>,id:string|null):SavedCoach|null{
  return id?readSavedCoaches(storage).find(coach=>coach.id===id)??null:null;
 }
+
+export function updateSavedCoach(storage:Pick<Storage,'getItem'|'setItem'>,coach:SavedCoach):SavedCoach[]{
+ const current=readSavedCoaches(storage);
+ if(!current.some(x=>x.id===coach.id))throw Error('Coach introuvable');
+ const result=current.map(x=>x.id===coach.id?coach:x);
+ storage.setItem(COACH_STORAGE_KEY,JSON.stringify(result));
+ return result;
+}
+export function deleteSavedCoach(storage:Pick<Storage,'getItem'|'setItem'>,id:string):SavedCoach[]{
+ const result=readSavedCoaches(storage).filter(x=>x.id!==id);
+ storage.setItem(COACH_STORAGE_KEY,JSON.stringify(result));
+ return result;
+}

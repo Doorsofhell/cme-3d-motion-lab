@@ -40,3 +40,6 @@ P2 : optimisation Android et audit A/B biomécanique.
 - Le coach actif est conservé sur cet appareil et indiqué dans la scène ; la sélection d'un combattant de série désactive le profil personnalisé.
 - Limite persistante : les morphs, visages, tenues et protections ne sont pas encore pleinement appliqués à la géométrie du rig. L'adaptateur de matériaux ne colore que les surfaces reconnues. Le retargeting quantitatif et la certification des six disciplines ne sont pas achevés.
 - Critères de validation : typecheck, tests, build Pages, contrôle réel Android et test visuel des 6 disciplines. Ne pas annoncer les contrôles Android comme faits sans preuve.
+
+## Addendum — interface et catalogue
+Parcours : humanoïde neutre, personnalisation, sauvegarde, puis test en Laboratoire. Les profils doivent pouvoir être créés, modifiés et supprimés. Inventorier les techniques, mouvements et enchaînements Shadow en lecture seule, en distinguant données importées et animations réellement validées. Référence détaillée : docs/CME_INTERFACE_CIBLE_CATALOGUE_SHADOW.md.

@@ -1,5 +1,5 @@
 import {describe,it,expect} from 'vitest';
-import {addSavedCoach,readSavedCoaches,COACH_STORAGE_KEY,coachSourceActor,findSavedCoach} from './savedCoaches';
+import {addSavedCoach,readSavedCoaches,COACH_STORAGE_KEY,coachSourceActor,findSavedCoach,updateSavedCoach,deleteSavedCoach} from './savedCoaches';
 import {defaultCoachLook} from './StudioCoach';
 describe('linked coach library',()=>{
  it('persists coach profiles for the lab and studio with newest first',()=>{
@@ -29,5 +29,19 @@ describe('laboratory actor link',()=>{
   addSavedCoach(storage,saved);
   expect(findSavedCoach(storage,'one')?.look.sex).toBe('homme');
   expect(findSavedCoach(storage,'missing')).toBeNull();
+ });
+});
+
+describe('coach editing and deletion',()=>{
+ it('edits in place and deletes without duplicating character IDs',()=>{
+  const data=new Map<string,string>();
+  const storage={getItem:(key:string)=>data.get(key)??null,setItem:(key:string,value:string)=>{data.set(key,value);}};
+  const coach={id:'stable',name:'Initial',createdAt:'2026-10-24',look:defaultCoachLook};
+  addSavedCoach(storage,coach);
+  updateSavedCoach(storage,{...coach,name:'Updated'});
+  expect(readSavedCoaches(storage)).toHaveLength(1);
+  expect(readSavedCoaches(storage)[0].name).toBe('Updated');
+  deleteSavedCoach(storage,'stable');
+  expect(readSavedCoaches(storage)).toEqual([]);
  });
 });

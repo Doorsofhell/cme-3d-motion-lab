@@ -23,10 +23,10 @@ import {useAutoIncidentQueue,type AutoCategory} from './AutoIncidents';
 import {autoClearEnabled,setAutoClearEnabled,clearApplicationCache} from './cachePolicy';
 import './style.css';
 
-function SavedCoachLibrary({openCoach,selectedId}:{openCoach:(id:string)=>void;selectedId:string|null}){
+function SavedCoachLibrary({openCoach,editCoach,selectedId}:{openCoach:(id:string)=>void;editCoach:(id:string)=>void;selectedId:string|null}){
  const [coaches,setCoaches]=useState<SavedCoach[]>(()=>{try{return readSavedCoaches(localStorage);}catch{return [];}});
  useEffect(()=>{const refresh=()=>{try{setCoaches(readSavedCoaches(localStorage));}catch{setCoaches([]);}};window.addEventListener('cme-coaches-changed',refresh);return()=>window.removeEventListener('cme-coaches-changed',refresh);},[]);
- return <section className="savedCoachLibrary" aria-label="Coachs créés"><h3>Mes coachs ({coaches.length})</h3>{coaches.length===0?<p>Créez votre premier coach dans Studio Coach. Il apparaîtra ici.</p>:<div className="savedCoachItems">{coaches.map(c=><button key={c.id} aria-pressed={selectedId===c.id} onClick={()=>openCoach(c.id)}><strong>{c.name}{selectedId===c.id?' ✓':''}</strong><small>{c.look.sex} · Profil d'apparence</small></button>)}</div>}<small>Sélectionnez un coach pour le faire exécuter les mouvements du Laboratoire. Morphologie et équipements personnalisés : rendu encore partiel.</small></section>;
+ return <section className="savedCoachLibrary" aria-label="Coachs créés"><h3>Mes coachs ({coaches.length})</h3>{coaches.length===0?<p>Créez votre premier coach dans Studio Coach. Il apparaîtra ici.</p>:<div className="savedCoachItems">{coaches.map(c=><div key={c.id} className="savedCoachEntry"><button aria-pressed={selectedId===c.id} onClick={()=>openCoach(c.id)}><strong>{c.name}{selectedId===c.id?' ✓':''}</strong><small>{c.look.sex} · Tester les mouvements</small></button><button type="button" onClick={()=>editCoach(c.id)}>Modifier {c.name}</button></div>)}</div>}<small>Sélectionnez un coach pour le faire exécuter les mouvements du Laboratoire. Morphologie et équipements personnalisés : rendu encore partiel.</small></section>;
 }
 type Actor='mma-kadir'|'mma-amara'|'mma-naira';
 type TechniqueEntry={id:string;name:string;category:string;disciplines:string[];motion:string};
@@ -170,6 +170,7 @@ function Viewer({actor,discipline,technique,coachPlan,quality,renderStyle,playba
 export function App(){
  const [actor,setActor]=useState<Actor>(()=>{try{const c=findSavedCoach(localStorage,localStorage.getItem('cme-lab-coach'));return c?coachSourceActor(c):'mma-amara';}catch{return 'mma-amara';}});
  const [selectedCoach,setSelectedCoach]=useState<SavedCoach|null>(()=>{try{return findSavedCoach(localStorage,localStorage.getItem('cme-lab-coach'));}catch{return null;}});
+ useEffect(()=>{const refresh=()=>{try{setSelectedCoach(findSavedCoach(localStorage,localStorage.getItem('cme-lab-coach')));}catch{setSelectedCoach(null);}};window.addEventListener('cme-coaches-changed',refresh);return()=>window.removeEventListener('cme-coaches-changed',refresh);},[]);
  const selectSavedCoach=(id:string)=>{try{const saved=findSavedCoach(localStorage,id);if(!saved)return;setSelectedCoach(saved);setActor(coachSourceActor(saved));localStorage.setItem('cme-lab-coach',id);setReport(null);setProgress(0);}catch{/* unavailable local storage */}};
  const [discipline,setDiscipline]=useState('boxe');
  const [nogi,setNogi]=useState(false);
@@ -296,7 +297,7 @@ export function App(){
    <span className="footnote">IA locale expérimentale : entraînement validé en attente</span>
   </section>
   </div>
-  {tab==='lab'&&<SavedCoachLibrary selectedId={selectedCoach?.id??null} openCoach={selectSavedCoach}/>}
+  {tab==='lab'&&<SavedCoachLibrary selectedId={selectedCoach?.id??null} openCoach={selectSavedCoach} editCoach={id=>{try{localStorage.setItem('cme-selected-coach',id);}catch{}setTab('studio');}}/>}
   {tab==='studio'&&<StudioCoach/>}
   {tab==='versions'&&<VersionsPanel/>}
   {tab==='options'&&<section className="cmeOptions" aria-label="Options CME-3D">
