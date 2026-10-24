@@ -54,6 +54,21 @@ describe('Studio Coach : cohérence tactile Android',()=>{
   expect(rig).toContain("thighs:proportions?.thighs??1");
   expect(rig).toContain("hips:proportions?.hips??1");
  });
+ it('garde la scène visible sur Android lorsque les réglages défilent',()=>{
+  const studio=readFileSync(new URL('./StudioCoach.tsx',import.meta.url),'utf8');
+  const app=readFileSync(new URL('./App.tsx',import.meta.url),'utf8');
+  expect(css).toContain('.coachPreview:not(.cmeFullscreen):not(:fullscreen)');
+  expect(css).toContain('position:sticky;top:0');
+  expect(css).toContain('height:clamp(186px,30dvh,300px)');
+  expect(studio).toContain('coachLiveValues');
+  expect(studio).toContain("range('bust','Volume de poitrine'");
+  expect(studio).toContain('aria-label="Technique ou enchaînement"');
+  expect(studio).toContain("localStorage.setItem('cme-lab-coach',id)");
+  expect(app).toContain('<optgroup label="Mes coachs personnalisés">');
+  expect(app).toContain("value={selectedCoach?'saved:'+selectedCoach.id:actor}");
+  expect(app).toContain("selectSavedCoach(value.slice(6))");
+  expect(app).toContain("'cme-open-lab-coach'");
+ });
  it('préserve les boutons tactiles accessibles et la barre commune',()=>{
   expect(css).toContain('min-height:44px');
   expect(controls).toContain('export function SceneToolbar');
