@@ -26,9 +26,9 @@ export function applyShapePreset(look:CoachLook,id:ShapeKey,value:number):CoachL
  if(!group||!(group.sex==='all'||group.sex===look.sex)||!group.presets.some(p=>p.value===value))throw Error('Forme indisponible : '+id);
  return {...look,[id]:value};
 }
-export function randomShapeLook(look:CoachLook,rand:()=>number=Math.random):CoachLook{
+export function randomShapeLook(look:CoachLook,rand:()=>number=Math.random,available:(group:ShapeGroup)=>boolean=()=>true):CoachLook{
  let result={...look};
- for(const group of activeShapeGroups(look.sex)){
+ for(const group of activeShapeGroups(look.sex).filter(available)){
   const index=Math.max(0,Math.min(group.presets.length-1,Math.floor(rand()*group.presets.length)));
   result=applyShapePreset(result,group.id,group.presets[index].value);
  }
