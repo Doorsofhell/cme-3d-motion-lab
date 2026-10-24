@@ -242,3 +242,62 @@ select{width:100%;min-width:0;background:#1b2b3e;border:1px solid #344c60;border
 .versionToggle{width:100%;padding:14px 15px;display:flex;align-items:center;justify-content:space-between;gap:12px;background:transparent;color:inherit;text-align:left;border:0;cursor:pointer}
 .versionToggle>span:first-child{display:grid;gap:3px}.versionToggle small{font-size:.75rem;opacity:.7}.versionTitle{font-size:.95rem}.versionDetails{padding:0 15px 15px;font-size:.9rem}.versionDetails p{opacity:.8}.versionsFootnote{font-size:.8rem;opacity:.7;line-height:1.45;margin-top:16px}
 .labTabs button{min-width:0;flex:1 1 0;padding-left:3px;padding-right:3px;font-size:clamp(.63rem,2.45vw,.85rem)}
+
+
+/* Shadow Studio visual identity — CME laboratory adaptation.
+   Source: Combat Shadow Studio src/ui/styles.css (approved dark premium tokens).
+   BetterMe screenshots inform spacious cards, hierarchy and rounded navigation,
+   not the brand palette. These overrides do not alter 3D motion logic. */
+:root{
+  --c-bg:#101116;
+  --c-surface:#20232c;
+  --c-surface-2:#2a2e39;
+  --c-accent:#d6363c;
+  --c-accent-ink:#ff7378;
+  --c-text:#f5f5f5;
+  --c-text-2:#a6a8b3;
+  --c-gold:#c8a96b;
+  --c-line:rgba(255,255,255,.09);
+  --c-line-strong:rgba(255,255,255,.18);
+  --c-ok:#4cc38a;
+  --c-warn:#f0b45a;
+  --radius:14px;
+  --radius-l:20px;
+  --tap:48px;
+  font-family:Inter,system-ui,-apple-system,sans-serif;
+  color:var(--c-text);
+  background:var(--c-bg);
+  color-scheme:dark;
+}
+html,body,#root{background:var(--c-bg);color:var(--c-text)}
+.labApp{color:var(--c-text)}
+.brandDot{background:var(--c-accent);color:#fff;border-radius:12px}
+.branding strong span{color:var(--c-accent-ink)}
+.branding .cmeVersion{color:var(--c-gold);background:rgba(200,169,107,.12);border-color:rgba(200,169,107,.3)}
+.branding p,.liveTag,.muted,.hint,.diagnostics,.stageBottom{color:var(--c-text-2)}
+.liveTag i,.diagnostics .good{background:var(--c-ok)}
+.iconButton,.quickBar,.transport,.switchGroup,.diagnostics>span{
+  background:var(--c-surface);border-color:var(--c-line);color:var(--c-text);
+}
+.stage{background:#171920;border-color:var(--c-line-strong);border-radius:var(--radius-l)}
+.stageTitle,.stageBottom{background:var(--c-surface)}
+.stagePill{color:var(--c-gold);background:rgba(200,169,107,.13)}
+select{background:var(--c-surface-2);border-color:var(--c-line-strong);color:var(--c-text)}
+.quickBar label span,.inlineSelect span{color:var(--c-text-2)}
+.viewerOverlay{background:var(--c-bg);color:var(--c-text)}
+.viewerOverlay button,.playButton{background:var(--c-accent);color:#fff}
+.resetButton{background:var(--c-surface-2);color:var(--c-text);border-color:var(--c-line-strong)}
+.seek input,.checkMini input{accent-color:var(--c-accent)}
+.switchGroup button{color:var(--c-text-2)}
+.switchGroup button.active{background:var(--c-accent);color:#fff}
+button:focus-visible,select:focus-visible,input:focus-visible{
+  outline:2px solid var(--c-accent-ink);outline-offset:2px;
+}
+button{min-height:36px}
+@media(max-width:780px){
+  .quickBar,.transport{border-radius:var(--radius-l)}
+  .iconButton{min-width:var(--tap);min-height:var(--tap)}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
