@@ -1,5 +1,6 @@
 import {useEffect,useRef,useState} from 'react';
 import {Canvas} from '@react-three/fiber';
+import {CameraPedagogique} from './CameraPedagogique';
 import {OrbitControls} from '@react-three/drei';
 import {NeutralRig,LAB_DISCIPLINES,type LabDiscipline,type NeutralRigReport} from './NeutralRig';
 import './StudioCoach.css';
@@ -61,6 +62,7 @@ export function StudioCoach(){
  const [section,setSection]=useState<Category>('corps');
  const [message,setMessage]=useState('');
  const [rigMode,setRigMode]=useState(true);
+ const [cameraAuto,setCameraAuto]=useState(true);
  const [previewFullscreen,setPreviewFullscreen]=useState(false);
  useEffect(()=>{const close=(event:KeyboardEvent)=>{if(event.key==='Escape')setPreviewFullscreen(false);};window.addEventListener('keydown',close);return()=>window.removeEventListener('keydown',close);},[]);
  const [advancedOpen,setAdvancedOpen]=useState(false);
@@ -91,10 +93,12 @@ export function StudioCoach(){
   <div className="coachStudioLayout">
    <div className={`coachPreview ${previewFullscreen?"cmeFullscreen":""}`} onDoubleClick={()=>setPreviewFullscreen(v=>!v)} aria-label="Aperçu 3D du mannequin ; double clic pour agrandir">\n    <button type="button" className="cmeFullscreenToggle" onClick={()=>setPreviewFullscreen(v=>!v)} aria-label={previewFullscreen?"Quitter le plein écran":"Agrandir le coach"}>{previewFullscreen?"Réduire ✕":"⛶"}</button>
     <div className="coachRigSwitch" role="group" aria-label="Mode du modèle 3D"><button className={!rigMode?'active':''} aria-pressed={!rigMode} onClick={()=>setRigMode(false)}>Apparence</button><button className={rigMode?'active':''} aria-pressed={rigMode} onClick={()=>setRigMode(true)}>Rig neutre</button></div>
+    <button type="button" className="cmeCameraAuto" aria-pressed={cameraAuto} onClick={()=>setCameraAuto(v=>!v)}>Caméra pédagogique : {cameraAuto?'auto':'libre'}</button>
     <Canvas camera={{position:[0,1.05,3.4],fov:38}} dpr={[1,1.5]} gl={{antialias:true}}>
      <color attach="background" args={['#171920']}/><ambientLight intensity={1.4}/><directionalLight position={[3,5,4]} intensity={2.1}/>
      <NeutralRig key={`${look.sex}-${rigMode?'neutral':'appearance'}`} mode={rigMode?'neutral':'appearance'} sex={look.sex} discipline={discipline} motionId={motionId} playing={playing} speed={1} showSkeleton={showSkeleton} onReport={setReport} appearance={{skin:look.skin,hairColor:look.hairColor,topColor:look.topColor,bottomColor:look.bottomColor,gloveColor:look.gloveColor}}/>
-     <OrbitControls target={[0,.65,0]} enablePan={false} minDistance={2.2} maxDistance={5}/>
+     <CameraPedagogique mouvement={motionId} active={cameraAuto}/>
+     {!cameraAuto&&<OrbitControls target={[0,.9,0]} enablePan={false} minDistance={2.2} maxDistance={5}/> }
     </Canvas>
     <span className="coachPreviewLabel">{rigMode?'Humanoïde de test monochrome · squelette partagé · équipements séparés masqués':'Modèle habillé · apparence personnalisable sur matériaux identifiés'}</span>
    </div>
