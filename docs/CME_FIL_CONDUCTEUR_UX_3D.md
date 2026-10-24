@@ -54,3 +54,6 @@ L'utilisateur a confirmé sur capture Android : **Rig neutre** = humanoïde d'é
 - Parcours cible strict : animations testées d'abord sur humanoïdes neutres ; coachs construits en mode Apparence à partir du même rig ; coachs sauvegardés visibles et testables dans le Laboratoire.
 - Première liaison de bibliothèque locale Studio → Laboratoire ; sélection ouvre le profil dans Studio. **Le chargement du coach directement comme acteur animé du Laboratoire reste à implémenter.**
 - Test tactile réel Android à confirmer malgré CI verte.
+
+## 24/10 — Lot A : liaison des coachs aux acteurs animés
+La bibliothèque du Laboratoire ne renvoie plus simplement vers Studio Coach : la sélection d'un profil charge le rig homme/femme correspondant dans la scène, avec couleurs personnalisées lorsque les matériaux sont identifiables, et conserve les animations canoniques. Persistance locale, sélection visuelle et tests de mapping. Limites : morphologie/tenues partiellement effectives, validation Android et biomécanique complète en attente.

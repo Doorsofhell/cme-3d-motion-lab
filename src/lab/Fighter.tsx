@@ -11,6 +11,8 @@ import {CoachPlanSampler} from './CoachPlanSampler';
 import type {CoachPlan} from './coachProtocol';
 import rawSequences from './complexSequences.json';
 import {restoreReferencePose} from './restorePose';
+import {applyNeutralAppearance} from './neutralAppearance';
+import type {CoachLook} from './StudioCoach';
 import type {Playback,Quality,RenderStyle,RigReport} from './App';
 import {attachOutfit,enhanceHumanMaterial} from '../adapters/outfits';
 /** Original fitness-coaching aesthetic: simplified materials, not BetterMe assets. */
@@ -110,9 +112,9 @@ export function applyComicStyle(root:Object3D,quality:Quality){
  });
  return outlines;
 }
-export function Fighter({actor,outfit,technique,coachPlan,playback,skeleton,quality,renderStyle,onReport,onReady}:{
+export function Fighter({actor,outfit,technique,coachPlan,playback,skeleton,quality,renderStyle,onReport,onReady,coachLook}:{
  actor:'mma-kadir'|'mma-amara'|'mma-naira';outfit:string;technique:string;coachPlan?:CoachPlan|null;playback:RefObject<Playback>;skeleton:boolean;
- quality:Quality;renderStyle:RenderStyle;onReport:(r:RigReport)=>void;onReady:()=>void;
+ quality:Quality;renderStyle:RenderStyle;onReport:(r:RigReport)=>void;onReady:()=>void;coachLook?:CoachLook|null;
 }){
  const base=import.meta.env.BASE_URL;
  // The original v0.31 Shadow coach rig + motion library is used unmodified.
@@ -145,8 +147,9 @@ export function Fighter({actor,outfit,technique,coachPlan,playback,skeleton,qual
   attachOutfit(s,clothes.scene,quality==='performance');
   if(renderStyle==='fitness')applyFitnessStyle(s);
   if(renderStyle==='comic')applyComicStyle(s,quality);
+  if(coachLook)applyNeutralAppearance(s,{skin:coachLook.skin,hairColor:coachLook.hairColor,topColor:coachLook.topColor,bottomColor:coachLook.bottomColor,gloveColor:coachLook.gloveColor});
   return s;
- },[gltf.scene,clothes.scene,renderStyle,quality,actor]);
+ },[gltf.scene,clothes.scene,renderStyle,quality,actor,coachLook]);
  const rig=useMemo(()=>new CoachRig(scene),[scene]);
  const library=useMemo(()=>getLibrary(rig,(outfit==='boxe'?'boxing':outfit.startsWith('bjj')?'bjj':outfit) as 'boxing'|'kickboxing'|'mma'|'muaythai'|'bjj'|'judo'),[rig,outfit]);
  const seq=useMemo(()=>(rawSequences as Array<{id:string;name:string;discipline:string;motions:string[]}>).find(s=>s.id===technique),[technique]);

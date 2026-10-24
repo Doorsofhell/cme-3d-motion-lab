@@ -33,3 +33,10 @@ P1 : vrais humanoïdes neutres homme/femme anatomiques sous licence vérifiée.
 P1 : tests de retargeting et six disciplines sur les deux humanoïdes.
 P2 : personnalisation visuelle réellement appliquée au mesh riggé (morphs/visage/tenues), sans rupture des mouvements.
 P2 : optimisation Android et audit A/B biomécanique.
+
+## Lot A — liaison réelle Studio Coach → Laboratoire (24/10/2026)
+- Les coachs enregistrés localement sont sélectionnables depuis « Mes coachs » dans le Laboratoire.
+- La sélection choisit le rig homme/femme existant et transmet les couleurs du profil au `Fighter` réellement animé par `CoachRig`, `MotionSampler`, `SequenceSampler` et `CoachPlanSampler`. La discipline, le mouvement, la vitesse et la lecture restent ceux du Laboratoire : aucune bibliothèque d'animation parallèle.
+- Le coach actif est conservé sur cet appareil et indiqué dans la scène ; la sélection d'un combattant de série désactive le profil personnalisé.
+- Limite persistante : les morphs, visages, tenues et protections ne sont pas encore pleinement appliqués à la géométrie du rig. L'adaptateur de matériaux ne colore que les surfaces reconnues. Le retargeting quantitatif et la certification des six disciplines ne sont pas achevés.
+- Critères de validation : typecheck, tests, build Pages, contrôle réel Android et test visuel des 6 disciplines. Ne pas annoncer les contrôles Android comme faits sans preuve.

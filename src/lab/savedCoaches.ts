@@ -13,3 +13,10 @@ export function addSavedCoach(storage:Pick<Storage,'getItem'|'setItem'>,coach:Sa
  storage.setItem(COACH_STORAGE_KEY,JSON.stringify(result));
  return result;
 }
+
+export function coachSourceActor(coach:SavedCoach):'mma-kadir'|'mma-amara'{
+ return coach.look.sex==='femme'?'mma-amara':'mma-kadir';
+}
+export function findSavedCoach(storage:Pick<Storage,'getItem'>,id:string|null):SavedCoach|null{
+ return id?readSavedCoaches(storage).find(coach=>coach.id===id)??null:null;
+}
