@@ -22,6 +22,29 @@ function skinnedTorso(){
  const root=new Group();root.add(mesh);
  return {root,mesh,original:geo,bones:[spine,hips],positions:new Float32Array(p.array as ArrayLike<number>)};
 }
+
+function skinnedFemale(){
+ const geo=new BoxGeometry(1,2,1,4,8,2),p=geo.getAttribute('position');
+ const joints:number[]=[],weights:number[]=[];
+ for(let i=0;i<p.count;i++){
+  const y=p.getY(i),x=p.getX(i);
+  const id=y>.38?0:y>-.3?1:x>=0?2:3;
+  joints.push(id,0,0,0);weights.push(1,0,0,0);
+ }
+ geo.setAttribute('skinIndex',new BufferAttribute(new Uint16Array(joints),4));
+ geo.setAttribute('skinWeight',new BufferAttribute(new Float32Array(weights),4));
+ const bones=[new Bone(),new Bone(),new Bone(),new Bone()];
+ bones.forEach((b,i)=>b.name=['mixamorigSpine2','mixamorigHips','mixamorigLeftUpLeg','mixamorigRightUpLeg'][i]);
+ const skeleton=new Skeleton(bones);
+ const body=new SkinnedMesh(geo,new MeshStandardMaterial({name:'f021_body'}));body.name='body';
+ body.bind(skeleton);
+ const garmentGeo=cloneOwnedGeometry(geo);
+ const garment=new SkinnedMesh(garmentGeo,new MeshStandardMaterial({name:'haut-brassiere'}));garment.name='tenue:haut';
+ garment.bind(skeleton);
+ const root=new Group();root.add(body,garment);
+ return {root,body,garment,geo,bones,reference:Array.from(p.array)};
+}
+
 const neutral={shoulders:1,muscle:1,waist:1};
 describe('Studio Coach — déformations GLB non destructives',()=>{
  it('ne duplique pas la géométrie à proportions standard',()=>{
@@ -151,5 +174,57 @@ describe('Studio Coach — déformations GLB non destructives',()=>{
   // An explicitly unknown sub-material must not become skin merely because
   // it is attached under a mesh named "skin_body".
   expect(materials[2].color.getHexString()).toBe('777777');
+ });
+});
+
+describe('Silhouette femme — vrais volumes skinnés, sans déformation des os',()=>{
+ const defaults={height:1,shoulders:1,muscle:1,waist:1,jaw:1,nose:1,eyes:1,sex:'femme' as const,roundness:1,hips:1,thighs:1};
+ it('détecte de vrais sommets de bassin et de cuisse, y compris sur les tenues',()=>{
+  const {root}=skinnedFemale();
+  const support=inspectCoachShapes(root);
+  expect(support.torsoVertices).toBeGreaterThan(0);
+  expect(support.hipVertices).toBeGreaterThan(0);
+  expect(support.thighVertices).toBeGreaterThan(0);
+ });
+ it('modifie vraiment hanches et cuisses, de façon indépendante et déterministe',()=>{
+  const {root,body,geo,bones,reference}=skinnedFemale();
+  const bonesBefore=bones.map(b=>b.position.clone());
+  const skinIndexes=Array.from(geo.getAttribute('skinIndex').array);
+  const skinWeights=Array.from(geo.getAttribute('skinWeight').array);
+  applyCoachLookGeometry(root,{...defaults,hips:1.3});
+  const hipsShaped=Array.from(body.geometry.getAttribute('position').array);
+  expect(hipsShaped).not.toEqual(reference);
+  applyCoachLookGeometry(root,{...defaults,thighs:1.2});
+  const thighsShaped=Array.from(body.geometry.getAttribute('position').array);
+  expect(thighsShaped).not.toEqual(reference);
+  expect(thighsShaped).not.toEqual(hipsShaped);
+  applyCoachLookGeometry(root,{...defaults,roundness:1.2});
+  const rounded=Array.from(body.geometry.getAttribute('position').array);
+  expect(rounded).not.toEqual(reference);
+  expect(rounded).not.toEqual(hipsShaped);
+  applyCoachLookGeometry(root,{...defaults,roundness:1.2});
+  expect(Array.from(body.geometry.getAttribute('position').array)).toEqual(rounded);
+  applyCoachLookGeometry(root,defaults);
+  expect(Array.from(body.geometry.getAttribute('position').array)).toEqual(reference);
+  expect(Array.from(geo.getAttribute('position').array)).toEqual(reference);
+  expect(Array.from(body.geometry.getAttribute('skinIndex').array)).toEqual(skinIndexes);
+  expect(Array.from(body.geometry.getAttribute('skinWeight').array)).toEqual(skinWeights);
+  expect(bones.every((b,i)=>b.position.equals(bonesBefore[i]))).toBe(true);
+ });
+ it('applique les réglages au vêtement cloné sans altérer le GLB initial',()=>{
+  const {root,garment,geo,reference}=skinnedFemale();
+  const outfitSource=garment.geometry;
+  const dispose=vi.spyOn(outfitSource,'dispose');
+  applyCoachLookGeometry(root,{...defaults,hips:1.25,thighs:1.15,roundness:1.2});
+  expect(Array.from(garment.geometry.getAttribute('position').array)).not.toEqual(reference);
+  expect(outfitSource).not.toBe(garment.geometry);
+  expect(dispose).toHaveBeenCalledTimes(1);
+  expect(geo.userData.cmeOwned).not.toBe(true);
+  expect(Array.from(geo.getAttribute('position').array)).toEqual(reference);
+ });
+ it('n’active aucun volume féminin sur un coach masculin',()=>{
+  const {root,body,geo}=skinnedFemale();
+  applyCoachBodyShape(root,{sex:'homme',shoulders:1,muscle:1,waist:1,hips:1.35,roundness:1.3,thighs:1.3});
+  expect(body.geometry).toBe(geo);
  });
 });
