@@ -174,3 +174,19 @@ A — stabilisation et non-régression d'abord ; B — personnalisation dynamiqu
 - Priorité de classement des zones : iris / cheveux / protections / vêtements avant peau ; éviter de recolorer par erreur des gants ou cheveux attachés à un parent de type `skin/body`. Afficher les quantités par zone réellement détectée sur les modèles chargés. Ne pas prétendre que des coiffures/gants ajoutables existent si les GLB ne contiennent pas de maillage distinct.
 - Éclairage Studio équilibré. Tests unitaires couleur native, aller-retour teint, matériaux Toon, classification, et tests de contrat des tenues et de l'ergonomie mobile.
 - **Restent ouverts :** revue visuelle sur Android physique en vue 360° et en mouvement ; couverture réelle des sous-matériaux par discipline / sexe ; création et intégration d'assets additionnels si les GLB existants ne permettent pas de changer coiffure, protections ou visage. Pas de capture/vision ou analyse vidéo, pas de changement des animations canoniques ni de Shadow Studio.
+
+## 24/10/2026 — P0 caméra contextuelle et audit des capacités (0.7.24)
+
+**Demande prioritaire utilisateur :** lorsque l'on personnalise une partie du corps dans Studio Coach, zoom automatique sur la région utile ; davantage de personnalisations réelles, en particulier chez Amara (rondeur, hanches, poitrine, coiffures). Jamais de commande placebo.
+
+**Réalisé :**
+- Mapping des rubriques Morphologie (corps entier), Visage (tête), Peau (visage et haut du corps), Cheveux (tête), Tenue (corps entier) et Protections (mains). Les contrôles spécifiques orientent les vues buste, abdomen, mains, jambes et tibias ; les futures morphologies poitrine, hanches, cuisses et rondeurs ont des zones prévues dans le plan focal.
+- Mesure dynamique sur les **os existants du GLB**, en coordonnées mondiales, avec repli sur le squelette entier si l'os recherché manque. Caméra perspective ajustée au ratio portrait/paysage, animation amortie ; geste utilisateur OrbitControls prioritaire et annule la transition ; bouton **Vue entière** relance le cadrage. Caméra pédagogique activée séparément, sans pilotage concurrent.
+- Audit CI explicite des deux corps et des 14 tenues : matières de peau/cheveux/yeux/vêtements/protections, cibles morph nommées et cibles non nommées. Matériaux visibles ≠ morph targets ≠ coiffures GLB réelles. Aucun asset ou changement biomécanique ajouté dans ce lot.
+- Tests de mapping, rig éloigné de l'origine, valeurs de repli, cadrage portrait et contrats UI.
+
+**P1 / dépendance asset ouverte :** créer et qualifier des morph targets dédiés Amara pour poitrine, hanches, rondeur générale, cuisses/fessiers, ainsi que des coiffures skinnées ou attachées à la tête. Vérifier les variations avec six disciplines et 14 tenues, collisions, ombrage, morphs incompatibles et préservation des os. Ce lot 0.7.24 **ne livre pas** les nouvelles morphologies ; les futures zones caméra ne signifient pas qu'un curseur est déjà actif.
+
+**P0 validation non encore certifiée :** recette tactile sur Android physique (changement de rubrique, double tap plein écran, geste libre, retour à vue générale, deux sexes, six disciplines, FPS p50/p95). Sans capture/vision/mocap/vidéo. Ne toucher ni Shadow Studio ni les animations canoniques.
+
+**Audit GLB vérifié en CI :** consulter [`docs/CME_AUDIT_CAPACITES_PERSONNALISATION_3D.md`](CME_AUDIT_CAPACITES_PERSONNALISATION_3D.md) — 2 matériaux de peau par corps, 0 morph target sur les 2 corps, 0 coiffure distincte et 14 tenues catégorisées. Les nouvelles personnalisations féminines restent un chantier d'assets, non une fonctionnalité déjà active.
