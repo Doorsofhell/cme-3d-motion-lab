@@ -78,7 +78,8 @@ export function StudioCoach(){
  const [look,setLook]=useState<CoachLook>(defaultCoachLook);
  const [section,setSection]=useState<Category>('corps');
  const [message,setMessage]=useState('');
- const [rigMode,setRigMode]=useState(false);
+ const [rigMode,setRigMode]=useState(true);
+ const [advancedOpen,setAdvancedOpen]=useState(false);
  const [discipline,setDiscipline]=useState<LabDiscipline>('boxing');
  const [motionId,setMotionId]=useState('garde');
  const [playing,setPlaying]=useState(true);
@@ -99,7 +100,7 @@ export function StudioCoach(){
  };
  const exportJson=()=>{const json=JSON.stringify({schema:'cme-coach-look-v1',look},null,2);const blob=new Blob([json],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='cme-coach-look.json';a.click();URL.revokeObjectURL(url);setMessage('Configuration exportée : apparence uniquement, sans modification du moteur.');};
  return <section className="coachStudio" aria-label="Studio Coach">
-  <header className="coachStudioHeader"><div><small>STUDIO COACH · PROTOTYPE 3D</small><h2>Créer un combattant</h2></div><button onClick={()=>{setLook(defaultCoachLook);setMessage('Apparence réinitialisée');}}>Réinitialiser</button></header>
+  <header className="coachStudioHeader"><div><small>CME-3D / STUDIO COACH</small><h2>Créer un coach</h2><p>Un modèle, six disciplines. Personnalisez puis testez.</p></div><button onClick={()=>{setLook(defaultCoachLook);setMessage('Apparence réinitialisée');}}>Réinitialiser</button></header>
   <div className="coachStudioLayout">
    <div className="coachPreview" aria-label="Aperçu 3D permanent du mannequin personnalisable">
     <div className="coachRigSwitch"><button className={!rigMode?'active':''} onClick={()=>setRigMode(false)}>Apparence</button><button className={rigMode?'active':''} onClick={()=>setRigMode(true)}>Rig animé</button></div>
@@ -127,11 +128,11 @@ export function StudioCoach(){
      {section==='tenue'&&<>{choose('top','Haut',['rashguard','tshirt','aucun'])}{color('topColor','Couleur du haut')}{choose('bottom','Bas',['short','legging'])}{color('bottomColor','Couleur du bas')}</>}
      {section==='protections'&&<>{choose('gloves','Gants',['boxe','mma','aucun'])}{color('gloveColor','Couleur des gants')}<label className="coachField"><span>Protège-tibias</span><input type="checkbox" checked={look.shins} onChange={e=>update('shins',e.target.checked)}/></label>{color('shinColor','Couleur des protections')}</>}
     </div>
-    <div className="coachActions">
+    <details className="coachAdvanced" open={advancedOpen} onToggle={e=>setAdvancedOpen(e.currentTarget.open)}><summary>Gestion du profil <span>Importer · Exporter</span></summary><div className="coachActions">
       <button onClick={exportJson}>Exporter JSON</button>
       <button onClick={()=>importRef.current?.click()}>Importer JSON</button>
       <input ref={importRef} type="file" accept=".json,application/json" hidden aria-label="Fichier de profil Coach" onChange={e=>{void importJson(e.target.files?.[0]);e.target.value='';}}/>
-     </div>
+     </div></details>
     {message&&<p role="status" className="coachStatus">{message}</p>}
    </div>
   </div>
