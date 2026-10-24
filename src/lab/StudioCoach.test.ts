@@ -29,6 +29,13 @@ describe('Studio Coach appearance isolation',()=>{
   const male=normalizeCoachLook({...defaultCoachLook,sex:'homme',hips:1.3,roundness:1.2,thighs:1.1});
   expect(male.hips).toBe(1);expect(male.roundness).toBe(1);expect(male.thighs).toBe(1);
  });
+ it('conserve les réglages de poitrine dans les profils et les remet à neutre sur un homme',()=>{
+  const female=normalizeCoachLook({...defaultCoachLook,sex:'femme',bust:8});
+  expect(female.bust).toBe(1.35);
+  const exported=JSON.stringify({schema:'cme-coach-look-v1',look:female});
+  expect(parseCoachLookJson(exported).bust).toBe(1.35);
+  expect(normalizeCoachLook({...female,sex:'homme'}).bust).toBe(1);
+ });
  it('rejects invalid color values',()=>{
   expect(normalizeCoachLook({...defaultCoachLook,skin:'javascript:alert(1)'}).skin).toBe(defaultCoachLook.skin);
  });

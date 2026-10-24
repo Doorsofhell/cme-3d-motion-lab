@@ -143,3 +143,26 @@
 .coachFemaleShapes{display:flex;flex-direction:column;gap:13px;min-width:0}
 .coachFemaleShapes .coachField{min-height:58px}
 .coachFemaleShapes input[type=range]{min-height:44px;touch-action:pan-y}
+
+/* Studio mobile: persistent, compact live 3D preview while the editor scrolls
+ * inside the existing .coachStudio container. Fullscreen remains fixed. */
+@media (max-width:760px){
+ .labApp:has(.coachStudio) .coachStudioLayout{align-items:stretch;min-height:0;overflow:visible}
+ .labApp:has(.coachStudio) .coachPreview:not(.cmeFullscreen):not(:fullscreen){
+  position:sticky;top:0;z-index:8;flex:0 0 auto;
+  min-height:178px;height:clamp(186px,30dvh,300px);
+  border-radius:16px;box-shadow:0 10px 22px #15294038;
+ }
+ .labApp:has(.coachStudio) .coachEditor{z-index:1;position:relative}
+ .coachPreviewLabel{bottom:8px;left:8px;padding:5px 8px}
+ .coachLiveValues{
+  position:absolute;z-index:3;right:8px;bottom:8px;max-width:58%;
+  padding:6px 8px;border-radius:9px;
+  background:#18253bdf;color:#fff;font-size:10px;text-align:right;pointer-events:none;
+ }
+ .coachStudioHeader{padding-bottom:2px}
+ .coachStudioLayout{gap:8px}
+}
+@media (min-width:761px){
+ .coachLiveValues{position:absolute;z-index:4;right:12px;bottom:12px;background:#18253bdf;color:#fff;font-size:11px;padding:7px 10px;border-radius:9px;pointer-events:none}
+}

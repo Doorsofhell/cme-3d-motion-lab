@@ -1,4 +1,4 @@
-import {useEffect,useMemo,useRef} from 'react';
+import {useEffect,useLayoutEffect,useMemo,useRef} from 'react';
 import {useFrame} from '@react-three/fiber';
 import {useGLTF} from '@react-three/drei';
 import {clone} from 'three/examples/jsm/utils/SkeletonUtils.js';
@@ -6,6 +6,8 @@ import {Mesh,MeshStandardMaterial,Object3D,SkeletonHelper} from 'three';
 import {CoachRig} from '../shadow-engine/rig';
 import {getLibrary} from '../shadow-engine/library';
 import {MotionSampler} from '../shadow-engine/motion';
+import {SequenceSampler} from './ComplexSequences';
+import {studioTechniqueCatalog,studioMotionOptions} from './studioTechniqueCatalog';
 import {restoreReferencePose} from './restorePose';
 import {applyNeutralAppearance,applyNeutralRigMaterials,inspectCoachMaterialZones,type NeutralAppearance} from './neutralAppearance';
 import {applyCoachLookGeometry,inspectCoachShapes,type CoachFaceShape,type CoachBodyShape} from './coachGeometry';
@@ -21,6 +23,7 @@ export const NEUTRAL_ASSETS:Record<NeutralSex,string>={
  femme:'mma-amara'
 };
 export type NeutralRigReport={sex:NeutralSex;discipline:LabDiscipline;motion:string;available:boolean;bones:number;duration:number;
+ motions:Array<{id:string;label:string;kind:'technique'|'sequence';supported:boolean}>;
  appearanceSupport:{colors:ReturnType<typeof inspectCoachMaterialZones>;shape:ReturnType<typeof inspectCoachShapes>};
 };
 
@@ -72,8 +75,8 @@ function RigBody({sex,discipline,motionId,playing,speed,showSkeleton,onReport,ap
  const appearanceSupport=useMemo(()=>({
   colors:inspectCoachMaterialZones(scene),shape:inspectCoachShapes(scene)
  }),[scene]);
- useEffect(()=>{if(mode==='appearance')applyNeutralAppearance(scene,appearance);},[scene,appearance,mode]);
- useEffect(()=>{
+ useLayoutEffect(()=>{if(mode==='appearance')applyNeutralAppearance(scene,appearance);},[scene,appearance,mode]);
+ useLayoutEffect(()=>{
   if(mode==='appearance'){
    applyCoachLookGeometry(scene,{
     height:proportions?.height??1,
@@ -84,6 +87,7 @@ function RigBody({sex,discipline,motionId,playing,speed,showSkeleton,onReport,ap
     roundness:proportions?.roundness??1,
     hips:proportions?.hips??1,
     thighs:proportions?.thighs??1,
+    bust:proportions?.bust??1,
     jaw:face?.jaw??1,
     nose:face?.nose??1,
     eyes:face?.eyes??1
@@ -92,17 +96,24 @@ function RigBody({sex,discipline,motionId,playing,speed,showSkeleton,onReport,ap
    // Anatomie reste rigoureusement neutre, y compris après changement de profil.
    scene.scale.setScalar(1);
   }
- },[scene,mode,proportions?.height,proportions?.shoulders,proportions?.muscle,proportions?.waist,proportions?.sex,proportions?.roundness,proportions?.hips,proportions?.thighs,face?.jaw,face?.nose,face?.eyes]);
+ },[scene,mode,proportions?.height,proportions?.shoulders,proportions?.muscle,proportions?.waist,proportions?.sex,proportions?.roundness,proportions?.hips,proportions?.thighs,proportions?.bust,face?.jaw,face?.nose,face?.eyes]);
  const rig=useMemo(()=>new CoachRig(scene),[scene]);
  const library=useMemo(()=>getLibrary(rig,discipline),[rig,discipline]);
- const motion=library.get(motionId)??library.get('garde');
- const sampler=useMemo(()=>motion?new MotionSampler(rig,motion):null,[rig,motion]);
+ const motionEntries=useMemo(()=>studioMotionOptions(studioTechniqueCatalog(discipline),id=>library.has(id)),[discipline,library]);
+ const selected=motionEntries.find(entry=>entry.id===motionId&&entry.supported);
+ const isSequence=selected?.kind==='sequence';
+ const motion=!isSequence?(library.get(selected?.id??'garde')??library.get('garde')):null;
+ const sampler=useMemo(()=>{
+  if(isSequence&&selected)return new SequenceSampler(rig,library,selected.motions);
+  return motion?new MotionSampler(rig,motion):null;
+ },[rig,library,motion,isSequence,selected?.id]);
+ const playable=!!selected&&(isSequence?!!sampler:!!library.get(motionId));
  const skeleton=useMemo(()=>new SkeletonHelper(scene),[scene]);
  const time=useRef(0);
  useEffect(()=>{time.current=0;},[sex,discipline,motionId]);
  useEffect(()=>{
-  onReport({sex,discipline,motion:motion?.id??motionId,available:!!library.get(motionId),bones:skeleton.bones.length,duration:sampler?.duration??0,appearanceSupport});
- },[sex,discipline,motionId,motion,library,sampler,skeleton,onReport,appearanceSupport]);
+  onReport({sex,discipline,motion:selected?.id??motion?.id??'garde',available:playable,bones:skeleton.bones.length,duration:sampler?.duration??0,appearanceSupport,motions:motionEntries});
+ },[sex,discipline,motionId,motion,library,sampler,skeleton,onReport,appearanceSupport,motionEntries,selected?.id,playable]);
  useEffect(()=>()=>{skeleton.dispose();scene.traverse(o=>{
   const m=o as Mesh;
   if(!m.isMesh)return;

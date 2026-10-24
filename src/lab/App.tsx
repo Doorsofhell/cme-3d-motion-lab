@@ -186,7 +186,21 @@ function Viewer({actor,discipline,technique,coachPlan,quality,renderStyle,playba
 export function App(){
  const [actor,setActor]=useState<Actor>(()=>{try{const c=findSavedCoach(localStorage,localStorage.getItem('cme-lab-coach'));return c?coachSourceActor(c):'mma-amara';}catch{return 'mma-amara';}});
  const [selectedCoach,setSelectedCoach]=useState<SavedCoach|null>(()=>{try{return findSavedCoach(localStorage,localStorage.getItem('cme-lab-coach'));}catch{return null;}});
- useEffect(()=>{const refresh=()=>{try{setSelectedCoach(findSavedCoach(localStorage,localStorage.getItem('cme-lab-coach')));}catch{setSelectedCoach(null);}};window.addEventListener('cme-coaches-changed',refresh);return()=>window.removeEventListener('cme-coaches-changed',refresh);},[]);
+ const [savedCoaches,setSavedCoaches]=useState<SavedCoach[]>(()=>{try{return readSavedCoaches(localStorage);}catch{return [];}});
+ useEffect(()=>{
+  const refresh=()=>{
+   try{
+    const items=readSavedCoaches(localStorage);
+    setSavedCoaches(items);
+    const saved=findSavedCoach(localStorage,localStorage.getItem('cme-lab-coach'));
+    setSelectedCoach(saved);
+    if(saved)setActor(coachSourceActor(saved));
+   }catch{setSavedCoaches([]);setSelectedCoach(null);}
+  };
+  window.addEventListener('cme-coaches-changed',refresh);
+  window.addEventListener('storage',refresh);
+  return()=>{window.removeEventListener('cme-coaches-changed',refresh);window.removeEventListener('storage',refresh);};
+ },[]);
  const selectSavedCoach=(id:string)=>{try{const saved=findSavedCoach(localStorage,id);if(!saved)return;setSelectedCoach(saved);setActor(coachSourceActor(saved));localStorage.setItem('cme-lab-coach',id);setReport(null);setProgress(0);}catch{/* unavailable local storage */}};
  const [discipline,setDiscipline]=useState('boxe');
  const [nogi,setNogi]=useState(false);
@@ -204,6 +218,7 @@ export function App(){
  const stageFullscreen=useSceneFullscreen();
 
  const [tab,setTab]=useState<'lab'|'tracking'|'comparison'|'versions'|'options'|'studio'>('lab');
+ useEffect(()=>{const open=()=>setTab('lab');window.addEventListener('cme-open-lab-coach',open);return()=>window.removeEventListener('cme-open-lab-coach',open);},[]);
  const [pageVisible,setPageVisible]=useState(()=>typeof document==='undefined'||document.visibilityState==='visible');
  useEffect(()=>{const sync=()=>setPageVisible(document.visibilityState==='visible');document.addEventListener('visibilitychange',sync);return()=>document.removeEventListener('visibilitychange',sync);},[]);
  const labActive=shouldRenderLabFrames(tab,pageVisible);
@@ -283,7 +298,21 @@ export function App(){
   
   <div className="labContent" style={{display:tab==='lab'?'contents':'none'}}>
   <section className="quickBar" aria-label="Sélection de test">
-   <label><span>Coach</span><select aria-label="Coach" value={actor} onChange={e=>{journal.record('coach','Changement de coach : '+actor+' → '+e.target.value);reset();setSelectedCoach(null);try{localStorage.removeItem('cme-lab-coach');}catch{}setActor(e.target.value as Actor);}}>{fighterRoster.map(f=><option key={f.id} value={f.id} disabled={f.status!=='available'&&f.id!=='mma-naira'}>{f.name}{f.status==='in-production'?' · prototype cloné (non validé)':''}</option>)}</select></label>
+   <label><span>Coach · {savedCoaches.length} personnalisé(s)</span><select aria-label="Coach" value={selectedCoach?'saved:'+selectedCoach.id:actor} onChange={e=>{
+    const value=e.target.value;
+    if(value.startsWith('saved:')){
+     selectSavedCoach(value.slice(6));
+     journal.record('coach','Coach personnalisé sélectionné : '+value.slice(6));
+    }else{
+     journal.record('coach','Changement de coach : '+actor+' → '+value);
+     reset();setSelectedCoach(null);
+     try{localStorage.removeItem('cme-lab-coach');}catch{}
+     setActor(value as Actor);
+    }
+   }}>
+    <optgroup label="Coachs de référence">{fighterRoster.map(f=><option key={f.id} value={f.id} disabled={f.status!=='available'&&f.id!=='mma-naira'}>{f.name}{f.status==='in-production'?' · prototype cloné (non validé)':''}</option>)}</optgroup>
+    {savedCoaches.length>0&&<optgroup label="Mes coachs personnalisés">{savedCoaches.map(c=><option key={c.id} value={'saved:'+c.id}>{c.name} · {c.look.sex}</option>)}</optgroup>}
+   </select></label>
    <label><span>Discipline</span><select aria-label="Discipline" value={discipline} onChange={e=>{journal.record('discipline','Discipline : '+discipline+' → '+e.target.value,{coach:actor,style:renderStyle});reset();setDiscipline(e.target.value);setTechnique(techniques.find(t=>t.disciplines.includes(e.target.value))?.motion??'garde');onLog('Discipline : '+e.target.value);}}>{disciplines.map(([id,name])=><option key={id} value={id}>{name}</option>)}</select></label>
    <label><span>{technique.startsWith('seq-')?'Enchaînement':'Technique'} · {currentTechniques.length}</span><div className="motionSelector"><button type="button" className="catalogButton" aria-label="Choisir une technique" onClick={()=>{setCatalogMode('techniques');setCatalogOpen(true);setQuery('');}}><span>{techniqueLabel}</span><strong>⌕</strong></button><button type="button" className="comboChoose" aria-label="Choisir un enchaînement complexe" onClick={()=>{setCatalogMode('sequences');setCatalogOpen(true);setQuery('');}}>×{currentSequences.length}</button></div></label>
   </section>
