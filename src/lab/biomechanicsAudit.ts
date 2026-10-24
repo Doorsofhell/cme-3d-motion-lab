@@ -34,6 +34,13 @@ export function auditMotion(m:Motion):MotionFinding[]{
    const before=m.keys[i-1];const dt=k.t-before.t;
    if(dt>0&&dt<.025)add(i,'KEY_INTERVAL','Less than 25ms between poses');
    if(dt>0&&dist(p.hips,before.pose.hips)/dt>4)add(i,'HIP_SPEED','Hip translation exceeds 4 m/s');
+   for(const side of ['footL','footR'] as const){
+    const current=p[side],prior=before.pose[side];
+    if(current.mode==='ground'&&prior.mode==='ground'&&dt>0){
+     const displacement=Math.hypot(current.ball.x-prior.ball.x,current.ball.z-prior.ball.z);
+     if(displacement>.025)add(i,'PLANTED_FOOT_SLIDE',`${side}: planted ball moved ${(displacement*100).toFixed(1)} cm; check step or pivot`);
+    }
+   }
   }
   if(i>0&&i<m.keys.length-1&&!k.hold){
    const a=m.keys[i-1],b=m.keys[i+1];
