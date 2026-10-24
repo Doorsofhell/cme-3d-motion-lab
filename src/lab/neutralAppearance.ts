@@ -26,7 +26,7 @@ export function applyNeutralAppearance(root:Object3D,appearance?:NeutralAppearan
   for(const material of materials){
    if(!(material instanceof MeshStandardMaterial))continue;
    // Material-specific zones take precedence over an enclosing skinned body mesh.
-   const zone=appearanceZone(material.name)||appearanceZone(mesh.name);
+   const zone=appearanceZone(material.name)||(!material.name||/^(?:material(?:[._ -]?[0-9]+)?|mat[0-9]*|default(?:material)?)$/i.test(material.name)?appearanceZone(mesh.name):null);
    if(!zone)continue;
    if(appearance&&appearance[zone]){
     material.color.copy(new Color(appearance[zone]));
@@ -50,7 +50,7 @@ export function inspectCoachMaterialZones(root:Object3D):Record<keyof NeutralApp
   const materials=Array.isArray(mesh.material)?mesh.material:[mesh.material];
   for(const material of materials){
    if(!(material instanceof MeshStandardMaterial))continue;
-   const zone=appearanceZone(material.name)||appearanceZone(mesh.name);
+   const zone=appearanceZone(material.name)||(!material.name||/^(?:material(?:[._ -]?[0-9]+)?|mat[0-9]*|default(?:material)?)$/i.test(material.name)?appearanceZone(mesh.name):null);
    if(zone)totals[zone]++;
   }
  });
