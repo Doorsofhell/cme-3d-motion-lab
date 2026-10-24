@@ -155,3 +155,11 @@ A — stabilisation et non-régression d'abord ; B — personnalisation dynamiqu
 - Le mode Anatomie ne reprend pas la variation de taille du profil : la géométrie neutre demeure une référence indépendante.
 - Tests : effets réels de l'adaptateur partagé sur un rig synthétique, idempotence, réversibilité, intégrité des os, tests de colorimétrie Toon et contrat de réutilisation Studio/Laboratoire.
 - Exclusions : **aucun changement** des mouvements canoniques ni du dépôt Shadow Studio, aucun ajout artificiel de coiffures, tenues ou morph targets. Recette Android physique et conformité visuelle/anatomique encore **non certifiées**. Les déformations de vêtements et les collisions doivent être évaluées visuellement par discipline et par sexe.
+
+## 24/10/2026 — Lot 0.7.22 : tenue/corps et intégrité GLB
+
+- Les tenues liées au squelette héritent des déformations de torse existantes. Une marge proportionnelle au changement de morphologie, limitée à 1,2 % sur les sommets pondérés buste/bassin, réduit les risques de traversée du vêtement. Ce n'est ni un moteur de collision ni une preuve d'absence d'intersection pendant les mouvements.
+- Toute géométrie `cmeOwned` provenant de l'adaptateur de tenue, remplacée par un nouveau clone pour la morphologie, est libérée ; la géométrie issue des GLB de référence n'est jamais libérée par cette étape.
+- Contrôle CI des 2 corps GLB et 14 tenues disponibles (boxe, kickboxing, muay-thaï, MMA, judo, JJB gi/no-gi) : intégrité structurelle, maillages skinnés, poids de skinning, rapprochement des os des tenues avec le corps. Ce contrôle est indépendant du moteur de mouvements.
+- Tests unitaires : clearance, idempotence, retour à l'origine, protection du squelette, propriété des géométries et absence de libération des sources.
+- **À fermer seulement après une recette sur Android physique** : revue 360° statique/dynamique pour deux sexes × six disciplines, postures extrêmes, accroche/occlusion et FPS/latence. Aucune vidéo et aucune analyse par caméra ne sont admises. Shadow Studio et mouvements canoniques restent intacts.
