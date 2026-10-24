@@ -66,7 +66,7 @@ function Lights({quality,renderStyle}:{quality:Quality;renderStyle:RenderStyle})
  useEffect(()=>{
   gl.outputColorSpace=SRGBColorSpace;
   gl.toneMapping=fitness?ACESFilmicToneMapping:NeutralToneMapping;
-  gl.toneMappingExposure=fitness?1.04:.94;
+  gl.toneMappingExposure=fitness?1.04:1.12;
  },[gl,fitness]);
  return <>
   <hemisphereLight args={fitness?['#fffdf5','#e4e6e7',1.5]:['#fffaf4','#919aa2',1.42]}/>
@@ -142,7 +142,7 @@ function Viewer({actor,discipline,technique,coachPlan,quality,renderStyle,playba
  const dpr=quality==='performance'?1:quality==='balanced'?(mobile()?1.1:1.35):(mobile()?1.4:1.6);
  return <div className="viewer">
    <ErrorBoundary key={retry} onError={message=>{setError(message);onIncident('javascript','Erreur du composant de rendu 3D',message);}}>
-    <Canvas key={retry} gl={gl} onCreated={onCreated} dpr={dpr} shadows={quality==='detail'&&!mobile()} camera={{position:[0,1.54,3.07],fov:34}} frameloop="always">
+    <Canvas key={retry} gl={gl} onCreated={onCreated} dpr={dpr} shadows={quality==='detail'&&!mobile()} camera={{position:[0,1.54,2.78],fov:34}} frameloop="always">
      <color attach="background" args={[renderStyle==='fitness'?'#e7eeef':renderStyle==='comic'?'#111827':'#1d252c']}/>
      <Lights quality={quality} renderStyle={renderStyle}/>
      <PerfProbe onMetrics={onMetrics}/>
