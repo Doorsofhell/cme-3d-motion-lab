@@ -11,7 +11,6 @@ import rawSequences from './complexSequences.json';
 import {restoreReferencePose} from './restorePose';
 import type {Playback,Quality,RenderStyle,RigReport} from './App';
 import {attachOutfit,enhanceHumanMaterial} from '../adapters/outfits';
-import {refineFemaleAthleteSilhouette} from './femaleSilhouette';
 /** Original fitness-coaching aesthetic: simplified materials, not BetterMe assets. */
 // Six restrained tonal steps help reveal contours without flat shading.
 const fitnessGradient=new DataTexture(new Uint8Array([65,102,145,186,223,251]),6,1,RedFormat,UnsignedByteType);
@@ -117,7 +116,6 @@ export function Fighter({actor,outfit,technique,playback,skeleton,quality,render
   restoreReferencePose(s);
   enhanceHumanMaterial(s,quality==='performance');
   attachOutfit(s,clothes.scene,quality==='performance');
-  if(actor==='mma-amara'&&renderStyle==='comic')refineFemaleAthleteSilhouette(s);
   if(renderStyle==='fitness')applyFitnessStyle(s);
   if(renderStyle==='comic')applyComicStyle(s,quality);
   return s;
