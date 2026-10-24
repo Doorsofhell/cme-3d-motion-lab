@@ -335,3 +335,5 @@ button{min-height:36px}
 
 .labSelectedCoach{padding:9px 12px;border:1px solid rgba(214,54,60,.4);border-radius:12px;background:rgba(214,54,60,.1);color:#f5f5f5;font-size:12px}
 .savedCoachItems button[aria-pressed='true']{border-color:#d6363c;background:rgba(214,54,60,.2)}
+
+.coachCrud{display:flex;gap:8px;flex-wrap:wrap;align-items:stretch}.coachCrud button{min-height:48px;border-radius:12px;padding:10px 12px;flex:1 1 auto}.coachCrud .coachSave{flex:2 1 180px}.savedCoachItems{align-items:stretch}.savedCoachItems button[aria-pressed='true']{border-color:#d6363c}
