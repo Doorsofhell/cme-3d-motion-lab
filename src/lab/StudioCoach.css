@@ -90,3 +90,16 @@
  .coachRigSwitch{max-width:calc(100% - 154px)!important}
  .coachRigSwitch button{padding:7px 9px!important;font-size:11px!important}
 }
+
+/* P0 Android : les commandes ne doivent jamais masquer la scène ou se chevaucher. */
+.coachPreview{isolation:isolate}
+.coachRigSwitch{z-index:5!important;max-width:calc(100% - 155px)!important}
+.coachPreview .cmeCameraAuto,.coachPreview .cmeFullscreenToggle{z-index:5!important}
+.coachPreview canvas{display:block;width:100%;height:100%}
+@media(max-width:420px){
+ .coachRigSwitch{left:8px!important;top:8px!important;gap:2px!important;padding:3px!important;max-width:calc(100% - 143px)!important}
+ .coachRigSwitch button{min-height:42px!important;padding:7px 8px!important;font-size:11px!important}
+ .coachPreview .cmeCameraAuto{right:56px!important;top:8px!important;max-width:73px!important;font-size:11px!important;padding:7px 5px!important}
+ .coachPreview .cmeFullscreenToggle{right:8px!important;top:8px!important;min-width:42px!important;min-height:42px!important}
+ .coachPreviewLabel{bottom:10px!important;left:10px!important}
+}
