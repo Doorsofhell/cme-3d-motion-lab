@@ -8,7 +8,7 @@ import {getLibrary} from '../shadow-engine/library';
 import {MotionSampler} from '../shadow-engine/motion';
 import {restoreReferencePose} from './restorePose';
 import {applyNeutralAppearance,applyNeutralRigMaterials,inspectCoachMaterialZones,type NeutralAppearance} from './neutralAppearance';
-import {applyCoachBodyShape,applyCoachFaceShapes,inspectCoachShapes,type CoachFaceShape} from './coachGeometry';
+import {applyCoachLookGeometry,inspectCoachShapes,type CoachFaceShape} from './coachGeometry';
 import {CadrageSquelette} from './CadrageSquelette';
 
 export const LAB_DISCIPLINES=['boxing','kickboxing','muaythai','mma','bjj','judo'] as const;
@@ -58,15 +58,21 @@ export function NeutralRig({sex,discipline,motionId,playing,speed,showSkeleton,o
  }),[scene]);
  useEffect(()=>{if(mode==='appearance')applyNeutralAppearance(scene,appearance);},[scene,appearance,mode]);
  useEffect(()=>{
-  if(mode!=='appearance')return;
-  if(proportions)applyCoachBodyShape(scene,proportions);
-  if(face)applyCoachFaceShapes(scene,face);
- },[scene,mode,proportions?.shoulders,proportions?.muscle,proportions?.waist,face?.jaw,face?.nose,face?.eyes]);
- useEffect(()=>{
-  const height=proportions?.height??1;
-  scene.scale.set(height,height,height);
-
- },[scene,proportions?.height,proportions?.shoulders,proportions?.muscle,proportions?.waist]);
+  if(mode==='appearance'){
+   applyCoachLookGeometry(scene,{
+    height:proportions?.height??1,
+    shoulders:proportions?.shoulders??1,
+    muscle:proportions?.muscle??1,
+    waist:proportions?.waist??1,
+    jaw:face?.jaw??1,
+    nose:face?.nose??1,
+    eyes:face?.eyes??1
+   });
+  }else{
+   // Anatomie reste rigoureusement neutre, y compris après changement de profil.
+   scene.scale.setScalar(1);
+  }
+ },[scene,mode,proportions?.height,proportions?.shoulders,proportions?.muscle,proportions?.waist,face?.jaw,face?.nose,face?.eyes]);
  const rig=useMemo(()=>new CoachRig(scene),[scene]);
  const library=useMemo(()=>getLibrary(rig,discipline),[rig,discipline]);
  const motion=library.get(motionId)??library.get('garde');
