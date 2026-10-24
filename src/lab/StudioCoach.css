@@ -166,3 +166,17 @@
 @media (min-width:761px){
  .coachLiveValues{position:absolute;z-index:4;right:12px;bottom:12px;background:#18253bdf;color:#fff;font-size:11px;padding:7px 10px;border-radius:9px;pointer-events:none}
 }
+
+/* Premium shape atlas: real selectable morph presets, no decorative inactive actions. */
+.coachShapeGroups{display:flex;flex-direction:column;gap:16px;min-width:0}
+.coachShapeGroup{display:flex;flex-direction:column;gap:8px;min-width:0}
+.coachShapeGroupTitle{display:flex;justify-content:space-between;align-items:center;gap:8px;color:#263348;font-size:13px}
+.coachShapeGroupTitle span{font-size:11px;color:#7d8798}
+.coachShapeGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+.coachShapeOption{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-width:0;min-height:76px;padding:8px 3px;background:#f5f7fb;border:2px solid #e2e7f0;border-radius:12px;color:#35445b;font-size:11px;cursor:pointer;overflow-wrap:anywhere}
+.coachShapeSymbol{font-size:31px;font-family:Georgia,serif;line-height:1.1;display:flex;align-items:center;justify-content:center;width:100%;height:35px;color:#586274}
+.coachShapeOption.active{border-color:#d6363c;background:#fff4f4;color:#942832}
+.coachShapeOption.active .coachShapeSymbol{color:#d6363c}
+.coachShapeOption:disabled{opacity:.38;cursor:not-allowed}
+.coachShapeOption:focus-visible{outline:3px solid #d6363c;outline-offset:2px}
+@media(max-width:420px){.coachShapeGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.coachShapeOption{min-height:68px}.coachShapeSymbol{font-size:26px}}
