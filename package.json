@@ -7,8 +7,9 @@
     "dev": "vite --host 0.0.0.0",
     "build": "tsc -p tsconfig.json && vite build",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "vitest run",
-    "preview": "vite preview --host 0.0.0.0"
+    "test": "vitest run && node scripts/validate-amara.mjs",
+    "preview": "vite preview --host 0.0.0.0",
+    "test:amara": "node scripts/validate-amara.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.9",
