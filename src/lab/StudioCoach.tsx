@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useRef,useState} from 'react';
 import {Canvas} from '@react-three/fiber';
 import {OrbitControls} from '@react-three/drei';
 import './StudioCoach.css';
@@ -36,11 +36,27 @@ export function normalizeCoachLook(input:Partial<CoachLook>):CoachLook{
  out.shins=out.shins===true;
  return out;
 }
+export function parseCoachLookJson(text:string):CoachLook{
+ const parsed:unknown=JSON.parse(text);
+ if(!parsed||typeof parsed!=='object'||Array.isArray(parsed))throw Error('Format JSON invalide');
+ const doc=parsed as Record<string,unknown>;
+ if(doc.schema!=='cme-coach-look-v1')throw Error('Version de profil non prise en charge');
+ if(!doc.look||typeof doc.look!=='object'||Array.isArray(doc.look))throw Error('Apparence absente');
+ const input=doc.look as Record<string,unknown>;
+ const required=Object.keys(defaultCoachLook);
+ if(required.some(k=>!(k in input)))throw Error('Profil incomplet');
+ for(const k of required){
+  const expected=typeof defaultCoachLook[k as keyof CoachLook];
+  if(typeof input[k]!==expected)throw Error('Type de paramètre incorrect : '+k);
+ }
+ return normalizeCoachLook(input as CoachLook);
+}
 function Mannequin({look}:{look:CoachLook}){
  const skin=look.skin,top=look.top==='aucun'?skin:look.topColor;
- const h=look.height,shoulder=look.shoulders,arm=look.muscle,waist=look.waist;
+ const h=look.height,shoulder=look.shoulders*(look.sex==='femme'?.94:1),arm=look.muscle,waist=look.waist;
  return <group scale={[1,h,1]} position={[0,-.1,0]}>
   <mesh position={[0,1.62,0]} scale={[.21*look.jaw,.27,.19]}><sphereGeometry args={[1,20,16]}/><meshStandardMaterial color={skin} roughness={.86}/></mesh>
+  <mesh position={[0,1.6,.194]} scale={[.045*look.nose,.075*look.nose,.06*look.nose]}><sphereGeometry args={[1,14,10]}/><meshStandardMaterial color={skin}/></mesh>
   {look.hairStyle!=='rase'&&<mesh position={[0,1.83,-.015]} scale={[.21,look.hairStyle==='long'?.19:.11,.19]}><sphereGeometry args={[1,20,12]}/><meshStandardMaterial color={look.hairColor}/></mesh>}
   {[-1,1].map(s=><group key={s}>
    <mesh position={[s*.083,1.65,.177]} scale={[.036*look.eyes,.026,.018]}><sphereGeometry args={[1,12,8]}/><meshStandardMaterial color={look.eyeColor}/></mesh>
@@ -61,10 +77,19 @@ export function StudioCoach(){
  const [look,setLook]=useState<CoachLook>(defaultCoachLook);
  const [section,setSection]=useState<Category>('corps');
  const [message,setMessage]=useState('');
+ const importRef=useRef<HTMLInputElement>(null);
  const update=<K extends keyof CoachLook>(key:K,value:CoachLook[K])=>setLook(l=>normalizeCoachLook({...l,[key]:value}));
  const range=(key:'height'|'shoulders'|'muscle'|'waist'|'jaw'|'nose'|'eyes',label:string,min:number,max:number)=><label className="coachField"><span>{label} <b>{look[key].toFixed(2)}</b></span><input type="range" min={min} max={max} step=".01" value={look[key]} onChange={e=>update(key,Number(e.target.value))}/></label>;
  const color=(key:'skin'|'eyeColor'|'hairColor'|'topColor'|'bottomColor'|'gloveColor'|'shinColor',label:string)=><label className="coachColor"><span>{label}</span><input type="color" value={look[key]} onChange={e=>update(key,e.target.value)}/></label>;
  const choose=<K extends 'sex'|'hairStyle'|'top'|'bottom'|'gloves'>(key:K,label:string,values:CoachLook[K][])=><label className="coachField"><span>{label}</span><select value={look[key]} onChange={e=>update(key,e.target.value as CoachLook[K])}>{values.map(v=><option key={v} value={v}>{v}</option>)}</select></label>;
+ const importJson=async(file:File|undefined)=>{
+  if(!file)return;
+  try{
+   if(file.size>100_000)throw Error('Fichier trop volumineux');
+   const next=parseCoachLookJson(await file.text());
+   setLook(next);setMessage('Profil importé et paramètres validés.');
+  }catch(error){setMessage('Import refusé : '+(error instanceof Error?error.message:'fichier invalide'));}
+ };
  const exportJson=()=>{const json=JSON.stringify({schema:'cme-coach-look-v1',look},null,2);const blob=new Blob([json],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='cme-coach-look.json';a.click();URL.revokeObjectURL(url);setMessage('Configuration exportée : apparence uniquement, sans modification du moteur.');};
  return <section className="coachStudio" aria-label="Studio Coach">
   <header className="coachStudioHeader"><div><small>STUDIO COACH · PROTOTYPE 3D</small><h2>Créer un combattant</h2></div><button onClick={()=>{setLook(defaultCoachLook);setMessage('Apparence réinitialisée');}}>Réinitialiser</button></header>
@@ -86,7 +111,11 @@ export function StudioCoach(){
      {section==='tenue'&&<>{choose('top','Haut',['rashguard','tshirt','aucun'])}{color('topColor','Couleur du haut')}{choose('bottom','Bas',['short','legging'])}{color('bottomColor','Couleur du bas')}</>}
      {section==='protections'&&<>{choose('gloves','Gants',['boxe','mma','aucun'])}{color('gloveColor','Couleur des gants')}<label className="coachField"><span>Protège-tibias</span><input type="checkbox" checked={look.shins} onChange={e=>update('shins',e.target.checked)}/></label>{color('shinColor','Couleur des protections')}</>}
     </div>
-    <div className="coachActions"><button onClick={exportJson}>Exporter JSON</button><button onClick={()=>setMessage('Prévisualisation uniquement : aucun mouvement biomécanique n’a été modifié.')}>Vérifier l’isolation du moteur</button></div>
+    <div className="coachActions">
+      <button onClick={exportJson}>Exporter JSON</button>
+      <button onClick={()=>importRef.current?.click()}>Importer JSON</button>
+      <input ref={importRef} type="file" accept=".json,application/json" hidden aria-label="Fichier de profil Coach" onChange={e=>{void importJson(e.target.files?.[0]);e.target.value='';}}/>
+     </div>
     {message&&<p role="status" className="coachStatus">{message}</p>}
    </div>
   </div>
