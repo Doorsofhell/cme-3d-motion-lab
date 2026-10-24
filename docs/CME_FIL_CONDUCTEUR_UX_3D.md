@@ -38,3 +38,11 @@ L'utilisateur a confirmé sur capture Android : **Rig neutre** = humanoïde d'é
 - Ne pas prétendre qu'un GLB habillé devient un humanoïde anatomiquement nu par simple changement de matériau : la géométrie des vêtements fusionnés nécessite de vrais assets neutres.
 - Garder la personnalisation progressive, les catégories lisibles, les trois espaces principaux, le menu Plus et la charte Shadow.
 - Proposer à chaque étape des choix prédéfinis pertinents pour le prochain lot, en conservant ce fil conducteur.
+
+## Lot 1 — humanoïdes neutres (étape intermédiaire)
+- Le mode Rig neutre masque entièrement les meshes source habillés et reconstruit un **proxy anatomique procédural gris mat**, attaché aux os du squelette existant (homme et femme).
+- Ce proxy ne contient ni texture de peau, ni costume, ni accessoires. Le mode Apparence conserve ses modèles réalistes texturés.
+- Les six disciplines passent par les mêmes `CoachRig`, `MotionSampler` et `getLibrary` ; aucune duplication du moteur ni modification de Shadow.
+- Les tests automatisés vérifient la présence des segments sur les deux sexes, leur rattachement aux os et l'absence de texture. **Ils ne valident pas encore le retargeting physique** ni les trajectoires des 6 disciplines sur de vrais GLB.
+- Ce proxy articulé ne remplace PAS deux modèles humains neutres sculptés/riggés de qualité production : le volume est schématique. Les assets GLB dédiés, l'audit des poids de skinning et les mesures Android restent à réaliser.
+- Prochain lot recommandé : produire/importer deux vrais meshes anatomiques neutres sous licence compatible, avec squelette identique et comparaison quantitative A/B.
