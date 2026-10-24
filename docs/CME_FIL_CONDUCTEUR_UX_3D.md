@@ -211,3 +211,7 @@ A — stabilisation et non-régression d'abord ; B — personnalisation dynamiqu
 - Techniques Studio : catalogue déroulant par discipline basé sur `techniques.json`, `complexSequences.json` et `shadowExercises.json` versionnés, séquences pilotées par `SequenceSampler`, entrées incompatibles désactivées. Aucun geste canonique modifié ; pas d'appel au dépôt Shadow.
 
 **Vérifications avant validation finale :** tests profil poitrine, géométrie antérieure/reprise neutre, mode anatomie sans vêtement, inventaire six disciplines, lecture des enchaînements, sélection coach après sauvegarde, aucun chevauchement Android ; CI verte puis contrôle GitHub Pages. La validation sur téléphone réel reste distincte.
+
+## 25/10/2026 — 0.7.27 : navigation à quatre onglets, galerie maintenue
+
+**Nouvelle décision utilisateur :** garder Galerie Coachs comme destination distincte et déplacer toutes les autres options dans Plus. Livraison incrémentale : onglets Studio / Galerie Coachs / Comparatif / Plus ; grille de galerie adaptée Android et raccourci de test depuis Studio ; Nouveautés (versions existantes) et Centre technique distinct via Plus. Le moteur de combat existant reste utilisable, mais sa fusion technique avec l’aperçu Studio est un chantier ouvert. Le workflow de benchmark CME / Shadow doit mesurer avec données d’essai traçables, afficher des graphiques et ne jamais déduire la supériorité d’un score fictif. La recettte Android physique reste à réaliser.
