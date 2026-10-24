@@ -26,6 +26,20 @@ describe('Studio Coach : cohérence tactile Android',()=>{
   expect(studio).toContain('coachSkinGrid');
   expect(css).toContain('grid-template-columns:repeat(4,minmax(0,1fr))');
  });
+ it('centre la caméra sur la rubrique et son contrôle spécialisé sans conflit de commandes',()=>{
+  const studio=readFileSync(new URL('./StudioCoach.tsx',import.meta.url),'utf8');
+  const rig=readFileSync(new URL('./NeutralRig.tsx',import.meta.url),'utf8');
+  const framing=readFileSync(new URL('./CadrageSquelette.tsx',import.meta.url),'utf8');
+  expect(studio).toContain('focusZone={focusZone} focusRequest={focusRequest}');
+  expect(studio).toContain('recenter(focusForSection(item))');
+  expect(studio).toContain('selectFocus(focusForSetting(key,section))');
+  expect(studio).toContain('Vue entière');
+  expect(studio).toContain('setCameraAuto(false);recenter(\'corps\')');
+  expect(rig).toContain('zone={focusZone} refocus={focusRequest}');
+  expect(framing).toContain("orbit.addEventListener('start',cancel)");
+  expect(framing).toContain('camera.position.lerp(aim.position,speed)');
+  expect(css).toContain('.coachFocusLine button');
+ });
  it('préserve les boutons tactiles accessibles et la barre commune',()=>{
   expect(css).toContain('min-height:44px');
   expect(controls).toContain('export function SceneToolbar');
