@@ -10,4 +10,14 @@ describe('biomechanics motion audit',()=>{
  it('flags planted foot horizontal sliding',()=>expect(auditMotion({...motion,keys:[{t:0,pose},{t:1,pose:{...pose,footL:{...pose.footL,ball:{x:.08,y:0,z:0}}}}]}).some(f=>f.code==='PLANTED_FOOT_SLIDE')).toBe(true));
  it('allows stable planted foot pivots',()=>expect(auditMotion({...motion,keys:[{t:0,pose},{t:1,pose:{...pose,footL:{...pose.footL,yaw:1}}}]}).some(f=>f.code==='PLANTED_FOOT_SLIDE')).toBe(false));
  it('detects ground penetration and invalid impacts',()=>expect(auditCatalog([{...motion,impacts:[2],keys:[{t:0,pose:{...pose,footL:{...pose.footL,ball:{x:0,y:-.1,z:0}}}},{t:1,pose}]}]).map(f=>f.code)).toEqual(expect.arrayContaining(['GROUND_PENETRATION','IMPACT_TIME'])));
+ it('keeps baseline preparation, impact and recovery timestamps stable',()=>{
+  const baseline={...motion,keys:[{t:0,pose},{t:.5,pose},{t:1,pose}],impacts:[.5]};
+  expect(baseline.keys.map(k=>k.t)).toEqual([0,.5,1]);
+  expect(baseline.impacts).toEqual([.5]);
+  expect(auditMotion(baseline)).toEqual([]);
+ });
+ it('detects a planted-foot regression beyond 2.5 cm tolerance',()=>{
+  const changed={...pose,footR:{...pose.footR,ball:{x:.03,y:0,z:0}}};
+  expect(auditMotion({...motion,keys:[{t:0,pose},{t:1,pose:changed}]}).some(f=>f.code==='PLANTED_FOOT_SLIDE')).toBe(true);
+ });
 });
