@@ -1,14 +1,14 @@
 import {Box3,Bone,Object3D,Sphere,Vector3} from 'three';
 
 export type StudioFocusZone='corps'|'buste'|'visage'|'cheveux'|'peau'|'abdomen'|'hanches'|'jambes'|'mains'|'tibias';
-export type StudioSection='corps'|'visage'|'peau'|'cheveux'|'tenue'|'protections';
+export type StudioSection='corps'|'silhouette'|'visage'|'peau'|'cheveux'|'tenue'|'protections';
 export const FOCUS_LABELS:Record<StudioFocusZone,string>={
  corps:'Corps entier',buste:'Buste',visage:'Visage',cheveux:'Coiffure',
  peau:'Peau du visage et du buste',abdomen:'Taille et abdomen',
  hanches:'Hanches et bassin',jambes:'Jambes',mains:'Gants et mains',tibias:'Protège-tibias'
 };
 const defaults:Record<StudioSection,StudioFocusZone>={
- corps:'corps',visage:'visage',peau:'peau',cheveux:'cheveux',tenue:'corps',protections:'mains'
+ corps:'corps',silhouette:'hanches',visage:'visage',peau:'peau',cheveux:'cheveux',tenue:'corps',protections:'mains'
 };
 export function focusForSection(section:StudioSection):StudioFocusZone{return defaults[section];}
 export function focusForSetting(key:string,section:StudioSection):StudioFocusZone{
