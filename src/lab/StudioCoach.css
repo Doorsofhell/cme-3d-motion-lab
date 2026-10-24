@@ -103,3 +103,21 @@
  .coachPreview .cmeFullscreenToggle{right:8px!important;top:8px!important;min-width:42px!important;min-height:42px!important}
  .coachPreviewLabel{bottom:10px!important;left:10px!important}
 }
+
+/* Studio Android P1 : un seul bandeau de commandes, scène indépendante. */
+.coachPreview{display:flex;flex-direction:column;isolation:isolate}
+.coachCanvasViewport{position:absolute;inset:0;z-index:0;overflow:hidden;border-radius:inherit;touch-action:manipulation}
+.coachCanvasViewport canvas{display:block;width:100%!important;height:100%!important}
+.coachRigSwitch{left:10px!important;top:10px!important;right:auto!important;z-index:6!important;max-width:none!important;gap:3px!important}
+.coachRigSwitch button{min-width:58px!important;min-height:44px!important}
+.coachPreview .cmeCameraAuto{right:64px!important;top:10px!important;z-index:6!important;max-width:90px!important;min-width:64px!important}
+.coachPreview .cmeFullscreenToggle{right:10px!important;top:10px!important;z-index:6!important;min-width:44px!important;min-height:44px!important}
+.coachPreviewLabel{z-index:3!important;right:auto!important;max-width:calc(100% - 24px)}
+.coachPreview.cmeFullscreen{position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;max-width:none!important;min-height:100dvh!important;z-index:9999!important;border-radius:0!important}
+@media(max-width:440px){
+ .coachRigSwitch{left:8px!important;top:8px!important;padding:3px!important}
+ .coachRigSwitch button{min-width:54px!important;padding:7px 8px!important;font-size:11px!important}
+ .coachPreview .cmeCameraAuto{right:59px!important;top:8px!important;min-width:57px!important;max-width:72px!important;padding:6px 5px!important;font-size:11px!important}
+ .coachPreview .cmeFullscreenToggle{right:8px!important;top:8px!important;min-width:43px!important}
+ .coachCategories{overscroll-behavior-x:contain}
+}
