@@ -1,4 +1,4 @@
-import {useRef,useState} from 'react';
+import {useEffect,useRef,useState} from 'react';
 import {Canvas} from '@react-three/fiber';
 import {OrbitControls} from '@react-three/drei';
 import {NeutralRig,LAB_DISCIPLINES,type LabDiscipline,type NeutralRigReport} from './NeutralRig';
@@ -60,7 +60,9 @@ export function StudioCoach(){
  const [selectedId,setSelectedId]=useState<string|null>(()=>{try{return localStorage.getItem('cme-selected-coach');}catch{return null;}});
  const [section,setSection]=useState<Category>('corps');
  const [message,setMessage]=useState('');
- const [rigMode,setRigMode]=useState(false);
+ const [rigMode,setRigMode]=useState(true);
+ const [previewFullscreen,setPreviewFullscreen]=useState(false);
+ useEffect(()=>{const close=(event:KeyboardEvent)=>{if(event.key==='Escape')setPreviewFullscreen(false);};window.addEventListener('keydown',close);return()=>window.removeEventListener('keydown',close);},[]);
  const [advancedOpen,setAdvancedOpen]=useState(false);
  const [discipline,setDiscipline]=useState<LabDiscipline>('boxing');
  const [motionId,setMotionId]=useState('garde');
@@ -87,7 +89,7 @@ export function StudioCoach(){
  return <section className="coachStudio" aria-label="Studio Coach">
   <header className="coachStudioHeader"><div><small>STUDIO COACH</small><h2>Votre combattant</h2><p>Choisissez un modèle et personnalisez son apparence.</p></div></header>
   <div className="coachStudioLayout">
-   <div className="coachPreview" aria-label="Aperçu 3D permanent du mannequin personnalisable">
+   <div className={`coachPreview ${previewFullscreen?"cmeFullscreen":""}`} onDoubleClick={()=>setPreviewFullscreen(v=>!v)} aria-label="Aperçu 3D du mannequin ; double clic pour agrandir">\n    <button type="button" className="cmeFullscreenToggle" onClick={()=>setPreviewFullscreen(v=>!v)} aria-label={previewFullscreen?"Quitter le plein écran":"Agrandir le coach"}>{previewFullscreen?"Réduire ✕":"⛶"}</button>
     <div className="coachRigSwitch" role="group" aria-label="Mode du modèle 3D"><button className={!rigMode?'active':''} aria-pressed={!rigMode} onClick={()=>setRigMode(false)}>Apparence</button><button className={rigMode?'active':''} aria-pressed={rigMode} onClick={()=>setRigMode(true)}>Rig neutre</button></div>
     <Canvas camera={{position:[0,1.05,3.4],fov:38}} dpr={[1,1.5]} gl={{antialias:true}}>
      <color attach="background" args={['#171920']}/><ambientLight intensity={1.4}/><directionalLight position={[3,5,4]} intensity={2.1}/>
