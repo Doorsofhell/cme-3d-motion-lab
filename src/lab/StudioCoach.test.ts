@@ -1,6 +1,17 @@
 import {describe,it,expect} from 'vitest';
-import {defaultCoachLook,normalizeCoachLook} from './StudioCoach';
+import {defaultCoachLook,normalizeCoachLook,parseCoachLookJson} from './StudioCoach';
 describe('Studio Coach appearance isolation',()=>{
+ it('roundtrips exported schema and validates imported colors and proportions',()=>{
+  const input={...defaultCoachLook,skin:'#663322',height:1.08};
+  const output=parseCoachLookJson(JSON.stringify({schema:'cme-coach-look-v1',look:input}));
+  expect(output).toEqual(input);
+ });
+ it('rejects wrong schema, missing values and maliciously typed properties',()=>{
+  expect(()=>parseCoachLookJson(JSON.stringify({schema:'other',look:defaultCoachLook}))).toThrow();
+  expect(()=>parseCoachLookJson(JSON.stringify({schema:'cme-coach-look-v1',look:{skin:'#ffffff'}}))).toThrow();
+  expect(()=>parseCoachLookJson(JSON.stringify({schema:'cme-coach-look-v1',look:{...defaultCoachLook,height:'bad'}}))).toThrow();
+ });
+
  it('starts from a valid reproducible neutral appearance preset',()=>{expect(normalizeCoachLook(defaultCoachLook)).toEqual(defaultCoachLook);});
  it('clamps body and facial controls without altering motion definitions',()=>{
   const result=normalizeCoachLook({...defaultCoachLook,height:50,muscle:-10,jaw:99});
