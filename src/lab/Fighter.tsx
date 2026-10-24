@@ -103,23 +103,42 @@ function applyComicStyle(root:Object3D,quality:Quality){
  return outlines;
 }
 export function Fighter({actor,outfit,technique,playback,skeleton,quality,renderStyle,onReport,onReady}:{
- actor:'mma-kadir'|'mma-amara';outfit:string;technique:string;playback:RefObject<Playback>;skeleton:boolean;
+ actor:'mma-kadir'|'mma-amara'|'mma-naira';outfit:string;technique:string;playback:RefObject<Playback>;skeleton:boolean;
  quality:Quality;renderStyle:RenderStyle;onReport:(r:RigReport)=>void;onReady:()=>void;
 }){
  const base=import.meta.env.BASE_URL;
  // The original v0.31 Shadow coach rig + motion library is used unmodified.
- const url=base+'fighters/'+actor+'/photo.glb';
+ const sourceActor=actor==='mma-naira'?'mma-amara':actor;
+ const url=base+'fighters/'+sourceActor+'/photo.glb';
  const gltf=useGLTF(url,base+'draco/');
- const clothes=useGLTF(base+'fighters/'+actor+'/tenues/'+outfit+'.glb',base+'draco/');
+ const clothes=useGLTF(base+'fighters/'+sourceActor+'/tenues/'+outfit+'.glb',base+'draco/');
  const scene=useMemo(()=>{
   const s=clone(gltf.scene) as Object3D;
   restoreReferencePose(s);
+  if(actor==='mma-naira'){
+   // Non-destructive skinned clone preview. Original Amara GLB remains untouched.
+   s.traverse(o=>{
+    const m=o as Mesh;
+    if(!m.isMesh)return;
+    const mats=Array.isArray(m.material)?m.material:[m.material];
+    m.material=Array.isArray(m.material)?mats.map(x=>x.clone()):mats[0].clone();
+    const next=Array.isArray(m.material)?m.material:[m.material];
+    for(const mat of next){
+     const standard=mat as MeshStandardMaterial;
+     if(standard.color){
+      const name=(standard.name+' '+m.name).toLowerCase();
+      if(/hair|cheveu/.test(name))standard.color.set('#30212b');
+      else if(/skin|peau|body|head|f021_/.test(name))standard.color.multiplyScalar(.93);
+     }
+    }
+   });
+  }
   enhanceHumanMaterial(s,quality==='performance');
   attachOutfit(s,clothes.scene,quality==='performance');
   if(renderStyle==='fitness')applyFitnessStyle(s);
   if(renderStyle==='comic')applyComicStyle(s,quality);
   return s;
- },[gltf.scene,clothes.scene,renderStyle,quality]);
+ },[gltf.scene,clothes.scene,renderStyle,quality,actor]);
  const rig=useMemo(()=>new CoachRig(scene),[scene]);
  const library=useMemo(()=>getLibrary(rig,(outfit==='boxe'?'boxing':outfit.startsWith('bjj')?'bjj':outfit) as 'boxing'|'kickboxing'|'mma'|'muaythai'|'bjj'|'judo'),[rig,outfit]);
  const seq=(rawSequences as Array<{id:string;name:string;discipline:string;motions:string[]}>).find(s=>s.id===technique);
