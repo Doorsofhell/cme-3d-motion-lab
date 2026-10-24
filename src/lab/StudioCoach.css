@@ -55,3 +55,38 @@
  .coachStudioHeader h2{font-size:22px}
  .coachRigSwitch button{font-size:12px;padding:8px 10px}
 }
+
+/* Studio Coach clair : contrôles contextuels et prévisualisation prioritaire. */
+.coachStudio{color:#202737!important;background:#f6f8fc!important;border-radius:18px;padding:12px!important;gap:10px!important}
+.coachStudioHeader{padding:2px 4px!important}
+.coachStudioHeader small{color:#66758b!important;font-weight:800}
+.coachStudioHeader h2{color:#162032!important;margin:2px 0!important}
+.coachStudioHeader p{display:none}
+.coachStudioLayout{gap:12px!important}
+.coachPreview{background:radial-gradient(ellipse at 50% 36%,#e7edf5,#cbd6e4)!important;border:1px solid #d4dce8!important;min-height:370px!important}
+.coachPreviewLabel{background:#ffffffd9!important;color:#35445b!important;left:12px!important;right:auto!important;bottom:12px!important;font-size:12px!important;padding:7px 10px!important}
+.coachRigSwitch{top:10px!important;left:10px!important;right:auto!important;background:#ffffffed!important;border:1px solid #d7dfeb!important;padding:4px!important;max-width:calc(100% - 145px)!important}
+.coachRigSwitch button{background:#eef2f8!important;color:#38465b!important;min-height:44px!important;padding:8px 11px!important;font-size:12px!important}
+.coachRigSwitch button.active{background:#d6363c!important;color:white!important}
+.coachPreview .cmeCameraAuto{top:10px!important;right:62px!important;left:auto!important;width:auto!important;max-width:105px!important;min-height:44px!important;padding:7px 9px!important;background:#ffffffed!important;color:#253147!important;border:1px solid #d4dce8!important;font-size:12px!important;white-space:nowrap!important}
+.coachPreview .cmeFullscreenToggle{right:10px!important;top:10px!important;background:#ffffffed!important;color:#253147!important;border:1px solid #d4dce8!important}
+.coachEditor{background:#ffffff!important;border:1px solid #e0e6ef!important;box-shadow:0 10px 28px #2531470b!important;color:#202737!important}
+.coachQuickChoice button,.coachCategories button{background:#f1f4f9!important;color:#344257!important;border:1px solid #dfe5ee!important}
+.coachQuickChoice button.active,.coachCategories button.active{background:#d6363c!important;border-color:#d6363c!important;color:#fff!important}
+.coachCategories{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;scrollbar-width:none!important;gap:7px!important;padding-bottom:5px!important}
+.coachCategories button{flex:0 0 auto!important;min-width:94px!important;min-height:48px!important;border-radius:12px!important;font-size:13px!important;padding:8px 12px!important}
+.coachField,.coachColor,.coachAdvanced summary{color:#27344a!important}
+.coachField select,.coachRigControls select,.coachRigControls input{background:#f4f6fa!important;color:#253147!important;border:1px solid #d4dce8!important}
+.coachField b{color:#b52d36!important}
+.coachAdvanced{border-color:#e2e7f0!important}
+.coachCrud button,.coachActions button{min-height:44px!important;border-radius:12px!important}
+.coachAvailability{margin:0;color:#65758c;font-size:12px;line-height:1.5;background:#f3f6fb;padding:10px;border-radius:12px}
+.coachStatus{color:#147f5c!important}
+@media(max-width:760px){
+ .coachStudio{padding:9px!important}
+ .coachStudioLayout{display:flex!important;flex-direction:column!important}
+ .coachPreview{height:clamp(340px,55dvh,700px)!important;flex:none!important}
+ .coachEditor{padding:12px!important}
+ .coachRigSwitch{max-width:calc(100% - 154px)!important}
+ .coachRigSwitch button{padding:7px 9px!important;font-size:11px!important}
+}
