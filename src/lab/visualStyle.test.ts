@@ -40,10 +40,10 @@ describe('CME-3D toon costume detail and adult comics',()=>{
   const fitness=makeCoachMaterial('haut-boxe');
   applyComicStyle(comic.root,'balanced');
   applyFitnessStyle(fitness.root);
-  const c=comic.mesh.material as MeshToonMaterial;
-  const f=fitness.mesh.material as MeshToonMaterial;
-  expect(c.gradientMap?.image.width).toBe(3);
-  expect(f.gradientMap?.image.width).toBe(6);
+  const c=comic.mesh.material as unknown as MeshToonMaterial;
+  const f=fitness.mesh.material as unknown as MeshToonMaterial;
+  expect((c.gradientMap?.image as {width:number}).width).toBe(3);
+  expect((f.gradientMap?.image as {width:number}).width).toBe(6);
   expect(c.color.getHexString()).not.toBe(f.color.getHexString());
  });
  it('preserves facial textures and flat palette for untextured costumes',()=>{
