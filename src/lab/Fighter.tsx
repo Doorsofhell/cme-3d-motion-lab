@@ -19,7 +19,7 @@ const fitnessGradient=new DataTexture(new Uint8Array([65,102,145,186,223,251]),6
 fitnessGradient.magFilter=NearestFilter;
 fitnessGradient.minFilter=NearestFilter;
 fitnessGradient.needsUpdate=true;
-function applyFitnessStyle(root:Object3D){
+export function applyFitnessStyle(root:Object3D){
  root.traverse(o=>{
   const mesh=o as Mesh;
   if(!mesh.isMesh)return;
@@ -37,10 +37,12 @@ function applyFitnessStyle(root:Object3D){
    const palette=trim?'#d6b180':shoes?'#f1f4f4':isGlove?'#24495e':outfitTop?'#393e51':shorts?'#25485c':'#f3f4f3';
    const material=new MeshToonMaterial({
     name:old.name+'-fitness',
-    color:new Color(palette),
-    map:skin?(old.map??null):null,
+    // Preserve original textile detail: a near-white tint avoids darkening coloured maps twice.
+    color:old.map&&!skin?new Color(palette).lerp(new Color('#ffffff'),.75):new Color(palette),
+    map:old.map??null,
     gradientMap:fitnessGradient,
     normalMap:old.normalMap??null,
+    alphaMap:old.alphaMap??null,
     normalScale:old.normalScale?.clone(),
     vertexColors:old.vertexColors,
     side:outfitTop?DoubleSide:old.side,
@@ -48,8 +50,6 @@ function applyFitnessStyle(root:Object3D){
     opacity:old.opacity,
     alphaTest:old.alphaTest
    });
-   // Recreate the shirt/short colours independently from the photographic material.
-   if(!skin && !isGlove && !outfitTop && !shorts && !shoes && !trim)material.map=old.map??null;
    old.dispose();
    return material;
   });
@@ -61,7 +61,7 @@ const comicGradient=new DataTexture(new Uint8Array([24,48,83,127,178,223,251]),7
 comicGradient.magFilter=NearestFilter;
 comicGradient.minFilter=NearestFilter;
 comicGradient.needsUpdate=true;
-function applyComicStyle(root:Object3D,quality:Quality){
+export function applyComicStyle(root:Object3D,quality:Quality){
  const outlines:Object3D[]=[];
  root.traverse(o=>{
   const mesh=o as Mesh;
@@ -78,10 +78,11 @@ function applyComicStyle(root:Object3D,quality:Quality){
    const trim=/liseré-/.test(name);
    const color=skin?'#ffffff':gloves?'#b72e42':top?'#263e68':shorts?'#192d4c':shoes?'#d9e3ee':trim?'#efc26c':'#b9c6d5';
    const material=new MeshToonMaterial({
-    name:old.name+'-hero-ink',color:new Color(color),
+    name:old.name+'-hero-ink',
+    color:old.map&&!skin?new Color(color).lerp(new Color('#ffffff'),.62):new Color(color),
     // Keep actual skin pigmentation, facial detail and anatomical normal maps.
-    map:skin?(old.map??null):null,
-    gradientMap:comicGradient,normalMap:old.normalMap??null,
+    map:old.map??null,
+    gradientMap:comicGradient,normalMap:old.normalMap??null,alphaMap:old.alphaMap??null,
     normalScale:old.normalScale?.clone(),vertexColors:old.vertexColors,
     side:top?DoubleSide:old.side,transparent:old.transparent,
     opacity:old.opacity,alphaTest:old.alphaTest
