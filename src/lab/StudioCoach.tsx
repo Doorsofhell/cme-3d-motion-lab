@@ -252,8 +252,8 @@ export function StudioCoach(){
  const exportJson=()=>{const json=JSON.stringify({schema:'cme-coach-look-v1',look},null,2);const blob=new Blob([json],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='cme-coach-look.json';a.click();URL.revokeObjectURL(url);setMessage('Configuration exportée : apparence uniquement, sans modification du moteur.');};
  return <section className="coachStudio" aria-label="Studio Coach">
   <header className="coachStudioHeader"><div><small>STUDIO COACH</small><h2>Mon combattant</h2><p>Choisis un modèle, personnalise-le, puis teste un geste.</p></div></header>
-  <div className="coachStudioLayout">
-   <div className="coachSceneStack">
+  <div className="coachStudioLayout sculptorWorkspace">
+   <div className="coachSceneStack sculptorSceneArea">
     <div className="coachSceneControls" role="group" aria-label="Sélection du modèle et commandes caméra">
      <div className="coachQuickChoice coachSexeVue" role="group" aria-label="Choisir le modèle">
       <button type="button" className={look.sex==='homme'?'active':''} aria-pressed={look.sex==='homme'} onClick={()=>update('sex','homme')}>Homme</button>
@@ -261,22 +261,29 @@ export function StudioCoach(){
      </div>
      <SceneToolbar variant="studio" actions={<><SceneCameraButton automatic={cameraAuto} onToggle={()=>{setCameraAuto(v=>!v);setAnatomicalView(null);}}/><SceneFullscreenButton fullscreen={sceneFullscreen.fullscreen} onClick={sceneFullscreen.toggle}/></>}/>
     </div>
-   <div ref={sceneFullscreen.ref as React.RefObject<HTMLDivElement>} className={`coachPreview ${sceneFullscreen.fullscreen?"cmeFullscreen":""}`} onDoubleClick={sceneFullscreen.onDoubleClick} onTouchEnd={sceneFullscreen.onTouchEnd} aria-label="Aperçu 3D du mannequin ; double clic pour agrandir">
+   <div className="sculptorViewportFrame">
+    <div ref={sceneFullscreen.ref as React.RefObject<HTMLDivElement>} className={`coachPreview ${sceneFullscreen.fullscreen?"cmeFullscreen":""}`} onDoubleClick={sceneFullscreen.onDoubleClick} onTouchEnd={sceneFullscreen.onTouchEnd} aria-label="Aperçu 3D du mannequin ; double clic pour agrandir">
     
     <SceneLoadingIndicator/>
     {sceneFullscreen.fullscreen&&<button type="button" className="coachFermerPleinEcran" onClick={sceneFullscreen.toggle} aria-label="Quitter le plein écran 3D">× Fermer</button>}
     
     <div className="coachCanvasViewport"><Canvas key={canvasRetry} onCreated={onCanvasCreated} camera={{position:[0,1.3,4.5],fov:38}} dpr={[1,1.5]} gl={{antialias:true,preserveDrawingBuffer:true}}>
      <AndroidFrameProbe telemetry={androidTelemetry}/>
-     <color attach="background" args={['#151921']}/><hemisphereLight args={['#fff8ef','#677388',1.05]}/><ambientLight intensity={0.65}/><directionalLight position={[3,5,4]} intensity={1.55}/>
+     <color attach="background" args={['#090b0f']}/><gridHelper args={[8,16,'#17454e','#14242d']} position={[0,-0.01,0]}/><hemisphereLight args={['#fff8ef','#677388',1.05]}/><ambientLight intensity={0.65}/><directionalLight position={[3,5,4]} intensity={1.55}/>
      <SceneLoadingBoundary>{rigMode&&referenceMode?<AnatomicalReferenceRig key={'reference-'+look.sex} sex={look.sex} orientation={anatomicalView} focusZone={focusZone} focusRequest={focusRequest} autoCadrage={!cameraAuto}/>:<NeutralRig key={`${look.sex}-${rigMode?(anatomicalPreview?'mannequin':'creator'):'appearance'}`} mode={rigMode?(anatomicalPreview?'mannequin':'creator'):'appearance'} sex={look.sex} discipline={discipline} noGi={noGi} motionId={testingMotion?motionId:'garde'} creationPose={!testingMotion} playing={testingMotion&&playing} speed={1} showSkeleton={showSkeleton} autoCadrage={!cameraAuto} focusZone={focusZone} focusRequest={focusRequest} orientation={anatomicalView} onReport={handleRigReport} appearance={colors} proportions={dimensions} face={faceDimensions} hairStyle={look.hairStyle}/>}</SceneLoadingBoundary>
      <SceneCameraControls automatic={cameraAuto} motion={motionId}/>
+     <SculptorWireframe actif={filDeFer&&!referenceMode&&!!report} version={`${look.sex}-${rigMode}-${report?.sex??"chargement"}`}/>
     </Canvas></div>
     
     {webglStatus&&<div className="coachWebglAlert" role="status"><span>{webglStatus}</span>
      <button type="button" onClick={()=>{beginRigLoad(look.sex,rigMode,'retry');setWebglStatus('');setCanvasRetry(v=>v+1);}}>Relancer la scène 3D</button>
      <button type="button" aria-label="Masquer le diagnostic WebGL" onClick={()=>setWebglStatus('')}>×</button>
     </div>}
+   </div>
+    <SculptorViewportTools vue={anatomicalView} filDeFer={filDeFer} disponible={!!report&&!referenceMode}
+     choisirVue={vue=>{setCameraAuto(false);setAnatomicalView(vue);recenter('corps');}}
+     retablir={()=>{setCameraAuto(false);setAnatomicalView('face');recenter('corps');}}
+     changerFilDeFer={()=>setFilDeFer(v=>!v)}/>
    </div>
    </div>
    <div className="coachEditor">
