@@ -1,0 +1,11 @@
+{
+  "id": "gallery",
+  "version": 1,
+  "inside": "studio",
+  "portrait": {
+    "width": 256,
+    "height": 320,
+    "format": "jpeg"
+  },
+  "profileKey": "cme-3d-coaches-v1"
+}
