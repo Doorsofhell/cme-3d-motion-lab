@@ -9,7 +9,7 @@ describe('vision CME-3D 1.0 : un atelier, cinq destinations',()=>{
   for(const label of ['Studio','Mouvements','Technique','Versions','Autres'])expect(app).toContain('<span>'+label+'</span>');
  });
  it('utilise une scène unique de création et un onglet distinct de recette',()=>{
-  expect(studio).toContain('Création en pose neutre');
+  expect(studio).toContain('Création d’abord sur le corps neutre');
   expect(studio).not.toContain('2 · Test des mouvements');
   expect(app).toContain('<MotionReview');
   expect((studio.match(/<Canvas\b/g)||[]).length).toBe(1);
@@ -18,7 +18,7 @@ describe('vision CME-3D 1.0 : un atelier, cinq destinations',()=>{
   expect(studio).toContain("sex:'homme'");
   expect(studio).toContain("'femme'");
   for(const key of ['roundness','hips','thighs','bust'])expect(studio).toContain(key);
-  expect(studio).toContain('morph anatomique dédié non présent');
+  expect(studio).toContain('morph anatomique dédié absent des GLB actuels');
  });
  it('conserve les protections GLB et les commandes de scène partagées',()=>{
   expect(studio).toContain('<NeutralRig');
