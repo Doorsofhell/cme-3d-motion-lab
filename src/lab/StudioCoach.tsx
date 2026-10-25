@@ -81,7 +81,6 @@ export function parseCoachLookJson(text:string):CoachLook{
  }
  return normalizeCoachLook(input as CoachLook);
 }
-const sections:Category[]=['corps','silhouette','visage','peau','cheveux','tenue','protections'];
 const sectionNames:Record<Category,string>={corps:'Corps',silhouette:'Silhouette',visage:'Visage',peau:'Peau',cheveux:'Cheveux',tenue:'Tenue',protections:'Protections'};
 type Step='morphologie'|'apparence'|'equipement';
 const sectionStep:Record<Category,Step>={corps:'morphologie',silhouette:'morphologie',visage:'apparence',peau:'apparence',cheveux:'apparence',tenue:'equipement',protections:'equipement'};

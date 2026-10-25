@@ -12,7 +12,7 @@ describe('Studio premium 0.7.47 — référence visuelle et commande réelles',(
   expect(new Set(zones).size).toBe(7);
   for(const zone of zones)expect(groupePourZone(zone as ZoneAnatomique).zones).toContain(zone);
   expect(studio).toContain('GROUPES_ANATOMIQUES.map(groupe=>');
-  expect(studio).toContain('groupeActif.zones.includes(item)');
+  expect(studio).toContain('regionsPourGroupe(groupeActif.id)');
   expect(studio).toContain('<AnatomyIcon zone={groupe.icone}');
  });
  it('garde une scène sombre et la sélection homme/femme sans masquage',()=>{
