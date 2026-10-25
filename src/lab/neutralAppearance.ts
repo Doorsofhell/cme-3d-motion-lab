@@ -2,9 +2,9 @@ import {Mesh,MeshStandardMaterial,MeshToonMaterial,Object3D,Color,type Material}
 import {NATIVE_SKIN_REFERENCE} from './skinTones';
 
 export type NeutralAppearance={
- skin:string;hairColor:string;topColor:string;bottomColor:string;gloveColor:string;shinColor?:string;eyeColor?:string;
+ skin:string;hairColor:string;topColor:string;bottomColor:string;gloveColor:string;shinColor?:string;eyeColor?:string;accessories?:('gloves'|'shins')[];
 };
-export type AppearanceZone=keyof NeutralAppearance;
+export type AppearanceZone=Exclude<keyof NeutralAppearance,'accessories'>;
 
 const sourceColors=new WeakMap<Material,Color>();
 const readableFallback=/^(?:material|mat)(?:[._ -]?[0-9]+)?$|^default(?:material)?$|^[0-9]+$/i;
@@ -57,6 +57,11 @@ export function applyNeutralAppearance(root:Object3D,appearance?:NeutralAppearan
   const mesh=object as Mesh;
   if(!mesh.isMesh)return;
   const materials=Array.isArray(mesh.material)?mesh.material:[mesh.material];
+  if(mesh.name.startsWith('tenue:')&&appearance?.accessories){
+   const zones=materials.map(m=>zoneFor(mesh,m));
+   if(zones.length&&zones.every(z=>z==='gloveColor'))mesh.visible=appearance.accessories.includes('gloves');
+   else if(zones.length&&zones.every(z=>z==='shinColor'))mesh.visible=appearance.accessories.includes('shins');
+  }
   for(const material of materials){
    if(!(material instanceof MeshStandardMaterial)&&!(material instanceof MeshToonMaterial))continue;
    const zone=zoneFor(mesh,material);
