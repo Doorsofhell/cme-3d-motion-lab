@@ -174,7 +174,7 @@ export function StudioCoach(){
  const groupeActif=groupePourZone(section);
  const ouvrirZone=(item:Category)=>{
   const dressed=item==='tenue'||item==='protections';
-  setStep(sectionStep[item]);setSection(item);setExpandedShape(null);recenter('corps');
+  setStep(sectionStep[item]);setSection(item);setExpandedShape(null);recenter(focusForSection(item));
   if(rigMode===dressed){beginRigLoad(look.sex,!dressed,'mode');setRigMode(!dressed);setReport(null);}
  };
  const selectStudioStep=(target:Step,first:Category)=>{
