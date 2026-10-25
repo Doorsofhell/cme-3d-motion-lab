@@ -31,7 +31,7 @@ describe('Studio Coach : cohérence tactile Android',()=>{
   const rig=readFileSync(new URL('./NeutralRig.tsx',import.meta.url),'utf8');
   const framing=readFileSync(new URL('./CadrageSquelette.tsx',import.meta.url),'utf8');
   expect(studio).toContain('focusZone={focusZone} focusRequest={focusRequest}');
-  expect(studio).toContain('setSection(item);setExpandedShape(null);recenter(focusForSection(item))');
+   expect(studio).toContain("setSection(item);setExpandedShape(item==='corps'?'shoulders':item==='silhouette'?'bust':item==='visage'?'jaw':null);recenter(focusForSection(item))");
   expect(studio).toContain('selectFocus(focusForSetting(key,section))');
   expect(studio).toContain('Vue entière');
   expect(studio).toContain('setCameraAuto(false);recenter(\'corps\')');

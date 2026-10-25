@@ -10,6 +10,22 @@ L'utilisateur adopte une méthode **additive en cinq étapes avant tout code** :
 
 **Communication permanente :** choix libre prioritaire, Choix 1 (Recommandé), Choix 2, Choix 3 — quatre commandes cliquables en conclusion et une seule grande question à la fois. Les décisions UX déjà prises (mobile d'abord, viewport fixe, quatre onglets Studio Coach/Mouvements/Galerie/Plus) restent en vigueur. L'organisation des zones anatomiques n'est pas encore décidée.
 
+## Incident Android documenté et lot 0.7.48 : reconstruire réellement l'interface Studio
+
+**Constat transmis le 25/10/2026 :** la capture Android de CME-3D 0.7.47 montre le sélecteur Homme/Femme et les commandes Tenue / Corps neutre / caméra devant le haut du mannequin, les réglages anatomiques repoussés hors du panneau visible et les actions Enregistrer / Tester / Hasard / Nouveau / Supprimer prenant presque tout l'espace inférieur. Cette composition ne respecte pas les neuf maquettes visuelles et empêche la personnalisation fluide.
+
+**1 — Reformulation additive.** Priorité absolue à une interface utilisable avec personnage dégagé. Les arbitrages UX B (Android premium avant nouveaux GLB), A (viewport fixe dominant + panneau contextuel) et A (barre unique Studio Coach, Mouvements, Galerie, Plus) sont conservés.
+
+**2 — Impacts transversaux.** Cause racine : commandes placées dans le même élément que le Canvas, gestion/validation dans le scroll de personnalisation, et anciens sélecteurs CSS concurrents. La refonte sépare les responsabilités de DOM : barre compacte H/F + caméra **hors scène**, viewport Canvas autonome, navigation par groupes et sous-zones fixe en haut du panneau, unique conteneur vertical scrollable de paramètres, validation Enregistrer/Tester dans un pied indépendant, opérations non urgentes dans un volet replié. La caméra/les poses/morphs existants sont réutilisés ; aucun GLB, rig canonique, poids, trajectoire ou atlas n'est modifié.
+
+**3 — Règles d'or.** Shadow demeure en lecture seule et n'est pas modifié. Aucun faux asset de personnalisation, capture vidéo, webcam, mocap ou vision par ordinateur ajouté ; contrôles capillaires sans GLB spécialisé toujours désactivés. FPS, p50/p95, GPU et latence physiques : **Non mesuré**.
+
+**4 — Validation.** Vitest doit garantir l'ordre réel des régions du DOM, l'absence de commandes dans le viewport, le scroll isolé, les quatre onglets et les boutons tactiles d'au moins 44 px ; TypeScript, contrôles GLB, compilation, deux workflows CI verts avant fusion et Pages vérifiée. **Recette manuelle indispensable sur le même smartphone Android que la capture**, aux quatre vues anatomiques, avec clavier/safe-area et navigation Studio→Mouvements→Galerie. La CI ne prouve pas le rendu du téléphone.
+
+**5 — Exécution et documentation.** Lot 0.7.48 : nouveau StudioSceneLibre.css chargé après les anciens styles ; StudioCoach restructuré en coachSceneControls / coachSceneStack / coachEditorScroll / coachEditorFooter et contrôles secondaires repliés. Les 4 familles et 7 sous-zones restent accessibles ; les valeurs et presets anatomiques s'affichent en premier. Le titre mobile redondant est masqué pour rendre plus de place au mannequin. Ce travail porte sur l'interface réellement codée, pas sur une prétendue finalisation de tous les actifs de CME-3D 1.0.
+
+**Suite :** confirmer visuellement sur Android que tête, torse et pieds ne sont plus masqués ; ajuster les proportions du panneau uniquement selon des captures réelles ; maintenir les contrôles sans actifs GLB désactivés.
+
 ## Décision visuelle libre et lot UX 0.7.47 — 25/10/2026
 
 **Arbitrage utilisateur actif :** la priorité visuelle absolue est de rapprocher CME-3D des neuf maquettes transmises, sans présumer l'adoption du toucher direct sur le maillage. Les choix déjà validés demeurent : refonte Android avant moteur 3D définitif ; grande scène fixe dominante en haut ; panneau inférieur contextuel ; une seule navigation inférieure Studio Coach / Mouvements / Galerie / Plus.

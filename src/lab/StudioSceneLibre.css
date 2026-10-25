@@ -1,0 +1,244 @@
+/* CME-3D 0.7.48 : structure de Studio pensée d'abord pour la scène 3D.
+ * Les décisions UX sont appliquées au DOM, et pas seulement par surcouches.
+ * Une unique zone peut défiler : .coachEditorScroll. Le mannequin n'est
+ * recouvert par aucun bouton de personnalisation ou de sauvegarde.
+ */
+.labApp[data-cme-screen="studio"] .coachSceneStack{
+ display:flex;flex-direction:column;min-width:0;min-height:0;overflow:hidden;gap:6px;
+}
+.labApp[data-cme-screen="studio"] .coachSceneControls{
+ flex:0 0 auto;min-width:0;display:flex;align-items:center;
+ justify-content:space-between;gap:8px;padding:1px 3px;
+ background:var(--coach-fond,#11151c);border-radius:12px;
+}
+.labApp[data-cme-screen="studio"] .coachSceneControls .coachSexeVue{
+ position:static!important;inset:auto!important;top:auto!important;
+ left:auto!important;transform:none!important;z-index:auto!important;
+ flex:0 1 auto;max-width:none;width:auto;
+ display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:3px;padding:3px;margin:0;box-shadow:none;
+ background:#212936;border:1px solid #44566c;border-radius:11px;
+}
+.labApp[data-cme-screen="studio"] .coachSceneControls .coachSexeVue button{
+ box-sizing:border-box;min-width:65px;min-height:44px;padding:6px 10px;
+ border:0;border-radius:8px;font-size:12px;
+}
+.labApp[data-cme-screen="studio"] .coachSceneControls .cmeSceneToolbar{
+ position:static!important;inset:auto!important;top:auto!important;
+ left:auto!important;right:auto!important;max-width:none!important;
+ display:flex;align-items:center;justify-content:flex-end;
+ flex:0 0 auto;flex-wrap:nowrap;gap:4px;z-index:auto!important;
+ pointer-events:auto;
+}
+.labApp[data-cme-screen="studio"] .coachSceneControls .cmeSceneToolbarActions{
+ margin:0;display:flex;flex:none;gap:4px;
+}
+.labApp[data-cme-screen="studio"] .coachSceneControls .cmeSceneToolbar button{
+ min-height:44px;min-width:44px;max-width:72px;
+ font-size:12px;padding:6px!important;
+}
+.labApp[data-cme-screen="studio"] .coachSceneStack>.coachPreview:not(.cmeFullscreen):not(:fullscreen){
+ flex:1 1 auto;min-height:0!important;max-height:none!important;
+ width:100%;height:auto!important;position:relative!important;
+ top:auto!important;z-index:1!important;
+ overflow:hidden;box-shadow:0 4px 15px #0005;
+}
+.labApp[data-cme-screen="studio"] .coachSceneStack .coachCanvasViewport{
+ position:absolute;inset:0;width:100%;height:100%;overflow:hidden;
+}
+.labApp[data-cme-screen="studio"] .coachSceneStack .coachCanvasViewport canvas{
+ display:block;width:100%;height:100%;touch-action:none;
+}
+.labApp[data-cme-screen="studio"] .coachEditor{
+ min-height:0;min-width:0;display:flex!important;flex-direction:column;
+ gap:6px;overflow:hidden!important;
+}
+.labApp[data-cme-screen="studio"] .coachEditor>.coachGroupesAnatomiques,
+.labApp[data-cme-screen="studio"] .coachEditor>.coachCategories{
+ flex:0 0 auto;min-width:0;max-width:100%;
+}
+.labApp[data-cme-screen="studio"] .coachEditor>.coachGroupesAnatomiques{margin:0}
+.labApp[data-cme-screen="studio"] .coachEditor>.coachCategories{margin:0}
+.labApp[data-cme-screen="studio"] .coachEditorScroll{
+ flex:1 1 auto;min-width:0;min-height:0;
+ overflow-x:hidden;overflow-y:auto!important;
+ display:flex;flex-direction:column;align-items:stretch;gap:9px;
+ overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+ touch-action:pan-y;scrollbar-width:thin;scrollbar-color:#647085 #212836;
+ padding:5px 3px 8px;outline-offset:-2px;
+}
+.labApp[data-cme-screen="studio"] .coachEditorScroll>.coachFields,
+.labApp[data-cme-screen="studio"] .coachEditorScroll>.coachAdvanced,
+.labApp[data-cme-screen="studio"] .coachEditorScroll>.coachExpertTools{
+ flex:0 0 auto;min-height:0;max-height:none;
+}
+.labApp[data-cme-screen="studio"] .coachEditorScroll .coachShapeZoneCard{
+ min-height:60px;padding:6px 9px;
+}
+.labApp[data-cme-screen="studio"] .coachEditorScroll .coachShapeGroups{gap:7px}
+.labApp[data-cme-screen="studio"] .coachEditorScroll .coachShapeGroup{gap:4px}
+.labApp[data-cme-screen="studio"] .coachEditorScroll .coachShapeZoneCard .coachMorphIllustration{
+ height:50px;width:46px;flex:0 0 46px;
+}
+.labApp[data-cme-screen="studio"] .coachEditorScroll .coachShapePanel{padding:8px}
+.labApp[data-cme-screen="studio"] .coachEditorScroll .coachAvailability{
+ margin:0;padding:7px 9px;font-size:11px;
+}
+.labApp[data-cme-screen="studio"] .coachEditorScroll .coachZoneCourante{
+ margin:0;padding:2px 0 5px;min-height:31px;flex:none;
+}
+.labApp[data-cme-screen="studio"] .coachEditorScroll .coachLiveValues,
+.labApp[data-cme-screen="studio"] .coachEditorScroll .coachPreviewLabel{
+ position:static!important;inset:auto!important;top:auto!important;bottom:auto!important;
+ left:auto!important;right:auto!important;display:block;max-width:100%;
+ width:auto;height:auto;font-size:11px;padding:3px 5px;
+ color:var(--coach-secondaire,#a9b2c0);background:transparent;border:0;box-shadow:none;
+}
+.labApp[data-cme-screen="studio"] .coachEditorScroll .coachModeleAvance .coachRigSwitch{
+ position:static;inset:auto;display:flex;flex-wrap:wrap;gap:5px;margin:6px 0;
+}
+.labApp[data-cme-screen="studio"] .coachEditorScroll .coachModeleAvance .coachRigSwitch button{
+ min-width:110px;min-height:44px;
+}
+.labApp[data-cme-screen="studio"] .coachEditorScroll .coachSecondaryButtons{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:7px;padding:7px;
+}
+.labApp[data-cme-screen="studio"] .coachEditorScroll .coachSecondaryButtons button{
+ min-height:44px;padding:8px;border-radius:9px;
+ background:#283442;color:#e0e9f4;border:1px solid #4b5c73;
+}
+.labApp[data-cme-screen="studio"] .coachEditor>.coachEditorFooter{
+ flex:0 0 auto;position:static!important;bottom:auto!important;
+ z-index:3;margin:0;padding:6px 0 2px!important;
+ display:grid!important;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);
+ gap:7px;overflow:hidden;min-width:0;max-width:100%;
+ background:var(--coach-panneau,#1e232e)!important;
+ border:0!important;border-top:1px solid #344151!important;
+ box-shadow:none!important;
+}
+.labApp[data-cme-screen="studio"] .coachEditor>.coachEditorFooter button{
+ box-sizing:border-box;min-width:0;width:100%;min-height:48px!important;
+ margin:0;border-radius:11px;padding:8px 6px;
+ font-size:12px;line-height:1.2;white-space:normal;
+}
+.labApp[data-cme-screen="studio"] .coachEditor>.coachEditorFooter .coachSave{
+ grid-column:auto!important;order:0!important;
+ background:#df1740!important;color:#fff!important;
+ font-weight:800;font-size:13px;letter-spacing:0;box-shadow:none;
+}
+.labApp[data-cme-screen="studio"] .coachEditor>.coachEditorFooter .coachTest{
+ border:1px solid #4f627a;background:#2c3a4c;color:#e9f3fb;
+ font-weight:700;
+}
+.labApp[data-cme-screen="studio"] .coachEditorFooter button:disabled{
+ opacity:.48;cursor:not-allowed;
+}
+.labApp[data-cme-screen="studio"] .coachStudioHeader{
+ flex:0 0 auto;min-width:0;
+}
+.labApp[data-cme-screen="studio"] .coachStudioHeader h2{
+ font-size:16px;line-height:1.2;margin:0;
+}
+.labApp[data-cme-screen="studio"] .coachStudioHeader small{font-size:9px}
+.labApp[data-cme-screen="studio"] .coachStudioHeader p{display:none}
+.labApp[data-cme-screen="studio"] .coachCreationNote{display:none}
+
+/* Android : scène stable en haut, réglages seuls défilants.
+ * Les anciennes feuilles contiennent des sélecteurs :has() contradictoires :
+ * ceux-ci ont une priorité explicite uniquement dans Studio mobile.
+ */
+@media(max-width:760px){
+ .labApp[data-cme-screen="studio"]{
+  box-sizing:border-box!important;display:flex;flex-direction:column;
+  height:100dvh!important;max-height:100dvh!important;
+  overflow:hidden!important;gap:5px;
+ }
+ .labApp[data-cme-screen="studio"] .cmeAppContent,
+ .labApp[data-cme-screen="studio"] .cmeStudioHub{
+  flex:1 1 auto!important;display:flex!important;flex-direction:column!important;
+  min-height:0!important;height:auto!important;max-height:none!important;
+  overflow:hidden!important;overscroll-behavior:none!important;
+ }
+ .labApp[data-cme-screen="studio"] .cmeStudioHub .coachStudio{
+  box-sizing:border-box;display:flex!important;flex-direction:column!important;
+  flex:1 1 auto!important;min-height:0!important;max-height:100%!important;
+  height:100%!important;overflow:hidden!important;
+  padding:4px 7px 5px!important;gap:5px!important;
+ }
+ .labApp[data-cme-screen="studio"] .cmeStudioHub .coachStudioLayout{
+  display:flex!important;flex-direction:column!important;align-items:stretch;
+  flex:1 1 auto;min-width:0;min-height:0!important;height:100%!important;
+  max-height:100%!important;gap:6px;overflow:hidden!important;
+ }
+ .labApp[data-cme-screen="studio"] .coachSceneStack{
+  flex:1 1 57%;height:auto;min-height:0;max-height:62%;
+  width:100%;gap:5px;
+ }
+ .labApp[data-cme-screen="studio"] .coachSceneControls{
+  flex:0 0 48px;min-height:48px;padding:0 2px;gap:4px;
+ }
+ .labApp[data-cme-screen="studio"] .coachSceneControls .coachSexeVue button{
+  min-width:57px;min-height:44px;font-size:11px;padding:5px 8px;
+ }
+ .labApp[data-cme-screen="studio"] .coachSceneControls .cmeSceneToolbar button{
+  min-width:44px;min-height:44px;padding:5px!important;line-height:1.1;
+ }
+ .labApp[data-cme-screen="studio"] .coachSceneStack>.coachPreview:not(.cmeFullscreen):not(:fullscreen){
+  position:relative!important;flex:1 1 auto!important;
+  min-height:0!important;max-height:none!important;
+  height:auto!important;overflow:hidden!important;
+ }
+ .labApp[data-cme-screen="studio"] .coachEditor{
+  flex:1 1 43%!important;min-height:0!important;
+  max-height:none!important;height:auto!important;
+  overflow:hidden!important;position:relative!important;
+  z-index:1;display:flex!important;flex-direction:column!important;
+  padding:6px 8px 5px!important;gap:5px!important;
+ }
+ .labApp[data-cme-screen="studio"] .coachEditor>.coachGroupesAnatomiques button{
+  min-height:44px!important;padding:4px 1px;
+ }
+ .labApp[data-cme-screen="studio"] .coachEditor>.coachGroupesAnatomiques .coachGroupeIcone{
+  width:22px;height:22px;
+ }
+ .labApp[data-cme-screen="studio"] .coachEditor>.coachCategories button{
+  min-height:44px!important;padding:4px 2px;
+ }
+ .labApp[data-cme-screen="studio"] .coachEditor .coachEditorScroll{
+  min-height:0!important;overflow-y:auto!important;
+  overflow-x:hidden!important;touch-action:pan-y;
+ }
+ .labApp[data-cme-screen="studio"] .coachEditor>.coachEditorFooter{
+  flex:0 0 auto!important;position:static!important;
+  bottom:auto!important;min-height:52px;
+ }
+}
+@media(max-width:360px){
+ .labApp[data-cme-screen="studio"] .coachSceneControls{gap:2px}
+ .labApp[data-cme-screen="studio"] .coachSceneControls .coachSexeVue button{
+  min-width:51px;padding:4px;
+ }
+ .labApp[data-cme-screen="studio"] .coachEditor>.coachEditorFooter button{
+  font-size:11px;padding:6px 4px;
+ }
+}
+@media(max-height:620px) and (max-width:760px){
+ .labApp[data-cme-screen="studio"] .coachSceneStack{flex-basis:52%;max-height:57%}
+ .labApp[data-cme-screen="studio"] .coachEditor{flex-basis:48%!important}
+ .labApp[data-cme-screen="studio"] .coachStudioHeader{display:none}
+}
+
+
+/* Plein écran : sortie accessible même après retrait des barres de la scène. */
+.labApp[data-cme-screen="studio"] .coachFermerPleinEcran{
+ position:absolute;right:10px;top:10px;z-index:30;
+ min-width:98px;min-height:44px;padding:8px 12px;
+ color:#fff;background:#283342e8;border:1px solid #8494a8;
+ border-radius:10px;font-weight:750;
+}
+@media(max-width:760px){
+ .labApp[data-cme-screen="studio"] .coachStudioHeader{display:none!important}
+ .labApp[data-cme-screen="studio"] .coachSceneStack{flex-basis:59%;max-height:66%}
+ .labApp[data-cme-screen="studio"] .coachEditor{flex-basis:41%!important}
+}
