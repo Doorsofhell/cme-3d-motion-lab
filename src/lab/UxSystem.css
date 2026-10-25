@@ -203,3 +203,63 @@
  .labApp .coachCrud{grid-template-columns:repeat(2,minmax(0,1fr))}
  .labApp .coachCrud .coachSave{grid-column:1/-1}
 }
+
+
+/* Android shell v0.7.37: only content scrolls; bottom navigation never does. */
+html,body,#root{height:100%;height:100dvh;overscroll-behavior:none}
+.labApp,.labApp[data-cme-screen="lab"]{
+ display:flex;flex-direction:column;overflow:hidden;min-height:0;
+ height:100dvh;max-height:100dvh;gap:7px;
+}
+.labApp .labHeader{flex:0 0 auto}
+.labApp .cmeAppContent{
+ flex:1 1 auto;min-width:0;min-height:0;width:100%;
+ display:flex;flex-direction:column;gap:10px;
+ overflow-y:auto;overflow-x:hidden;
+ overscroll-behavior-y:contain;
+ scrollbar-gutter:stable;
+ scroll-padding-top:8px;
+ scroll-padding-bottom:18px;
+ -webkit-overflow-scrolling:touch;
+}
+.labApp .cmeAppContent>*{min-width:0}
+.labApp .labTabs,.labApp[data-cme-screen="lab"] .labTabs{
+ order:99;position:relative;bottom:auto;left:auto;right:auto;
+ flex:0 0 auto;z-index:30;margin:0;
+ padding-bottom:max(6px,env(safe-area-inset-bottom));
+}
+.labApp .cmeStudioHub{overflow:visible!important;flex:0 0 auto;min-height:auto}
+.labApp .cmeStudioHub .coachStudio{overflow:visible!important;flex:0 0 auto}
+.labApp .cmeAppContent .versionsPanel,.labApp .cmeAppContent .roadmapPanel,
+.labApp .cmeAppContent .cmeTechnicalScreen,.labApp .cmeAppContent .cmeOtherScreen,
+.labApp .cmeAppContent .cmeOptions,.labApp .cmeAppContent .engineComparison,
+.labApp .cmeAppContent .tracker{
+ overflow:visible;max-height:none;flex:0 0 auto;min-height:0;
+}
+.labApp .cmeAppContent .cmeReview{flex:0 0 auto;max-height:none}
+.labApp .cmeAppContent .cmeReviewList{overscroll-behavior:contain}
+.labApp .cmeAppContent .stage{flex:none}
+.labApp .coachShapeZoneCard,.labApp .coachShapeOption,.labApp .cmeReviewList button,
+.labApp .coachCrud button,.labApp .labTabs>button{touch-action:manipulation}
+.labApp .cmeAppContent .paletteBackdrop{z-index:80}
+.labApp .cmeAppContent .coachPreview canvas,.labApp .stage canvas{touch-action:none}
+@media(max-width:760px){
+ .labApp .cmeAppContent{gap:8px;scrollbar-gutter:auto}
+ .labApp .labTabs{margin:0!important;min-height:64px;padding:4px 3px max(5px,env(safe-area-inset-bottom))}
+ .labApp .labTabs>button{min-height:49px!important;font-size:19px!important}
+ .labApp .quickBar{grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch}
+ .labApp .quickBar label{min-height:48px}
+ .labApp .cmeCurrentMotion{grid-column:1/-1;min-height:50px}
+ .labApp .transportMain{flex-wrap:wrap;row-gap:9px}
+ .labApp .transportMain .seek{flex:1 1 45%;min-width:100px}
+ .labApp .compareBar{flex-wrap:wrap}
+ .labApp .compareBar .switchGroup{flex:1 1 100%;min-height:43px}
+ .labApp .cmeReviewFilters{width:100%}
+ .labApp .cmeStudioHub .coachPreview:not(.cmeFullscreen):not(:fullscreen){
+  position:sticky;top:0;z-index:12;
+ }
+}
+@media(max-width:370px){
+ .labApp .labTabs button span{font-size:8.5px!important}
+ .labApp .cmeAppContent .transportMain{gap:5px}
+}

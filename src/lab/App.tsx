@@ -304,6 +304,7 @@ export function App(){
    <div className="headerActions"><span className="liveTag"><i/> Moteur local</span></div>
   </header>
   
+  <div key={tab} className="cmeAppContent" role="region" aria-label="Contenu de la rubrique active" tabIndex={-1}>
   <div className="labContent" style={{display:tab==='lab'?'contents':'none'}}>
   <section className="quickBar" aria-label="Sélection de test">
    <label><span>Coach · {savedCoaches.length} personnalisé(s)</span><select aria-label="Coach" value={selectedCoach?'saved:'+selectedCoach.id:actor} onChange={e=>{
@@ -373,6 +374,7 @@ export function App(){
   </section>}
   {tab==='tracking'&&<IssueTracker drafts={pendingDrafts} onDismiss={autoDismiss} onClear={autoClear} onCopyReport={exportReport} {...known}/>}
   {tab==='comparison'&&<ComparisonPanel metrics={metrics} report={report} snapshot={comparisonSnapshot} actor={actor==='mma-amara'?'Amara':'Kadir'} discipline={discipline} technique={techniqueLabel} renderStyle={renderStyle} onOpenLab={()=>setTab('lab')} onCopyReport={exportReport}/>}
+  </div>
   {tab==='technical'&&catalogOpen&&<div className="paletteBackdrop" onClick={()=>setCatalogOpen(false)}>
     <section className="catalogPalette" role="dialog" aria-label="Catalogue complet des techniques" onClick={e=>e.stopPropagation()}>
       <div className="paletteTitle"><strong>{catalogMode==='sequences'?'Enchaînements expérimentaux · '+visibleSequences.length:'Techniques · '+palette.length+' / '+techniques.length}</strong><button aria-label="Fermer le catalogue" onClick={()=>setCatalogOpen(false)}>×</button></div>
