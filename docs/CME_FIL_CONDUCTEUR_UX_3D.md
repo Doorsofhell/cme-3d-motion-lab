@@ -1,10 +1,16 @@
 # Fil conducteur CME-3D — 2026-10-24
 
+## Décision confirmée — 25/10/2026 : **choix A, quatre onglets de navigation**
+
+La barre principale Android est **unique et fixe** dans l'ordre **Studio Coach → Mouvements → Galerie → Plus**. Dans **Plus** sont rangés, **sans aucune perte de fonctionnalité**, le Comparatif CME/Shadow (Shadow en lecture seule), l'Atlas biomécanique, le Laboratoire de diagnostic et mesures, les options, incidents, versions/nouveautés et utilitaires. Studio garde la grande scène 3D fixe et le panneau contextuel bas déjà validés ; Mouvements reprend le coach courant avec un sélecteur des animations réellement exécutables ; Galerie retrouve et gère les profils. Pas de second lecteur ni de cinquième barre.
+
+**Décision active** : elle supplante les nombreuses anciennes configurations d'onglets mentionnées ci-dessous, qui demeurent **des jalons historiques et non des consignes actuelles**. Référence : [`CME3D_SCHEMA_DIRECTEUR_1_0.md`](CME3D_SCHEMA_DIRECTEUR_1_0.md), section 1 ter. **Prochaine question exclusivement :** quelle organisation des zones du corps et des commandes du panneau de personnalisation, avec **choix libre en premier** puis boutons cliquables A/B/C. Le code applicatif actuel n'est pas encore déclaré refondu par ce lot documentaire.
+
 ## Décision UX confirmée — 25/10/2026 : **architecture Studio mobile A**
 
 Le commanditaire a validé sans ambiguïté l'option **A** : **viewport 3D fixe et dominant en haut**, **panneau inférieur de personnalisation contextuel**, **navigation inférieure unique**. Ce choix complète la priorité produit **B** (refonte UX avant futurs actifs anatomiques/animations), et ne doit plus être remis au vote. La composition détaillée, les contraintes de scène persistante, safe-area, cibles tactiles, défilement contenu aux réglages et les gates UX-G figurent dans [`CME3D_SCHEMA_DIRECTEUR_1_0.md`](CME3D_SCHEMA_DIRECTEUR_1_0.md), section 1 bis.
 
-**Prochaine décision stratégique uniquement :** destinations et libellés de la navigation inférieure principale. Choix libre prioritaire, puis boutons A/B/C. Ne pas supposer le choix de navigation ni considérer le Studio comme déjà reconstruit : ce jalon modifie la doctrine documentaire, pas l'application runtime.
+**Décision suivante désormais validée le 25/10/2026 :** les onglets sont **Studio Coach / Mouvements / Galerie / Plus** dans cet ordre. Le **prochain arbitrage non tranché** concerne la navigation anatomique interne au Studio. Choix libre prioritaire, puis boutons A/B/C. Ne pas confondre cette doctrine documentaire avec la reconstruction runtime.
 
 ## Décision confirmée — 25/10/2026 : priorité B, refonte mobile premium avant actifs et animations
 

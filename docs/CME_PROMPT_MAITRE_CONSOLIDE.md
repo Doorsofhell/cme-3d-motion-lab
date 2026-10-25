@@ -2,17 +2,30 @@
 
 > **Document directeur actif.** Les décisions historiques figurent intégralement plus bas : elles restent applicables sauf arbitrage explicitement documenté. V1.0 est une **cible produit**, pas une certification de livraison.
 
+## ARBITRAGE DE NAVIGATION VALIDÉ — 25/10/2026 : **choix A, quatre onglets**
+
+**Référence active et prioritaire sur tous les fragments historiques incompatibles ci-dessous :** la barre de navigation Android est **unique**, fixe en bas, avec **exactement quatre onglets ordonnés : Studio Coach → Mouvements → Galerie → Plus**. Le Comparatif **CME/Shadow** (Shadow strictement en lecture seule), l'**Atlas biomécanique** et **toutes les fonctionnalités techniques** (Laboratoire, performances, diagnostics, incidents, options, nouveautés, cache, aide et exports autorisés) restent accessibles dans **Plus**, sans retrait, perte de mesures ou création d'un cinquième onglet.
+
+- **Studio Coach** : édition du même coach dans la grande scène 3D supérieure fixe, panneau anatomique inférieur contextuel, raccourci vers Mouvements.
+- **Mouvements** : sélection discipline/technique/enchaînement disponible, exécution, pause, vitesse et caméra ; reprend le coach en cours, sans doublon de lecteur.
+- **Galerie** : enregistrer, retrouver, éditer, dupliquer, supprimer et tester les profils ; données et brouillons cohérents avec Studio et Mouvements.
+- **Plus** : routes secondaires pour Comparatif, Atlas, diagnostics, options et outils existants. Ne jamais confondre déplacement de menu et abandon de fonctionnalité.
+
+**Priorités précédentes préservées :** option B (refonte UX mobile avant nouveaux GLB et animations), option A pour la mise en page (viewport 3D fixe dominant + panneau de réglages inférieur), composants partagés, Android, parité anatomique H/F adaptée au sexe, sécurité et non-régression Shadow. Voir les sections 1 bis et **1 ter** de [`CME3D_SCHEMA_DIRECTEUR_1_0.md`](CME3D_SCHEMA_DIRECTEUR_1_0.md).
+
+**Prochaine question stratégique, et elle seule :** comment sélectionner les zones anatomiques et présenter leurs réglages dans le panneau inférieur (sélection libre directe par zones / parcours guidé / combinaison des deux). **Choix libre PRIORITAIRE**, puis options cliquables. Les quatre onglets ne doivent plus être soumis au vote. **Ce lot modifie les décisions documentées, pas l'interface runtime ; ne pas annoncer la refonte déjà déployée.**
+
 ## ARBITRAGE UX VALIDÉ — 25/10/2026 : **choix A, Studio Coach scène fixe + panneau inférieur**
 
 **Décision active complétant la priorité B déjà validée.** Le Studio Coach Android adopte un **grand viewport 3D fixe et dominant dans la zone haute**, des **réglages anatomiques contextuels dans un panneau inférieur** et **une seule barre de navigation principale fixe tout en bas**. L'interface doit rester proche de la composition des maquettes fournies sans copier leurs assets. Aucun réglage ne doit déplacer la scène hors écran ; le panneau peut défiler ou être étendu de manière maîtrisée, mais le personnage reste visible en édition. Caméra 360°, zoom par zone, boutons ≥44 px, safe-areas Android, validation primaire distincte du quai, composants réutilisés, rendu homme/femme cohérent, état partagé Studio/Galerie/Mouvements, non-régression des modèles et des animations actuels. Détails, contraintes et tests d'acceptation : [`CME3D_SCHEMA_DIRECTEUR_1_0.md`](CME3D_SCHEMA_DIRECTEUR_1_0.md), section « 1 bis ».
 
-**Décision encore ouverte :** choix des **destinations et libellés** de la barre basse unique (et non plus l'agencement du Studio, définitivement arbitré). Une seule prochaine question majeure, choix libre **d'abord**, puis deux/trois boutons effectifs. Ne pas confondre validation du schéma avec implémentation du nouveau layout : aucun changement runtime requis par ce lot documentaire.
+**Décision ultérieure du 25/10/2026 :** le choix des destinations est désormais **tranché : Studio Coach, Mouvements, Galerie, Plus** ; cette liste fixe remplace toute autre variante décrite dans les anciennes sections. Le prochain arbitrage porte sur les **zones anatomiques du panneau inférieur**. Une seule prochaine question majeure, choix libre **d'abord**, puis options cliquables. La validation du schéma ne constitue pas une implémentation du layout.
 
 ## ARBITRAGE STRUCTURANT VALIDÉ — 25/10/2026 : option B, **refonte UX Android premium d'abord**
 
 **Décision prioritaire et active.** Le schéma directeur actuel est [`docs/CME3D_SCHEMA_DIRECTEUR_1_0.md`](CME3D_SCHEMA_DIRECTEUR_1_0.md). Le commanditaire privilégie **la reconstruction de l'expérience mobile inspirée des maquettes fournies**, **puis** l'intégration des nouveaux modèles anatomiques organiques et des animations avancées. Priorité d'exécution : UX architecture → design system → Studio Coach → parcours Mouvements/Galerie → recette UX Android → actifs organiques H/F → retargeting/motions → sortie 1.0. Corriger les bugs bloquants sans dévier vers une refonte du moteur non encore choisie. Maintenir entre-temps tous les modèles et mouvements existants sans régression.
 
-**Mise à jour du 25/10/2026 :** l'agencement d'écran Studio a désormais été validé séparément (choix **A** décrit ci-dessus). Le **prochain arbitrage** porte sur les destinations et libellés de la navigation inférieure unique. Les futurs actifs 3D et le nombre exact d'onglets ne sont pas encore arrêtés. Une seule question stratégique à la fois, **choix libre prioritaire en premier, puis options cliquables**. Les décisions antérieures sont intégralement conservées.
+**Mise à jour cumulée du 25/10/2026 :** l'agencement du Studio est validé en **A** (viewport fixe dominant + panneau inférieur) et les **quatre onglets** en **A** (Studio Coach, Mouvements, Galerie, Plus). Les futurs actifs 3D restent à planifier après le lot UX. **Prochaine décision : organisation des zones anatomiques dans le panneau inférieur**, choix libre prioritaire puis options cliquables. Les anciennes variantes sont conservées uniquement en tant qu'historique.
 
 ## 1. But unique et promesse
 **Créer, examiner et valider un combattant 3D humain crédible, de son apparence à ses mouvements, dans un seul atelier mobile.** CME-3D n'est ni une application d'entraînement ni un clone de Shadow : c'est un **atelier de création de coachs et de validation biomécanique**. Les mouvements doivent être naturels, fluides, compréhensibles, traçables et reproductibles.
@@ -25,7 +38,7 @@
 5. **Plus** : nouveautés, incidents, centre technique, options, diagnostics avancés. Aucun outil technique ne surcharge le parcours principal.
 
 ## 3. Navigation et design
-- Barre basse unique : **Studio, Galerie Coachs, Comparatif, Plus** ; jamais deux barres concurrentes.
+- Barre basse unique **approuvée le 25/10/2026** : **Studio Coach, Mouvements, Galerie, Plus**. Comparatif CME/Shadow, Atlas et technique accessibles depuis Plus ; jamais deux barres concurrentes.
 - Studio possède **deux modes visibles** : Création et Test. La scène reste dominante ; les réglages ne doivent pas faire disparaître l'aperçu pendant une manipulation tactile.
 - Interface mobile portrait Android d'abord ; pas de chevauchements, de commandes coupées, ni de scroll horizontal accidentel ; gestes tactiles robustes, cibles de 44 px minimum.
 - Identité Dark Combat Premium, finition contemporaine et lisible ; inspiration BetterMe limitée à l'ergonomie. Textes et labels **uniquement en français**.
