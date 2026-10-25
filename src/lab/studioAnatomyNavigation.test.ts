@@ -15,9 +15,9 @@ describe('Studio premium 0.7.47 — référence visuelle et commande réelles',(
   expect(studio).toContain('groupeActif.zones.includes(item)');
   expect(studio).toContain('<AnatomyIcon zone={groupe.icone}');
  });
- it('garde une scène sombre et la sélection homme/femme dans le viewport',()=>{
+ it('garde une scène sombre et la sélection homme/femme sans masquage',()=>{
   expect(studio).toContain('coachQuickChoice coachSexeVue');
-  expect(studio).toContain('#151921');
+  expect(studio).toContain('#090b0f');
   expect(css).toContain('.coachGroupesAnatomiques button');
   expect(css).toContain('min-height:54px');
   expect(css).toContain('coachSexeVue button');

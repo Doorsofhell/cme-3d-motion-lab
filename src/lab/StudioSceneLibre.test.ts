@@ -6,7 +6,7 @@ describe('Studio 0.7.48 — scène sans masquage',()=>{
  const studio=read('StudioCoach.tsx'),css=read('StudioSceneLibre.css');
  it('affiche le choix Homme/Femme et les commandes caméra en dehors du Canvas',()=>{
   const bar=studio.indexOf('className="coachSceneControls"');
-  const scene=studio.indexOf('className="coachSceneStack"');
+  const scene=studio.indexOf('className="coachSceneStack sculptorSceneArea"');
   const viewport=studio.indexOf('aria-label="Aperçu 3D du mannequin');
   const edit=studio.indexOf('className="coachEditor sculptorDashboard"');
   expect(scene).toBeGreaterThan(0);
@@ -39,7 +39,7 @@ describe('Studio 0.7.48 — scène sans masquage',()=>{
  it('limite le pied du panneau aux deux actions importantes',()=>{
   expect(studio).toContain('coachSecondaryActions');
   expect(studio).toContain('Autres actions · nouveau, aléatoire et suppression');
-  expect(studio.match(/className="coachSave"/g)).toHaveLength(1);
+  expect(studio.match(/className="coachSave sculptorCommit"/g)).toHaveLength(1);
   expect(studio.match(/className="coachTest"/g)).toHaveLength(1);
   expect(css).toContain('coachEditorFooter');
   expect(css).toContain('position:static!important');
