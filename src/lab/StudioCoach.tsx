@@ -286,7 +286,7 @@ export function StudioCoach(){
      changerFilDeFer={()=>setFilDeFer(v=>!v)}/>
    </div>
    </div>
-   <div className="coachEditor">
+   <div className="coachEditor sculptorDashboard">
 
   
   <p className="coachCreationNote">Création en pose neutre : choisissez une zone et sa forme. Pour exécuter ou valider des techniques, ouvrez <strong>Mouvements</strong>.</p>
