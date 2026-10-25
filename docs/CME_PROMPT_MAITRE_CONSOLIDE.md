@@ -2,6 +2,18 @@
 
 > **Document directeur actif.** Les décisions historiques figurent intégralement plus bas : elles restent applicables sauf arbitrage explicitement documenté. V1.0 est une **cible produit**, pas une certification de livraison.
 
+## Protocole permanent validé le 25/10/2026
+
+**Méthode préalable à toute évolution, en français :** 1. Reformuler la demande comme un ajout et préserver les décisions validées. 2. Étudier les impacts sur UX Android, maillage GLB/rigging, biomécanique, FPS/GPU et composants partagés. 3. Vérifier les règles ci-dessous. 4. Prévoir Vitest, TypeScript, CI verte, test visuel sur Android réel et zones tactiles d'au moins 44 px. 5. Mettre à jour le schéma directeur et le fil conducteur.
+
+**Règles impératives :** le dépôt `Doorsofhell/combat-shadow-studio` reste exclusivement en lecture seule. Aucun paramètre de coupe, visage, morphologie, vêtement ou couleur n'est actif sans ressource 3D et rendu réellement compatibles avec le modèle chargé ; sinon désactiver la commande avec une explication. Ni volume simulé par recoloration, ni géométrie approximative présentée comme un actif GLB professionnel. Les adaptations d'apparence ne modifient ni squelette canonique, ni poids de skinning, ni trajectoires. Aucune caméra utilisateur, captation ou analyse vidéo, mocap ou vision par ordinateur. Aucune mesure FPS, latence ou GPU inventée : afficher « Non mesuré » en l'absence de données.
+
+**Dette à auditer dans un lot technique séparé :** les coiffures procédurales et certains réglages de secours de `src/lab/coachHair.ts`, `src/lab/coachFaceGeometry.ts` et `src/lab/StudioCoach.tsx` devront être confrontés aux vrais actifs disponibles. Une option non réellement prise en charge sera désactivée, sans retirer les possibilités garanties par le GLB. Cette règle documentaire ne vaut pas correction déjà réalisée.
+
+**Décisions conservées :** refonte UX mobile avant nouveaux modèles et animations ; grand viewport fixe, panneau contextuel inférieur ; navigation unique **Studio Coach, Mouvements, Galerie, Plus**, avec Comparatif CME/Shadow et Atlas dans Plus. L'organisation des zones anatomiques reste à trancher.
+
+**Communication obligatoire :** terminer chaque réponse avec quatre choix cliquables, dans cet ordre et sous ces libellés : **Choix libre prioritaire**, **Choix 1 (Recommandé)**, **Choix 2**, **Choix 3**. Ne poser qu'une grande question à la fois. Ne jamais confondre documenté, codé, CI verte, fusionné, déployé et testé physiquement sur Android.
+
 ## ARBITRAGE DE NAVIGATION VALIDÉ — 25/10/2026 : **choix A, quatre onglets**
 
 **Référence active et prioritaire sur tous les fragments historiques incompatibles ci-dessous :** la barre de navigation Android est **unique**, fixe en bas, avec **exactement quatre onglets ordonnés : Studio Coach → Mouvements → Galerie → Plus**. Le Comparatif **CME/Shadow** (Shadow strictement en lecture seule), l'**Atlas biomécanique** et **toutes les fonctionnalités techniques** (Laboratoire, performances, diagnostics, incidents, options, nouveautés, cache, aide et exports autorisés) restent accessibles dans **Plus**, sans retrait, perte de mesures ou création d'un cinquième onglet.
