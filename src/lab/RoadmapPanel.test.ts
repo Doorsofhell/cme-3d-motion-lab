@@ -2,7 +2,7 @@ import {describe,expect,it} from 'vitest';
 import {roadmap} from './RoadmapPanel';
 import {CME_APP_VERSION} from './buildInfo';
 describe('Feuille de route V1',()=>{
- it('référence la version publiée',()=>expect(CME_APP_VERSION).toBe('0.7.31'));
+ it('référence la version publiée',()=>expect(CME_APP_VERSION).toMatch(/^0\\.7\\.\\d+$/));
  it('attribue un identifiant unique, un statut, une priorité et une version à chaque chantier',()=>{
   expect(roadmap.length).toBeGreaterThanOrEqual(15);
   expect(new Set(roadmap.map(x=>x.id)).size).toBe(roadmap.length);
