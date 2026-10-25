@@ -1,0 +1,24 @@
+{
+  "id": "skin",
+  "version": 1,
+  "groups": [
+    {
+      "id": "skin",
+      "label": "Carnation",
+      "driver": "materialColor",
+      "type": "color_hex"
+    },
+    {
+      "id": "eyeColor",
+      "label": "Iris",
+      "driver": "materialColor",
+      "type": "color_hex"
+    },
+    {
+      "id": "hairColor",
+      "label": "Cheveux",
+      "driver": "materialColor",
+      "type": "color_hex"
+    }
+  ]
+}
