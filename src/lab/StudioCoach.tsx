@@ -20,6 +20,8 @@ import {PrecisionSlider,type PrecisionTone} from './PrecisionSlider';
 import {SculptorViewportTools} from './SculptorViewportTools';
 import {SculptorWireframe} from './SculptorWireframe';
 import {GROUPES_ANATOMIQUES,groupePourZone,type ZoneAnatomique} from './studioAnatomyNavigation';
+import {regionsPourGroupe,type SculptorRegion} from './sculptorRegions';
+import {SculptorRegionIcon} from './SculptorRegionIcon';
 import {resolvedProportions} from './coachProportions';
 import {LIMITS} from './anatomicalHarmony';
 import {EYE_TONES,HAIR_TONES} from './appearancePalettes';
@@ -183,12 +185,19 @@ export function StudioCoach(){
   setStep(sectionStep[item]);setSection(item);setExpandedShape(item==='corps'?'shoulders':item==='silhouette'?'bust':item==='visage'?'jaw':null);recenter(focusForSection(item));
   if(rigMode===dressed){beginRigLoad(look.sex,!dressed,'mode');setRigMode(!dressed);setReport(null);}
  };
+ const ouvrirCible=(cible:SculptorRegion)=>{
+  ouvrirZone(cible.zone);
+  if(cible.forme){
+   setExpandedShape(cible.forme);
+   recenter(focusForSetting(cible.forme,cible.zone));
+  }
+ };
  const selectStudioStep=(target:Step,first:Category)=>{
   setStep(target);setSection(first);setExpandedShape(null);recenter('corps');
   if(target==='equipement'&&rigMode){beginRigLoad(look.sex,false,'mode');setRigMode(false);setReferenceMode(false);setReport(null);}
   if(target!=='equipement'&&!rigMode){beginRigLoad(look.sex,true,'mode');setRigMode(true);setReport(null);}
  };
- const shapePicker=(ids:string[])=><div className="coachShapeGroups">{activeShapeGroups(look.sex).filter(g=>ids.includes(g.id)).map(g=>{
+ const shapePicker=(ids:string[])=><div className="coachShapeGroups">{activeShapeGroups(look.sex).filter(g=>ids.includes(g.id)&&(!expandedShape||(!ids.includes(expandedShape)&&expandedShape!=='height')||g.id===expandedShape)).map(g=>{
   const enabled=isShapeSupported(g);
   const selected=g.presets.reduce((best,p)=>Math.abs(p.value-look[g.id])<Math.abs(best.value-look[g.id])?p:best,g.presets[0]);
   const open=expandedShape===g.id;
@@ -205,10 +214,10 @@ export function StudioCoach(){
  })}</div>;
  const precisionTone=(key:keyof CoachLook):PrecisionTone=>['muscle','thighs','calves','roundness'].includes(key)?'orange':['waist','bust','hips','glutes','jaw'].includes(key)?'rouge':'cyan';
  const range=(key:'height'|'shoulders'|'muscle'|'waist'|'roundness'|'hips'|'glutes'|'thighs'|'arms'|'calves'|'bust'|'jaw'|'nose'|'eyes',label:string,min:number,max:number,enabled=true)=>
-  <PrecisionSlider label={label} valeur={look[key]} minimum={min} maximum={max}
+  (expandedShape&&expandedShape!==key&&(['corps','visage','silhouette'] as Category[]).includes(section)?null:<PrecisionSlider label={label} valeur={look[key]} minimum={min} maximum={max}
    actif={enabled} couleur={precisionTone(key)}
    affichage={key==='height'&&Number(identity.heightCm)>0?(Number(identity.heightCm)*look.height/100).toFixed(2)+' m':undefined}
-   changer={v=>{selectFocus(focusForSetting(key,section));update(key,v);}}/>;
+   changer={v=>{selectFocus(focusForSetting(key,section));update(key,v);}}/>);
  const color=(key:'skin'|'eyeColor'|'hairColor'|'topColor'|'bottomColor'|'gloveColor'|'shinColor',label:string)=>
   <label className="coachColor"><span>{label}{!colorAvailable(key)&&<small> · maillage non identifié</small>}</span>
    <input type="color" disabled={!colorAvailable(key)} value={look[key]} onFocus={()=>selectFocus(focusForSetting(key,section))} onChange={e=>update(key,e.target.value)}/></label>;
@@ -300,9 +309,11 @@ export function StudioCoach(){
     <div className="sculptorDashboardBody">
       <aside className="sculptorYAxis" aria-label="Sous-catégories anatomiques">
       <nav className="coachCategories" aria-label="Zones anatomiques">
-     {sections.filter(item=>groupeActif.zones.includes(item)).map(item=><button type="button" key={item}
-       className={section===item?'active':''} aria-current={section===item?'true':undefined}
-       onClick={()=>ouvrirZone(item)}><AnatomyIcon zone={item} className="coachCategoryIcon"/><span>{sectionNames[item]}</span></button>)}
+     {regionsPourGroupe(groupeActif.id).map(cible=><button type="button" key={cible.id}
+       className={(cible.forme?section===cible.zone&&expandedShape===cible.forme:section===cible.zone)?'active':''}
+       aria-current={(cible.forme?section===cible.zone&&expandedShape===cible.forme:section===cible.zone)?'true':undefined}
+       title={cible.libelle} aria-label={'Personnaliser '+cible.libelle}
+       onClick={()=>ouvrirCible(cible)}><SculptorRegionIcon cible={cible}/><span>{cible.libelle}</span></button>)}
     </nav>
     </aside>
       <div className="sculptorDashboardWorkspace">
