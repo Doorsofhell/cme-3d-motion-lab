@@ -9,10 +9,11 @@ import {MotionSampler} from '../shadow-engine/motion';
 import {SequenceSampler} from './ComplexSequences';
 import {studioTechniqueCatalog,studioMotionOptions} from './studioTechniqueCatalog';
 import {restoreReferencePose} from './restorePose';
-import {applyNeutralAppearance,applyNeutralRigMaterials,prepareEditableNeutralBody,inspectCoachMaterialZones,type NeutralAppearance} from './neutralAppearance';
+import {applyNeutralAppearance,applyNeutralRigMaterials,prepareEditableNeutralBody,applyAnatomicalMannequinMaterials,inspectCoachMaterialZones,type NeutralAppearance} from './neutralAppearance';
 import {applyCoachLookGeometry,inspectCoachShapes,type CoachFaceShape,type CoachBodyShape} from './coachGeometry';
 import {CadrageSquelette} from './CadrageSquelette';
 import type {StudioFocusZone} from './studioFocus';
+import type {AnatomicalView} from './AnatomicalReference';
 import {attachOutfit} from '../adapters/outfits';
 
 export const LAB_DISCIPLINES=['boxing','kickboxing','muaythai','mma','bjj','judo'] as const;
@@ -33,7 +34,7 @@ export type NeutralRigReport={sex:NeutralSex;discipline:LabDiscipline;motion:str
  */
 type NeutralRigProps={
  sex:NeutralSex;discipline:LabDiscipline;motionId:string;playing:boolean;speed:number;showSkeleton:boolean;
- onReport:(r:NeutralRigReport)=>void;creationPose?:boolean;noGi?:boolean;appearance?:NeutralAppearance;proportions?:CoachBodyShape & {height:number};face?:CoachFaceShape;autoCadrage?:boolean;focusZone?:StudioFocusZone;focusRequest?:number;mode?:'neutral'|'appearance'|'creator';
+ onReport:(r:NeutralRigReport)=>void;creationPose?:boolean;noGi?:boolean;appearance?:NeutralAppearance;proportions?:CoachBodyShape & {height:number};face?:CoachFaceShape;autoCadrage?:boolean;focusZone?:StudioFocusZone;focusRequest?:number;mode?:'neutral'|'appearance'|'creator'|'mannequin';orientation?:AnatomicalView|null;
 };
 /** Appearance uses a genuine, already-shipped outfit GLB.
  * Neutral anatomy does not fetch or display an outfit.
@@ -47,7 +48,7 @@ function OutfittedRig(props:NeutralRigProps){
  const {scene}=useGLTF(url,import.meta.env.BASE_URL+'draco/');
  return <RigBody {...props} outfitScene={scene}/>;
 }
-function RigBody({sex,discipline,motionId,playing,speed,showSkeleton,onReport,creationPose=false,appearance,proportions,face,autoCadrage=false,focusZone,focusRequest=0,mode='neutral',outfitScene}:NeutralRigProps & {outfitScene?:Object3D}){
+function RigBody({sex,discipline,motionId,playing,speed,showSkeleton,onReport,creationPose=false,appearance,proportions,face,autoCadrage=false,focusZone,focusRequest=0,mode='neutral',orientation=null,outfitScene}:NeutralRigProps & {outfitScene?:Object3D}){
  const url=import.meta.env.BASE_URL+'fighters/'+NEUTRAL_ASSETS[sex]+'/photo.glb';
  const gltf=useGLTF(url,import.meta.env.BASE_URL+'draco/');
  const scene=useMemo(()=>{
@@ -71,6 +72,7 @@ function RigBody({sex,discipline,motionId,playing,speed,showSkeleton,onReport,cr
   if(mode==='appearance'&&outfitScene)attachOutfit(root,outfitScene,true);
   if(mode==='neutral')applyNeutralRigMaterials(root);
   if(mode==='creator')prepareEditableNeutralBody(root);
+  if(mode==='mannequin')applyAnatomicalMannequinMaterials(root);
   return root;
  },[gltf.scene,mode,sex,outfitScene]);
  const appearanceSupport=useMemo(()=>({
@@ -78,7 +80,7 @@ function RigBody({sex,discipline,motionId,playing,speed,showSkeleton,onReport,cr
  }),[scene]);
  useLayoutEffect(()=>{if(mode==='appearance'||mode==='creator')applyNeutralAppearance(scene,appearance);},[scene,appearance,mode]);
  useLayoutEffect(()=>{
-  if(mode==='appearance'||mode==='creator'){
+  if(mode==='appearance'||mode==='creator'||mode==='mannequin'){
    applyCoachLookGeometry(scene,{
     height:proportions?.height??1,
     shoulders:proportions?.shoulders??1,
@@ -129,5 +131,5 @@ function RigBody({sex,discipline,motionId,playing,speed,showSkeleton,onReport,cr
   if(!creationPose)rig.apply(sampler.sample(time.current));
   if(showSkeleton)skeleton.updateMatrixWorld(true);
  });
- return <group><primitive object={scene}/><CadrageSquelette racine={scene} actif={autoCadrage} zone={focusZone} refocus={focusRequest}/>{showSkeleton&&<primitive object={skeleton}/>}</group>;
+ return <group><primitive object={scene}/><CadrageSquelette racine={scene} actif={autoCadrage} zone={focusZone} refocus={focusRequest} orientation={orientation}/>{showSkeleton&&<primitive object={skeleton}/>}</group>;
 }

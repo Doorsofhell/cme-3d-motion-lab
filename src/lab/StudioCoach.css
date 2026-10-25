@@ -236,3 +236,16 @@
 .coachAccessoryToggle span{font-size:13px;font-weight:700}
 .coachAccessoryToggle small{font-size:11px;color:#68768a}
 .coachIdentityFields label select{min-height:44px;max-width:100%;color:#293749;background:#f8faff;border:1px solid #ccd7e5;border-radius:10px;padding:8px}
+
+
+
+/* CME 0.7.41 : des commandes accessibles, hors superposition 3D sur Android. */
+.coachAnatomicalReferenceSwitch{display:flex;flex-direction:column;gap:5px;padding:8px 10px;border:1px solid #d7dfeb;background:#f2f5fa;border-radius:12px}
+.coachAnatomicalReferenceSwitch button{min-height:44px;border:1px solid #a4b1c2;background:#fff;color:#263448;border-radius:10px;padding:8px 10px;font-weight:650}
+.coachAnatomicalReferenceSwitch button[aria-pressed="true"]{background:#29364a;color:#fff}
+.coachAnatomicalReferenceSwitch small{color:#586a82;font-size:11px;line-height:1.4}
+.coachReferenceViews{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+.coachReferenceViews button{min-width:0;min-height:44px;padding:6px 4px;border-radius:10px;border:1px solid #bbc8da;background:#f6f8fc;color:#2f4159;font-size:12px;font-weight:650;white-space:normal}
+.coachReferenceViews button[aria-pressed="true"]{background:#344760;color:white}
+@media(max-width:420px){.coachReferenceViews{grid-template-columns:repeat(2,minmax(0,1fr))}}
+

@@ -216,3 +216,7 @@ Parité de fonctionnalités homme/femme avec variation anatomique crédible et d
 
 ## 25/10/2026 — mode Créateur neutre séparé de l'anatomie technique
 En Studio, l'humanoïde neutre est la source principale éditable de la morphologie et de la peau (textures GLB intactes) ; seul le mode Tenue charge les équipements. Ne jamais neutraliser les matériaux en gris pendant la création. Respecter les décisions précédentes de parité des catégories homme/femme et les profils JSON, mensurations, latéralité, vêtements/accessoires et palette humain/animation (#115). À l'ouverture de chaque rubrique, cadrer le corps complet; zoomer seulement sur une forme précise. Compatibilité ancienne des profils maintenue. Affichage de capacités réel, sans morphs faciaux ou coiffures imaginaires. Aucun changement des mouvements canoniques ou de Shadow.
+
+
+## Ajout impératif — 25/10/2026 · Référence anatomique premium
+Lire et appliquer `docs/ANATOMIE_MANNEQUINS_PREMIUM_0741.md` : deux bases H/F organiques inspirées des quatre vues utilisateur, morphs vrais et liés, modes mannequin gris/peau/tenue, caméra 360°, discipline et latéralité sans altération du rig, Android/CI/Pages. Priorités 0.7.41 à 0.7.43, portes de validation et communication en français. Toutes les décisions précédentes sont conservées.
