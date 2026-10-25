@@ -2,18 +2,18 @@ import {Mesh,MeshStandardMaterial,MeshToonMaterial,Object3D,Color,type Material}
 import {NATIVE_SKIN_REFERENCE} from './skinTones';
 
 export type NeutralAppearance={
- skin:string;hairColor:string;topColor:string;bottomColor:string;gloveColor:string;shinColor?:string;eyeColor?:string;
+ skin:string;hairColor:string;topColor:string;bottomColor:string;gloveColor:string;shinColor?:string;eyeColor?:string;accessories?:('gloves'|'shins')[];
 };
-export type AppearanceZone=keyof NeutralAppearance;
+export type AppearanceZone=Exclude<keyof NeutralAppearance,'accessories'>;
 
 const sourceColors=new WeakMap<Material,Color>();
-const readableFallback=/^(?:material(?:[._ -]?[0-9]+)?|mat[0-9]*|default(?:material)?|[0-9]+)$/i;
+const readableFallback=/^(?:material|mat)(?:[._ -]?[0-9]+)?$|^default(?:material)?$|^[0-9]+$/i;
 
 /** Specific costume/hair/eyes identifiers MUST beat generic body/skin identifiers. */
 export function appearanceZone(name:string):AppearanceZone|null{
  const id=name.replace(/([a-z])([A-Z])/g,'$1_$2').toLowerCase();
  if(/iris|pupil|eyeball|eye[_. -]/.test(id))return 'eyeColor';
- if(/hair|cheveu|beard|brow|eyelash|cils/.test(id))return 'hairColor';
+ if(/hair|cheveu|scalp|beard|brow|eyelash|cils/.test(id))return 'hairColor';
  if(/glove|mitten|boxing_mitt|gant|handwrap|bandage|sangle.mma/.test(id))return 'gloveColor';
  if(/protection|protege.tibia|shinguard|shin.guard|velcro/.test(id))return 'shinColor';
  if(/short|pantalon|pant|trouser|legging|bottom|lowerwear|hakama/.test(id))return 'bottomColor';
@@ -28,6 +28,9 @@ function zoneFor(mesh:Mesh,material:Material):AppearanceZone|null{
  // A descriptive mesh name is useful when a material has a generated/generic name.
  // Never paint a garment using a broad enclosing body name if the material is named.
  if(!material.name||readableFallback.test(material.name))return appearanceZone(mesh.name);
+ // Imported clothing uses synthetic mesh names; only an explicitly named body/iris/hair mesh
+ // may override a descriptive material, never recolour arbitrary outfit fabrics.
+ if(/^(?:f021|m021|m018)[_-](?:body|head)/i.test(mesh.name)&&!appearanceZone(material.name))return 'skin';
  return null;
 }
 
@@ -54,15 +57,24 @@ export function applyNeutralAppearance(root:Object3D,appearance?:NeutralAppearan
   const mesh=object as Mesh;
   if(!mesh.isMesh)return;
   const materials=Array.isArray(mesh.material)?mesh.material:[mesh.material];
+  if(mesh.name.startsWith('tenue:')&&appearance?.accessories){
+   const zones=materials.map(m=>zoneFor(mesh,m));
+   if(zones.length&&zones.every(z=>z==='gloveColor'))mesh.visible=appearance.accessories.includes('gloves');
+   else if(zones.length&&zones.every(z=>z==='shinColor'))mesh.visible=appearance.accessories.includes('shins');
+  }
   for(const material of materials){
    if(!(material instanceof MeshStandardMaterial)&&!(material instanceof MeshToonMaterial))continue;
    const zone=zoneFor(mesh,material);
    if(!zone)continue;
    if(appearance&&appearance[zone]){
-    if(zone==='skin'&&material.map){
+    if((zone==='skin'||zone==='eyeColor'||zone==='hairColor')&&material.map){
      let source=sourceColors.get(material);
      if(!source){source=material.color.clone();sourceColors.set(material,source);}
-     material.color.copy(relativeSkinColor(source,appearance.skin));
+     // Maps retain their painted albedo and fine texture: shift tint relative to a reference.
+     const reference=zone==='skin'?NATIVE_SKIN_REFERENCE:zone==='eyeColor'?'#4a2f1e':'#201713';
+     const base=new Color(reference),target=new Color(appearance[zone]);
+     const scale=(c:number,r:number)=>limit(c/Math.max(.002,r),.35,1.95);
+     material.color.setRGB(limit(source.r*scale(target.r,base.r),0,1),limit(source.g*scale(target.g,base.g),0,1),limit(source.b*scale(target.b,base.b),0,1));
     }else{
      material.color.copy(new Color(appearance[zone]));
     }

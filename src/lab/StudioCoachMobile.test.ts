@@ -22,7 +22,7 @@ describe('Studio Coach : cohérence tactile Android',()=>{
   expect(rig).toContain("props.mode==='appearance'?<OutfittedRig");
   expect(rig).toContain("attachOutfit(root,outfitScene,true)");
   expect(rig).toContain("'/tenues/'+costume+'.glb'");
-  expect(studio).toContain('SKIN_TONES.map(');
+  expect(studio).toContain("skinPaletteMode==='realiste'?SKIN_TONES:ANIME_SKIN_TONES");
   expect(studio).toContain('coachSkinGrid');
   expect(css).toContain('grid-template-columns:repeat(4,minmax(0,1fr))');
  });
@@ -40,12 +40,12 @@ describe('Studio Coach : cohérence tactile Android',()=>{
   expect(framing).toContain('camera.position.lerp(aim.position,speed)');
   expect(css).toContain('.coachFocusLine button');
  });
- it('n’expose les nouveaux curseurs que sur un modèle femme et active le zoom par zone',()=>{
+ it('expose les mêmes zones aux deux sexes et conserve le zoom par zone',()=>{
   const studio=readFileSync(new URL('./StudioCoach.tsx',import.meta.url),'utf8');
   const focus=readFileSync(new URL('./studioFocus.ts',import.meta.url),'utf8');
   const rig=readFileSync(new URL('./NeutralRig.tsx',import.meta.url),'utf8');
-  expect(studio).toContain("item!=='silhouette'||look.sex==='femme'");
-  expect(studio).toContain("section==='silhouette'&&look.sex==='femme'");
+  expect(studio).toContain('sections.map(item=>');
+  expect(studio).toContain("section==='silhouette'&&");
   expect(studio).toContain("range('hips','Largeur des hanches'");
   expect(studio).toContain("range('thighs','Volume des cuisses'");
   expect(studio).toContain("range('roundness','Rondeur générale'");

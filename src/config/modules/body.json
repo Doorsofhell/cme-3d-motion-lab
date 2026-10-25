@@ -1,6 +1,6 @@
 {
   "id": "body",
-  "version": 1,
+  "version": 2,
   "sexes": [
     "homme",
     "femme"
@@ -41,9 +41,6 @@
       "range": [
         0.75,
         1.35
-      ],
-      "sexes": [
-        "femme"
       ]
     },
     {
@@ -53,9 +50,6 @@
       "range": [
         0.75,
         1.3
-      ],
-      "sexes": [
-        "femme"
       ]
     },
     {
@@ -65,10 +59,10 @@
       "range": [
         0.75,
         1.35
-      ],
-      "sexes": [
-        "femme"
       ]
     }
-  ]
+  ],
+  "implementation": "skinned-mesh-weighted",
+  "sexAdaptive": true,
+  "heightWeightLinked": true
 }
