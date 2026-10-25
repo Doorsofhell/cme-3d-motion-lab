@@ -15,6 +15,7 @@ import {addSavedCoach,readSavedCoaches,updateSavedCoach,deleteSavedCoach} from '
 import {studioTechniqueCatalog} from './studioTechniqueCatalog';
 import {activeShapeGroups,applyShapePreset,randomShapeLook,type ShapeGroup} from './visualShapePresets';
 import {MorphThumbnail} from './MorphThumbnail';
+import {currentAtlasCapabilities,canEditAtlasShape} from './atlasCapabilities';
 
 type Category='corps'|'silhouette'|'visage'|'peau'|'cheveux'|'tenue'|'protections';
 export type CoachLook={
@@ -93,7 +94,7 @@ export function StudioCoach(){
  const [testingMotion,setTestingMotion]=useState(false);
  const [showSkeleton,setShowSkeleton]=useState(false);
  const [report,setReport]=useState<NeutralRigReport|null>(null);
- const support=report?.appearanceSupport;
+ const support=currentAtlasCapabilities(report,look.sex,rigMode);
  const colors=useMemo(()=>({
   skin:look.skin,hairColor:look.hairColor,eyeColor:look.eyeColor,topColor:look.topColor,bottomColor:look.bottomColor,gloveColor:look.gloveColor,shinColor:look.shinColor
  }),[look.skin,look.hairColor,look.eyeColor,look.topColor,look.bottomColor,look.gloveColor,look.shinColor]);
@@ -148,7 +149,7 @@ export function StudioCoach(){
   if(key!=='sex')selectFocus(focusForSetting(key,section));
   setLook(l=>normalizeCoachLook({...l,[key]:value}));
  };
- const isShapeSupported=(group:ShapeGroup)=>!rigMode&&!!support&&(group.requires==='torso'?support.shape.torsoVertices>0:group.requires==='hip'?support.shape.hipVertices>0:group.requires==='thigh'?support.shape.thighVertices>0:group.requires==='bust'?support.shape.bustVertices>0:!!support.shape.faceMorphs[group.id as 'jaw'|'nose'|'eyes']);
+ const isShapeSupported=(group:ShapeGroup)=>canEditAtlasShape(group,support);
  const shapePicker=(ids:string[])=><div className="coachShapeGroups">{activeShapeGroups(look.sex).filter(g=>ids.includes(g.id)).map(g=>{
   const enabled=isShapeSupported(g);
   const selected=g.presets.reduce((best,p)=>Math.abs(p.value-look[g.id])<Math.abs(best.value-look[g.id])?p:best,g.presets[0]);
