@@ -22,7 +22,7 @@ describe('CME-3D UX : parcours uniques, design system et accessibilité',()=>{
   expect(app).not.toContain('cmeReviewToggle');
   expect(studio).toContain('Création en pose neutre');
   expect(studio).not.toContain('2 · Test des mouvements');
-  expect((studio.match(/<Canvas\\b/g)||[]).length).toBe(1);
+  expect(studio.split('<Canvas ').length-1).toBe(1);
   expect(studio).toContain('Tester dans Mouvements');
  });
  it('assure un socle de couleurs sémantiques et le défilement Android',()=>{
