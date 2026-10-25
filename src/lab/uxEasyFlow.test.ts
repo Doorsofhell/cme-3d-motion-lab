@@ -6,7 +6,7 @@ describe('Parcours UX 0.7.45',()=>{
  const studio=read('StudioCoach.tsx'),app=read('App.tsx'),fighter=read('Fighter.tsx');
  it('présente trois choix clairs au lieu de sept panneaux simultanés',()=>{
   expect(studio).toContain('studioSteps.map(item=>');
-  expect(studio).toContain('groupeActif.zones.includes(item)');
+  expect(studio).toContain('regionsPourGroupe(groupeActif.id).map(cible=>');
   expect(studio).toContain('1. Silhouette');
   expect(studio).toContain('2. Visage et couleurs');
   expect(studio).toContain('3. Équipement');

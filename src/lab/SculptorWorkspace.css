@@ -232,3 +232,24 @@
  .labApp[data-cme-screen="studio"] .sculptorDashboard *,
  .labApp[data-cme-screen="studio"] .sculptorViewportTools *{scroll-behavior:auto;transition:none}
 }
+
+/* CME-3D 0.7.50 — rail Y anatomique précis, sans masquage du modèle. */
+.labApp[data-cme-screen="studio"] .sculptorYAxis .sculptorRegionIcon{
+ display:block;width:24px;height:24px;flex:none;stroke:currentColor;
+}
+.labApp[data-cme-screen="studio"] .sculptorYAxis .coachCategories{
+ gap:5px;padding:6px 3px 10px;touch-action:pan-y;
+}
+.labApp[data-cme-screen="studio"] .sculptorYAxis .coachCategories button{
+ min-height:52px!important;box-sizing:border-box;gap:3px;
+ font-size:9px!important;line-height:1.12;touch-action:manipulation;
+}
+.labApp[data-cme-screen="studio"] .sculptorYAxis .coachCategories button span{
+ max-width:100%;overflow-wrap:anywhere;
+}
+.labApp[data-cme-screen="studio"] .sculptorYAxis .coachCategories button:focus-visible{
+ outline:2px solid var(--sculpt-cyan);outline-offset:-2px;
+}
+.labApp[data-cme-screen="studio"] .sculptorDashboardWorkspace .coachShapeGroups:empty{
+ display:none;
+}

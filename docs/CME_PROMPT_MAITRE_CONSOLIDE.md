@@ -1,3 +1,15 @@
+## 26/10/2026 — Lot 0.7.50 : accès direct aux régions anatomiques sur l'axe Y
+
+**1. Reformulation additive.** Après la livraison et le déploiement vérifié de 0.7.49, prolonger « The Sculptor’s Workspace » : la barre X conserve cinq grandes familles ; le rail Y propose **18 cibles précises**, au lieu de deux grands boutons Corps/Visage sans personnalisation directe. Les quatre onglets globaux et toutes les décisions maîtresses précédentes sont conservés.
+
+**2. Impacts UX et 3D.** Ajout des composants `sculptorRegions.ts` et `SculptorRegionIcon.tsx` : yeux, nez, mâchoire, cheveux ; stature, épaules, poitrine/pectoraux, muscles, bras, taille, rondeur ; hanches, fessiers, cuisses, mollets ; peau, tenue, protections. Chacun commande uniquement la sélection `expandedShape` existante ; affichage contextuel de **son** curseur et de ses vrais presets, recadrage via les os GLB déjà reconnus. Les couleurs, morphologies homme/femme et dépendances biomécaniques restent sous contrôle des mêmes capacités GLB. Aucune modification du squelette ni de l'Atlas.
+
+**3. Règles d'or.** Shadow strictement en lecture seule ; coiffures sans GLB spécialisé inactives ; les morphologies sans sommets compatibles restent désactivées et expliquées dans le panneau ; aucun suivi, vidéo, webcam, reconnaissance d'images ou motion capture. Aucune mesure FPS/latence/GPU inventée.
+
+**4. Critères de validation.** Vitest des 18 cibles uniques, des 13 morphologies canonisées, de l'intégrité des cinq familles, de la sélection réelle et de la hauteur des boutons de **52 px** ; typecheck, tests GLB, compilation et CI verte avant fusion, publication Pages vérifiée. Recette visuelle sur Android physique, quatre vues et test tactile de toutes les cibles requis séparément. **FPS p50/p95, GPU, latence et ergonomie physique : Non mesuré.**
+
+**5. Documentation.** Nouvelle décision intégrée au schéma directeur, prompt maître et fil conducteur, sans annuler la version 0.7.49 ou ses autres jalons. La valeur des curseurs reste une variation relative tant qu'aucune mesure de référence réelle n'existe.
+
 ## 26/10/2026 — The Sculptor's Workspace, premier lot UX v0.7.49
 
 **Décision additive utilisateur :** interface de sculpture numérique « Studio 3D Lab » true black / anthracite ; viewport 3D réel 55 %, panneau inférieur 45 %, grille spatiale Three.js, commandes caméra latérales non superposées, deux axes X/Y de zones anatomiques, curseurs de précision à affichage monospacé et accent néon, galerie horizontale de vrais préréglages, validation par coche rouge. Le 4-onglets global Studio Coach / Mouvements / Galerie / Plus reste **inchangé**. Technologie existante React + R3F conservée (pas de migration RN/Flutter induite par la formulation du rôle).
