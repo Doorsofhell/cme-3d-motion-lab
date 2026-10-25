@@ -228,3 +228,7 @@ Deux bases organiques MakeHuman/MPFB CC0, femme et homme, 163 os, chargées en 3
 
 ## 25/10/2026 — Exigence 0.7.43 : personnalisation cohérente selon le sexe
 Parité de richesse homme/femme, pas une identité de proportions. Pour une femme, poitrine, taille, hanches, bassin, fessiers et cuisses doivent dessiner une silhouette féminine naturelle et harmonieuse quelle que soit la corpulence choisie, sans caricature ni modèle unique. Pour l'homme, pectoraux, carrure, bassin et musculature sont adaptés aux proportions du corps masculin. Les volumes se compensent avec interpolation douce et limites raisonnables. Chaque forme reste modifiable ; les valeurs brutes sauvegardées restent intactes, les anciens profils restent compatibles. Les maillages GLB de référence (163 os) sont encore en lecture seule, tandis que la morphologie réelle des coachs utilise des sommets skinnés clonés et ne modifie jamais les mouvements canoniques ni Shadow.
+
+
+## 25/10/2026 — 0.7.44, audit qualité visuelle Android
+Les 4 vues face/dos/profil droit/gauche doivent préserver la même échelle de caméra pour comparer homme/femme. Le cadrage entier tient compte des volumes maillés (poitrine, fessiers, extrémités) et non des pivots osseux seuls ; ignorer les maillages cachés. Boutons de 44 px sur mobile, preview stable et lisible. Régression visuelle à contrôler sur les sources hommes/femmes réelles et sur smartphone Android ; ne pas confondre calcul caméra testé avec validation artistique réelle. Préserver les modèles, les profils et les mouvements canoniques ; ne pas modifier Shadow.
