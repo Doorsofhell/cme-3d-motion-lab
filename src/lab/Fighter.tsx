@@ -10,6 +10,9 @@ import {SequenceSampler} from './ComplexSequences';
 import {CoachPlanSampler} from './CoachPlanSampler';
 import type {CoachPlan} from './coachProtocol';
 import rawSequences from './complexSequences.json';
+import shadowSequences from './shadowExercises.json';
+import {studioTechniqueCatalog} from './studioTechniqueCatalog';
+import {applyCoachHair} from './coachHair';
 import {restoreReferencePose} from './restorePose';
 import {applyNeutralAppearance} from './neutralAppearance';
 import {applyCoachLookGeometry} from './coachGeometry';
@@ -151,12 +154,13 @@ export function Fighter({actor,outfit,technique,coachPlan,playback,skeleton,qual
   if(coachLook)applyCoachLookGeometry(s,coachLook);
   if(renderStyle==='fitness')applyFitnessStyle(s);
   if(renderStyle==='comic')applyComicStyle(s,quality);
-  if(coachLook)applyNeutralAppearance(s,{skin:coachLook.skin,hairColor:coachLook.hairColor,topColor:coachLook.topColor,bottomColor:coachLook.bottomColor,gloveColor:coachLook.gloveColor,shinColor:coachLook.shinColor,eyeColor:coachLook.eyeColor,accessories});
+  if(coachLook){applyNeutralAppearance(s,{skin:coachLook.skin,hairColor:coachLook.hairColor,topColor:coachLook.topColor,bottomColor:coachLook.bottomColor,gloveColor:coachLook.gloveColor,shinColor:coachLook.shinColor,eyeColor:coachLook.eyeColor,accessories});applyCoachHair(s,coachLook.hairStyle,coachLook.hairColor);}
   return s;
  },[gltf.scene,clothes.scene,renderStyle,quality,actor,coachLook,accessories]);
  const rig=useMemo(()=>new CoachRig(scene),[scene]);
  const library=useMemo(()=>getLibrary(rig,(outfit==='boxe'?'boxing':outfit.startsWith('bjj')?'bjj':outfit) as 'boxing'|'kickboxing'|'mma'|'muaythai'|'bjj'|'judo'),[rig,outfit]);
- const seq=useMemo(()=>(rawSequences as Array<{id:string;name:string;discipline:string;motions:string[]}>).find(s=>s.id===technique),[technique]);
+ const seq=useMemo(()=>([...rawSequences,...shadowSequences] as Array<{id:string;name:string;discipline:string;motions:string[]}>).find(s=>s.id===technique),[technique]);
+ const verifiedEntries=useMemo(()=>studioTechniqueCatalog((outfit==='boxe'?'boxing':outfit.startsWith('bjj')?'bjj':outfit) as 'boxing'|'kickboxing'|'mma'|'muaythai'|'bjj'|'judo').filter(entry=>entry.motions.every(id=>library.has(id))).map(entry=>entry.id),[library,outfit]);
  const motion=library.get(technique)??library.get('garde');
  const seqValid=!!seq&&seq.motions.every(id=>library.has(id));
  const sampler=useMemo(()=>{
@@ -170,7 +174,7 @@ export function Fighter({actor,outfit,technique,coachPlan,playback,skeleton,qual
  const t=useRef(0);
  useEffect(()=>{lastSample.current=null;lastEvidenceSignal.current=0;t.current=0;},[technique,outfit,coachPlan]);
  useEffect(()=>{
-  onReport({bones:helper.bones.length,armClamps:0,footErrorMetres:0,techniqueFound:seq?seqValid:!!library.get(technique),source:seq?'CME-3D · enchaînement expérimental':'CME-3D · bibliothèque de mouvements'});
+  onReport({bones:helper.bones.length,armClamps:0,footErrorMetres:0,techniqueFound:seq?seqValid:!!library.get(technique),availableMotions:verifiedEntries,source:seq?'CME-3D · enchaînement expérimental':'CME-3D · bibliothèque de mouvements'});
   onReady();
  },[helper,library,technique,onReport,onReady]);
  useEffect(()=>()=>{helper.dispose();scene.traverse(o=>{
@@ -197,7 +201,7 @@ export function Fighter({actor,outfit,technique,coachPlan,playback,skeleton,qual
   if(skeleton)helper.updateMatrixWorld(true);
   t.current+=dt;
   if(t.current>.9){
-   onReport({bones:helper.bones.length,armClamps:0,footErrorMetres:0,techniqueFound:seq?seqValid:!!library.get(technique),source:seq?'CME-3D · enchaînement expérimental':'CME-3D · bibliothèque de mouvements'});
+   onReport({bones:helper.bones.length,armClamps:0,footErrorMetres:0,techniqueFound:seq?seqValid:!!library.get(technique),availableMotions:verifiedEntries,source:seq?'CME-3D · enchaînement expérimental':'CME-3D · bibliothèque de mouvements'});
    t.current=0;
   }
  });

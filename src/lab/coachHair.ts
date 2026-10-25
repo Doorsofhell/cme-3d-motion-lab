@@ -1,4 +1,4 @@
-import {Bone,Box3,CapsuleGeometry,CatmullRomCurve3,Color,Group,Mesh,MeshStandardMaterial,Object3D,SphereGeometry,TubeGeometry,Vector3} from 'three';
+import {Bone,Box3,CatmullRomCurve3,Color,Group,Mesh,MeshStandardMaterial,Object3D,SphereGeometry,TubeGeometry,Vector3} from 'three';
 
 export type HairStyle='rase'|'court'|'long';
 const TAG='CME_COIFFURE_ADAPTATIVE';

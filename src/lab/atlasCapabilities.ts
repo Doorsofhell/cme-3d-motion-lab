@@ -14,6 +14,6 @@ export function canEditAtlasShape(group:ShapeGroup,support:ReturnType<typeof cur
   case 'hip':return support.shape.hipVertices>0;
   case 'thigh':return support.shape.thighVertices>0;
   case 'bust':return support.shape.bustVertices>0;
-  case 'face':return !!support.shape.faceMorphs[group.id as 'jaw'|'nose'|'eyes'];
+  case 'face':return !!support.shape.faceMorphs[group.id as 'jaw'|'nose'|'eyes']||support.shape.faceVertices>0;
  }
 }

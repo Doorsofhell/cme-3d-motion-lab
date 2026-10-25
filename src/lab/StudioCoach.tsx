@@ -113,8 +113,8 @@ export function StudioCoach(){
  }),[look.skin,look.hairColor,look.eyeColor,look.topColor,look.bottomColor,look.gloveColor,look.shinColor,accessories]);
  const dimensions=useMemo(()=>resolvedProportions(look,Number(identity.heightCm)||undefined,Number(identity.weightKg)||undefined),[look,identity.heightCm,identity.weightKg]);
  const faceDimensions=useMemo(()=>({jaw:look.jaw,nose:look.nose,eyes:look.eyes}),[look.jaw,look.nose,look.eyes]);
- const colorAvailable=(key:'skin'|'eyeColor'|'hairColor'|'topColor'|'bottomColor'|'gloveColor'|'shinColor')=>!!support?.colors[key]&&(!rigMode||key==='skin'||key==='eyeColor'||key==='hairColor');
- const faceAvailable=(key:'jaw'|'nose'|'eyes')=>!!support?.shape.faceMorphs[key];
+ const colorAvailable=(key:'skin'|'eyeColor'|'hairColor'|'topColor'|'bottomColor'|'gloveColor'|'shinColor')=>(key==='hairColor'||key==='skin'||!!support?.colors[key])&&(!rigMode||key==='skin'||key==='eyeColor'||key==='hairColor');
+ const faceAvailable=(key:'jaw'|'nose'|'eyes')=>!!support&&(!!support.shape.faceMorphs[key]||support.shape.faceVertices>0);
 
  const [androidTelemetry]=useState(()=>{
   const meter=new AndroidTelemetry('studio');
@@ -157,7 +157,8 @@ export function StudioCoach(){
  const importRef=useRef<HTMLInputElement>(null);
  const update=<K extends keyof CoachLook>(key:K,value:CoachLook[K])=>{
   if(key==='sex'&&look.sex!==value){beginRigLoad(value as CoachLook['sex'],rigMode,'switch');setReport(null);setSection('corps');recenter('corps');}
-  if(key!=='sex')selectFocus(focusForSetting(key,section));
+  if(key!=='sex'){selectFocus(focusForSetting(key,section));if(['skin','hairColor','hairStyle','eyeColor','jaw','nose','eyes'].includes(key)){setReferenceMode(false);setAnatomicalPreview(false);}}
+
   setLook(l=>normalizeCoachLook({...l,[key]:value}));
  };
  const isShapeSupported=(group:ShapeGroup)=>!referenceMode&&canEditAtlasShape(group,support);
@@ -231,7 +232,7 @@ export function StudioCoach(){
     <div className="coachCanvasViewport"><Canvas key={canvasRetry} onCreated={onCanvasCreated} camera={{position:[0,1.3,4.5],fov:38}} dpr={[1,1.5]} gl={{antialias:true,preserveDrawingBuffer:true}}>
      <AndroidFrameProbe telemetry={androidTelemetry}/>
      <color attach="background" args={['#e6edf6']}/><hemisphereLight args={['#fff8ef','#677388',1.05]}/><ambientLight intensity={0.65}/><directionalLight position={[3,5,4]} intensity={1.55}/>
-     <SceneLoadingBoundary>{rigMode&&referenceMode?<AnatomicalReferenceRig key={'reference-'+look.sex} sex={look.sex} orientation={anatomicalView} focusZone={focusZone} focusRequest={focusRequest} autoCadrage={!cameraAuto}/>:<NeutralRig key={`${look.sex}-${rigMode?(anatomicalPreview?'mannequin':'creator'):'appearance'}`} mode={rigMode?(anatomicalPreview?'mannequin':'creator'):'appearance'} sex={look.sex} discipline={discipline} noGi={noGi} motionId={testingMotion?motionId:'garde'} creationPose={!testingMotion} playing={testingMotion&&playing} speed={1} showSkeleton={showSkeleton} autoCadrage={!cameraAuto} focusZone={focusZone} focusRequest={focusRequest} orientation={anatomicalView} onReport={handleRigReport} appearance={colors} proportions={dimensions} face={faceDimensions}/>}</SceneLoadingBoundary>
+     <SceneLoadingBoundary>{rigMode&&referenceMode?<AnatomicalReferenceRig key={'reference-'+look.sex} sex={look.sex} orientation={anatomicalView} focusZone={focusZone} focusRequest={focusRequest} autoCadrage={!cameraAuto}/>:<NeutralRig key={`${look.sex}-${rigMode?(anatomicalPreview?'mannequin':'creator'):'appearance'}`} mode={rigMode?(anatomicalPreview?'mannequin':'creator'):'appearance'} sex={look.sex} discipline={discipline} noGi={noGi} motionId={testingMotion?motionId:'garde'} creationPose={!testingMotion} playing={testingMotion&&playing} speed={1} showSkeleton={showSkeleton} autoCadrage={!cameraAuto} focusZone={focusZone} focusRequest={focusRequest} orientation={anatomicalView} onReport={handleRigReport} appearance={colors} proportions={dimensions} face={faceDimensions} hairStyle={look.hairStyle}/>}</SceneLoadingBoundary>
      <SceneCameraControls automatic={cameraAuto} motion={motionId}/>
     </Canvas></div>
     <span className="coachPreviewLabel">{rigMode?(referenceMode?'Étalon anatomique CC0 · 163 os · lecture seule':anatomicalPreview?'Mannequin anatomique gris · forme modifiable':'Corps neutre personnalisable'):'Coach habillé · '+(look.sex==='femme'?'Femme':'Homme')}</span>

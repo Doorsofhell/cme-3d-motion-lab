@@ -1,7 +1,7 @@
-import {Mesh,SkinnedMesh,Object3D,type BufferAttribute,type BufferGeometry} from 'three';
+import {Box3,Mesh,SkinnedMesh,Object3D,type BufferAttribute,type BufferGeometry} from 'three';
 import {cloneOwnedGeometry} from '../adapters/geometryOwnership';
 type FaceParam={jaw:number;nose:number;eyes:number};
-type LocalState={geo:BufferGeometry;source:Float32Array};
+type LocalState={geo:BufferGeometry;source:Float32Array;bounds:Box3};
 const cache=new WeakMap<SkinnedMesh,LocalState>();
 const clamp=(v:number)=>Math.max(.8,Math.min(1.2,Number.isFinite(v)?v:1));
 export const isEditableHead=(mesh:Mesh)=>
@@ -30,13 +30,13 @@ export function applyCoachFaceGeometry(root:Object3D,shape:FaceParam):number{
    if(input.every(v=>Math.abs(v)<.0001))return;
    const original=head.geometry;
    const geo=cloneOwnedGeometry(original);
-   state={geo,source:new Float32Array(original.getAttribute('position').array as ArrayLike<number>)};
+   if(!geo.boundingBox)geo.computeBoundingBox();
+   state={geo,source:new Float32Array(original.getAttribute('position').array as ArrayLike<number>),bounds:geo.boundingBox!.clone()};
    cache.set(head,state);head.geometry=geo;
    if(original.userData.cmeOwned===true)original.dispose();
   }
   const pos=state.geo.getAttribute('position') as BufferAttribute,ref=state.source;
-  if(!state.geo.boundingBox)state.geo.computeBoundingBox();
-  const box=state.geo.boundingBox!;
+  const box=state.bounds;
   const minX=box.min.x,maxX=box.max.x,minY=box.min.y,maxY=box.max.y,minZ=box.min.z,maxZ=box.max.z;
   const width=Math.max(1e-4,maxX-minX),height=Math.max(1e-4,maxY-minY),depth=Math.max(1e-4,maxZ-minZ);
   const midX=(minX+maxX)/2;

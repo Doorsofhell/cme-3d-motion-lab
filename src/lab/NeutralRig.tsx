@@ -15,6 +15,7 @@ import {CadrageSquelette} from './CadrageSquelette';
 import type {StudioFocusZone} from './studioFocus';
 import type {AnatomicalView} from './AnatomicalReference';
 import {attachOutfit} from '../adapters/outfits';
+import {applyCoachHair,type HairStyle} from './coachHair';
 
 export const LAB_DISCIPLINES=['boxing','kickboxing','muaythai','mma','bjj','judo'] as const;
 export type LabDiscipline=typeof LAB_DISCIPLINES[number];
@@ -34,7 +35,7 @@ export type NeutralRigReport={sex:NeutralSex;discipline:LabDiscipline;motion:str
  */
 type NeutralRigProps={
  sex:NeutralSex;discipline:LabDiscipline;motionId:string;playing:boolean;speed:number;showSkeleton:boolean;
- onReport:(r:NeutralRigReport)=>void;creationPose?:boolean;noGi?:boolean;appearance?:NeutralAppearance;proportions?:CoachBodyShape & {height:number};face?:CoachFaceShape;autoCadrage?:boolean;focusZone?:StudioFocusZone;focusRequest?:number;mode?:'neutral'|'appearance'|'creator'|'mannequin';orientation?:AnatomicalView|null;
+ onReport:(r:NeutralRigReport)=>void;creationPose?:boolean;noGi?:boolean;appearance?:NeutralAppearance;proportions?:CoachBodyShape & {height:number};face?:CoachFaceShape;autoCadrage?:boolean;focusZone?:StudioFocusZone;focusRequest?:number;mode?:'neutral'|'appearance'|'creator'|'mannequin';hairStyle?:HairStyle;orientation?:AnatomicalView|null;
 };
 /** Appearance uses a genuine, already-shipped outfit GLB.
  * Neutral anatomy does not fetch or display an outfit.
@@ -48,7 +49,7 @@ function OutfittedRig(props:NeutralRigProps){
  const {scene}=useGLTF(url,import.meta.env.BASE_URL+'draco/');
  return <RigBody {...props} outfitScene={scene}/>;
 }
-function RigBody({sex,discipline,motionId,playing,speed,showSkeleton,onReport,creationPose=false,appearance,proportions,face,autoCadrage=false,focusZone,focusRequest=0,mode='neutral',orientation=null,outfitScene}:NeutralRigProps & {outfitScene?:Object3D}){
+function RigBody({sex,discipline,motionId,playing,speed,showSkeleton,onReport,creationPose=false,appearance,proportions,face,autoCadrage=false,focusZone,focusRequest=0,mode='neutral',hairStyle='court',orientation=null,outfitScene}:NeutralRigProps & {outfitScene?:Object3D}){
  const url=import.meta.env.BASE_URL+'fighters/'+NEUTRAL_ASSETS[sex]+'/photo.glb';
  const gltf=useGLTF(url,import.meta.env.BASE_URL+'draco/');
  const scene=useMemo(()=>{
@@ -79,6 +80,7 @@ function RigBody({sex,discipline,motionId,playing,speed,showSkeleton,onReport,cr
   colors:inspectCoachMaterialZones(scene),shape:inspectCoachShapes(scene)
  }),[scene]);
  useLayoutEffect(()=>{if(mode==='appearance'||mode==='creator')applyNeutralAppearance(scene,appearance);},[scene,appearance,mode]);
+ useLayoutEffect(()=>{if(mode==='appearance'||mode==='creator')applyCoachHair(scene,hairStyle,appearance?.hairColor??'#201713');else applyCoachHair(scene,'rase',appearance?.hairColor??'#201713');},[scene,mode,hairStyle,appearance?.hairColor]);
  useLayoutEffect(()=>{
   if(mode==='appearance'||mode==='creator'||mode==='mannequin'){
    applyCoachLookGeometry(scene,{

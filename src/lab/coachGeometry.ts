@@ -1,10 +1,11 @@
 import {BufferAttribute,Mesh,Object3D,SkinnedMesh,type BufferGeometry} from 'three';
 import {cloneOwnedGeometry} from '../adapters/geometryOwnership';
+import {applyCoachFaceGeometry,countEditableHeadVertices} from './coachFaceGeometry';
 
 export type CoachBodyShape={shoulders:number;muscle:number;waist:number;sex?:'homme'|'femme';roundness?:number;hips?:number;glutes?:number;thighs?:number;bust?:number};
 export type CoachFaceShape={jaw:number;nose:number;eyes:number};
 export type FaceControl=keyof CoachFaceShape;
-export type CoachShapeSupport={torsoVertices:number;hipVertices:number;thighVertices:number;bustVertices:number;faceMorphs:Record<FaceControl,number>};
+export type CoachShapeSupport={torsoVertices:number;hipVertices:number;thighVertices:number;bustVertices:number;faceVertices:number;faceMorphs:Record<FaceControl,number>};
 type Cache={geometry:BufferGeometry;reference:Float32Array;weights:Float32Array};
 const cache=new WeakMap<SkinnedMesh,Cache>();
 const clamp=(n:number,a:number,b:number)=>Math.max(a,Math.min(b,Number.isFinite(n)?n:1));
@@ -27,7 +28,7 @@ const shapeMorph=(name:string):{control:FaceControl;direction:-1|1}|null=>{
 };
 /** Detect blend shapes explicitly named for proportions; expression/speech targets are excluded. */
 export function inspectCoachShapes(root:Object3D):CoachShapeSupport{
- const result:CoachShapeSupport={torsoVertices:0,hipVertices:0,thighVertices:0,bustVertices:0,faceMorphs:{jaw:0,nose:0,eyes:0}};
+ const result:CoachShapeSupport={torsoVertices:0,hipVertices:0,thighVertices:0,bustVertices:0,faceVertices:countEditableHeadVertices(root),faceMorphs:{jaw:0,nose:0,eyes:0}};
  root.traverse(o=>{
   const mesh=o as Mesh;
   if(!mesh.isMesh)return;
@@ -197,6 +198,6 @@ export function applyCoachLookGeometry(root:Object3D,look:CoachBodyShape & Coach
  root.scale.setScalar(clamp(look.height,.9,1.1));
  return {
   torsoVertices:applyCoachBodyShape(root,look),
-  faceTargets:applyCoachFaceShapes(root,look)
+  faceTargets:applyCoachFaceShapes(root,look)+applyCoachFaceGeometry(root,look)
  };
 }
