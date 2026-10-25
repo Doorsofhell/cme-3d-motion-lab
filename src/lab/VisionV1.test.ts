@@ -2,11 +2,11 @@
 import {readFileSync} from 'node:fs';
 import {describe,it,expect} from 'vitest';
 const read=(file:string)=>readFileSync(new URL('./'+file,import.meta.url),'utf8');
-describe('vision CME-3D 1.0 : un atelier, quatre destinations',()=>{
+describe('vision CME-3D 1.0 : un atelier, cinq destinations',()=>{
  const app=read('App.tsx');
  const studio=read('StudioCoach.tsx');
- it('préserve les quatre destinations principales',()=>{
-  for(const label of ['Studio','Galerie Coachs','Comparatif','Plus'])expect(app).toContain('<span>'+label+'</span>');
+ it('préserve les cinq destinations principales',()=>{
+  for(const label of ['Studio','Mouvements','Technique','Versions','Autres'])expect(app).toContain('<span>'+label+'</span>');
  });
  it('utilise une scène unique dans Studio avec création et test',()=>{
   expect(studio).toContain('1 · Création');
