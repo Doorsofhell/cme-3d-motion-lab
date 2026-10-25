@@ -1,5 +1,15 @@
 # Fil conducteur CME-3D — 2026-10-24
 
+## Protocole de travail impératif — 25/10/2026
+
+L'utilisateur adopte une méthode **additive en cinq étapes avant tout code** : 1) reformulation sans écrasement des décisions ; 2) analyse UX Android, actifs GLB/rig, biomécanique, GPU/FPS et composants partagés ; 3) vérification des interdictions ; 4) critères Vitest/TypeScript/CI verte, cibles tactiles ≥44 px et recette visuelle Android réelle ; 5) proposition et mise à jour des documents directeurs.
+
+**Règles d'or :** Shadow en lecture seule ; aucun faux réglage ni effet placebo (absence de GLB/morph/matériau compatible = commande grisée avec explication) ; squelette, poids de skinning et trajectoires intacts ; aucune captation utilisateur, analyse vidéo, mocap ni vision par ordinateur ; mesures absentes = « Non mesuré ». L'assistant répond et documente exclusivement en français.
+
+**Impact identifié sans correction technique revendiquée :** auditer les accessoires capillaires générés et les secours de morphologie du visage existants contre les véritables capacités des GLB ; désactiver les fonctions dépourvues d'actifs. La rédaction de cette décision ne vaut ni correctif runtime ni recette sur téléphone.
+
+**Communication permanente :** choix libre prioritaire, Choix 1 (Recommandé), Choix 2, Choix 3 — quatre commandes cliquables en conclusion et une seule grande question à la fois. Les décisions UX déjà prises (mobile d'abord, viewport fixe, quatre onglets Studio Coach/Mouvements/Galerie/Plus) restent en vigueur. L'organisation des zones anatomiques n'est pas encore décidée.
+
 ## Décision confirmée — 25/10/2026 : **choix A, quatre onglets de navigation**
 
 La barre principale Android est **unique et fixe** dans l'ordre **Studio Coach → Mouvements → Galerie → Plus**. Dans **Plus** sont rangés, **sans aucune perte de fonctionnalité**, le Comparatif CME/Shadow (Shadow en lecture seule), l'Atlas biomécanique, le Laboratoire de diagnostic et mesures, les options, incidents, versions/nouveautés et utilitaires. Studio garde la grande scène 3D fixe et le panneau contextuel bas déjà validés ; Mouvements reprend le coach courant avec un sélecteur des animations réellement exécutables ; Galerie retrouve et gère les profils. Pas de second lecteur ni de cinquième barre.
