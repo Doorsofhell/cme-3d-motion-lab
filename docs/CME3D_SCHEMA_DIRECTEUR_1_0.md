@@ -4,6 +4,16 @@
 
 > Document de référence **actif**. Il précise les priorités du [prompt maître](CME_PROMPT_MAITRE_CONSOLIDE.md) sans supprimer son historique. La version 1.0 demeure un objectif futur et n'est pas une livraison déclarée.
 
+## 0. Règles supérieures — protocole qualité du 25/10/2026
+
+Pour chaque requête CME-3D : **(1) reformuler l'ajout, (2) auditer les impacts UX Android / maillage / rig / biomécanique / GPU / composants, (3) vérifier les règles d'or, (4) établir les critères CI/Vitest/Android réel et zones tactiles ≥44 px, (5) proposer la traçabilité documentaire**.
+
+Règles obligatoires : dépôt **Shadow strictement en lecture seule** ; **zéro fausse personnalisation** (absence d'actif GLB ou de matériau/morph compatible = commande désactivée avec explication) ; aucun changement du squelette canonique, des poids de skinning et des trajectoires par une option d'apparence ; aucune caméra utilisateur, capture/analyse vidéo, mocap ou vision par ordinateur ; aucune métrique inventée, afficher **« Non mesuré »**.
+
+**Décisions antérieures préservées** : UX premium Android d'abord ; grand viewport 3D fixe en haut, panneau contextuel en bas ; barre unique **Studio Coach / Mouvements / Galerie / Plus**, Comparatif et Atlas depuis Plus. L'organisation des zones anatomiques n'est pas encore arbitrée. Auditer notamment les coiffures générées et secours faciaux actuellement dans le code ; ne pas les déclarer conformes sans actif et preuve visuelle. Cette mise à jour du schéma n'est pas une livraison fonctionnelle.
+
+Format de communication : **Choix libre prioritaire**, **Choix 1 (Recommandé)**, **Choix 2**, **Choix 3**, actions réellement cliquables à la fin de chaque réponse. Français exclusif pour les réponses et la documentation ; une décision majeure par échange.
+
 ## 1. Décision fondatrice : expérience mobile premium d'abord
 
 Le commanditaire a explicitement choisi **B** : réaliser la refonte de l'expérience mobile à partir de ses maquettes **avant** l'intégration des futurs modèles anatomiques et des animations avancées. Cela ne dispense pas de conserver les modèles et mouvements *existants* fonctionnels pendant le chantier.
