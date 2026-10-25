@@ -20,6 +20,32 @@ Le commanditaire a explicitement choisi **B** : réaliser la refonte de l'expér
 
 Une dépendance technique P0 bloquante peut être corrigée en cours de phase UX. Cela n'autorise pas à renverser la priorité validée sans nouvelle décision explicite.
 
+## 1 bis. Architecture Studio Coach — **Option A validée le 25/10/2026**
+
+**Décision structurante et non négociable pour la refonte :** Studio Coach adopte un **grand viewport 3D fixé en zone supérieure et toujours dominant**, un **panneau inférieur de personnalisation exclusivement contextuel**, et **une seule barre de navigation inférieure persistante**. Les neuf maquettes communiquées servent de direction ergonomique et artistique, sans copie de leurs éléments protégés.
+
+### Règles de composition mobile
+
+1. **En haut — scène 3D persistante** : le coach occupe la zone visuellement prioritaire. La scène ne disparaît pas lors d'un changement de catégorie, de valeur, de préréglage ou de couleur ; conserver la même instance WebGL si possible et éviter les démontages/rechargements GLB inutiles. Homme/femme et identité actifs restent évidents.
+2. **Au centre/bas — panneau de commandes contextuel** : une catégorie anatomique active à la fois, ses préréglages visuels et ses seuls paramètres réellement exploitables. Panneau extensible/rétractable **sans recouvrir l'entièreté du personnage** en mode édition. Le contenu éventuellement long **défile à l'intérieur du panneau**, jamais en entraînant la scène hors écran.
+3. **Tout en bas — navigation principale unique** : barre fixe respectant les safe-areas Android ; interdiction de deuxième barre principale, quai concurrent ou validation superposée. Le bouton principal « Valider / Enregistrer » appartient à l'espace d'édition, distinct de la navigation et toujours accessible. Un seul geste principal par contexte.
+4. **Commandes caméra discrètes** : rotation, zoom, quatre vues anatomiques et recadrage par zone, sans masquer le personnage. Plein écran possible comme outil ponctuel, **mais pas comme mode d'édition par défaut** ; sortie claire sans perte des réglages.
+5. **Android portrait d'abord** : contraintes sur faible hauteur, encoches, clavier logiciel, gestes système et orientation. Dalle tactile ≥44 px ; grilles de boutons ni coupées ni inaccessibles ; pas de scroll horizontal involontaire. Les seuils de hauteur précis seront calibrés et testés, pas supposés validés ici.
+6. **Langage visuel** : Dark Combat Premium, cohérent avec les maquettes, surfaces sombres, accents rouge pour action principale et cyan réservé aux sélections/informations utiles. Même carte, curseur, palette, état disabled, icône anatomique, feuille contextuelle et chargement partout dans l'application.
+7. **Retour immédiat** : chaque déplacement de curseur ou couleur modifie réellement le personnage si le rig actif le supporte ; si absent, afficher explicitement l'indisponibilité et ne pas offrir une commande inerte.
+8. **Comparabilité H/F** : silhouette à échelle cohérente, vues face/dos/profils, zones équivalentes mais effets adaptés au sexe ; aucune prétention de conformité esthétique sans inspection visuelle réelle.
+
+### Contrat d'acceptation UX spécifique
+
+- **SC-A1** : viewport visible en permanence en mode création pendant sélection/édition de chaque zone et chaque profil.
+- **SC-A2** : panneau inférieur indépendant, tactile et scrollable si nécessaire ; les zones peau, cheveux, visage, bras, jambes, bassin, équipement restent atteignables.
+- **SC-A3** : **une et une seule navigation principale inférieure**, compatible safe-area ; commandes système et bouton primaire ne se chevauchent pas.
+- **SC-A4** : transition entre catégorie, homme/femme, zoom, tenue, profil et test **sans perte d'état ni remount WebGL superflu**.
+- **SC-A5** : parcours mobile « sélectionner homme/femme → choisir zone → modifier → constater visuellement → valider → tester » vérifiable et mesurable.
+- **SC-A6** : tests TypeScript/Vitest/build, responsive portrait/paysage et vraie recette Android séparée avant déclaration de qualité finale.
+
+**Limite volontaire de cette décision :** le **nombre, les libellés et l'ordre exacts des destinations de la barre inférieure ne sont pas encore arbitrés**. Cette structure d'écran est approuvée ; aucune refonte de code UI n'est déclarée réalisée par le présent travail documentaire.
+
 ## 2. Vision du produit, sans confusion avec une maquette
 
 **CME-3D est un Studio Coach mobile premium ET un laboratoire de validation de mouvements de combat**, pas une application de coaching sportif ni un clone de Shadow Studio.
@@ -32,7 +58,7 @@ Espaces fonctionnels préservés :
 - **Galerie** : retrouver, dupliquer, modifier, supprimer, réutiliser et tester les profils.
 - **Comparatif CME/Shadow** (Shadow **lecture seule**), Atlas, télémétrie, incidents, options, nouveautés : fonctions conservées mais rangées hors du parcours principal.
 
-**Point ouvert pour la décision d'architecture UX suivante :** type d'agencement mobile du Studio (viewport fixe + tiroir de réglages, viewport immersif + feuilles, ou présentation hybride). Le nombre et les libellés définitifs des destinations de la barre basse ne sont pas reconfirmés par cette décision : préserver temporairement la navigation existante et arbitrer seulement après le modèle d'agencement.
+**Architecture d'écran approuvée — choix A :** viewport 3D fixe et dominant en haut ; panneau de personnalisation contextuel en bas ; navigation principale inférieure unique. **Prochain arbitrage : les destinations et libellés de cette barre basse**. Préserver provisoirement les entrées existantes et ne pas anticiper ce choix.
 
 ## 3. Traduction des neuf maquettes fournies
 
@@ -96,6 +122,7 @@ Principes impératifs :
 | --- | --- | --- |
 | 25/10/2026 | Priorité **B** : refonte UX mobile premium depuis maquettes, avant nouveaux GLB et animations | **Validée** |
 | 25/10/2026 | Choix libre prioritaire + boutons cliquables + une question stratégique à la fois | **Validée** |
-| À arbitrer | Agencement mobile principal du Studio Coach : fixe / immersif / hybride | **Prochaine décision** |
-| À arbitrer après agencement | Destinations et ordre définitifs de navigation ; proportions scène/réglages ; niveaux de personnalisation | **À venir** |
+| 25/10/2026 | **Choix A : viewport 3D fixe dominant en haut + panneau inférieur contextuel + navigation inférieure unique** | **Validée** |
+| À arbitrer | Destinations et libellés définitifs de la barre de navigation unique | **Prochaine décision** |
+| À arbitrer après navigation | Répartition fine des catégories anatomiques, presets/curseurs, ratios de hauteur et règles d'extension du panneau | **À venir** |
 | À arbitrer ultérieurement | Politique d'assets finaux, rig et méthode de personnalisation anatomique H/F | **Après UX stabilisée** |
