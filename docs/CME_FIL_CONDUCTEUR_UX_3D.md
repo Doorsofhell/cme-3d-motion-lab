@@ -229,3 +229,6 @@ La mission est recentrée sur **créer → tester → valider** le même combatt
 
 ## 25/10/2026 — v0.7.31, lot A Android (sans certification physique)
 Trois axes de recette : (1) ergonomie Studio, aperçu sticky et commandes sans chevauchement en portrait/paysage ; (2) latence GLB et FPS p50/p95 mesurés par le diagnostic Android sur 60 s après 5 s de chauffe ; (3) perte/restauration WebGL et préservation des modèles H/F. Le code 0.7.31 renforce les règles CSS du premier axe et maintient les deux autres en vérification instrumentée. Aucun chiffre de performance ni succès de recette Android réelle n'est inventé. Les quatre destinations Studio / Galerie Coachs / Comparatif / Plus restent inchangées, de même que les GLB historiques et Shadow.
+
+## 25/10/2026 — Navigation définitive v0.7.33
+L'utilisateur remplace les anciens quatre onglets par cinq : Studio (création, modification, liste/galerie coachs), Mouvements (tests), Technique (mesures/diagnostics), Versions (historique/nouveautés), Autres (comparatif CME/Shadow, feuille de route, incidents, paramètres). Uniformiser tous les écrans vers le thème clair premium ; mode auto suit les préférences jour/nuit de l’OS, modes manuels clair/sombre. La Galerie Coachs n'est pas supprimée : elle est intégrée dans Studio. Les profils restent partagés ; les mouvements canoniques et le dépôt Shadow Studio restent intacts.
