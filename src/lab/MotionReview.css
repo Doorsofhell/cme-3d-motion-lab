@@ -17,3 +17,17 @@
 .cmeReviewActions{display:flex;gap:8px;flex-wrap:wrap}.cmeReviewActions button{flex:1 1 150px}
 .cmeReviewActions button:disabled{opacity:.45;cursor:not-allowed}
 @media(max-width:500px){.cmeReview{padding:10px;max-height:75dvh}.cmeReviewList{grid-template-columns:1fr;max-height:215px}.cmeReviewHeader button{width:100%}.cmeReviewFilters{flex-direction:column}}
+
+
+/* Recette : la preuve d'exécution provient des échantillons 3D, jamais du seul catalogue. */
+.cmePlaybackWitness{display:flex;flex-wrap:wrap;justify-content:space-between;gap:7px;
+ padding:10px 12px;background:var(--ux-card,var(--c-surface));color:var(--ux-text,var(--c-text));
+ border:1px solid var(--c-line-strong);border-radius:11px;font-size:12px}
+.cmePlaybackWitness small{color:var(--ux-subtle,var(--c-text-2));font-size:11px}
+.cmeReviewPlay{min-height:48px;padding:10px 14px;border-radius:11px;
+ border:1px solid var(--c-accent);background:var(--c-accent);color:#fff;font-weight:750}
+.cmeReviewPlay:disabled{opacity:.45}
+.cmeReviewList button:disabled{opacity:.95}
+.cmeReviewList button[aria-pressed=true]{outline:2px solid var(--c-accent);outline-offset:0}
+.cmeReviewDecision label textarea{font-size:14px;line-height:1.45}
+@media(max-width:760px){.cmeReviewPlay{width:100%}.cmePlaybackWitness{flex-direction:column}}
