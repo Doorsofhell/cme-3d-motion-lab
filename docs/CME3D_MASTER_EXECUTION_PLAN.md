@@ -1,5 +1,11 @@
 # CME-3D — Plan directeur d'exécution
 
+## Priorité exécutive validée le 25/10/2026 : UX mobile d'abord (option B)
+
+**Ce paragraphe remplace uniquement l'ordre historique du travail ci-dessous** et renvoie au [schéma directeur CME-3D 1.0](CME3D_SCHEMA_DIRECTEUR_1_0.md). Ordre désormais applicable : 1) structure UX Android ; 2) design system et composants partagés ; 3) Studio Coach et paramètres contextuels ; 4) lien simple Mouvements/Galerie ; 5) recette UX, fusion et déploiement vérifiés ; **puis** modèles 3D anatomiques finaux et personnalisation H/F avancée ; **puis** animation/retargeting, tout en conservant les acquis du moteur courant. Les travaux existants sur Naïra et les modèles organiques restent des exigences produit mais ne dictent plus le premier chantier.
+
+**Arbitrage suivant encore ouvert :** architecture d'écran Studio scène/commandes. Ne pas présumer sa validation à partir des maquettes.
+
 ## Mission
 Créer un laboratoire de production, validation et comparaison de personnages et animations 3D de sports de combat. Shadow Studio reste en lecture seule. La qualité visuelle doit dépasser les prototypes rudimentaires déjà rejetés.
 
