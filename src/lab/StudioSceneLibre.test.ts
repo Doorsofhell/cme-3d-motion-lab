@@ -8,7 +8,7 @@ describe('Studio 0.7.48 — scène sans masquage',()=>{
   const bar=studio.indexOf('className="coachSceneControls"');
   const scene=studio.indexOf('className="coachSceneStack"');
   const viewport=studio.indexOf('aria-label="Aperçu 3D du mannequin');
-  const edit=studio.indexOf('className="coachEditor"');
+  const edit=studio.indexOf('className="coachEditor sculptorDashboard"');
   expect(scene).toBeGreaterThan(0);
   expect(bar).toBeGreaterThan(scene);
   expect(bar).toBeLessThan(viewport);
@@ -21,7 +21,7 @@ describe('Studio 0.7.48 — scène sans masquage',()=>{
   expect(preview).toContain('coachFermerPleinEcran');
  });
  it('garde la navigation par zones accessible et fait défiler les réglages seulement',()=>{
-  const groups=studio.indexOf('className="coachGroupesAnatomiques"');
+  const groups=studio.indexOf('className="coachGroupesAnatomiques sculptorXAxis"');
   const zones=studio.indexOf('className="coachCategories"');
   const scroll=studio.indexOf('className="coachEditorScroll"');
   const values=studio.indexOf('className="coachZoneCourante"');
