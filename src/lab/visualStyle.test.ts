@@ -1,6 +1,8 @@
 import {describe,it,expect} from 'vitest';
 import {BoxGeometry,Group,Mesh,MeshStandardMaterial,MeshToonMaterial,Texture,Bone,Skeleton,SkinnedMesh,Color} from 'three';
 import {applyNeutralAppearance} from './neutralAppearance';
+// @ts-ignore — la lecture des sources est exécutée par Vitest sous Node.
+import {readFileSync} from 'node:fs';
 import {applyFitnessStyle,applyComicStyle} from './Fighter';
 
 function makeCoachMaterial(name:string,textured=true){
@@ -88,7 +90,7 @@ describe('0.7.51 : aucune tenue héroïque, mêmes habits pour les six disciplin
     root.add(mesh);
     if(style==='fitness')applyFitnessStyle(root);
     else applyComicStyle(root,'performance');
-    const stylise=mesh.material as MeshToonMaterial;
+    const stylise=mesh.material as unknown as MeshToonMaterial;
     expect(stylise.color.getHexString()).toBe(origine.getHexString());
     expect(stylise.map).toBe(map);
     expect(stylise.normalMap).toBe(normalMap);
@@ -129,7 +131,6 @@ describe('0.7.51 : aucune tenue héroïque, mêmes habits pour les six disciplin
   }
  });
  it('charge les mêmes GLB sportifs et les mêmes motions, indépendamment du style',async()=>{
-  const {readFileSync}=await import('node:fs');
   const source=readFileSync(new URL('./Fighter.tsx',import.meta.url),'utf8');
   expect(source).toContain("clothes=useGLTF(base+'fighters/'+sourceActor+'/tenues/'+outfit+'.glb'");
   expect(source).toContain("if(renderStyle==='fitness')applyFitnessStyle(s)");
