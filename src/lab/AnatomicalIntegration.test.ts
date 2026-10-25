@@ -1,4 +1,5 @@
 import {describe,expect,it} from 'vitest';
+// @ts-ignore — import Node autorisé uniquement dans Vitest, hors types du bundle navigateur.
 import {readFileSync} from 'node:fs';
 const source=(name:string)=>readFileSync(new URL('./'+name,import.meta.url),'utf8');
 describe("Studio anatomique 0.7.41 — contrats d'intégration",()=>{
