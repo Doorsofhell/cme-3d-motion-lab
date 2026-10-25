@@ -290,20 +290,25 @@ export function StudioCoach(){
 
   
   <p className="coachCreationNote">Création en pose neutre : choisissez une zone et sa forme. Pour exécuter ou valider des techniques, ouvrez <strong>Mouvements</strong>.</p>
-    <nav className="coachGroupesAnatomiques" aria-label="Familles de personnalisation">
+    <nav className="coachGroupesAnatomiques sculptorXAxis" aria-label="Familles de personnalisation">
      {GROUPES_ANATOMIQUES.map(groupe=><button type="button" key={groupe.id}
       className={groupeActif.id===groupe.id?'active':''} aria-pressed={groupeActif.id===groupe.id}
       onClick={()=>ouvrirZone(groupe.zones[0])}>
       <AnatomyIcon zone={groupe.icone} className="coachGroupeIcone"/><span>{groupe.libelle}</span>
      </button>)}
     </nav>
-    <nav className="coachCategories" aria-label="Zones anatomiques">
+    <div className="sculptorDashboardBody">
+      <aside className="sculptorYAxis" aria-label="Sous-catégories anatomiques">
+      <nav className="coachCategories" aria-label="Zones anatomiques">
      {sections.filter(item=>groupeActif.zones.includes(item)).map(item=><button type="button" key={item}
        className={section===item?'active':''} aria-current={section===item?'true':undefined}
        onClick={()=>ouvrirZone(item)}><AnatomyIcon zone={item} className="coachCategoryIcon"/><span>{sectionNames[item]}</span></button>)}
     </nav>
-    <div className="coachEditorScroll" ref={editorScrollRef} aria-label="Réglages de la zone sélectionnée" tabIndex={0}>
+    </aside>
+      <div className="sculptorDashboardWorkspace">
+      <div className="coachEditorScroll" ref={editorScrollRef} aria-label="Réglages de la zone sélectionnée" tabIndex={0}>
     <h3 className="coachZoneCourante"><AnatomyIcon zone={section}/><span>Personnaliser : {sectionNames[section]}</span></h3>
+    <details className="coachAdvanced sculptorPrecisionPanel" open><summary>Réglages fins de la zone</summary><div className="coachFields">{section==='corps'&&<>{range('height','Taille relative',.9,1.1)}{range('shoulders','Épaules',.75,1.25,!!support?.shape.torsoVertices)}{range('muscle','Musculature',.7,1.35,!!support?.shape.torsoVertices)}{range('waist','Taille',.75,1.3,!!support?.shape.torsoVertices)}{range('arms','Volume des bras',.75,1.3,!!support?.shape.armVertices)}</>}{section==='visage'&&<>{range('jaw','Mâchoire',.8,1.2,faceAvailable('jaw'))}{range('nose','Nez',.8,1.2,faceAvailable('nose'))}{range('eyes','Yeux',.8,1.2,faceAvailable('eyes'))}</>}{section==='silhouette'&&<>{range('bust',look.sex==='femme'?'Volume de la poitrine':'Volume des pectoraux',.75,1.35,!!support?.shape.bustVertices)}{range('roundness','Rondeur générale',.7,1.3,!!support?.shape.torsoVertices)}{range('hips',look.sex==='femme'?'Hanches féminines':'Largeur du bassin',.75,1.35,!!support?.shape.hipVertices)}{range('glutes',look.sex==='femme'?'Galbe des fessiers':'Volume des fessiers',.75,1.35,!!support?.shape.hipVertices)}{range('thighs','Volume des cuisses',.75,1.3,!!support?.shape.thighVertices)}{range('calves','Volume des mollets',.75,1.3,!!support?.shape.calfVertices)}</>}</div></details>
     <div className="coachFields">
      {rigMode&&referenceMode&&<p className="coachAvailability">Lecture seule : revenir au créateur pour modifier les formes. Le modèle CC0 sert à examiner la silhouette réelle sur quatre angles.</p>}
      {section==='corps'&&<><p className="coachAvailability">Choisissez une forme adaptée au modèle {look.sex==='femme'?'féminin':'masculin'} : les zones voisines évoluent progressivement et conservent une silhouette cohérente.</p>{shapePicker(['shoulders','muscle','arms','waist'])}</>}
@@ -314,8 +319,7 @@ export function StudioCoach(){
      {section==='tenue'&&<><p className="coachAvailability">L’aperçu charge la véritable tenue 3D de la discipline sélectionnée. Les couleurs sont modifiables uniquement sur les parties identifiées.</p><label className="coachField"><span>Tenue de discipline</span><select value={discipline} onChange={e=>{setDiscipline(e.target.value as LabDiscipline);setReport(null);}}>{LAB_DISCIPLINES.map(d=><option key={d} value={d}>{disciplineNames[d]}</option>)}</select></label>{discipline==='bjj'&&<label className="coachField"><span>Équipement JJB</span><select value={noGi?'nogi':'gi'} onChange={e=>{setNoGi(e.target.value==='nogi');setReport(null);}}><option value="gi">Gi · kimono</option><option value="nogi">No-Gi · rashguard</option></select></label>}{color('topColor','Couleur du haut existant')}{color('bottomColor','Couleur du bas existant')}</>}
      {section==='protections'&&<div className="coachAccessoryPanel"><p className="coachAvailability">Accessoires cumulables : activez les équipements déjà présents dans la tenue 3D. Plusieurs protections peuvent être utilisées ensemble.</p>{(['gloves','shins'] as const).map(layer=><label key={layer} className="coachAccessoryToggle"><input type="checkbox" checked={accessories.includes(layer)} disabled={!support?.colors[layer==='gloves'?'gloveColor':'shinColor']} onChange={e=>setAccessories(v=>e.target.checked?[...v.filter(x=>x!==layer),layer]:v.filter(x=>x!==layer))}/><span>{layer==='gloves'?'Gants':'Protège-tibias'}</span><small>{(support?.colors[layer==='gloves'?'gloveColor':'shinColor']??0)>0?'Équipement détecté dans le modèle':'Non présent dans cette tenue'}</small></label>)}{color('gloveColor','Couleur des gants')}{color('shinColor','Couleur des protège-tibias')}</div>}
     </div>
-    <details className="coachAdvanced"><summary>Réglages fins de la zone</summary><div className="coachFields">{section==='corps'&&<>{range('height','Taille relative',.9,1.1)}{range('shoulders','Épaules',.75,1.25,!!support?.shape.torsoVertices)}{range('muscle','Musculature',.7,1.35,!!support?.shape.torsoVertices)}{range('waist','Taille',.75,1.3,!!support?.shape.torsoVertices)}{range('arms','Volume des bras',.75,1.3,!!support?.shape.armVertices)}</>}{section==='visage'&&<>{range('jaw','Mâchoire',.8,1.2,faceAvailable('jaw'))}{range('nose','Nez',.8,1.2,faceAvailable('nose'))}{range('eyes','Yeux',.8,1.2,faceAvailable('eyes'))}</>}{section==='silhouette'&&<>{range('bust',look.sex==='femme'?'Volume de la poitrine':'Volume des pectoraux',.75,1.35,!!support?.shape.bustVertices)}{range('roundness','Rondeur générale',.7,1.3,!!support?.shape.torsoVertices)}{range('hips',look.sex==='femme'?'Hanches féminines':'Largeur du bassin',.75,1.35,!!support?.shape.hipVertices)}{range('glutes',look.sex==='femme'?'Galbe des fessiers':'Volume des fessiers',.75,1.35,!!support?.shape.hipVertices)}{range('thighs','Volume des cuisses',.75,1.3,!!support?.shape.thighVertices)}{range('calves','Volume des mollets',.75,1.3,!!support?.shape.calfVertices)}</>}</div></details>
-    
+        
     <details className="coachExpertTools coachParcoursGuide"><summary>Parcours guidé · étapes</summary>
      <div className="coachStepNavigation" role="group" aria-label="Étapes de personnalisation">
       {studioSteps.map(item=><button key={item.id} type="button" aria-pressed={step===item.id} onClick={()=>selectStudioStep(item.id,item.first)}>{item.label}</button>)}
@@ -372,9 +376,11 @@ export function StudioCoach(){
      {message&&<p role="status" className="coachStatus">{message}</p>}
    </div>
      <footer className="coachCrud coachEditorFooter" aria-label="Validation et essai du coach">
-      <button type="button" className="coachSave" onClick={saveCoach}>{selectedId?'Enregistrer':'Créer le coach'}</button>
+      <button type="button" className="coachSave sculptorCommit" aria-label={selectedId?'Enregistrer les modifications':'Créer et enregistrer le coach'} title="Valider" onClick={saveCoach}>✓</button>
       <button type="button" className="coachTest" disabled={referenceMode} onClick={tryCoachInLab}>▶ Tester dans Mouvements</button>
      </footer>
+      </div>
+      </div>
     </div>
   </div>
  </section>;
