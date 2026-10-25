@@ -3,6 +3,7 @@ import {useFrame,useThree} from '@react-three/fiber';
 import {Box3,Bone,Object3D,PerspectiveCamera,Sphere,Vector3} from 'three';
 import {distancePourZone,mesurerZoneStudio,type StudioFocusZone} from './studioFocus';
 import {directionAnatomique,type AnatomicalView} from './AnatomicalReference';
+import {mesurerSilhouetteVisible,calculerDistanceSilhouette} from './anatomicalBounds';
 
 export function mesurerSquelette(racine:Object3D):{centre:Vector3;rayon:number;os:number}{
  racine.updateMatrixWorld(true);
@@ -33,8 +34,13 @@ export function CadrageSquelette({racine,actif,zone,refocus=0,orientation=null}:
  const orbit=controls as unknown as OrbitAccess|null;
  useEffect(()=>{
   if(!actif||!racine||!(camera instanceof PerspectiveCamera)){destination.current=null;return;}
-  const {centre,rayon}=zone?mesurerZoneStudio(racine,zone):mesurerSquelette(racine);
-  const distance=zone?distancePourZone(rayon,camera.fov,camera.aspect,zone):
+  // For a full-body anatomical comparison, include the skin and clothing
+  // envelope: breasts, hips, glutes and toes extend beyond skeleton pivots.
+  // Keep the bone-based autofocus for details and Motion Lab.
+  const silhouette=zone==='corps'?mesurerSilhouetteVisible(racine):null;
+  const {centre,rayon}=silhouette??(zone?mesurerZoneStudio(racine,zone):mesurerSquelette(racine));
+  const distance=silhouette?calculerDistanceSilhouette(rayon,camera.fov,camera.aspect):
+   zone?distancePourZone(rayon,camera.fov,camera.aspect,zone):
    Math.max(2,rayon/Math.sin(camera.fov*Math.PI/360)*1.2);
   // Preserve viewing direction if the user previously rotated, but recenter to
   // the true target bone region (including off-origin rigs).

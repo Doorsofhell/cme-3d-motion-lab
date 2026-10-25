@@ -91,7 +91,7 @@ export function StudioCoach(){
  const [rigMode,setRigMode]=useState(true);
  const [anatomicalPreview,setAnatomicalPreview]=useState(false);
  const [referenceMode,setReferenceMode]=useState(false);
- const [anatomicalView,setAnatomicalView]=useState<AnatomicalView|null>(null);
+ const [anatomicalView,setAnatomicalView]=useState<AnatomicalView|null>('face');
  const [cameraAuto,setCameraAuto]=useState(false);
  const [focusZone,setFocusZone]=useState<StudioFocusZone>('corps');
  const [focusRequest,setFocusRequest]=useState(0);
@@ -224,7 +224,7 @@ export function StudioCoach(){
   <p className="coachCreationNote">Création en pose neutre : choisissez une zone et sa forme. Pour exécuter ou valider des techniques, ouvrez <strong>Mouvements</strong>.</p>
   <div className="coachStudioLayout">
    <div ref={sceneFullscreen.ref as React.RefObject<HTMLDivElement>} className={`coachPreview ${sceneFullscreen.fullscreen?"cmeFullscreen":""}`} onDoubleClick={sceneFullscreen.onDoubleClick} onTouchEnd={sceneFullscreen.onTouchEnd} aria-label="Aperçu 3D du mannequin ; double clic pour agrandir">
-    <SceneToolbar variant="studio" actions={<><SceneCameraButton automatic={cameraAuto} onToggle={()=>setCameraAuto(v=>!v)}/><SceneFullscreenButton fullscreen={sceneFullscreen.fullscreen} onClick={sceneFullscreen.toggle}/></>}>
+    <SceneToolbar variant="studio" actions={<><SceneCameraButton automatic={cameraAuto} onToggle={()=>{setCameraAuto(v=>!v);setAnatomicalView(null);}}/><SceneFullscreenButton fullscreen={sceneFullscreen.fullscreen} onClick={sceneFullscreen.toggle}/></>}>
      <div className="coachRigSwitch" role="group" aria-label="Mode du modèle 3D"><button type="button" className={!rigMode?'active':''} aria-pressed={!rigMode} onClick={()=>{if(rigMode){beginRigLoad(look.sex,false,'mode');setRigMode(false);}}}>Tenue</button><button type="button" className={rigMode?'active':''} aria-pressed={rigMode} onClick={()=>{if(!rigMode){beginRigLoad(look.sex,true,'mode');setRigMode(true);}}}>Corps neutre</button></div>
     </SceneToolbar>
     <SceneLoadingIndicator/>
@@ -246,7 +246,7 @@ export function StudioCoach(){
       <button className={look.sex==='homme'?'active':''} onClick={()=>update('sex','homme')}>Homme</button>
       <button className={look.sex==='femme'?'active':''} onClick={()=>update('sex','femme')}>Femme</button>
     </div>
-    <div className="coachFocusLine" role="status"><span>Cadre : {cameraAuto?'caméra pédagogique':FOCUS_LABELS[focusZone]}</span><button type="button" onClick={()=>{setCameraAuto(false);recenter('corps');}}>Vue entière</button></div>
+    <div className="coachFocusLine" role="status"><span>Cadre : {cameraAuto?'caméra pédagogique':FOCUS_LABELS[focusZone]}</span><button type="button" onClick={()=>{setCameraAuto(false);setAnatomicalView('face');recenter('corps');}}>Vue entière</button></div>
     {rigMode&&<div className="coachAnatomicalReferenceSwitch">
       <button type="button" aria-pressed={referenceMode} onClick={()=>{setReferenceMode(v=>!v);setReport(null);setCameraAuto(false);recenter('corps');}}>{referenceMode?'Étalon 3D actif · revenir au créateur':'Comparer au modèle anatomique CC0 H/F'}</button>
       <small>{referenceMode?'Étude anatomique 3D en lecture seule. Les curseurs ne pilotent pas ce squelette distinct à 163 os.':'Deux véritables modèles organiques en A-pose, sans vêtement. Les coachs de combat restent inchangés.'}</small>
@@ -254,7 +254,7 @@ export function StudioCoach(){
       <small>Surface satinée sur le véritable GLB, sans tenue. La forme du modèle source reste à perfectionner pour atteindre les références.</small>
     </div>}
     <div className="coachReferenceViews" role="group" aria-label="Vues anatomiques">
-     {ANATOMICAL_VIEWS.map(v=><button key={v.id} type="button" aria-pressed={anatomicalView===v.id} onClick={()=>{setCameraAuto(false);setAnatomicalView(v.id);recenter('corps');}}>{v.label}</button>)}
+     {ANATOMICAL_VIEWS.map(v=><button key={v.id} type="button" aria-pressed={anatomicalView===v.id} title={'Orienter le mannequin : '+v.label} onClick={()=>{setCameraAuto(false);setAnatomicalView(v.id);recenter('corps');}}>{v.label}</button>)}
     </div>
     <p className="coachCapability" role="status">{rigMode&&referenceMode?'Étalon anatomique réel en lecture seule : référence CC0 de 163 os. Modification du coach et animations désactivées dans ce mode.':support?('Zones reconnues : corps '+support.shape.torsoVertices+' sommets · peau '+support.colors.skin+' matériau(x) · iris '+support.colors.eyeColor+' · cheveux '+support.colors.hairColor+'. Les options sans géométrie source restent enregistrables mais non rendues.'):'Chargement du modèle anatomique et de la tenue…'}</p>
     <nav className="coachCategories" aria-label="Choisir une zone du portrait-robot">{sections.map(item=><button key={item} className={section===item?'active':''} aria-current={section===item?'true':undefined} onClick={()=>{const dressed=item==='tenue'||item==='protections';setSection(item);setExpandedShape(null);recenter('corps');if(rigMode===dressed){beginRigLoad(look.sex,!dressed,'mode');setRigMode(!dressed);setReport(null);}}}><AnatomyIcon zone={item} className="coachCategoryIcon"/><span>{sectionNames[item]}</span></button>)}</nav>

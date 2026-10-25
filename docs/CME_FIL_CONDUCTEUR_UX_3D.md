@@ -264,3 +264,7 @@ Deux GLB anatomiques réels sans tenues, homme/femme, en A-pose, proviennent du 
 
 ## 25/10/2026 — 0.7.43 : correction de la personnalisation anatomique
 Clarification : homme/femme possèdent les mêmes catégories éditables, avec **interprétation physiologique et esthétique différenciée**. Nouveau groupe fessiers, effet 3D postérieur sur pelvis skinné, couplage borné des régions voisines, vocabulaire féminin/masculin, compatibilité anciens profils et mêmes composants Studio/Laboratoire. Le rendu final des planches et le retargeting des étalons CC0 restent distincts, à ne pas annoncer comme livrés.
+
+
+## 25/10/2026 — 0.7.44 : audit géométrique Android 4 vues
+L’utilisateur valide le lot B : priorité rendu homme/femme sous face, dos, profil droit, profil gauche. Défauts vérifiés dans le code : cadrage corps entier calculé sur les os seulement (volume cutané potentiellement hors cadre), aperçu Android trop petit, boutons de vue 2x2 sur mobile malgré 4 vues. Corrections : calcul conservateur des limites des meshes visibles, même distance pour les quatre angles, cadrage complet face par défaut, retour explicite « Vue entière », une rangée de vues tactile, aperçu mobile augmenté. Tests sur corps synthétiques homme/femme, orientations et ratios de viewport. Recette réelle Android/WebGL et conformité à la référence artistique à vérifier sur appareil et sur GLB finaux. Aucun changement des mouvements ni de Shadow.
