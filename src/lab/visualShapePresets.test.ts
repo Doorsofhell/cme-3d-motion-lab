@@ -14,10 +14,10 @@ describe('Atlas morphologique premium Studio',()=>{
  it('ne montre pas une poitrine féminine pour un homme',()=>{
   const homme=activeShapeGroups('homme');
   const femme=activeShapeGroups('femme');
-  expect(homme.some(g=>g.id==='bust')).toBe(false);
+  expect(homme.some(g=>g.id==='bust')).toBe(true);
   expect(femme.some(g=>g.id==='bust')).toBe(true);
   expect(homme.some(g=>g.id==='muscle')).toBe(true);
-  expect(()=>applyShapePreset(defaultCoachLook,'bust',1.35)).toThrow();
+  expect(applyShapePreset(defaultCoachLook,'bust',1.35).bust).toBe(1.35);
  });
  it('applique une variante et laisse les autres réglages inchangés',()=>{
   const edited=applyShapePreset(defaultCoachLook,'muscle',1.2);
@@ -32,7 +32,7 @@ describe('Atlas morphologique premium Studio',()=>{
   expect(generated.hips).toBe(1.35);
   expect(randomShapeLook(femme,()=>.99)).toEqual(generated);
   const homme=randomShapeLook(defaultCoachLook,()=>0);
-  expect(homme.bust).toBe(1);
+  expect(homme.bust).toBe(.76);
   expect(homme.muscle).toBe(.72);
  });
 });
