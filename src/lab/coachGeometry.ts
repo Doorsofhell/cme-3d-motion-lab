@@ -81,10 +81,8 @@ export function applyCoachBodyShape(root:Object3D,shape:CoachBodyShape):number{
   if(!state){
    const weights=computeTorsoWeights(o);
    if(!weights||!weights.some(x=>x>.4))return;
-   const female=shape.sex==='femme';
-   const femaleNeutral=!female||[
-    shape.roundness??1,shape.hips??1,shape.thighs??1,shape.bust??1
-   ].every(v=>Math.abs(v-1)<.001);
+   const femaleNeutral=[shape.roundness??1,shape.hips??1,shape.thighs??1,shape.bust??1]
+    .every(v=>Math.abs(v-1)<.001);
    if(!cache.has(o)&&Math.abs(shape.shoulders-1)<.001&&Math.abs(shape.muscle-1)<.001&&Math.abs(shape.waist-1)<.001&&femaleNeutral)return;
    const previous=o.geometry;
    const source=previous.getAttribute('position');
@@ -102,10 +100,10 @@ export function applyCoachBodyShape(root:Object3D,shape:CoachBodyShape):number{
   const muscle=clamp(shape.muscle,.7,1.35)-1;
   const waist=clamp(shape.waist,.75,1.3)-1;
   const female=shape.sex==='femme';
-  const roundness=female?clamp(shape.roundness??1,.7,1.3)-1:0;
-  const hips=female?clamp(shape.hips??1,.75,1.35)-1:0;
-  const thighs=female?clamp(shape.thighs??1,.75,1.3)-1:0;
-  const bust=female?clamp(shape.bust??1,.75,1.35)-1:0;
+  const roundness=clamp(shape.roundness??1,.7,1.3)-1;
+  const hips=clamp(shape.hips??1,.75,1.35)-1;
+  const thighs=clamp(shape.thighs??1,.75,1.3)-1;
+  const bust=clamp(shape.bust??1,.75,1.35)-1;
   // Compute the anterior chest envelope from the reference geometry rather
   // than assuming that BufferGeometry.boundingBox was precalculated.
   let sumX=0,sumY=0,sumZ=0,count=0,minChestX=Infinity,maxChestX=-Infinity;
@@ -144,7 +142,7 @@ export function applyCoachBodyShape(root:Object3D,shape:CoachBodyShape):number{
    const nx=(Math.abs(x-chestCenterX)-widthScale*.38)/(widthScale*.38);
    const ny=(y-chestCenterY)/(widthScale*.72);
    const localized=front?Math.exp(-nx*nx*1.8-ny*ny*1.7):0;
-   const projection=bust*.24*widthScale*chest*localized;
+   const projection=bust*(female?.24:.12)*widthScale*chest*localized;
    position.setXYZ(i,x*width,y,z*depth+projection);
    if(extent>.4)modified++;
   }
