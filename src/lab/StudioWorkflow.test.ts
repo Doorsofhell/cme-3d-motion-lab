@@ -7,7 +7,7 @@ describe('contrat majeur V1 — atelier de création et validation',()=>{
  const app=read('App.tsx');
  const css=read('StudioCoach.css');
  it('concentre Studio sur la personnalisation et renvoie les tests à Mouvements',()=>{
-  expect(studio).toContain('Création en pose neutre');
+  expect(studio).toContain('Création d’abord sur le corps neutre');
   expect(studio).not.toContain('2 · Test des mouvements');
   expect(studio).toContain('Tester dans Mouvements');
   expect(studio).toContain('setTestingMotion(false)');
