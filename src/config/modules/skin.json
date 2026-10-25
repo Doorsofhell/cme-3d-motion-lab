@@ -1,6 +1,6 @@
 {
   "id": "skin",
-  "version": 1,
+  "version": 2,
   "groups": [
     {
       "id": "skin",
@@ -20,5 +20,12 @@
       "driver": "materialColor",
       "type": "color_hex"
     }
-  ]
+  ],
+  "paletteModes": [
+    "realiste",
+    "anime"
+  ],
+  "irisColors": true,
+  "hairColors": true,
+  "shaderCapabilitiesRequired": true
 }
