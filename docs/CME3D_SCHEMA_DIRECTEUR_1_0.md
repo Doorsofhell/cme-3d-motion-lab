@@ -14,6 +14,12 @@ Règles obligatoires : dépôt **Shadow strictement en lecture seule** ; **zéro
 
 Format de communication : **Choix libre prioritaire**, **Choix 1 (Recommandé)**, **Choix 2**, **Choix 3**, actions réellement cliquables à la fin de chaque réponse. Français exclusif pour les réponses et la documentation ; une décision majeure par échange.
 
+## 9. Lot d'exécution 0.7.46 — implémentation UX mobile, sans changement moteur
+
+Cette étape traduit effectivement les décisions précédentes en code : barre unique **quatre onglets** via `NavigationPrincipale.tsx`, Galerie séparée, Plus regroupant les fonctions avancées, viewport Studio mobile fixe et dominant, panneau d'édition défilant indépendamment via `CmePremiumMobile.css`. Les tests de contrat remplacent les anciennes hypothèses de cinq onglets ; le code des modèles, les poids de skinning, les rigs, les séquences biomécaniques et Shadow ne sont pas modifiés.
+
+**Porte de recette** : exiger Vitest/typecheck/build/CI verts, publication Pages, boutons ≥44 px ; sur Android physique vérifier édition simultanée, hauteur visible du personnage, grille des quatre onglets, clavier logiciel, safe-area, rotation, persistance Studio→Galerie→Mouvements et accès à Plus. **FPS/GPU/latence : Non mesuré** sans exécution physique. Ne pas déclarer CME-3D 1.0 achevé ; les thèmes Premium, la hiérarchie des réglages et la conformité « zéro placebo » restent des travaux à suivre.
+
 ## 1. Décision fondatrice : expérience mobile premium d'abord
 
 Le commanditaire a explicitement choisi **B** : réaliser la refonte de l'expérience mobile à partir de ses maquettes **avant** l'intégration des futurs modèles anatomiques et des animations avancées. Cela ne dispense pas de conserver les modèles et mouvements *existants* fonctionnels pendant le chantier.

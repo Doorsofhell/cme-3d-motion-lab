@@ -14,6 +14,16 @@
 
 **Communication obligatoire :** terminer chaque réponse avec quatre choix cliquables, dans cet ordre et sous ces libellés : **Choix libre prioritaire**, **Choix 1 (Recommandé)**, **Choix 2**, **Choix 3**. Ne poser qu'une grande question à la fois. Ne jamais confondre documenté, codé, CI verte, fusionné, déployé et testé physiquement sur Android.
 
+## Exécution technique — 25/10/2026 : premier lot UX 0.7.46
+
+**Portée** : remplacement du menu historique à cinq onglets par le composant commun `NavigationPrincipale` à **quatre destinations Studio Coach / Mouvements / Galerie / Plus**. La Galerie est désormais indépendante du Studio. Plus conserve Comparatif CME/Shadow (Shadow lecture seule), lien vers l'Atlas documentaire, Laboratoire, incidents, options, versions et feuille de route. Un retour explicite relie les vues secondaires à Plus.
+
+Le Studio Android donne priorité au **viewport 3D fixe et dominant**, avec un **panneau inférieur contextuel autonome et scrollable**. Le parcours conserve les quatre angles et les sept zones existantes sans changer les modèles ni le rig. Le composant Canvas n'est plus démonté à cause de la clé portée par le conteneur de contenu. Les styles UX sont regroupés dans `src/lab/CmePremiumMobile.css` pour ce lot ; le nettoyage des nombreuses règles CSS historiques reste un chantier ciblé. Le recueil des métriques GPU/FPS réelles, les essais Android physique et les futures ressources GLB restent **« Non mesuré » / à valider**.
+
+**Audit 5 étapes** : (1) ajout compatible avec B + A + navigation A ; (2) impact limité à l'UX Android et aux composants d'application/config/tests, pas aux GLB/biomécanique ; (3) Shadow en lecture seule, aucun faux contrôle ajouté, rig/skinWeights et motions inchangés, aucun tracking ; (4) Vitest, typecheck, builds et CI requis avant fusion, touch targets ≥44 px, recette Android physique encore requise ; (5) documentation et release 0.7.46 mises à jour. **Version 1.0 reste une cible, pas une livraison terminée.**
+
+**Dette visuelle prioritaire suivante** : organiser l'édition anatomique dans le panneau inférieur (navigation par zones illustrées, sélection directe du mesh ou modèle hybride) ; cette décision n'est pas encore tranchée. Contrôler en parallèle les commandes sans actif GLB pour conformité « zéro placebo » sans casser la présente refonte.
+
 ## ARBITRAGE DE NAVIGATION VALIDÉ — 25/10/2026 : **choix A, quatre onglets**
 
 **Référence active et prioritaire sur tous les fragments historiques incompatibles ci-dessous :** la barre de navigation Android est **unique**, fixe en bas, avec **exactement quatre onglets ordonnés : Studio Coach → Mouvements → Galerie → Plus**. Le Comparatif **CME/Shadow** (Shadow strictement en lecture seule), l'**Atlas biomécanique** et **toutes les fonctionnalités techniques** (Laboratoire, performances, diagnostics, incidents, options, nouveautés, cache, aide et exports autorisés) restent accessibles dans **Plus**, sans retrait, perte de mesures ou création d'un cinquième onglet.
