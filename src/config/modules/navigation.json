@@ -1,0 +1,48 @@
+{
+  "id": "navigation",
+  "version": 1,
+  "items": [
+    {
+      "id": "studio",
+      "label": "Studio",
+      "icon": "user-round-pen",
+      "order": 1
+    },
+    {
+      "id": "lab",
+      "label": "Mouvements",
+      "icon": "play",
+      "order": 2
+    },
+    {
+      "id": "technical",
+      "label": "Technique",
+      "icon": "cpu",
+      "order": 3
+    },
+    {
+      "id": "versions",
+      "label": "Versions",
+      "icon": "history",
+      "order": 4
+    },
+    {
+      "id": "other",
+      "label": "Autres",
+      "icon": "grid",
+      "order": 5
+    }
+  ],
+  "secondary": [
+    "comparison",
+    "roadmap",
+    "tracking",
+    "options"
+  ],
+  "defaultTheme": "auto",
+  "themes": [
+    "auto",
+    "light",
+    "dark"
+  ]
+}
