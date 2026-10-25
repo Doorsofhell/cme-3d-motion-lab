@@ -120,3 +120,23 @@ export function applyNeutralRigMaterials(root:Object3D):number{
  });
  return count;
 }
+
+
+/** Studio Creator: hide garments without destroying the source skin/hair/eye textures.
+ * On the cloned rig only; the source GLB, texture maps and materials remain untouched.
+ * Unlike the technical gray Anatomy mode, this is a paintable neutral mannequin.
+ */
+export function prepareEditableNeutralBody(root:Object3D):number{
+ let hidden=0;
+ root.traverse(object=>{
+  const mesh=object as Mesh;
+  if(!mesh.isMesh)return;
+  const id=mesh.name.toLowerCase();
+  if(/(^|[_. :/-])(tenue|garment|clothing|shirt|rashguard|shorts?|pants?|pantalon|brassiere|vest|veste|gi|kimono|gloves?|gants?|shinguards?|headgear|helmet|pads?|shoes?|chaussure)([_. :/-]|$)/.test(id)){
+   mesh.visible=false;hidden++;return;
+  }
+  mesh.visible=true;
+  // Keep all skin maps and their original roughness/normal detail intact.
+ });
+ return hidden;
+}
