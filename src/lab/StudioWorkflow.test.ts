@@ -14,8 +14,8 @@ describe('contrat majeur V1 — atelier de création et validation',()=>{
   expect(studio).toContain('creationPose={!testingMotion}');
   expect(studio).toContain('playing={testingMotion&&playing}');
  });
- it('conserve une seule navigation principale à quatre destinations',()=>{
-  for(const name of ['Studio','Galerie Coachs','Comparatif','Plus'])expect(app).toContain('<span>'+name+'</span>');
+ it('conserve une seule navigation principale à cinq destinations',()=>{
+  for(const name of ['Studio','Mouvements','Technique','Versions','Autres'])expect(app).toContain('<span>'+name+'</span>');
  });
  it('préserve les vrais GLB et les composants de scène partagés',()=>{
   expect(studio).toContain('<NeutralRig');
