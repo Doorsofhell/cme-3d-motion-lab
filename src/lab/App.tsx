@@ -21,6 +21,7 @@ import shadowExercises from './shadowExercises.json';
 import {ComparisonPanel} from './ComparisonPanel';
 import {fighterRoster} from './fighterRoster';
 import {VersionsPanel} from './VersionsPanel';
+import {RoadmapPanel} from './RoadmapPanel';
 import {IncidentReporter,IssueTracker,useKnownIssues,type TestContext} from './Issues';
 import {unresolvedDrafts} from './IssueLinks';
 import {buildFullReport,useSessionJournal} from './SessionReport';
@@ -217,7 +218,7 @@ export function App(){
  const [moreOpen,setMoreOpen]=useState(false);
  const stageFullscreen=useSceneFullscreen();
 
- const [tab,setTab]=useState<'lab'|'gallery'|'tracking'|'comparison'|'versions'|'options'|'studio'|'technical'>('studio');
+ const [tab,setTab]=useState<'lab'|'gallery'|'tracking'|'comparison'|'versions'|'options'|'studio'|'technical'|'roadmap'>('studio');
  useEffect(()=>{const open=()=>setTab('lab');window.addEventListener('cme-open-lab-coach',open);return()=>window.removeEventListener('cme-open-lab-coach',open);},[]);
  const [pageVisible,setPageVisible]=useState(()=>typeof document==='undefined'||document.visibilityState==='visible');
  useEffect(()=>{const sync=()=>setPageVisible(document.visibilityState==='visible');document.addEventListener('visibilitychange',sync);return()=>document.removeEventListener('visibilitychange',sync);},[]);
@@ -358,6 +359,7 @@ export function App(){
   {tab==='gallery'&&<section className="cmeCoachGallery" aria-label="Galerie Coachs"><header><h2>Galerie Coachs</h2><p>Choisissez un combattant enregistré. Sa configuration est partagée avec Studio et le banc d'essai.</p></header><SavedCoachLibrary selectedId={selectedCoach?.id??null} openCoach={id=>{selectSavedCoach(id);setTab('lab');}} editCoach={id=>{try{localStorage.setItem('cme-selected-coach',id);}catch{}setTab('studio');}}/><button className="galleryCreate" type="button" onClick={()=>setTab('studio')}>Créer un combattant dans Studio</button></section>}
   {tab==='studio'&&<StudioCoach/>}
   {tab==='versions'&&<VersionsPanel/>}
+  {tab==='roadmap'&&<RoadmapPanel/>}
   {tab==='technical'&&<section className="cmeTechnicalScreen" aria-label="Centre technique"><h2>Centre technique</h2><p>Les diagnostics et outils avancés sont regroupés ici, séparément du parcours de personnalisation.</p><button type="button" onClick={()=>{setTab('lab');setDebug(true);}}>Ouvrir les diagnostics du moteur</button><button type="button" onClick={()=>setTab('tracking')}>Voir les incidents</button></section>}
   {tab==='options'&&<section className="cmeOptions" aria-label="Options CME-3D">
    <h2>Options du laboratoire</h2>
@@ -389,8 +391,9 @@ export function App(){
   <button className={tab==='gallery'?'selected':''} aria-current={tab==='gallery'?'page':undefined} onClick={()=>{setTab('gallery');setMoreOpen(false);setDebug(false);}}>♧ <span>Galerie Coachs</span></button>
   <button className={tab==='comparison'?'selected':''} aria-current={tab==='comparison'?'page':undefined} onClick={openComparison}>⇄ <span>Comparatif</span></button>
   <div className="labMore">
-   <button className={['tracking','versions','options','technical'].includes(tab)?'selected':''} aria-haspopup="true" aria-expanded={moreOpen} aria-controls="cmeMoreMenu" onClick={()=>setMoreOpen(v=>!v)}>⋯ <span>Plus</span>{pendingDrafts.length>0&&<i className="labMoreDot"/>}</button>
+   <button className={['tracking','versions','options','technical','roadmap'].includes(tab)?'selected':''} aria-haspopup="true" aria-expanded={moreOpen} aria-controls="cmeMoreMenu" onClick={()=>setMoreOpen(v=>!v)}>⋯ <span>Plus</span>{pendingDrafts.length>0&&<i className="labMoreDot"/>}</button>
    {moreOpen&&<div id="cmeMoreMenu" className="labMoreMenu" role="group" aria-label="Fonctions complémentaires">
+    <button onClick={()=>{setTab('roadmap');setMoreOpen(false);}}>☷ Feuille de route</button>
     <button onClick={()=>{setTab('versions');setMoreOpen(false);}}>✦ Nouveautés</button>
     <button onClick={()=>{setTab('technical');setMoreOpen(false);}}>◈ Centre technique</button>
     <button onClick={()=>{journal.record('navigation','Ouverture Suivi des corrections');void known.refresh();setTab('tracking');setDebug(false);setMoreOpen(false);}}>⚑ Incidents {pendingDrafts.length>0&&`(${pendingDrafts.length})`}</button>
