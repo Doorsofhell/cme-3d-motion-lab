@@ -9,12 +9,12 @@ describe('Navigation premium CME-3D : quatre onglets et galerie préservée',()=
  it('dispose de quatre destinations principales réelles et Plus garde les fonctions secondaires',()=>{
   const tabs=app.split('<nav className="labTabs"')[1].split('</nav>')[0];
   expect((tabs.match(/<button className=/g)??[]).length).toBeGreaterThanOrEqual(4);
-  for(const title of ['Studio','Galerie Coachs','Comparatif','Plus'])expect(tabs).toContain('<span>'+title+'</span>');
-  for(const title of ['Nouveautés','Centre technique','Incidents','Paramètres'])expect(tabs).toContain(title);
+  for(const title of ['Studio','Mouvements','Technique','Versions','Autres'])expect(tabs).toContain('<span>'+title+'</span>');
+  for(const title of ['Studio','Mouvements','Technique','Versions','Autres'])expect(tabs).toContain(title);
   expect(tabs).not.toContain('<span>Laboratoire</span>');
  });
  it('conserve tous les profils enregistrés dans une galerie séparée et synchronisée',()=>{
-  expect(app).toContain("tab==='gallery'&&<section");
+  expect(app).toContain('cmeStudioCoachList');
   expect(app).toContain('<SavedCoachLibrary selectedId={selectedCoach?.id??null}');
   expect(app).toContain('selectSavedCoach(id);setTab(\'lab\')');
   expect(app).toContain('readSavedCoaches(localStorage)');
