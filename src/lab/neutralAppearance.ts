@@ -132,3 +132,24 @@ export function applyNeutralRigMaterials(root:Object3D):number{
  });
  return count;
 }
+
+
+/**
+ * Neutral Creator: show a true, editable human silhouette with original skin,
+ * hair and iris textures. This never installs the technical grey anatomy shader.
+ * Called only on a cloned scene, leaving source assets and outfits untouched.
+ */
+export function prepareEditableNeutralBody(root:Object3D):number{
+ let hidden=0;
+ root.traverse(o=>{
+  const mesh=o as Mesh;
+  if(!mesh.isMesh)return;
+  const id=mesh.name.toLowerCase();
+  if(/(^|[_. :/-])(tenue|garment|clothing|shirt|rashguard|shorts?|pants?|pantalon|brassiere|vest|veste|gi|kimono|gloves?|gants?|shinguards?|headgear|helmet|pads?|shoes?|chaussure)([_. :/-]|$)/.test(id)){
+   mesh.visible=false;hidden++;return;
+  }
+  // Respect meshes deliberately hidden by the renderer itself.
+  if(!mesh.userData.cmeHiddenSource)mesh.visible=true;
+ });
+ return hidden;
+}
