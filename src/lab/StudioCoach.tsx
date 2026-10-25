@@ -11,7 +11,7 @@ import {NeutralRig,LAB_DISCIPLINES,type LabDiscipline,type NeutralRigReport} fro
 import './StudioCoach.css';
 import {SKIN_TONES} from './skinTones';
 import {focusForSection,focusForSetting,FOCUS_LABELS,type StudioFocusZone} from './studioFocus';
-import {addSavedCoach,readSavedCoaches,updateSavedCoach,deleteSavedCoach} from './savedCoaches';
+import {addSavedCoach,readSavedCoaches,updateSavedCoach,deleteSavedCoach,suggestCoachNickname} from './savedCoaches';
 import {studioTechniqueCatalog} from './studioTechniqueCatalog';
 import {activeShapeGroups,applyShapePreset,randomShapeLook,type ShapeGroup} from './visualShapePresets';
 import {MorphThumbnail} from './MorphThumbnail';
@@ -75,6 +75,7 @@ const disciplineNames:Record<LabDiscipline,string>={boxing:'Boxe anglaise',kickb
 export function StudioCoach(){
  const [look,setLook]=useState<CoachLook>(()=>{try{const id=localStorage.getItem('cme-selected-coach');return normalizeCoachLook(readSavedCoaches(localStorage).find(x=>x.id===id)?.look??defaultCoachLook);}catch{return defaultCoachLook;}});
  const [selectedId,setSelectedId]=useState<string|null>(()=>{try{return localStorage.getItem('cme-selected-coach');}catch{return null;}});
+ const [identity,setIdentity]=useState(()=>{try{const id=localStorage.getItem('cme-selected-coach');const c=readSavedCoaches(localStorage).find(x=>x.id===id);return {nickname:c?.nickname??'',heightCm:c?.heightCm?.toString()??'',weightKg:c?.weightKg?.toString()??'',nicknameVariant:0};}catch{return {nickname:'',heightCm:'',weightKg:'',nicknameVariant:0};}});
  const [section,setSection]=useState<Category>('corps');
  const [expandedShape,setExpandedShape]=useState<string|null>(null);
  const [message,setMessage]=useState('');
@@ -188,12 +189,20 @@ export function StudioCoach(){
  };
  const saveCoach=()=>{try{const existing=readSavedCoaches(localStorage).find(c=>c.id===selectedId);const name=window.prompt('Nom du coach',existing?.name??(look.sex==='homme'?'Coach homme':'Coach femme'))?.trim();if(!name)return;const id=existing?.id??crypto.randomUUID();let portrait=existing?.portrait;
   try{if(!testingMotion&&!rigMode&&report?.appearanceSupport){const source=portraitCanvas.current;if(source&&source.width>0&&source.height>0){const dest=document.createElement('canvas');dest.width=240;dest.height=300;const ctx=dest.getContext('2d');if(ctx){ctx.fillStyle='#dce5ee';ctx.fillRect(0,0,240,300);ctx.drawImage(source,0,0,source.width,source.height,0,0,240,300);portrait=dest.toDataURL('image/jpeg',.76);}}}}catch{/* Context unreadable: retain old portrait. */}
-  const profile={id,name:name.slice(0,60),createdAt:existing?.createdAt??new Date().toISOString(),look:normalizeCoachLook(look),portrait};if(existing)updateSavedCoach(localStorage,profile);else addSavedCoach(localStorage,profile);localStorage.setItem('cme-selected-coach',id);localStorage.setItem('cme-lab-coach',id);setSelectedId(id);window.dispatchEvent(new Event('cme-coaches-changed'));setMessage(existing?'Coach mis à jour et sélectionné dans le Laboratoire.':'Coach enregistré et sélectionné dans le Laboratoire.');}catch{setMessage('Enregistrement impossible sur cet appareil.');}};
+  const profile={id,name:name.slice(0,60),createdAt:existing?.createdAt??new Date().toISOString(),look:normalizeCoachLook(look),portrait,nickname:identity.nickname.trim().slice(0,60)||undefined,initialDiscipline:existing?.initialDiscipline??discipline,heightCm:identity.heightCm?Number(identity.heightCm):undefined,weightKg:identity.weightKg?Number(identity.weightKg):undefined};if(existing)updateSavedCoach(localStorage,profile);else addSavedCoach(localStorage,profile);localStorage.setItem('cme-selected-coach',id);localStorage.setItem('cme-lab-coach',id);setSelectedId(id);window.dispatchEvent(new Event('cme-coaches-changed'));setMessage(existing?'Coach mis à jour et sélectionné dans le Laboratoire.':'Coach enregistré et sélectionné dans le Laboratoire.');}catch{setMessage('Enregistrement impossible sur cet appareil.');}};
  const newCoach=()=>{if(look.sex!=='homme')beginRigLoad('homme',rigMode,'switch');setSelectedId(null);setLook(defaultCoachLook);try{localStorage.removeItem('cme-selected-coach');}catch{}setMessage('Nouveau personnage : choisissez un modèle neutre, puis personnalisez-le.');};
  const removeCoach=()=>{if(!selectedId||!window.confirm('Supprimer définitivement ce coach de cet appareil ?'))return;try{deleteSavedCoach(localStorage,selectedId);if(localStorage.getItem('cme-lab-coach')===selectedId)localStorage.removeItem('cme-lab-coach');localStorage.removeItem('cme-selected-coach');setSelectedId(null);setLook(defaultCoachLook);window.dispatchEvent(new Event('cme-coaches-changed'));setMessage('Coach supprimé.');}catch{setMessage('Suppression impossible.');}};
  const exportJson=()=>{const json=JSON.stringify({schema:'cme-coach-look-v1',look},null,2);const blob=new Blob([json],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='cme-coach-look.json';a.click();URL.revokeObjectURL(url);setMessage('Configuration exportée : apparence uniquement, sans modification du moteur.');};
  return <section className="coachStudio" aria-label="Studio Coach">
   <header className="coachStudioHeader"><div><small>ATELIER CME-3D</small><h2>Créer et valider votre combattant</h2></div></header>
+  <details className="coachIdentity"><summary>Identité du combattant · surnom, taille et poids</summary>
+   <div className="coachIdentityFields">
+    <label>Surnom <input aria-label="Surnom du combattant" maxLength={60} value={identity.nickname} onChange={e=>setIdentity(v=>({...v,nickname:e.target.value}))}/></label>
+    <button type="button" onClick={()=>setIdentity(v=>({ ...v,nickname:suggestCoachNickname({name:readSavedCoaches(localStorage).find(c=>c.id===selectedId)?.name??'Combattant',look,initialDiscipline:discipline},v.nicknameVariant),nicknameVariant:v.nicknameVariant+1}))}>Générer un surnom</button>
+    <label>Taille (cm) <input aria-label="Taille en centimètres" type="number" min={100} max={250} step={1} value={identity.heightCm} onChange={e=>setIdentity(v=>({...v,heightCm:e.target.value}))}/></label>
+    <label>Poids (kg) <input aria-label="Poids en kilogrammes" type="number" min={25} max={300} step={.1} value={identity.weightKg} onChange={e=>setIdentity(v=>({...v,weightKg:e.target.value}))}/></label>
+   </div>
+  </details>
   <div className="cmeStudioWorkflow" role="group" aria-label="Mode de travail du Studio">
    <button type="button" className={!testingMotion?"active":""} aria-pressed={!testingMotion} onClick={()=>{setTestingMotion(false);setPlaying(false);setMotionId("garde");setCameraAuto(false);recenter("corps");}}>1 · Création</button>
    <button type="button" className={testingMotion?"active":""} aria-pressed={testingMotion} onClick={()=>{setTestingMotion(true);setPlaying(false);setCameraAuto(false);recenter("corps");}}>2 · Test des mouvements</button>
