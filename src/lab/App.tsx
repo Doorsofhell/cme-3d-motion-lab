@@ -219,7 +219,7 @@ export function App(){
  const [moreOpen,setMoreOpen]=useState(false);
  const stageFullscreen=useSceneFullscreen();
 
- const [theme,setTheme]=useState<'auto'|'light'|'dark'>(()=>{try{const v=localStorage.getItem('cme-theme');return v==='light'||v==='dark'?v:getConfigModule('navigation').defaultTheme;}catch{return getConfigModule('navigation').defaultTheme;}});
+ const [theme,setTheme]=useState<'auto'|'light'|'dark'>(()=>{try{const v=localStorage.getItem('cme-theme');return v==='light'||v==='dark'?v:getConfigModule('navigation').defaultTheme as 'auto';}catch{return getConfigModule('navigation').defaultTheme as 'auto';}});
  useEffect(()=>{document.documentElement.setAttribute('data-cme-theme',theme);try{localStorage.setItem('cme-theme',theme);}catch{}},[theme]);
  const [tab,setTab]=useState<'lab'|'gallery'|'tracking'|'comparison'|'versions'|'options'|'studio'|'technical'|'roadmap'|'other'>('studio');
  useEffect(()=>{const open=()=>setTab('lab');window.addEventListener('cme-open-lab-coach',open);return()=>window.removeEventListener('cme-open-lab-coach',open);},[]);
