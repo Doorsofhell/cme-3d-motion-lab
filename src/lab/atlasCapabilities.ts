@@ -7,7 +7,7 @@ export function currentAtlasCapabilities(report:NeutralRigReport|null,sex:CoachL
  if(neutral||!report||report.sex!==sex)return null;
  return report.appearanceSupport;
 }
-export function canEditAtlasShape(group:ShapeGroup,support:NonNullable<ReturnType<typeof currentAtlasCapabilities>>){
+export function canEditAtlasShape(group:ShapeGroup,support:ReturnType<typeof currentAtlasCapabilities>){
  if(!support)return false;
  switch(group.requires){
   case 'torso':return support.shape.torsoVertices>0;
