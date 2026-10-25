@@ -113,9 +113,9 @@ export function applyComicStyle(root:Object3D,quality:Quality){
  });
  return outlines;
 }
-export function Fighter({actor,outfit,technique,coachPlan,playback,skeleton,quality,renderStyle,onReport,onReady,onMotionSample,coachLook}:{
+export function Fighter({actor,outfit,technique,coachPlan,playback,skeleton,quality,renderStyle,onReport,onReady,onMotionSample,coachLook,handedness='right'}:{
  actor:'mma-kadir'|'mma-amara'|'mma-naira';outfit:string;technique:string;coachPlan?:CoachPlan|null;playback:RefObject<Playback>;skeleton:boolean;
- quality:Quality;renderStyle:RenderStyle;onReport:(r:RigReport)=>void;onReady:()=>void;onMotionSample?:(id:string,progress:number,nowMs:number)=>void;coachLook?:CoachLook|null;
+ quality:Quality;renderStyle:RenderStyle;onReport:(r:RigReport)=>void;onReady:()=>void;onMotionSample?:(id:string,progress:number,nowMs:number)=>void;coachLook?:CoachLook|null;handedness?:'right'|'left';
 }){
  const base=import.meta.env.BASE_URL;
  // The original v0.31 Shadow coach rig + motion library is used unmodified.
@@ -201,5 +201,7 @@ export function Fighter({actor,outfit,technique,coachPlan,playback,skeleton,qual
    t.current=0;
   }
  });
- return <group><primitive object={scene}/>{skeleton&&<primitive object={helper}/>}</group>;
+ // Mirror the entire articulated character in test mode for a left-handed stance.
+ // No changes to canonical animations, bind matrices or morph targets.
+ return <group scale={handedness==='left'?[-1,1,1]:[1,1,1]}><primitive object={scene}/>{skeleton&&<primitive object={helper}/>}</group>;
 }
