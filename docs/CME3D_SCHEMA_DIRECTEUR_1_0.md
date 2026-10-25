@@ -14,6 +14,18 @@ Règles obligatoires : dépôt **Shadow strictement en lecture seule** ; **zéro
 
 Format de communication : **Choix libre prioritaire**, **Choix 1 (Recommandé)**, **Choix 2**, **Choix 3**, actions réellement cliquables à la fin de chaque réponse. Français exclusif pour les réponses et la documentation ; une décision majeure par échange.
 
+## Décision visuelle libre et lot UX 0.7.47 — 25/10/2026
+
+**Arbitrage utilisateur actif :** la priorité visuelle absolue est de rapprocher CME-3D des neuf maquettes transmises, sans présumer l'adoption du toucher direct sur le maillage. Les choix déjà validés demeurent : refonte Android avant moteur 3D définitif ; grande scène fixe dominante en haut ; panneau inférieur contextuel ; une seule navigation inférieure Studio Coach / Mouvements / Galerie / Plus.
+
+**Traduction implémentée dans ce lot :** fond et scène anthracite, repères de cadrage discrets, vrai mannequin Three.js, choix Homme/Femme directement sur la scène, quatre **familles anatomiques illustrées** (Corps, Visage, Peau, Tenues) et sept sous-zones conservées (Corps, Silhouette, Visage, Cheveux, Peau, Tenue, Protections). La sélection d'une zone recadre le modèle, mais ne change pas son squelette. Préréglages visuels et palette contrôlés par les actifs chargés ; réglages fins, vue orthogonale et parcours guidé accessibles dans des sections secondaires. Sélection cyan, validation rouge, cibles tactiles d'au moins 44 px et panneau scrollable séparé de la scène.
+
+**Méthode en cinq étapes appliquée :** (1) décision libre additive fidèle aux images ; (2) impacts sur composition UI, CSS, caméra, couleur d'arrière-plan et composants partagés ; aucun changement du rig, des weights ou des animations ; (3) Shadow sanctuarisé et aucune captation ni animation factice ajoutée ; palettes peau dépendantes du rapport réel des matériaux, choix de coiffures sans actif GLB spécialisé désactivés et explicitement expliqués ; (4) Vitest, typecheck, build, validations GLB et CI obligatoirement verts avant fusion ; contrôle visuel Android physique toujours nécessaire ; (5) schéma directeur, prompt maître et fil conducteur mis à jour.
+
+**Limites :** ces neuf images restent des maquettes de direction artistique, pas les actifs GLB de CME. Les deux modèles anatomiques définitifs, les textures réalistes complètes, les cheveux spécialisés et les morphs du visage restent des jalons 3D futurs. Les anciennes coiffures procédurales encore présentes dans la couche moteur constituent une dette distincte : ne pas les décrire comme des assets professionnels. Aucun résultat réel FPS / GPU / latence Android n'est revendiqué : **Non mesuré**.
+
+**Prochaine priorité opérationnelle recommandée :** recette visuelle sur un Android physique et consolidation des derniers conflits CSS, puis audit des capacités GLB face/cheveux/peau pour compléter l'interface sans placebo. L'interaction directe par toucher anatomique du mesh reste optionnelle et non validée par ce choix libre.
+
 ## 9. Lot d'exécution 0.7.46 — implémentation UX mobile, sans changement moteur
 
 Cette étape traduit effectivement les décisions précédentes en code : barre unique **quatre onglets** via `NavigationPrincipale.tsx`, Galerie séparée, Plus regroupant les fonctions avancées, viewport Studio mobile fixe et dominant, panneau d'édition défilant indépendamment via `CmePremiumMobile.css`. Les tests de contrat remplacent les anciennes hypothèses de cinq onglets ; le code des modèles, les poids de skinning, les rigs, les séquences biomécaniques et Shadow ne sont pas modifiés.

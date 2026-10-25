@@ -31,7 +31,7 @@ describe('Studio Coach : cohérence tactile Android',()=>{
   const rig=readFileSync(new URL('./NeutralRig.tsx',import.meta.url),'utf8');
   const framing=readFileSync(new URL('./CadrageSquelette.tsx',import.meta.url),'utf8');
   expect(studio).toContain('focusZone={focusZone} focusRequest={focusRequest}');
-  expect(studio).toContain("setSection(item);setExpandedShape(null);recenter('corps')");
+  expect(studio).toContain('setSection(item);setExpandedShape(null);recenter(focusForSection(item))');
   expect(studio).toContain('selectFocus(focusForSetting(key,section))');
   expect(studio).toContain('Vue entière');
   expect(studio).toContain('setCameraAuto(false);recenter(\'corps\')');
@@ -44,7 +44,7 @@ describe('Studio Coach : cohérence tactile Android',()=>{
   const studio=readFileSync(new URL('./StudioCoach.tsx',import.meta.url),'utf8');
   const focus=readFileSync(new URL('./studioFocus.ts',import.meta.url),'utf8');
   const rig=readFileSync(new URL('./NeutralRig.tsx',import.meta.url),'utf8');
-  expect(studio).toContain('sections.map(item=>');
+  expect(studio).toContain('sections.filter(item=>groupeActif.zones.includes(item)).map(item=>');
   expect(studio).toContain("section==='silhouette'&&");
   expect(studio).toContain("range('hips',look.sex==='femme'");
   expect(studio).toContain("range('thighs','Volume des cuisses'");
