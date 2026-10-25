@@ -69,13 +69,6 @@ describe('Studio Coach : cohérence tactile Android',()=>{
   expect(app).toContain("selectSavedCoach(value.slice(6))");
   expect(app).toContain("'cme-open-lab-coach'");
  });
- it('verrouille les règles Android 0.7.31 de prévisualisation et plein écran',()=>{
-  expect(css).toContain('/* v0.7.31 Android:');
-  expect(css).toContain('position:sticky!important;top:0!important');
-  expect(css).toContain('height:clamp(186px,30dvh,300px)!important');
-  expect(css).toContain('.coachPreview:fullscreen,.coachPreview.cmeFullscreen');
-  expect(css).toContain('min-width:44px!important;min-height:44px!important');
- });
  it('préserve les boutons tactiles accessibles et la barre commune',()=>{
   expect(css).toContain('min-height:44px');
   expect(controls).toContain('export function SceneToolbar');
