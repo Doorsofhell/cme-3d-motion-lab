@@ -4,9 +4,9 @@ import {describe,it,expect} from 'vitest';
 const source=(name:string)=>readFileSync(new URL('./'+name,import.meta.url),'utf8');
 describe('CME-3D UX : parcours uniques, design system et accessibilité',()=>{
  const app=source('App.tsx'),studio=source('StudioCoach.tsx'),theme=source('UxSystem.css');
- it('conserve cinq écrans sans barre de fonctions techniques flottante',()=>{
-  const tabs=app.split('<nav className="labTabs"')[1].split('</nav>')[0];
-  for(const name of ['Studio','Mouvements','Technique','Versions','Autres'])expect(tabs).toContain('<span>'+name+'</span>');
+ it('conserve quatre destinations sans barre de fonctions techniques flottante',()=>{
+  const tabs=source('NavigationPrincipale.tsx');
+  for(const name of ['Studio Coach','Mouvements','Galerie','Plus'])expect(tabs).toContain("libelle:'"+name+"'");
   expect(app).toContain('data-cme-screen={tab}');
   expect(app).not.toContain('title="Console de débogage"');
   expect(app).not.toContain('title="Réglages avancés"');
@@ -33,5 +33,6 @@ describe('CME-3D UX : parcours uniques, design system et accessibilité',()=>{
   expect(theme).toContain('overscroll-behavior-y:contain');
   expect(theme).toContain('min-height:44px');
   expect(theme).toContain('@media(max-width:760px)');
+  expect(source('CmePremiumMobile.css')).toContain('overflow:hidden!important');
  });
 });
