@@ -18,7 +18,7 @@ describe('CME 0.7.42 — vrais GLB anatomiques MakeHuman CC0',()=>{
   expect(read('.github/workflows/deploy-pages.yml')).toContain('npm run fetch:anatomy');
   expect(read('.github/workflows/studio-coach-checks.yml')).toContain('npm run fetch:anatomy');
  });
- it('préserve la scène de combat et l'éditeur natif',()=>{
+ it("préserve la scène de combat et l'éditeur natif",()=>{
   const studio=read('src/lab/StudioCoach.tsx');
   expect(studio).toContain('AnatomicalReferenceRig');
   expect(studio).toContain('rigMode&&referenceMode?');
