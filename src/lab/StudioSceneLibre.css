@@ -228,3 +228,17 @@
  .labApp[data-cme-screen="studio"] .coachEditor{flex-basis:48%!important}
  .labApp[data-cme-screen="studio"] .coachStudioHeader{display:none}
 }
+
+
+/* Plein écran : sortie accessible même après retrait des barres de la scène. */
+.labApp[data-cme-screen="studio"] .coachFermerPleinEcran{
+ position:absolute;right:10px;top:10px;z-index:30;
+ min-width:98px;min-height:44px;padding:8px 12px;
+ color:#fff;background:#283342e8;border:1px solid #8494a8;
+ border-radius:10px;font-weight:750;
+}
+@media(max-width:760px){
+ .labApp[data-cme-screen="studio"] .coachStudioHeader{display:none!important}
+ .labApp[data-cme-screen="studio"] .coachSceneStack{flex-basis:59%;max-height:66%}
+ .labApp[data-cme-screen="studio"] .coachEditor{flex-basis:41%!important}
+}
