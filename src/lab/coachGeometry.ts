@@ -102,10 +102,10 @@ export function applyCoachBodyShape(root:Object3D,shape:CoachBodyShape):number{
   const muscle=clamp(shape.muscle,.7,1.35)-1;
   const waist=clamp(shape.waist,.75,1.3)-1;
   const female=shape.sex==='femme';
-  const roundness=female?clamp(shape.roundness??1,.7,1.3)-1:0;
-  const hips=female?clamp(shape.hips??1,.75,1.35)-1:0;
-  const thighs=female?clamp(shape.thighs??1,.75,1.3)-1:0;
-  const bust=female?clamp(shape.bust??1,.75,1.35)-1:0;
+  const roundness=clamp(shape.roundness??1,.7,1.3)-1;
+  const hips=clamp(shape.hips??1,.75,1.35)-1;
+  const thighs=clamp(shape.thighs??1,.75,1.3)-1;
+  const bust=clamp(shape.bust??1,.75,1.35)-1;
   // Compute the anterior chest envelope from the reference geometry rather
   // than assuming that BufferGeometry.boundingBox was precalculated.
   let sumX=0,sumY=0,sumZ=0,count=0,minChestX=Infinity,maxChestX=-Infinity;
@@ -144,7 +144,8 @@ export function applyCoachBodyShape(root:Object3D,shape:CoachBodyShape):number{
    const nx=(Math.abs(x-chestCenterX)-widthScale*.38)/(widthScale*.38);
    const ny=(y-chestCenterY)/(widthScale*.72);
    const localized=front?Math.exp(-nx*nx*1.8-ny*ny*1.7):0;
-   const projection=bust*.24*widthScale*chest*localized;
+   // Female breast fullness / male pectoral depth share one region with tailored amplitudes.
+   const projection=bust*(female?.24:.11)*widthScale*chest*localized;
    position.setXYZ(i,x*width,y,z*depth+projection);
    if(extent>.4)modified++;
   }
