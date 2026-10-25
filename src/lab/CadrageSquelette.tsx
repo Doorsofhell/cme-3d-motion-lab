@@ -2,6 +2,7 @@ import {useEffect,useRef} from 'react';
 import {useFrame,useThree} from '@react-three/fiber';
 import {Box3,Bone,Object3D,PerspectiveCamera,Sphere,Vector3} from 'three';
 import {distancePourZone,mesurerZoneStudio,type StudioFocusZone} from './studioFocus';
+import {directionAnatomique,type AnatomicalView} from './AnatomicalReference';
 
 export function mesurerSquelette(racine:Object3D):{centre:Vector3;rayon:number;os:number}{
  racine.updateMatrixWorld(true);
@@ -26,7 +27,7 @@ type FrameDestination={position:Vector3;target:Vector3};
  * immediately cancels animation. Pedagogical auto camera remains independent.
  * No webcam, video frame processing or motion-sampler updates.
  */
-export function CadrageSquelette({racine,actif,zone,refocus=0}:{racine:Object3D|null;actif:boolean;zone?:StudioFocusZone;refocus?:number}){
+export function CadrageSquelette({racine,actif,zone,refocus=0,orientation=null}:{racine:Object3D|null;actif:boolean;zone?:StudioFocusZone;refocus?:number;orientation?:AnatomicalView|null}){
  const {camera,controls}=useThree();
  const destination=useRef<FrameDestination|null>(null);
  const orbit=controls as unknown as OrbitAccess|null;
@@ -38,7 +39,7 @@ export function CadrageSquelette({racine,actif,zone,refocus=0}:{racine:Object3D|
   // Preserve viewing direction if the user previously rotated, but recenter to
   // the true target bone region (including off-origin rigs).
   const previous=orbit?.target??new Vector3(0,1,0);
-  const direction=camera.position.clone().sub(previous);
+  const direction=orientation?new Vector3(...directionAnatomique(orientation)):camera.position.clone().sub(previous);
   if(direction.lengthSq()<.001)direction.set(0,.12,1);
   direction.normalize();
   const position=centre.clone().addScaledVector(direction,distance);
@@ -52,7 +53,7 @@ export function CadrageSquelette({racine,actif,zone,refocus=0}:{racine:Object3D|
    camera.position.copy(position);camera.lookAt(centre);
    if(orbit?.target){orbit.target.copy(centre);orbit.update?.();}
   }
- },[racine,actif,zone,refocus,camera,orbit]);
+ },[racine,actif,zone,refocus,camera,orbit,orientation]);
  useEffect(()=>{
   if(!orbit?.addEventListener)return;
   const cancel=()=>{destination.current=null;};

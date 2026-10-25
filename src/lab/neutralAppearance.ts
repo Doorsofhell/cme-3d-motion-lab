@@ -135,6 +135,33 @@ export function applyNeutralRigMaterials(root:Object3D):number{
 
 
 /**
+ * Mannequin anatomique satin gris : ne change jamais les meshes, le rig ou la
+ * géométrie de référence. L'effet premium reste une approximation de matière
+ * sur le GLB réellement disponible, pas une sculpture anatomique nouvelle.
+ * Ne pas appeler applyNeutralAppearance ensuite dans cette vue.
+ */
+export function applyAnatomicalMannequinMaterials(root:Object3D):number{
+ prepareEditableNeutralBody(root);
+ let count=0;
+ root.traverse(object=>{
+  const mesh=object as Mesh;
+  if(!mesh.isMesh||!mesh.visible||mesh.userData.cmeHiddenSource)return;
+  const materials=Array.isArray(mesh.material)?mesh.material:[mesh.material];
+  for(const material of materials){
+   if(!(material instanceof MeshStandardMaterial))continue;
+   material.color.set('#adb5c1');
+   material.map=null;
+   material.emissiveMap=null;
+   material.metalness=.32;
+   material.roughness=.48;
+   material.needsUpdate=true;
+   count++;
+  }
+ });
+ return count;
+}
+
+/**
  * Neutral Creator: show a true, editable human silhouette with original skin,
  * hair and iris textures. This never installs the technical grey anatomy shader.
  * Called only on a cloned scene, leaving source assets and outfits untouched.
