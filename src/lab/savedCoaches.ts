@@ -1,6 +1,6 @@
 import type {CoachLook} from './StudioCoach';
 export const COACH_STORAGE_KEY='cme-3d-coaches-v1';
-export type SavedCoach={id:string;name:string;createdAt:string;look:CoachLook;portrait?:string;nickname?:string;initialDiscipline?:string;heightCm?:number;weightKg?:number};
+export type SavedCoach={id:string;name:string;createdAt:string;look:CoachLook;portrait?:string;nickname?:string;initialDiscipline?:string;heightCm?:number;weightKg?:number;handedness?:'right'|'left';
 export function readSavedCoaches(storage:Pick<Storage,'getItem'>):SavedCoach[]{
  try{
   const data=JSON.parse(storage.getItem(COACH_STORAGE_KEY)??'[]') as unknown;
@@ -46,6 +46,6 @@ export function suggestCoachNickname(coach:Pick<SavedCoach,'name'|'look'|'initia
 /** Métadonnées exportables, sans prétendre exporter les assets GLB. */
 export function coachIdentityManifest(coach:SavedCoach){
  return {schema:'cme-coach-identity-v1' as const,id:coach.id,name:coach.name,nickname:coach.nickname??null,
-  initialDiscipline:coach.initialDiscipline??null,heightCm:coach.heightCm??null,weightKg:coach.weightKg??null,
+  initialDiscipline:coach.initialDiscipline??null,heightCm:coach.heightCm??null,weightKg:coach.weightKg??null,handedness:coach.handedness??'right',
   actor:coachSourceActor(coach),look:coach.look};
 }
