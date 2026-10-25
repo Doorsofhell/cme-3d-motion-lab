@@ -14,7 +14,7 @@ describe('CME-3D UX : parcours uniques, design system et accessibilité',()=>{
  it('réserve les paramètres experts et le JSON à Technique',()=>{
   expect(app).toContain("tab==='technical'&&<section");
   expect(app).toContain('Prototype avancé · Exécuter un plan JSON');
-  expect(app).toContain('Diagnostics et outils techniques');
+  expect(app).toContain('Laboratoire et diagnostics');
   expect(app).not.toContain("tab==='lab'&&reviewOpen");
  });
  it('conserve une seule surface de test et un seul éditeur de coach',()=>{

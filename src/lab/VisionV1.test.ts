@@ -2,11 +2,14 @@
 import {readFileSync} from 'node:fs';
 import {describe,it,expect} from 'vitest';
 const read=(file:string)=>readFileSync(new URL('./'+file,import.meta.url),'utf8');
-describe('vision CME-3D 1.0 : un atelier, cinq destinations',()=>{
+describe('vision CME-3D 1.0 : un atelier et quatre destinations',()=>{
  const app=read('App.tsx');
  const studio=read('StudioCoach.tsx');
- it('préserve les cinq destinations principales',()=>{
-  for(const label of ['Studio','Mouvements','Technique','Versions','Autres'])expect(app).toContain('<span>'+label+'</span>');
+ it('préserve les quatre destinations principales, avec les outils dans Plus',()=>{
+  const navigation=read('NavigationPrincipale.tsx');
+  for(const label of ['Studio Coach','Mouvements','Galerie','Plus'])expect(navigation).toContain("libelle:'"+label+"'");
+  expect(app).toContain('Atlas biomécanique · référentiel');
+  expect(app).toContain('Laboratoire et diagnostics');
  });
  it('utilise une scène unique de création et un onglet distinct de recette',()=>{
   expect(studio).toContain('Création en pose neutre');
