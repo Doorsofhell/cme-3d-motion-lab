@@ -204,15 +204,3 @@
 .cmeStudioWorkflow span{flex:1 1 100%;padding:0 5px 4px;color:var(--c-text,#d6d7dd);font-size:12px}
 @media(max-width:420px){.cmeStudioWorkflow{gap:6px}.cmeStudioWorkflow button{flex-basis:115px;padding:8px;font-size:12px}}
 
-/* v0.7.31 Android: one authoritative compact preview, collision-free toolbar. */
-@media(max-width:760px){
- .labApp:has(.coachStudio) .coachStudio{overflow-y:auto!important;overscroll-behavior-y:contain;min-height:0!important}
- .labApp:has(.coachStudio) .coachStudioLayout{display:flex!important;flex-direction:column!important;min-width:0!important;overflow:visible!important}
- .labApp:has(.coachStudio) .coachPreview:not(.cmeFullscreen):not(:fullscreen){position:sticky!important;top:0!important;z-index:8!important;height:clamp(186px,30dvh,300px)!important;min-height:178px!important;max-height:300px!important;flex-shrink:0!important}
- .labApp:has(.coachStudio) .coachEditor{min-width:0!important;overflow:visible!important}
- .coachPreview .coachRigSwitch{left:8px!important;top:8px!important;max-width:calc(100% - 151px)!important}
- .coachPreview .cmeCameraAuto{right:60px!important;top:8px!important;min-width:56px!important;max-width:75px!important;min-height:44px!important}
- .coachPreview .cmeFullscreenToggle{right:8px!important;top:8px!important;min-width:44px!important;min-height:44px!important}
- .coachPreview:not(.cmeFullscreen) .coachLiveValues{max-width:55%!important;overflow-wrap:anywhere}
-}
-.coachPreview:fullscreen,.coachPreview.cmeFullscreen{height:100dvh!important;max-height:none!important;min-height:100dvh!important;position:fixed!important;inset:0!important;width:100vw!important;z-index:10000!important}
