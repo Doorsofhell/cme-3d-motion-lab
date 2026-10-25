@@ -28,6 +28,7 @@ import {buildFullReport,useSessionJournal} from './SessionReport';
 import {useAutoIncidentQueue,type AutoCategory} from './AutoIncidents';
 import {autoClearEnabled,setAutoClearEnabled,clearApplicationCache} from './cachePolicy';
 import './style.css';
+import {getConfigModule} from '../config/moduleRegistry';
 
 function SavedCoachLibrary({openCoach,editCoach,selectedId}:{openCoach:(id:string)=>void;editCoach:(id:string)=>void;selectedId:string|null}){
  const [coaches,setCoaches]=useState<SavedCoach[]>(()=>{try{return readSavedCoaches(localStorage);}catch{return [];}});
@@ -218,7 +219,7 @@ export function App(){
  const [moreOpen,setMoreOpen]=useState(false);
  const stageFullscreen=useSceneFullscreen();
 
- const [theme,setTheme]=useState<'auto'|'light'|'dark'>(()=>{try{const v=localStorage.getItem('cme-theme');return v==='light'||v==='dark'?v:'auto';}catch{return 'auto';}});
+ const [theme,setTheme]=useState<'auto'|'light'|'dark'>(()=>{try{const v=localStorage.getItem('cme-theme');return v==='light'||v==='dark'?v:getConfigModule('navigation').defaultTheme;}catch{return getConfigModule('navigation').defaultTheme;}});
  useEffect(()=>{document.documentElement.setAttribute('data-cme-theme',theme);try{localStorage.setItem('cme-theme',theme);}catch{}},[theme]);
  const [tab,setTab]=useState<'lab'|'gallery'|'tracking'|'comparison'|'versions'|'options'|'studio'|'technical'|'roadmap'|'other'>('studio');
  useEffect(()=>{const open=()=>setTab('lab');window.addEventListener('cme-open-lab-coach',open);return()=>window.removeEventListener('cme-open-lab-coach',open);},[]);
