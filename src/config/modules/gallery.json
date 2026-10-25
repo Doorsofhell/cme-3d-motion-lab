@@ -1,7 +1,7 @@
 {
   "id": "gallery",
   "version": 1,
-  "inside": "studio",
+  "inside": "gallery",
   "portrait": {
     "width": 256,
     "height": 320,

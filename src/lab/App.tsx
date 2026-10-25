@@ -3,6 +3,7 @@ import {Canvas,useThree,useFrame} from '@react-three/fiber';
 import {ACESFilmicToneMapping,NeutralToneMapping,SRGBColorSpace,CanvasTexture} from 'three';
 import {Fighter} from './Fighter';
 import {StudioCoach} from './StudioCoach';
+import {NavigationPrincipale,type DestinationPrincipale} from './NavigationPrincipale';
 import {useSceneFullscreen,SceneFullscreenButton} from './SceneFullscreen';
 import {SceneCameraControls,SceneToolbar,SceneLoadingIndicator} from './SceneControls';
 import {shouldRenderLabFrames} from './sceneRuntime';
@@ -31,6 +32,7 @@ import {useAutoIncidentQueue,type AutoCategory} from './AutoIncidents';
 import {autoClearEnabled,setAutoClearEnabled,clearApplicationCache} from './cachePolicy';
 import './style.css';
 import './UxSystem.css';
+import './CmePremiumMobile.css';
 import {getConfigModule} from '../config/moduleRegistry';
 
 function SavedCoachLibrary({openCoach,editCoach,selectedId}:{openCoach:(id:string)=>void;editCoach:(id:string)=>void;selectedId:string|null}){
@@ -234,6 +236,7 @@ export function App(){
   return()=>media?.removeEventListener?.('change',update);
  },[theme]);
  const [tab,setTab]=useState<'lab'|'gallery'|'tracking'|'comparison'|'versions'|'options'|'studio'|'technical'|'roadmap'|'other'>('studio');
+ const ongletActif:DestinationPrincipale=tab==='studio'||tab==='lab'||tab==='gallery'?tab:'other';
  useEffect(()=>{const open=()=>setTab('lab');window.addEventListener('cme-open-lab-coach',open);return()=>window.removeEventListener('cme-open-lab-coach',open);},[]);
  const [pageVisible,setPageVisible]=useState(()=>typeof document==='undefined'||document.visibilityState==='visible');
  useEffect(()=>{const sync=()=>setPageVisible(document.visibilityState==='visible');document.addEventListener('visibilitychange',sync);return()=>document.removeEventListener('visibilitychange',sync);},[]);
@@ -315,11 +318,12 @@ export function App(){
  };
  return <main className="labApp" data-cme-screen={tab}>
   <header className="labHeader">
-   <div className="branding"><span className="brandDot">C</span><div><strong>CME<span>–3D</span> <span className="cmeVersion" aria-label={'Version '+CME_APP_VERSION}>v{CME_APP_VERSION}</span></strong><p>{tab==='studio'?'Créer et gérer les coachs':tab==='lab'?'Tester et évaluer les mouvements':tab==='technical'?'Diagnostics et outils techniques':tab==='versions'?'Nouveautés et historique':'Préférences et ressources'}</p></div></div>
+   <div className="branding"><span className="brandDot">C</span><div><strong>CME<span>–3D</span> <span className="cmeVersion" aria-label={'Version '+CME_APP_VERSION}>v{CME_APP_VERSION}</span></strong><p>{tab==='studio'?'Créer et personnaliser':tab==='lab'?'Tester les mouvements':tab==='gallery'?'Mes coachs':tab==='other'?'Outils et ressources':'Fonctions complémentaires'}</p></div></div>
    <div className="headerActions"><span className="liveTag"><i/> Moteur local</span></div>
   </header>
   
-  <div key={tab} className="cmeAppContent" role="region" aria-label="Contenu de la rubrique active" tabIndex={-1}>
+  <div className="cmeAppContent" role="region" aria-label="Contenu de la rubrique active" tabIndex={-1}>
+   {['technical','versions','roadmap','tracking','options','comparison'].includes(tab)&&<button type="button" className="cmeRetourPlus" onClick={()=>setTab('other')}>‹ Retour à Plus</button>}
   <div className="labContent" style={{display:tab==='lab'?'contents':'none'}}>
   <section className="quickBar" aria-label="Sélection de test">
    <label><span>Coach · {savedCoaches.length} personnalisé(s)</span><select aria-label="Coach" value={selectedCoach?'saved:'+selectedCoach.id:actor} onChange={e=>{
@@ -374,11 +378,22 @@ export function App(){
   {tab==='lab'&&<details className="cmeMotionExpert"><summary>Validation et rapport technique · avancé</summary><MotionReview entries={reviewEntries} discipline={discipline} coach={selectedCoach?.id??actor} selected={technique} onSelect={selectTechnique} availableIds={report?.availableMotions??[]} engineVersion={CME_APP_VERSION} metrics={{...metrics,bones:report?.bones??null,techniqueFound:report?.techniqueFound??false}} rigReady={!!report} rigTechniqueFound={!!report?.techniqueFound} executionEvidence={executionEvidence?.key===currentExecutionKey?executionEvidence:null} playbackObserved={playbackWasObserved(executionEvidence,currentExecutionKey)} onPlay={()=>{seek(0);setExecutionEvidence(null);setPlaying(true);document.querySelector('.cmeAppContent')?.scrollTo({top:0,behavior:'smooth'});}}/></details>}
 
   {tab==='gallery'&&<section className="cmeCoachGallery" aria-label="Galerie Coachs"><header><h2>Galerie Coachs</h2><p>Choisissez un combattant enregistré. Sa configuration est partagée avec Studio et le banc d'essai.</p></header><SavedCoachLibrary selectedId={selectedCoach?.id??null} openCoach={id=>{selectSavedCoach(id);setTab('lab');}} editCoach={id=>{try{localStorage.setItem('cme-selected-coach',id);}catch{}setTab('studio');}}/><button className="galleryCreate" type="button" onClick={()=>setTab('studio')}>Créer un combattant dans Studio</button></section>}
-  {tab==='studio'&&<div className="cmeStudioHub"><StudioCoach/><section className="cmeStudioCoachList" aria-label="Liste des coachs du Studio"><h2>Mes coachs</h2><SavedCoachLibrary selectedId={selectedCoach?.id??null} openCoach={id=>{selectSavedCoach(id);setTab('lab');}} editCoach={id=>{try{localStorage.setItem('cme-selected-coach',id);window.dispatchEvent(new Event('cme-edit-selected-coach'));}catch{}}}/></section></div>}
+  {tab==='studio'&&<div className="cmeStudioHub"><StudioCoach/></div>}
   {tab==='versions'&&<VersionsPanel/>}
-  {tab==='other'&&<section className="cmeOtherScreen" aria-label="Autres fonctionnalités"><h2>Autres</h2><p>Comparatif des moteurs, feuille de route, incidents et préférences.</p><div className="cmeOtherGrid"><button onClick={openComparison}>⇄ Comparatif CME / Shadow</button><button onClick={()=>setTab('roadmap')}>☷ Feuille de route</button><button onClick={()=>{void known.refresh();setTab('tracking');}}>⚑ Incidents</button><button onClick={()=>setTab('options')}>⚙ Paramètres</button></div><label className="cmeThemeSetting">Apparence de l'application<select aria-label="Thème de CME-3D" value={theme} onChange={e=>setTheme(e.target.value as 'auto'|'light'|'dark')}><option value="auto">Automatique · selon le système (jour/nuit)</option><option value="light">Toujours clair</option><option value="dark">Toujours sombre</option></select></label></section>}
+  {tab==='other'&&<section className="cmeOtherScreen" aria-label="Fonctions complémentaires"><h2>Plus</h2><p>Les outils spécialisés restent accessibles sans encombrer le Studio.</p>
+    <div className="cmeOtherGrid">
+      <button type="button" onClick={openComparison}>⇄ Comparatif CME / Shadow</button>
+      <a href="https://github.com/Doorsofhell/cme-3d-motion-lab/blob/main/docs/biomecanique/README.md" target="_blank" rel="noopener noreferrer">☷ Atlas biomécanique · référentiel</a>
+      <button type="button" onClick={()=>setTab('technical')}>⌘ Laboratoire et diagnostics</button>
+      <button type="button" onClick={()=>setTab('versions')}>✦ Nouveautés et versions</button>
+      <button type="button" onClick={()=>setTab('roadmap')}>☷ Feuille de route</button>
+      <button type="button" onClick={()=>{void known.refresh();setTab('tracking');}}>⚑ Incidents</button>
+      <button type="button" onClick={()=>setTab('options')}>⚙ Options et cache</button>
+    </div>
+    <label className="cmeThemeSetting">Apparence de l'application<select aria-label="Thème de CME-3D" value={theme} onChange={e=>setTheme(e.target.value as 'auto'|'light'|'dark')}><option value="auto">Automatique · selon le système (jour/nuit)</option><option value="light">Toujours clair</option><option value="dark">Toujours sombre</option></select></label>
+   </section>}
   {tab==='roadmap'&&<RoadmapPanel/>}
-  {tab==='technical'&&<section className="cmeTechnicalScreen" aria-label="Centre technique"><header className="cmePageHeader"><h2>Technique</h2><p>Vérifier les mesures réelles, inspecter le rig et exporter un rapport de diagnostic.</p></header><div className="cmeDiagnosticGrid"><span>FPS <strong>{metrics.fps||'–'}</strong></span><span>WebGL <strong>{metrics.webgl}</strong></span><span>Draw calls <strong>{metrics.drawCalls}</strong></span><span>Triangles <strong>{metrics.triangles}</strong></span><span>Rig <strong>{report?.bones??'–'} os</strong></span></div><div className="cmeTechnicalActions"><button type="button" onClick={()=>setDebug(x=>!x)} aria-expanded={debug}>{debug?'Fermer le diagnostic':'Afficher le diagnostic détaillé'}</button><button type="button" onClick={exportReport}>Exporter le rapport de session</button><button type="button" onClick={()=>{journal.record('incident','Signalement manuel depuis Technique',{technique,discipline,actor});captureNow();setIncidentOpen(true);}}>Signaler un incident</button></div><AndroidDiagnostics telemetry={androidTelemetry} active={tab==='technical'} context={{coach:actor,discipline,technique,qualite:quality,rendu:renderStyle}}/><details className="cmeTechnicalFold"><summary>Prototype avancé · Exécuter un plan JSON</summary>   <details className="labTechnicalDetails"><summary>Outils techniques · Coach IA JSON</summary><section aria-label="Coach JSON Text-to-Animation" style={{padding:12,display:'grid',gap:8}}>
+  {tab==='technical'&&<section className="cmeTechnicalScreen" aria-label="Centre technique"><header className="cmePageHeader"><h2>Technique</h2><p>Vérifier les mesures réelles, inspecter le rig et exporter un rapport de diagnostic.</p></header><div className="cmeDiagnosticGrid"><span>FPS <strong>{metrics.fps>0?metrics.fps:'Non mesuré'}</strong></span><span>WebGL <strong>{metrics.webgl}</strong></span><span>Draw calls <strong>{metrics.drawCalls}</strong></span><span>Triangles <strong>{metrics.triangles}</strong></span><span>Rig <strong>{report?.bones??'–'} os</strong></span></div><div className="cmeTechnicalActions"><button type="button" onClick={()=>setDebug(x=>!x)} aria-expanded={debug}>{debug?'Fermer le diagnostic':'Afficher le diagnostic détaillé'}</button><button type="button" onClick={exportReport}>Exporter le rapport de session</button><button type="button" onClick={()=>{journal.record('incident','Signalement manuel depuis Technique',{technique,discipline,actor});captureNow();setIncidentOpen(true);}}>Signaler un incident</button></div><AndroidDiagnostics telemetry={androidTelemetry} active={tab==='technical'} context={{coach:actor,discipline,technique,qualite:quality,rendu:renderStyle}}/><details className="cmeTechnicalFold"><summary>Prototype avancé · Exécuter un plan JSON</summary>   <details className="labTechnicalDetails"><summary>Outils techniques · Coach IA JSON</summary><section aria-label="Coach JSON Text-to-Animation" style={{padding:12,display:'grid',gap:8}}>
 <strong>Coach IA · Text-to-Animation (prototype local)</strong>
 <textarea aria-label="Plan JSON du coach" rows={4} value={coachJson} onChange={e=>setCoachJson(e.target.value)} style={{width:'100%',boxSizing:'border-box'}}/>
 <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
@@ -406,7 +421,7 @@ export function App(){
    </div>}
   {tab==='technical'&&debug&&<aside className="debugPanel" role="region" aria-label="Console de débogage">
    <div className="debugTitle"><strong>⌘ Diagnostic · CME-3D</strong><div><button onClick={exportReport}>Copier rapport complet</button><button aria-label="Fermer la console" onClick={()=>setDebug(false)}>×</button></div></div>
-   <div className="debugGrid"><span>WebGL <b>{metrics.webgl}</b></span><span>FPS <b>{metrics.fps}</b></span><span>Draw calls <b>{metrics.drawCalls}</b></span><span>Triangles <b>{metrics.triangles.toLocaleString('fr-FR')}</b></span><span>Textures <b>{metrics.textures}</b></span><span>Géométries <b>{metrics.geometries}</b></span><span>DPR <b>{metrics.dpr.toFixed(2)}</b></span><span>Rig <b>{report?.bones??'–'} os</b></span></div>
+   <div className="debugGrid"><span>WebGL <b>{metrics.webgl}</b></span><span>FPS <b>{metrics.fps>0?metrics.fps:'Non mesuré'}</b></span><span>Draw calls <b>{metrics.drawCalls}</b></span><span>Triangles <b>{metrics.triangles.toLocaleString('fr-FR')}</b></span><span>Textures <b>{metrics.textures}</b></span><span>Géométries <b>{metrics.geometries}</b></span><span>DPR <b>{metrics.dpr.toFixed(2)}</b></span><span>Rig <b>{report?.bones??'–'} os</b></span></div>
    <div className="debugSubject"><strong>{actor==='mma-amara'?'Amara':'Kadir'} · {discipline}</strong><span>Tenue : {outfit}</span><span>Style : {renderStyle} · {quality}</span><span>Mouvement : {technique} · {report?.techniqueFound?'résolu':'non trouvé'}</span></div>
    <div className="debugLog"><strong>Événements et erreurs</strong>{messages.length?messages.map((x,i)=><p key={i}>{x}</p>):<p>Aucun événement anormal signalé</p>}</div>
    <div className="debugFootnote">{pendingDrafts.length} anomalie(s) à soumettre (hors tickets existants). Aucun envoi automatique. <button className="debugReview" onClick={()=>{setDebug(false);setTab('tracking');}}>Examiner les signalements ↗</button> FPS mesurés dans la boucle Three.js.</div>
@@ -414,12 +429,6 @@ export function App(){
   {tab==='technical'&&extra&&<aside className="advanced" role="region" aria-label="Informations du banc d'essai"><button className="close" onClick={()=>setExtra(false)} aria-label="Fermer">×</button><h2>Banc d’essai · CME-3D</h2><p>Le rendu et les techniques utilisent des poses articulées et un moteur de mouvements intégrés dans CME-3D.</p><p>Comparaison des rendus Ultra-réaliste et Animation fitness en un clic, sur la même animation. Le module neuronal historique est expérimental, entraîné sur des données synthétiques : aucune amélioration biomécanique par IA n’est encore revendiquée.</p><p>La prochaine étape sera un correcteur temporel léger quantifié (ONNX Runtime WASM), entraîné et évalué sur un jeu de mouvements de combat adapté au modèle.</p><p>Un seul écran, sans défilement vertical. Aucune transmission cloud pendant l’animation.</p></aside>}
   {tab==='technical'&&incidentOpen&&<IncidentReporter context={incidentContext} image={snapshot} onCapture={captureNow} onClose={()=>setIncidentOpen(false)}/>}
   {!!reportText&&<div className="reportFallback" role="dialog" aria-label="Rapport complet CME-3D"><div className="reportFallbackInner"><div className="reportFallbackHead"><strong>Rapport complet · Copier vers ChatGPT</strong><button onClick={()=>setReportText('')} aria-label="Fermer le rapport">×</button></div><p>La copie automatique n’est pas autorisée par ton navigateur. Sélectionne le texte ci-dessous puis copie-le pour me l’envoyer ici.</p><textarea aria-label="Texte complet du rapport" value={reportText} readOnly onFocus={e=>e.currentTarget.select()}/><button onClick={()=>{if(navigator.clipboard?.writeText)void navigator.clipboard.writeText(reportText).then(()=>{setReportText('');onLog('Rapport copié manuellement');});}}>Réessayer la copie</button></div></div>}
- <nav className="labTabs" aria-label="Navigation principale CME-3D">
-  <button className={tab==='studio'||tab==='gallery'?'selected':''} aria-current={tab==='studio'?'page':undefined} onClick={()=>{setTab('studio');setDebug(false);}}>♙ <span>Studio</span></button>
-  <button className={tab==='lab'?'selected':''} aria-current={tab==='lab'?'page':undefined} onClick={()=>{setTab('lab');setDebug(false);}}>▶ <span>Mouvements</span></button>
-  <button className={tab==='technical'?'selected':''} aria-current={tab==='technical'?'page':undefined} onClick={()=>setTab('technical')}>⌘ <span>Technique</span></button>
-  <button className={tab==='versions'?'selected':''} aria-current={tab==='versions'?'page':undefined} onClick={()=>setTab('versions')}>✦ <span>Versions</span></button>
-  <button className={['other','comparison','tracking','options','roadmap'].includes(tab)?'selected':''} aria-current={tab==='other'?'page':undefined} onClick={()=>setTab('other')}>⋯ <span>Autres</span></button>
- </nav>
+ <NavigationPrincipale actif={ongletActif} ouvrir={destination=>{setTab(destination);setDebug(false);}}/>
  </main>;
 }
