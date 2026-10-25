@@ -21,6 +21,7 @@ import shadowExercises from './shadowExercises.json';
 import {ComparisonPanel} from './ComparisonPanel';
 import {fighterRoster} from './fighterRoster';
 import {VersionsPanel} from './VersionsPanel';
+import {MotionReview,type ReviewMotion} from './MotionReview';
 import {RoadmapPanel} from './RoadmapPanel';
 import {IncidentReporter,IssueTracker,useKnownIssues,type TestContext} from './Issues';
 import {unresolvedDrafts} from './IssueLinks';
@@ -230,6 +231,7 @@ export function App(){
  const [clearCacheOnOpen,setClearCacheOnOpen]=useState(autoClearEnabled);
  const [cacheMessage,setCacheMessage]=useState('');
  const [catalogMode,setCatalogMode]=useState<'techniques'|'sequences'>('techniques');
+ const [reviewOpen,setReviewOpen]=useState(false);
  const [comparisonSnapshot,setComparisonSnapshot]=useState<string|null>(null);
  const [incidentOpen,setIncidentOpen]=useState(false);
  const [debug,setDebug]=useState(false),[catalogOpen,setCatalogOpen]=useState(false),[query,setQuery]=useState(''),[allCatalog,setAllCatalog]=useState(false);
@@ -248,6 +250,7 @@ export function App(){
  const currentSequences=useMemo(()=>sequences.filter(t=>t.discipline===discipline),[discipline]);
  const visibleSequences=useMemo(()=>currentSequences.filter(t=>(t.name+' '+t.motions.join(' ')).toLocaleLowerCase('fr-FR').includes(query.toLocaleLowerCase('fr-FR'))),[currentSequences,query]);
  const knownMotions=useMemo(()=>new Set(techniques.map(t=>t.motion)),[]);
+ const reviewEntries=useMemo<ReviewMotion[]>(()=>[...currentTechniques.map(t=>({id:t.motion,name:t.name,kind:'technique' as const,motions:[t.motion]})),...currentSequences.map(t=>({id:t.id,name:t.name,kind:'sequence' as const,motions:t.motions}))],[currentTechniques,currentSequences]);
  const canRunSequence=(entry:SequenceEntry)=>entry.motions.every(m=>knownMotions.has(m));
  const palette=useMemo(()=>techniques.filter(t=>(allCatalog||t.disciplines.includes(discipline))&&
    ((t.name+' '+t.id+' '+t.category).toLocaleLowerCase('fr-FR').includes(query.toLocaleLowerCase('fr-FR')))),[discipline,query,allCatalog]);
@@ -358,6 +361,8 @@ export function App(){
    <span className="footnote">IA locale expérimentale : entraînement validé en attente</span>
   </section></details>
   </div>
+  {tab==='lab'&&<section className="cmeReviewToggle"><button type="button" aria-expanded={reviewOpen} onClick={()=>setReviewOpen(x=>!x)}>{reviewOpen?'Masquer la recette':'✓ Ouvrir la recette de tous les mouvements et enchaînements'}</button></section>}
+  {tab==='lab'&&reviewOpen&&<MotionReview entries={reviewEntries} discipline={discipline} coach={selectedCoach?.id??actor} selected={technique} onSelect={selectTechnique} engineVersion={CME_APP_VERSION} metrics={{...metrics,bones:report?.bones??null,techniqueFound:report?.techniqueFound??false}} rigReady={!!report} rigTechniqueFound={!!report?.techniqueFound}/>}
   {tab==='lab'&&<ShadowCatalogPanel/>}
   {tab==='gallery'&&<section className="cmeCoachGallery" aria-label="Galerie Coachs"><header><h2>Galerie Coachs</h2><p>Choisissez un combattant enregistré. Sa configuration est partagée avec Studio et le banc d'essai.</p></header><SavedCoachLibrary selectedId={selectedCoach?.id??null} openCoach={id=>{selectSavedCoach(id);setTab('lab');}} editCoach={id=>{try{localStorage.setItem('cme-selected-coach',id);}catch{}setTab('studio');}}/><button className="galleryCreate" type="button" onClick={()=>setTab('studio')}>Créer un combattant dans Studio</button></section>}
   {tab==='studio'&&<div className="cmeStudioHub"><StudioCoach/><section className="cmeStudioCoachList" aria-label="Liste des coachs du Studio"><h2>Mes coachs</h2><SavedCoachLibrary selectedId={selectedCoach?.id??null} openCoach={id=>{selectSavedCoach(id);setTab('lab');}} editCoach={id=>{try{localStorage.setItem('cme-selected-coach',id);window.dispatchEvent(new Event('cme-edit-selected-coach'));}catch{}}}/></section></div>}
