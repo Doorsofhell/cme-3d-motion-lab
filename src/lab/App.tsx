@@ -33,6 +33,7 @@ import {autoClearEnabled,setAutoClearEnabled,clearApplicationCache} from './cach
 import './style.css';
 import './UxSystem.css';
 import './CmePremiumMobile.css';
+import './StudioReferenceLook.css';
 import {getConfigModule} from '../config/moduleRegistry';
 
 function SavedCoachLibrary({openCoach,editCoach,selectedId}:{openCoach:(id:string)=>void;editCoach:(id:string)=>void;selectedId:string|null}){

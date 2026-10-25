@@ -122,7 +122,7 @@ export function StudioCoach(){
  }),[look.skin,look.hairColor,look.eyeColor,look.topColor,look.bottomColor,look.gloveColor,look.shinColor,accessories]);
  const dimensions=useMemo(()=>resolvedProportions(look,Number(identity.heightCm)||undefined,Number(identity.weightKg)||undefined),[look,identity.heightCm,identity.weightKg]);
  const faceDimensions=useMemo(()=>({jaw:look.jaw,nose:look.nose,eyes:look.eyes}),[look.jaw,look.nose,look.eyes]);
- const colorAvailable=(key:'skin'|'eyeColor'|'hairColor'|'topColor'|'bottomColor'|'gloveColor'|'shinColor')=>key!=='hairColor'&&(key==='skin'||!!support?.colors[key])&&(!rigMode||key==='skin'||key==='eyeColor');
+ const colorAvailable=(key:'skin'|'eyeColor'|'hairColor'|'topColor'|'bottomColor'|'gloveColor'|'shinColor')=>key!=='hairColor'&&!!support?.colors[key]&&(!rigMode||key==='skin'||key==='eyeColor');
  const faceAvailable=(key:'jaw'|'nose'|'eyes')=>!!support&&(!!support.shape.faceMorphs[key]||support.shape.faceVertices>0);
 
  const [androidTelemetry]=useState(()=>{
