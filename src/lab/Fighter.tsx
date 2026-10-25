@@ -113,9 +113,9 @@ export function applyComicStyle(root:Object3D,quality:Quality){
  });
  return outlines;
 }
-export function Fighter({actor,outfit,technique,coachPlan,playback,skeleton,quality,renderStyle,onReport,onReady,coachLook}:{
+export function Fighter({actor,outfit,technique,coachPlan,playback,skeleton,quality,renderStyle,onReport,onReady,onMotionSample,coachLook}:{
  actor:'mma-kadir'|'mma-amara'|'mma-naira';outfit:string;technique:string;coachPlan?:CoachPlan|null;playback:RefObject<Playback>;skeleton:boolean;
- quality:Quality;renderStyle:RenderStyle;onReport:(r:RigReport)=>void;onReady:()=>void;coachLook?:CoachLook|null;
+ quality:Quality;renderStyle:RenderStyle;onReport:(r:RigReport)=>void;onReady:()=>void;onMotionSample?:(id:string,progress:number,nowMs:number)=>void;coachLook?:CoachLook|null;
 }){
  const base=import.meta.env.BASE_URL;
  // The original v0.31 Shadow coach rig + motion library is used unmodified.
@@ -166,8 +166,9 @@ export function Fighter({actor,outfit,technique,coachPlan,playback,skeleton,qual
  },[rig,motion,library,seq,seqValid,coachPlan]);
  const helper=useMemo(()=>new SkeletonHelper(scene),[scene]);
  const lastSample=useRef<number|null>(null);
+ const lastEvidenceSignal=useRef(0);
  const t=useRef(0);
- useEffect(()=>{lastSample.current=null;t.current=0;},[technique,outfit,coachPlan]);
+ useEffect(()=>{lastSample.current=null;lastEvidenceSignal.current=0;t.current=0;},[technique,outfit,coachPlan]);
  useEffect(()=>{
   onReport({bones:helper.bones.length,armClamps:0,footErrorMetres:0,techniqueFound:seq?seqValid:!!library.get(technique),source:seq?'CME-3D · enchaînement expérimental':'CME-3D · bibliothèque de mouvements'});
   onReady();
@@ -189,6 +190,10 @@ export function Fighter({actor,outfit,technique,coachPlan,playback,skeleton,qual
   lastSample.current=p;
   rig.reset();
   rig.apply(sampler.sample(p*sampler.duration));
+  if(playback.current.playing&&onMotionSample){
+   const now=performance.now();
+   if(now-lastEvidenceSignal.current>=300){lastEvidenceSignal.current=now;onMotionSample(technique,p,now);}
+  }
   if(skeleton)helper.updateMatrixWorld(true);
   t.current+=dt;
   if(t.current>.9){

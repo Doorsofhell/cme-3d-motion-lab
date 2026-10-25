@@ -242,3 +242,7 @@ Audit du code : trop d'îlots CSS sombres, mini-lecteur Studio en plus de Mouvem
 
 ## 25/10/2026 — 0.7.37 — lot C1 : architecture Android
 P0 : tous les écrans partagent un conteneur scrollable central propre, sans faire défiler les cinq onglets inférieurs. Le bas de l’écran respecte la safe-area, les commandes tactiles conservent une taille suffisante, le viewport 3D reste accessible ; le volet Mouvements constitue un parcours unique sélection/lecture/recette. Enlever les scrolls concurrents du Studio. Tests source de structure associés. La recette sur appareil Android physique n’est pas faite et ne doit pas être certifiée par la seule CI. C2 : moteur des gestes référencés réellement résolus, états de revue réinitialisés par sélection et vrai témoin d’exécution.
+
+
+## 25/10/2026 — 0.7.38 — lot C2 : exécution vraiment vérifiable
+P0 : un mouvement enregistré au référentiel ne suffit plus à activer Valider. Preuve de lecture uniquement après échantillonnage effectif de poses par le même rig, même technique, même discipline et même coach, avec temps de lecture et progression contrôlés. Le statut reste distinct de la validation biomécanique humaine. Les mouvements manquants/inhérents à des séquences non résolues sont sélectionnables pour signalement et rejet avec un commentaire technique obligatoire. Rapport Markdown d’exécution accompagnant les observations. Ne pas changer les gestes canoniques ni le dépôt Shadow. Faire vérifier les clips individuellement par l’utilisateur sur Android, l’exécution échantillonnée ne prouvant pas la qualité biomécanique.
