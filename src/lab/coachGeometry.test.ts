@@ -199,10 +199,10 @@ describe('Amara — personnalisation poitrine réellement appliquée au corps vi
   expect(Array.from(generated.array)).toEqual(reference);
   expect(bones.every((bone,i)=>bone.position.equals(pose[i]))).toBe(true);
  });
- it('ignore strictement le curseur poitrine sur un corps masculin',()=>{
+ it('applique une projection pectorale masculine adaptée sans changer les os',()=>{
   const {root,body,geo}=skinnedFemale();
   applyCoachLookGeometry(root,{...defaults,sex:'homme',bust:1.35});
-  expect(body.geometry).toBe(geo);
+  expect(body.geometry).not.toBe(geo);
  });
 });
 describe('Silhouette femme — vrais volumes skinnés, sans déformation des os',()=>{
@@ -250,9 +250,9 @@ describe('Silhouette femme — vrais volumes skinnés, sans déformation des os'
   expect(geo.userData.cmeOwned).not.toBe(true);
   expect(Array.from(geo.getAttribute('position').array)).toEqual(reference);
  });
- it('n’active aucun volume féminin sur un coach masculin',()=>{
+ it('donne aussi des paramètres de hanches et cuisses au coach masculin',()=>{
   const {root,body,geo}=skinnedFemale();
   applyCoachBodyShape(root,{sex:'homme',shoulders:1,muscle:1,waist:1,hips:1.35,roundness:1.3,thighs:1.3});
-  expect(body.geometry).toBe(geo);
+  expect(body.geometry).not.toBe(geo);
  });
 });
