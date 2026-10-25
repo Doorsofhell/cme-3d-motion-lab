@@ -192,7 +192,12 @@ export function StudioCoach(){
  const removeCoach=()=>{if(!selectedId||!window.confirm('Supprimer définitivement ce coach de cet appareil ?'))return;try{deleteSavedCoach(localStorage,selectedId);if(localStorage.getItem('cme-lab-coach')===selectedId)localStorage.removeItem('cme-lab-coach');localStorage.removeItem('cme-selected-coach');setSelectedId(null);setLook(defaultCoachLook);window.dispatchEvent(new Event('cme-coaches-changed'));setMessage('Coach supprimé.');}catch{setMessage('Suppression impossible.');}};
  const exportJson=()=>{const json=JSON.stringify({schema:'cme-coach-look-v1',look},null,2);const blob=new Blob([json],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='cme-coach-look.json';a.click();URL.revokeObjectURL(url);setMessage('Configuration exportée : apparence uniquement, sans modification du moteur.');};
  return <section className="coachStudio" aria-label="Studio Coach">
-  <header className="coachStudioHeader"><div><small>STUDIO COACH</small><h2>Votre combattant</h2></div></header>
+  <header className="coachStudioHeader"><div><small>ATELIER CME-3D</small><h2>Créer et valider votre combattant</h2></div></header>
+  <div className="cmeStudioWorkflow" role="group" aria-label="Mode de travail du Studio">
+   <button type="button" className={!testingMotion?"active":""} aria-pressed={!testingMotion} onClick={()=>{setTestingMotion(false);setPlaying(false);setMotionId("garde");setCameraAuto(false);recenter("corps");}}>1 · Création</button>
+   <button type="button" className={testingMotion?"active":""} aria-pressed={testingMotion} onClick={()=>{setTestingMotion(true);setPlaying(false);setCameraAuto(false);recenter("corps");}}>2 · Test des mouvements</button>
+   <span role="status">{testingMotion?"Mouvements disponibles · même combattant":"Pose de référence · personnalisation en direct"}</span>
+  </div>
   <div className="coachStudioLayout">
    <div ref={sceneFullscreen.ref as React.RefObject<HTMLDivElement>} className={`coachPreview ${sceneFullscreen.fullscreen?"cmeFullscreen":""}`} onDoubleClick={sceneFullscreen.onDoubleClick} onTouchEnd={sceneFullscreen.onTouchEnd} aria-label="Aperçu 3D du mannequin ; double clic pour agrandir">
     <SceneToolbar variant="studio" actions={<><SceneCameraButton automatic={cameraAuto} onToggle={()=>setCameraAuto(v=>!v)}/><SceneFullscreenButton fullscreen={sceneFullscreen.fullscreen} onClick={sceneFullscreen.toggle}/></>}>
@@ -221,7 +226,7 @@ export function StudioCoach(){
     <p className="coachCapability" role="status">{rigMode?'Anatomie : modèle neutre ; réglages d’apparence suspendus.':support?('Personnalisation en direct : '+support.shape.torsoVertices+' sommets morphologiques · '+support.colors.skin+' matériaux de peau · '+(support.colors.topColor+support.colors.bottomColor)+' matériaux de tenue · '+support.colors.gloveColor+' matériaux de gants reconnus · '+support.colors.shinColor+' matériaux de protège-tibias.'):'Chargement du corps et de sa tenue 3D…'}</p>
     <nav className="coachCategories" aria-label="Personnalisation">{sections.filter(item=>item!=='silhouette'||look.sex==='femme').map(item=><button key={item} className={section===item?'active':''} aria-current={section===item?'true':undefined} onClick={()=>{setSection(item);recenter(focusForSection(item));}}>{sectionNames[item]}</button>)}</nav>
 
-    {<details className="coachAdvanced"><summary>Tester les mouvements</summary><div className="coachRigControls">
+    {<details className="coachAdvanced" open={testingMotion}><summary>Choisir une technique ou un enchaînement</summary><div className="coachRigControls">
       <label>Discipline <select value={discipline} onChange={e=>{setDiscipline(e.target.value as LabDiscipline);setMotionId('garde');setReport(null);}}>{LAB_DISCIPLINES.map(d=><option key={d} value={d}>{disciplineNames[d]}</option>)}</select></label>
       <label>Technique / enchaînement <select aria-label="Technique ou enchaînement" value={motionId} onChange={e=>{setMotionId(e.target.value);setTestingMotion(true);setPlaying(true);}}>
        <optgroup label="Techniques">{catalog.filter(m=>m.kind==='technique').map(m=><option key={m.id} value={m.id} disabled={!!report&&!report.motions.find(x=>x.id===m.id)?.supported}>{m.label}</option>)}</optgroup>

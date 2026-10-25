@@ -195,3 +195,11 @@
 .coachShapeGroup.is-open .coachShapeZoneCard{border-color:#bf3942;background:#fff4f4;border-radius:14px 14px 6px 6px}
 .coachShapePanel{border:1px solid #d3d9e4;border-top:0;background:#fff;padding:10px;border-radius:0 0 14px 14px}
 .coachShapeZoneCard:focus-visible{outline:3px solid #d6363c;outline-offset:2px}
+
+/* V1-A : parcours Création → Test, accessible sans nouvelle navigation. */
+.cmeStudioWorkflow{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:6px;border-radius:14px;background:var(--c-surface,#20232c);border:1px solid rgba(128,128,128,.2)}
+.cmeStudioWorkflow button{flex:1 1 135px;min-height:44px;padding:10px 12px;border-radius:10px;border:1px solid rgba(128,128,128,.25);background:#2a2e39;color:#f5f5f5;font:inherit;font-weight:650;cursor:pointer}
+.cmeStudioWorkflow button.active{background:#d6363c;color:#fff;border-color:#d6363c}
+.cmeStudioWorkflow button:focus-visible{outline:3px solid #e9b46a;outline-offset:2px}
+.cmeStudioWorkflow span{flex:1 1 100%;padding:0 5px 4px;color:var(--c-text,#d6d7dd);font-size:12px}
+@media(max-width:420px){.cmeStudioWorkflow{gap:6px}.cmeStudioWorkflow button{flex-basis:115px;padding:8px;font-size:12px}}
