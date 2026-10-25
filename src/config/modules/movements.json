@@ -1,0 +1,14 @@
+{
+  "id": "movements",
+  "version": 1,
+  "disciplines": [
+    "boxing",
+    "kickboxing",
+    "muaythai",
+    "mma",
+    "bjj",
+    "judo"
+  ],
+  "defaultMotion": "garde",
+  "canonicalMotionsReadOnly": true
+}
