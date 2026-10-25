@@ -18,7 +18,7 @@ export function applyBodyMeasurements(look:CoachLook,heightText:string,weightTex
   const fullness=clamp((bmi-23)/17,-.65,.85);
   next.waist=clamp(1+fullness*.23,.75,1.3);
   next.roundness=clamp(1+fullness*.18,.7,1.3);
-  next.hips=clamp(1+fullness*(look.sex==='femme'?.14:.10),.75,1.35);
+  next.hips=clamp(1+fullness*(look.sex==='femme' ? 0.14 : 0.10),.75,1.35);
   next.thighs=clamp(1+fullness*.12,.75,1.3);
  }
  return next;
