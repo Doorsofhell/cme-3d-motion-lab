@@ -1,7 +1,7 @@
 import type {CoachLook} from './StudioCoach';
 import {harmonizeBodyScalars,type BodyScalars} from './anatomicalHarmony';
 export type Handedness='right'|'left';
-export type CoachDimensions=Pick<CoachLook,'sex'|'height'|'shoulders'|'muscle'|'waist'|'roundness'|'hips'|'glutes'|'thighs'|'bust'>;
+export type CoachDimensions=Pick<CoachLook,'sex'|'height'|'shoulders'|'muscle'|'waist'|'roundness'|'hips'|'glutes'|'thighs'|'arms'|'calves'|'bust'>;
 /** Art-directed BMI proxy, not a diagnostic or verified anthropometric model.
  * Female and male source GLBs are independent; the saved sliders stay intact.
  */
@@ -19,6 +19,8 @@ export function resolvedProportions(look:CoachLook,heightCm?:number,weightKg?:nu
   hips:look.hips+fullness*(female?.18:.10),
   glutes:look.glutes+fullness*(female?.17:.085),
   thighs:look.thighs+fullness*(female?.17:.115),
+  arms:look.arms+fullness*(female?.07:.11),
+  calves:look.calves+fullness*(female?.105:.085),
   bust:look.bust+fullness*(female?.08:.075)
  };
  return {sex:look.sex,height:clamp(h/baseHeight,.9,1.1),...harmonizeBodyScalars(look.sex,values)};

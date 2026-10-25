@@ -1,7 +1,7 @@
 import type {CoachLook} from './StudioCoach';
-export type ShapeKey='shoulders'|'muscle'|'waist'|'roundness'|'hips'|'glutes'|'thighs'|'bust'|'jaw'|'nose'|'eyes';
+export type ShapeKey='shoulders'|'muscle'|'waist'|'roundness'|'hips'|'glutes'|'thighs'|'arms'|'calves'|'bust'|'jaw'|'nose'|'eyes';
 export type ShapePreset={id:string;label:string;value:number;symbol:string};
-export type ShapeGroup={id:ShapeKey;label:string;zone:'corps'|'buste'|'visage'|'abdomen'|'hanches'|'jambes';sex:'all'|'femme'|'homme';requires:'torso'|'hip'|'thigh'|'bust'|'face';presets:readonly ShapePreset[]};
+export type ShapeGroup={id:ShapeKey;label:string;zone:'corps'|'buste'|'visage'|'abdomen'|'hanches'|'jambes';sex:'all'|'femme'|'homme';requires:'torso'|'hip'|'thigh'|'arm'|'calf'|'bust'|'face';presets:readonly ShapePreset[]};
 const variations=(id:string,labels:readonly string[],values:readonly number[],symbols:readonly string[]):ShapePreset[]=>
  labels.map((label,i)=>({id:id+'-'+i,label,value:values[i],symbol:symbols[i]}));
 const group=(id:ShapeKey,label:string,zone:ShapeGroup['zone'],sex:ShapeGroup['sex'],requires:ShapeGroup['requires'],labels:string[],values:number[],symbols:string[]):ShapeGroup=>
@@ -15,6 +15,8 @@ export const SHAPE_GROUPS:readonly ShapeGroup[]=[
  group('hips','Hanches','hanches','all','hip',['Étroites','Naturelles','Larges','Arrondies'],[.77,1,1.18,1.35],['│','◇','◯','⬭']),
  group('glutes','Fessiers','hanches','all','hip',['Discrets','Naturels','Galbés','Développés'],[.77,1,1.18,1.35],['◡','◠','◒','●']),
  group('thighs','Cuisses','jambes','all','thigh',['Fines','Naturelles','Athlétiques','Puissantes'],[.76,1,1.16,1.3],['│','∣∣','⌢⌢','◖◗']),
+ group('arms','Bras','buste','all','arm',['Fins','Naturels','Athlétiques','Musclés'],[.76,1,1.16,1.3],['│','∣','⌢','⬡']),
+ group('calves','Mollets','jambes','all','calf',['Fins','Naturels','Athlétiques','Puissants'],[.76,1,1.16,1.3],['│','∣','⌢','⬡']),
  group('jaw','Mâchoire','visage','all','face',['Fine','Naturelle','Large'],[.8,1,1.2],['▽','◡','▱']),
  group('nose','Nez','visage','all','face',['Fin','Naturel','Large'],[.8,1,1.2],['⌄','♢','◇']),
  group('eyes','Yeux','visage','all','face',['Petits','Naturels','Grands'],[.8,1,1.2],['˘','◡','◉'])
