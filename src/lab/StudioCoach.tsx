@@ -258,6 +258,7 @@ export function StudioCoach(){
    <div ref={sceneFullscreen.ref as React.RefObject<HTMLDivElement>} className={`coachPreview ${sceneFullscreen.fullscreen?"cmeFullscreen":""}`} onDoubleClick={sceneFullscreen.onDoubleClick} onTouchEnd={sceneFullscreen.onTouchEnd} aria-label="Aperçu 3D du mannequin ; double clic pour agrandir">
     
     <SceneLoadingIndicator/>
+    {sceneFullscreen.fullscreen&&<button type="button" className="coachFermerPleinEcran" onClick={sceneFullscreen.toggle} aria-label="Quitter le plein écran 3D">× Fermer</button>}
     
     <div className="coachCanvasViewport"><Canvas key={canvasRetry} onCreated={onCanvasCreated} camera={{position:[0,1.3,4.5],fov:38}} dpr={[1,1.5]} gl={{antialias:true,preserveDrawingBuffer:true}}>
      <AndroidFrameProbe telemetry={androidTelemetry}/>
