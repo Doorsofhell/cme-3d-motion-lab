@@ -220,3 +220,7 @@ En Studio, l'humanoïde neutre est la source principale éditable de la morpholo
 
 ## Ajout impératif — 25/10/2026 · Référence anatomique premium
 Lire et appliquer `docs/ANATOMIE_MANNEQUINS_PREMIUM_0741.md` : deux bases H/F organiques inspirées des quatre vues utilisateur, morphs vrais et liés, modes mannequin gris/peau/tenue, caméra 360°, discipline et latéralité sans altération du rig, Android/CI/Pages. Priorités 0.7.41 à 0.7.43, portes de validation et communication en français. Toutes les décisions précédentes sont conservées.
+
+
+## 25/10/2026 — v0.7.42 : étalons anatomiques réellement skinnés
+Deux bases organiques MakeHuman/MPFB CC0, femme et homme, 163 os, chargées en 3D et vues sous quatre angles. Elles sont indépendantes du rig canonique d'animation et demeurent en lecture seule jusqu'à retargeting/morphs validés. Aucun faux slider ; Shadow et mouvements canoniques inchangés. Source et contrôle de licence consignés dans docs/ANATOMICAL_CC0_SOURCES.md. Critères de qualité esthétique des images utilisateur toujours contraignants.

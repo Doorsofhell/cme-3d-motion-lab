@@ -21,6 +21,7 @@ import {EYE_TONES,HAIR_TONES} from './appearancePalettes';
 import {captureCoachPortrait} from './coachPortrait';
 import {currentAtlasCapabilities,canEditAtlasShape} from './atlasCapabilities';
 import {ANATOMICAL_VIEWS,type AnatomicalView} from './AnatomicalReference';
+import {AnatomicalReferenceRig} from './AnatomicalReferenceRig';
 
 type Category='corps'|'silhouette'|'visage'|'peau'|'cheveux'|'tenue'|'protections';
 export type CoachLook={
@@ -88,6 +89,7 @@ export function StudioCoach(){
  const [accessories,setAccessories]=useState<('gloves'|'shins')[]>(()=>{try{const id=localStorage.getItem('cme-selected-coach');return readSavedCoaches(localStorage).find(c=>c.id===id)?.accessories??['gloves','shins'];}catch{return ['gloves','shins'];}});
  const [rigMode,setRigMode]=useState(true);
  const [anatomicalPreview,setAnatomicalPreview]=useState(false);
+ const [referenceMode,setReferenceMode]=useState(false);
  const [anatomicalView,setAnatomicalView]=useState<AnatomicalView|null>(null);
  const [cameraAuto,setCameraAuto]=useState(false);
  const [focusZone,setFocusZone]=useState<StudioFocusZone>('corps');
@@ -157,7 +159,7 @@ export function StudioCoach(){
   if(key!=='sex')selectFocus(focusForSetting(key,section));
   setLook(l=>normalizeCoachLook({...l,[key]:value}));
  };
- const isShapeSupported=(group:ShapeGroup)=>canEditAtlasShape(group,support);
+ const isShapeSupported=(group:ShapeGroup)=>!referenceMode&&canEditAtlasShape(group,support);
  const shapePicker=(ids:string[])=><div className="coachShapeGroups">{activeShapeGroups(look.sex).filter(g=>ids.includes(g.id)).map(g=>{
   const enabled=isShapeSupported(g);
   const selected=g.presets.reduce((best,p)=>Math.abs(p.value-look[g.id])<Math.abs(best.value-look[g.id])?p:best,g.presets[0]);
@@ -228,11 +230,11 @@ export function StudioCoach(){
     <div className="coachCanvasViewport"><Canvas key={canvasRetry} onCreated={onCanvasCreated} camera={{position:[0,1.3,4.5],fov:38}} dpr={[1,1.5]} gl={{antialias:true,preserveDrawingBuffer:true}}>
      <AndroidFrameProbe telemetry={androidTelemetry}/>
      <color attach="background" args={['#e6edf6']}/><hemisphereLight args={['#fff8ef','#677388',1.05]}/><ambientLight intensity={0.65}/><directionalLight position={[3,5,4]} intensity={1.55}/>
-     <SceneLoadingBoundary><NeutralRig key={`${look.sex}-${rigMode?(anatomicalPreview?'mannequin':'creator'):'appearance'}`} mode={rigMode?(anatomicalPreview?'mannequin':'creator'):'appearance'} sex={look.sex} discipline={discipline} noGi={noGi} motionId={testingMotion?motionId:'garde'} creationPose={!testingMotion} playing={testingMotion&&playing} speed={1} showSkeleton={showSkeleton} autoCadrage={!cameraAuto} focusZone={focusZone} focusRequest={focusRequest} orientation={anatomicalView} onReport={handleRigReport} appearance={colors} proportions={dimensions} face={faceDimensions}/></SceneLoadingBoundary>
+     <SceneLoadingBoundary>{rigMode&&referenceMode?<AnatomicalReferenceRig key={'reference-'+look.sex} sex={look.sex} orientation={anatomicalView} focusZone={focusZone} focusRequest={focusRequest} autoCadrage={!cameraAuto}/>:<NeutralRig key={`${look.sex}-${rigMode?(anatomicalPreview?'mannequin':'creator'):'appearance'}`} mode={rigMode?(anatomicalPreview?'mannequin':'creator'):'appearance'} sex={look.sex} discipline={discipline} noGi={noGi} motionId={testingMotion?motionId:'garde'} creationPose={!testingMotion} playing={testingMotion&&playing} speed={1} showSkeleton={showSkeleton} autoCadrage={!cameraAuto} focusZone={focusZone} focusRequest={focusRequest} orientation={anatomicalView} onReport={handleRigReport} appearance={colors} proportions={dimensions} face={faceDimensions}/>}</SceneLoadingBoundary>
      <SceneCameraControls automatic={cameraAuto} motion={motionId}/>
     </Canvas></div>
-    <span className="coachPreviewLabel">{rigMode?(anatomicalPreview?'Mannequin anatomique gris · forme modifiable':'Corps neutre personnalisable'):'Coach habillé · '+(look.sex==='femme'?'Femme':'Homme')}</span>
-    {<span className="coachLiveValues" role="status">Buste {Math.round(dimensions.bust*100)} % · Taille {Math.round(dimensions.waist*100)} % · Hanches {Math.round(dimensions.hips*100)} %</span>}
+    <span className="coachPreviewLabel">{rigMode?(referenceMode?'Étalon anatomique CC0 · 163 os · lecture seule':anatomicalPreview?'Mannequin anatomique gris · forme modifiable':'Corps neutre personnalisable'):'Coach habillé · '+(look.sex==='femme'?'Femme':'Homme')}</span>
+    {<span className="coachLiveValues" role="status">{rigMode&&referenceMode?'Étalon CC0 non modifiable':`Buste ${Math.round(dimensions.bust*100)} % · Taille ${Math.round(dimensions.waist*100)} % · Hanches ${Math.round(dimensions.hips*100)} %`}</span>}
     {webglStatus&&<div className="coachWebglAlert" role="status"><span>{webglStatus}</span>
      <button type="button" onClick={()=>{beginRigLoad(look.sex,rigMode,'retry');setWebglStatus('');setCanvasRetry(v=>v+1);}}>Relancer la scène 3D</button>
      <button type="button" aria-label="Masquer le diagnostic WebGL" onClick={()=>setWebglStatus('')}>×</button>
@@ -245,17 +247,20 @@ export function StudioCoach(){
     </div>
     <div className="coachFocusLine" role="status"><span>Cadre : {cameraAuto?'caméra pédagogique':FOCUS_LABELS[focusZone]}</span><button type="button" onClick={()=>{setCameraAuto(false);recenter('corps');}}>Vue entière</button></div>
     {rigMode&&<div className="coachAnatomicalReferenceSwitch">
+      <button type="button" aria-pressed={referenceMode} onClick={()=>{setReferenceMode(v=>!v);setReport(null);setCameraAuto(false);recenter('corps');}}>{referenceMode?'Étalon 3D actif · revenir au créateur':'Comparer au modèle anatomique CC0 H/F'}</button>
+      <small>{referenceMode?'Étude anatomique 3D en lecture seule. Les curseurs ne pilotent pas ce squelette distinct à 163 os.':'Deux véritables modèles organiques en A-pose, sans vêtement. Les coachs de combat restent inchangés.'}</small>
       <button type="button" aria-pressed={anatomicalPreview} onClick={()=>{setAnatomicalPreview(v=>!v);setReport(null);recenter('corps');}}>{anatomicalPreview?'Mannequin gris actif · revenir aux couleurs':'Afficher le mannequin anatomique gris'}</button>
       <small>Surface satinée sur le véritable GLB, sans tenue. La forme du modèle source reste à perfectionner pour atteindre les références.</small>
     </div>}
     <div className="coachReferenceViews" role="group" aria-label="Vues anatomiques">
      {ANATOMICAL_VIEWS.map(v=><button key={v.id} type="button" aria-pressed={anatomicalView===v.id} onClick={()=>{setCameraAuto(false);setAnatomicalView(v.id);recenter('corps');}}>{v.label}</button>)}
     </div>
-    <p className="coachCapability" role="status">{support?('Zones reconnues : corps '+support.shape.torsoVertices+' sommets · peau '+support.colors.skin+' matériau(x) · iris '+support.colors.eyeColor+' · cheveux '+support.colors.hairColor+'. Les options sans géométrie source restent enregistrables mais non rendues.'):'Chargement du modèle anatomique et de la tenue…'}</p>
+    <p className="coachCapability" role="status">{rigMode&&referenceMode?'Étalon anatomique réel en lecture seule : référence CC0 de 163 os. Modification du coach et animations désactivées dans ce mode.':support?('Zones reconnues : corps '+support.shape.torsoVertices+' sommets · peau '+support.colors.skin+' matériau(x) · iris '+support.colors.eyeColor+' · cheveux '+support.colors.hairColor+'. Les options sans géométrie source restent enregistrables mais non rendues.'):'Chargement du modèle anatomique et de la tenue…'}</p>
     <nav className="coachCategories" aria-label="Choisir une zone du portrait-robot">{sections.map(item=><button key={item} className={section===item?'active':''} aria-current={section===item?'true':undefined} onClick={()=>{const dressed=item==='tenue'||item==='protections';setSection(item);setExpandedShape(null);recenter('corps');if(rigMode===dressed){beginRigLoad(look.sex,!dressed,'mode');setRigMode(!dressed);setReport(null);}}}><AnatomyIcon zone={item} className="coachCategoryIcon"/><span>{sectionNames[item]}</span></button>)}</nav>
 
 
     <div className="coachFields">
+     {rigMode&&referenceMode&&<p className="coachAvailability">Lecture seule : revenir au créateur pour modifier les formes. Le modèle CC0 sert à examiner la silhouette réelle sur quatre angles.</p>}
      {section==='corps'&&<><p className="coachAvailability">Choisissez une forme illustrée : l’aperçu du corps neutre se met à jour immédiatement, sans animation de combat.</p>{shapePicker(['shoulders','muscle','waist'])}</>}
      {section==='silhouette'&&<div className="coachFemaleShapes">{shapePicker(['roundness','bust','hips','thighs'])}<p className="coachAvailability">Les mêmes zones sont disponibles pour tous les combattants. Le volume du buste est adapté à l’anatomie du modèle (pectoraux ou poitrine). Les transitions restent des approximations déformées sur le maillage skinné. Le volume isolé des fessiers nécessite un morph anatomique dédié non présent dans les GLB, comme les variantes détaillées du visage.</p></div>}
      {section==='visage'&&<>{shapePicker(['jaw','nose','eyes'])}<div className="coachSwatchSection"><strong>Couleur de l’iris</strong><div className="coachColorAtlas" role="group" aria-label="Couleurs des yeux">{EYE_TONES.map(t=><button key={t.hex} type="button" title={t.name} aria-pressed={look.eyeColor.toLowerCase()===t.hex.toLowerCase()} onClick={()=>update('eyeColor',t.hex)}><i style={{background:t.hex}}/>{t.name}</button>)}</div>{color('eyeColor','Couleur personnalisée')}{!colorAvailable('eyeColor')&&<small>La teinte est mémorisée. L’asset courant ne sépare pas encore suffisamment l’iris pour l’afficher correctement.</small>}</div></>}

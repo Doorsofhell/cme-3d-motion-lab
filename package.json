@@ -1,6 +1,6 @@
 {
   "name": "@cme-3d/motion-lab",
-  "version": "0.7.41",
+  "version": "0.7.42",
   "private": true,
   "type": "module",
   "scripts": {
@@ -9,6 +9,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run && node scripts/validate-amara.mjs && node scripts/validate-naira.mjs && node scripts/validate-coach-assets.mjs && node scripts/audit-studio-materials.mjs && node scripts/audit-coach-capabilities.mjs",
     "preview": "vite preview --host 0.0.0.0",
+    "fetch:anatomy": "node scripts/fetch-premium-anatomy.mjs",
     "test:amara": "node scripts/validate-amara.mjs",
     "test:naira": "node scripts/validate-naira.mjs"
   },

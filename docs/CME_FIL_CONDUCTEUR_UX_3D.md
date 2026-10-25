@@ -256,3 +256,7 @@ Les personnalisations fusionnées par #115 (croquis, zones H/F identiques, mensu
 
 ## 25/10/2026 — 0.7.41 : cible mannequin anatomique en 4 vues
 L'utilisateur confirme l'affichage de 0.7.40 et fournit les silhouettes mannequin homme/femme (face/dos/profils) comme cible non négociable. Plan maître additionnel : docs/ANATOMIE_MANNEQUINS_PREMIUM_0741.md. Lot initial : matériau mannequin gris distinct du créateur texturé, quatre vues sur caméra commune, curseurs morphologiques accessibles sur corps neutre, mêmes capacités H/F. Ne jamais confondre finition de matière et sculpture 3D aboutie : les GLB professionnels morphables restent attendus en 0.7.42/0.7.43. Pas de changement Shadow, mouvements canoniques préservés.
+
+
+## 25/10/2026 — 0.7.42 : étalons CC0 intégrés sans régression
+Deux GLB anatomiques réels sans tenues, homme/femme, en A-pose, proviennent du catalogue Innerscene/MakeHuman CC0. Les nouveaux GLB ne remplacent pas les coachs actifs (squelette différent). Bouton de référence 3D, quatre vues, lecture seule. Les CI téléchargent et valident les binaires; Pages les sert sous /anatomie. Morphs indépendants, retargeting et revue visuelle physique restent ouverts.
