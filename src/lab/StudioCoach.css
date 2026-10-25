@@ -257,3 +257,18 @@
 /* 0.7.42 — les références anatomiques réelles utilisent les contrôles Android partagés. */
 .coachAnatomicalReferenceSwitch button[aria-pressed="true"]{background:#28384d;color:#fff}
 .coachAnatomicalReferenceSwitch button+small{display:block;line-height:1.45}
+
+/* 0.7.45 — progressive disclosure / one obvious task per step */
+.coachStudioHeader p{font-size:12px;color:#5d6b7d;margin:3px 0 0}
+.coachStepNavigation{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;padding:4px;background:#edf1f7;border-radius:13px}
+.coachStepNavigation button{min-width:0;min-height:48px;border:0;border-radius:10px;background:transparent;color:#526178;font-size:12px;font-weight:700;padding:7px 5px}
+.coachStepNavigation button[aria-pressed="true"]{color:#fff;background:#2d4059;box-shadow:0 3px 9px #1c26351f}
+.coachExpertTools{border:1px solid #e1e7f0;background:#f8fafd;border-radius:11px;padding:4px 9px;color:#42546d}
+.coachExpertTools>summary{cursor:pointer;min-height:40px;display:flex;align-items:center;font-size:12px;font-weight:600}
+.coachShapeZoneCard{min-height:72px;padding:7px 10px}
+.coachShapeZoneCard .coachMorphIllustration{height:58px;width:52px;flex:0 0 52px}
+.coachCategories button{min-height:62px;gap:3px;padding:5px}
+.coachCategories button .coachCategoryIcon{width:24px;height:24px}
+.coachCrud .coachSave{order:0;flex:1}
+.coachCrud button:disabled{opacity:.48}
+@media(max-width:390px){.coachStepNavigation button{font-size:11px;min-height:52px;padding:6px 2px}.coachStudioHeader h2{font-size:21px}}

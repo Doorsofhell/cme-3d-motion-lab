@@ -27,7 +27,7 @@ import {AnatomicalReferenceRig} from './AnatomicalReferenceRig';
 type Category='corps'|'silhouette'|'visage'|'peau'|'cheveux'|'tenue'|'protections';
 export type CoachLook={
  sex:'homme'|'femme';height:number;shoulders:number;muscle:number;waist:number;
- roundness:number;hips:number;glutes:number;thighs:number;bust:number;
+ roundness:number;hips:number;glutes:number;thighs:number;arms:number;calves:number;bust:number;
  jaw:number;nose:number;eyes:number;skin:string;eyeColor:string;
  hairStyle:'rase'|'court'|'long';hairColor:string;
  top:'rashguard'|'tshirt'|'aucun';topColor:string;
@@ -36,7 +36,7 @@ export type CoachLook={
  shins:boolean;shinColor:string;
 };
 export const defaultCoachLook:CoachLook={
- sex:'homme',height:1,shoulders:1,muscle:1,waist:1,roundness:1,hips:1,glutes:1,thighs:1,bust:1,jaw:1,nose:1,eyes:1,
+ sex:'homme',height:1,shoulders:1,muscle:1,waist:1,roundness:1,hips:1,glutes:1,thighs:1,arms:1,calves:1,bust:1,jaw:1,nose:1,eyes:1,
  skin:'#b97a56',eyeColor:'#4a2f1e',hairStyle:'court',hairColor:'#201713',
  top:'aucun',topColor:'#252934',bottom:'short',bottomColor:'#d6363c',
  gloves:'aucun',gloveColor:'#d6363c',shins:false,shinColor:'#20232c'
@@ -44,10 +44,10 @@ export const defaultCoachLook:CoachLook={
 const clamp=(v:number,min:number,max:number)=>Math.min(max,Math.max(min,Number.isFinite(v)?v:min));
 export function normalizeCoachLook(input:Partial<CoachLook>):CoachLook{
  const out={...defaultCoachLook,...input};
- const num=(k:'height'|'shoulders'|'muscle'|'waist'|'roundness'|'hips'|'glutes'|'thighs'|'bust'|'jaw'|'nose'|'eyes',a:number,b:number)=>{out[k]=clamp(out[k],a,b);};
+ const num=(k:'height'|'shoulders'|'muscle'|'waist'|'roundness'|'hips'|'glutes'|'thighs'|'arms'|'calves'|'bust'|'jaw'|'nose'|'eyes',a:number,b:number)=>{out[k]=clamp(out[k],a,b);};
  num('height',.9,1.1);num('shoulders',.75,1.25);num('muscle',.7,1.35);num('waist',.75,1.3);
  num('jaw',.8,1.2);num('nose',.8,1.2);num('eyes',.8,1.2);
- num('roundness',.7,1.3);num('hips',.75,1.35);num('glutes',...LIMITS.glutes);num('thighs',.75,1.3);num('bust',.75,1.35);
+ num('roundness',.7,1.3);num('hips',.75,1.35);num('glutes',...LIMITS.glutes);num('thighs',.75,1.3);num('arms',.75,1.3);num('calves',.75,1.3);num('bust',.75,1.35);
  for(const k of ['skin','eyeColor','hairColor','topColor','bottomColor','gloveColor','shinColor'] as const){
   if(!/^#[0-9a-fA-F]{6}$/.test(out[k]))out[k]=defaultCoachLook[k];
  }
@@ -66,7 +66,7 @@ export function parseCoachLookJson(text:string):CoachLook{
  if(doc.schema!=='cme-coach-look-v1')throw Error('Version de profil non prise en charge');
  if(!doc.look||typeof doc.look!=='object'||Array.isArray(doc.look))throw Error('Apparence absente');
  const input=doc.look as Record<string,unknown>;
- const legacy=Object.keys(defaultCoachLook).filter(k=>!['roundness','hips','glutes','thighs','bust'].includes(k));
+ const legacy=Object.keys(defaultCoachLook).filter(k=>!['roundness','hips','glutes','thighs','arms','calves','bust'].includes(k));
  if(legacy.some(k=>!(k in input)))throw Error('Profil incomplet');
  for(const k of Object.keys(defaultCoachLook)){
   if(!(k in input))continue;
@@ -76,7 +76,14 @@ export function parseCoachLookJson(text:string):CoachLook{
  return normalizeCoachLook(input as CoachLook);
 }
 const sections:Category[]=['corps','silhouette','visage','peau','cheveux','tenue','protections'];
-const sectionNames:Record<Category,string>={corps:'Morphologie',silhouette:'Bassin et silhouette',visage:'Visage',peau:'Peau',cheveux:'Cheveux',tenue:'Tenue',protections:'Protections'};
+const sectionNames:Record<Category,string>={corps:'Corps',silhouette:'Silhouette',visage:'Visage',peau:'Peau',cheveux:'Cheveux',tenue:'Tenue',protections:'Protections'};
+type Step='morphologie'|'apparence'|'equipement';
+const sectionStep:Record<Category,Step>={corps:'morphologie',silhouette:'morphologie',visage:'apparence',peau:'apparence',cheveux:'apparence',tenue:'equipement',protections:'equipement'};
+const studioSteps:readonly {id:Step;label:string;first:Category}[]=[
+ {id:'morphologie',label:'1. Silhouette',first:'corps'},
+ {id:'apparence',label:'2. Visage et couleurs',first:'visage'},
+ {id:'equipement',label:'3. Équipement',first:'tenue'}
+];
 const disciplineNames:Record<LabDiscipline,string>={boxing:'Boxe anglaise',kickboxing:'Kick-boxing',muaythai:'Muay-thaï',mma:'MMA',bjj:'JJB',judo:'Judo'};
 export function StudioCoach(){
  const [look,setLook]=useState<CoachLook>(()=>{try{const id=localStorage.getItem('cme-selected-coach');return normalizeCoachLook(readSavedCoaches(localStorage).find(x=>x.id===id)?.look??defaultCoachLook);}catch{return defaultCoachLook;}});
@@ -84,6 +91,7 @@ export function StudioCoach(){
  useEffect(()=>{const open=()=>{try{const id=localStorage.getItem('cme-selected-coach');const saved=readSavedCoaches(localStorage).find(x=>x.id===id);if(saved){setSelectedId(saved.id);setLook(normalizeCoachLook(saved.look));setIdentity(v=>({...v,nickname:saved.nickname??'',heightCm:String(saved.heightCm??''),weightKg:String(saved.weightKg??''),handedness:saved.handedness??'right'}));setAccessories(saved.accessories??['gloves','shins']);if(LAB_DISCIPLINES.includes(saved.initialDiscipline as LabDiscipline))setDiscipline(saved.initialDiscipline as LabDiscipline);}}catch{}};window.addEventListener('cme-edit-selected-coach',open);return()=>window.removeEventListener('cme-edit-selected-coach',open);},[]);
  const [identity,setIdentity]=useState(()=>{try{const id=localStorage.getItem('cme-selected-coach');const c=readSavedCoaches(localStorage).find(x=>x.id===id);return {nickname:c?.nickname??'',heightCm:c?.heightCm?.toString()??'',weightKg:c?.weightKg?.toString()??'',handedness:c?.handedness??'right',nicknameVariant:0};}catch{return {nickname:'',heightCm:'',weightKg:'',handedness:'right' as const,nicknameVariant:0};}});
  const [section,setSection]=useState<Category>('corps');
+ const [step,setStep]=useState<Step>('morphologie');
  const [skinPaletteMode,setSkinPaletteMode]=useState<'realiste'|'anime'>('realiste');
  const [expandedShape,setExpandedShape]=useState<string|null>(null);
  const [message,setMessage]=useState('');
@@ -113,8 +121,8 @@ export function StudioCoach(){
  }),[look.skin,look.hairColor,look.eyeColor,look.topColor,look.bottomColor,look.gloveColor,look.shinColor,accessories]);
  const dimensions=useMemo(()=>resolvedProportions(look,Number(identity.heightCm)||undefined,Number(identity.weightKg)||undefined),[look,identity.heightCm,identity.weightKg]);
  const faceDimensions=useMemo(()=>({jaw:look.jaw,nose:look.nose,eyes:look.eyes}),[look.jaw,look.nose,look.eyes]);
- const colorAvailable=(key:'skin'|'eyeColor'|'hairColor'|'topColor'|'bottomColor'|'gloveColor'|'shinColor')=>!!support?.colors[key]&&(!rigMode||key==='skin'||key==='eyeColor'||key==='hairColor');
- const faceAvailable=(key:'jaw'|'nose'|'eyes')=>!!support?.shape.faceMorphs[key];
+ const colorAvailable=(key:'skin'|'eyeColor'|'hairColor'|'topColor'|'bottomColor'|'gloveColor'|'shinColor')=>(key==='hairColor'||key==='skin'||!!support?.colors[key])&&(!rigMode||key==='skin'||key==='eyeColor'||key==='hairColor');
+ const faceAvailable=(key:'jaw'|'nose'|'eyes')=>!!support&&(!!support.shape.faceMorphs[key]||support.shape.faceVertices>0);
 
  const [androidTelemetry]=useState(()=>{
   const meter=new AndroidTelemetry('studio');
@@ -156,11 +164,17 @@ export function StudioCoach(){
  },[report?.sex]);
  const importRef=useRef<HTMLInputElement>(null);
  const update=<K extends keyof CoachLook>(key:K,value:CoachLook[K])=>{
-  if(key==='sex'&&look.sex!==value){beginRigLoad(value as CoachLook['sex'],rigMode,'switch');setReport(null);setSection('corps');recenter('corps');}
-  if(key!=='sex')selectFocus(focusForSetting(key,section));
+  if(key==='sex'&&look.sex!==value){beginRigLoad(value as CoachLook['sex'],rigMode,'switch');setReport(null);setSection('corps');setStep('morphologie');recenter('corps');}
+  if(key!=='sex'){selectFocus(focusForSetting(key,section));if(['skin','hairColor','hairStyle','eyeColor','jaw','nose','eyes'].includes(key)){setReferenceMode(false);setAnatomicalPreview(false);}}
+
   setLook(l=>normalizeCoachLook({...l,[key]:value}));
  };
  const isShapeSupported=(group:ShapeGroup)=>!referenceMode&&canEditAtlasShape(group,support);
+ const selectStudioStep=(target:Step,first:Category)=>{
+  setStep(target);setSection(first);setExpandedShape(null);recenter('corps');
+  if(target==='equipement'&&rigMode){beginRigLoad(look.sex,false,'mode');setRigMode(false);setReferenceMode(false);setReport(null);}
+  if(target!=='equipement'&&!rigMode){beginRigLoad(look.sex,true,'mode');setRigMode(true);setReport(null);}
+ };
  const shapePicker=(ids:string[])=><div className="coachShapeGroups">{activeShapeGroups(look.sex).filter(g=>ids.includes(g.id)).map(g=>{
   const enabled=isShapeSupported(g);
   const selected=g.presets.reduce((best,p)=>Math.abs(p.value-look[g.id])<Math.abs(best.value-look[g.id])?p:best,g.presets[0]);
@@ -176,7 +190,7 @@ export function StudioCoach(){
    </div>}
   </section>;
  })}</div>;
- const range=(key:'height'|'shoulders'|'muscle'|'waist'|'roundness'|'hips'|'glutes'|'thighs'|'bust'|'jaw'|'nose'|'eyes',label:string,min:number,max:number,enabled=true)=>
+ const range=(key:'height'|'shoulders'|'muscle'|'waist'|'roundness'|'hips'|'glutes'|'thighs'|'arms'|'calves'|'bust'|'jaw'|'nose'|'eyes',label:string,min:number,max:number,enabled=true)=>
   <label className="coachField"><span>{label} <b>{look[key].toFixed(2)}</b></span>
    <input type="range" min={min} max={max} step=".01" disabled={!enabled} value={look[key]} onFocus={()=>selectFocus(focusForSetting(key,section))} onChange={e=>update(key,Number(e.target.value))}/>
    {!enabled&&<small>Déformation non disponible sur ce GLB</small>}</label>;
@@ -205,11 +219,24 @@ export function StudioCoach(){
   // Une modification de l'apparence ne doit jamais réutiliser une ancienne image.
   if(existing&&JSON.stringify(existing.look)!==JSON.stringify(normalizeCoachLook(look))&&portrait===existing.portrait)portrait=undefined;
   const profile={id,name:name.slice(0,60),createdAt:existing?.createdAt??new Date().toISOString(),look:normalizeCoachLook(look),portrait,nickname:identity.nickname.trim().slice(0,60)||undefined,initialDiscipline:discipline,handedness:identity.handedness,accessories,heightCm:identity.heightCm&&Number(identity.heightCm)>=100&&Number(identity.heightCm)<=250?Number(identity.heightCm):undefined,weightKg:identity.weightKg&&Number(identity.weightKg)>=25&&Number(identity.weightKg)<=300?Number(identity.weightKg):undefined};if(existing)updateSavedCoach(localStorage,profile);else addSavedCoach(localStorage,profile);localStorage.setItem('cme-selected-coach',id);localStorage.setItem('cme-lab-coach',id);setSelectedId(id);window.dispatchEvent(new Event('cme-coaches-changed'));setMessage(existing?'Coach mis à jour et sélectionné dans le Laboratoire.':'Coach enregistré et sélectionné dans le Laboratoire.');}catch{setMessage('Enregistrement impossible sur cet appareil.');}};
+ const tryCoachInLab=()=>{try{
+  // One-click preview: keep just one reusable profile instead of asking for
+  // a name, and explicitly share the UNSAVED editor state with the lab.
+  const id='cme-studio-preview';
+  const profile={id,name:'Aperçu du Studio',createdAt:new Date().toISOString(),
+   look:normalizeCoachLook(look),nickname:identity.nickname.trim()||undefined,initialDiscipline:discipline,
+   handedness:identity.handedness,accessories,
+   heightCm:Number(identity.heightCm)||undefined,weightKg:Number(identity.weightKg)||undefined};
+  addSavedCoach(localStorage,profile);
+  localStorage.setItem('cme-lab-coach',id);
+  window.dispatchEvent(new Event('cme-coaches-changed'));
+  window.dispatchEvent(new Event('cme-open-lab-coach'));
+ }catch{setMessage('Aperçu indisponible : stockage local bloqué sur cet appareil.');}};
  const newCoach=()=>{if(look.sex!=='homme')beginRigLoad('homme',rigMode,'switch');setSelectedId(null);setLook(defaultCoachLook);setIdentity({nickname:'',heightCm:'',weightKg:'',handedness:'right',nicknameVariant:0});setDiscipline('boxing');setAccessories(['gloves','shins']);try{localStorage.removeItem('cme-selected-coach');}catch{}setMessage('Nouveau personnage : choisissez un modèle neutre, puis personnalisez-le.');};
  const removeCoach=()=>{if(!selectedId||!window.confirm('Supprimer définitivement ce coach de cet appareil ?'))return;try{deleteSavedCoach(localStorage,selectedId);if(localStorage.getItem('cme-lab-coach')===selectedId)localStorage.removeItem('cme-lab-coach');localStorage.removeItem('cme-selected-coach');setSelectedId(null);setLook(defaultCoachLook);window.dispatchEvent(new Event('cme-coaches-changed'));setMessage('Coach supprimé.');}catch{setMessage('Suppression impossible.');}};
  const exportJson=()=>{const json=JSON.stringify({schema:'cme-coach-look-v1',look},null,2);const blob=new Blob([json],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='cme-coach-look.json';a.click();URL.revokeObjectURL(url);setMessage('Configuration exportée : apparence uniquement, sans modification du moteur.');};
  return <section className="coachStudio" aria-label="Studio Coach">
-  <header className="coachStudioHeader"><div><small>STUDIO · PERSONNALISATION</small><h2>Créer ou modifier un coach</h2></div></header>
+  <header className="coachStudioHeader"><div><small>STUDIO COACH</small><h2>Mon combattant</h2><p>Choisis un modèle, personnalise-le, puis teste un geste.</p></div></header>
   <details className="coachIdentity"><summary>Identité du combattant · surnom, taille et poids</summary>
    <div className="coachIdentityFields">
     <label>Surnom <input aria-label="Surnom du combattant" maxLength={60} value={identity.nickname} onChange={e=>setIdentity(v=>({...v,nickname:e.target.value}))}/></label>
@@ -231,7 +258,7 @@ export function StudioCoach(){
     <div className="coachCanvasViewport"><Canvas key={canvasRetry} onCreated={onCanvasCreated} camera={{position:[0,1.3,4.5],fov:38}} dpr={[1,1.5]} gl={{antialias:true,preserveDrawingBuffer:true}}>
      <AndroidFrameProbe telemetry={androidTelemetry}/>
      <color attach="background" args={['#e6edf6']}/><hemisphereLight args={['#fff8ef','#677388',1.05]}/><ambientLight intensity={0.65}/><directionalLight position={[3,5,4]} intensity={1.55}/>
-     <SceneLoadingBoundary>{rigMode&&referenceMode?<AnatomicalReferenceRig key={'reference-'+look.sex} sex={look.sex} orientation={anatomicalView} focusZone={focusZone} focusRequest={focusRequest} autoCadrage={!cameraAuto}/>:<NeutralRig key={`${look.sex}-${rigMode?(anatomicalPreview?'mannequin':'creator'):'appearance'}`} mode={rigMode?(anatomicalPreview?'mannequin':'creator'):'appearance'} sex={look.sex} discipline={discipline} noGi={noGi} motionId={testingMotion?motionId:'garde'} creationPose={!testingMotion} playing={testingMotion&&playing} speed={1} showSkeleton={showSkeleton} autoCadrage={!cameraAuto} focusZone={focusZone} focusRequest={focusRequest} orientation={anatomicalView} onReport={handleRigReport} appearance={colors} proportions={dimensions} face={faceDimensions}/>}</SceneLoadingBoundary>
+     <SceneLoadingBoundary>{rigMode&&referenceMode?<AnatomicalReferenceRig key={'reference-'+look.sex} sex={look.sex} orientation={anatomicalView} focusZone={focusZone} focusRequest={focusRequest} autoCadrage={!cameraAuto}/>:<NeutralRig key={`${look.sex}-${rigMode?(anatomicalPreview?'mannequin':'creator'):'appearance'}`} mode={rigMode?(anatomicalPreview?'mannequin':'creator'):'appearance'} sex={look.sex} discipline={discipline} noGi={noGi} motionId={testingMotion?motionId:'garde'} creationPose={!testingMotion} playing={testingMotion&&playing} speed={1} showSkeleton={showSkeleton} autoCadrage={!cameraAuto} focusZone={focusZone} focusRequest={focusRequest} orientation={anatomicalView} onReport={handleRigReport} appearance={colors} proportions={dimensions} face={faceDimensions} hairStyle={look.hairStyle}/>}</SceneLoadingBoundary>
      <SceneCameraControls automatic={cameraAuto} motion={motionId}/>
     </Canvas></div>
     <span className="coachPreviewLabel">{rigMode?(referenceMode?'Étalon anatomique CC0 · 163 os · lecture seule':anatomicalPreview?'Mannequin anatomique gris · forme modifiable':'Corps neutre personnalisable'):'Coach habillé · '+(look.sex==='femme'?'Femme':'Homme')}</span>
@@ -246,34 +273,37 @@ export function StudioCoach(){
       <button className={look.sex==='homme'?'active':''} onClick={()=>update('sex','homme')}>Homme</button>
       <button className={look.sex==='femme'?'active':''} onClick={()=>update('sex','femme')}>Femme</button>
     </div>
+    <div className="coachStepNavigation" role="group" aria-label="Étapes de personnalisation">
+     {studioSteps.map(item=><button key={item.id} type="button" aria-pressed={step===item.id} onClick={()=>selectStudioStep(item.id,item.first)}>{item.label}</button>)}
+    </div>
     <div className="coachFocusLine" role="status"><span>Cadre : {cameraAuto?'caméra pédagogique':FOCUS_LABELS[focusZone]}</span><button type="button" onClick={()=>{setCameraAuto(false);setAnatomicalView('face');recenter('corps');}}>Vue entière</button></div>
-    {rigMode&&<div className="coachAnatomicalReferenceSwitch">
+    {rigMode&&<details className="coachExpertTools"><summary>Références anatomiques · avancé</summary><div className="coachAnatomicalReferenceSwitch">
       <button type="button" aria-pressed={referenceMode} onClick={()=>{setReferenceMode(v=>!v);setReport(null);setCameraAuto(false);recenter('corps');}}>{referenceMode?'Étalon 3D actif · revenir au créateur':'Comparer au modèle anatomique CC0 H/F'}</button>
       <small>{referenceMode?'Étude anatomique 3D en lecture seule. Les curseurs ne pilotent pas ce squelette distinct à 163 os.':'Deux véritables modèles organiques en A-pose, sans vêtement. Les coachs de combat restent inchangés.'}</small>
       <button type="button" aria-pressed={anatomicalPreview} onClick={()=>{setAnatomicalPreview(v=>!v);setReport(null);recenter('corps');}}>{anatomicalPreview?'Mannequin gris actif · revenir aux couleurs':'Afficher le mannequin anatomique gris'}</button>
       <small>Surface satinée sur le véritable GLB, sans tenue. La forme du modèle source reste à perfectionner pour atteindre les références.</small>
-    </div>}
+    </div></details>}
     <div className="coachReferenceViews" role="group" aria-label="Vues anatomiques">
      {ANATOMICAL_VIEWS.map(v=><button key={v.id} type="button" aria-pressed={anatomicalView===v.id} title={'Orienter le mannequin : '+v.label} onClick={()=>{setCameraAuto(false);setAnatomicalView(v.id);recenter('corps');}}>{v.label}</button>)}
     </div>
-    <p className="coachCapability" role="status">{rigMode&&referenceMode?'Étalon anatomique réel en lecture seule : référence CC0 de 163 os. Modification du coach et animations désactivées dans ce mode.':support?('Zones reconnues : corps '+support.shape.torsoVertices+' sommets · peau '+support.colors.skin+' matériau(x) · iris '+support.colors.eyeColor+' · cheveux '+support.colors.hairColor+'. Les options sans géométrie source restent enregistrables mais non rendues.'):'Chargement du modèle anatomique et de la tenue…'}</p>
-    <nav className="coachCategories" aria-label="Choisir une zone du portrait-robot">{sections.map(item=><button key={item} className={section===item?'active':''} aria-current={section===item?'true':undefined} onClick={()=>{const dressed=item==='tenue'||item==='protections';setSection(item);setExpandedShape(null);recenter('corps');if(rigMode===dressed){beginRigLoad(look.sex,!dressed,'mode');setRigMode(!dressed);setReport(null);}}}><AnatomyIcon zone={item} className="coachCategoryIcon"/><span>{sectionNames[item]}</span></button>)}</nav>
+    <details className="coachExpertTools"><summary>Informations techniques du modèle</summary><p className="coachCapability" role="status">{rigMode&&referenceMode?'Étalon anatomique réel en lecture seule : référence CC0 de 163 os. Modification du coach et animations désactivées dans ce mode.':support?('Zones reconnues : corps '+support.shape.torsoVertices+' sommets · peau '+support.colors.skin+' matériau(x) · iris '+support.colors.eyeColor+' · cheveux '+support.colors.hairColor+'. Les options sans géométrie source restent enregistrables mais non rendues.'):'Chargement du modèle anatomique et de la tenue…'}</p></details>
+    <nav className="coachCategories" aria-label="Choisir une zone du portrait-robot">{sections.map(item=>sectionStep[item]!==step?null:<button key={item} className={section===item?'active':''} aria-current={section===item?'true':undefined} onClick={()=>{const dressed=item==='tenue'||item==='protections';setSection(item);setExpandedShape(null);recenter('corps');if(rigMode===dressed){beginRigLoad(look.sex,!dressed,'mode');setRigMode(!dressed);setReport(null);}}}><AnatomyIcon zone={item} className="coachCategoryIcon"/><span>{sectionNames[item]}</span></button>)}</nav>
 
 
     <div className="coachFields">
      {rigMode&&referenceMode&&<p className="coachAvailability">Lecture seule : revenir au créateur pour modifier les formes. Le modèle CC0 sert à examiner la silhouette réelle sur quatre angles.</p>}
-     {section==='corps'&&<><p className="coachAvailability">Choisissez une forme adaptée au modèle {look.sex==='femme'?'féminin':'masculin'} : les zones voisines évoluent progressivement et conservent une silhouette cohérente.</p>{shapePicker(['shoulders','muscle','waist'])}</>}
-     {section==='silhouette'&&<div className="coachFemaleShapes">{shapePicker(['roundness','bust','hips','glutes','thighs'])}<p className="coachAvailability">Les mêmes zones sont disponibles pour tous les combattants. Le volume du buste est adapté à l’anatomie du modèle (pectoraux ou poitrine). Les transitions restent des approximations déformées sur le maillage skinné. Une déformation locale bornée des fessiers agit sur les sommets skinnés du bassin. De nouveaux morphs sculptés du visage et des modèles organiques détaillés restent nécessaires pour la qualité finale.</p></div>}
+     {section==='corps'&&<><p className="coachAvailability">Choisissez une forme adaptée au modèle {look.sex==='femme'?'féminin':'masculin'} : les zones voisines évoluent progressivement et conservent une silhouette cohérente.</p>{shapePicker(['shoulders','muscle','arms','waist'])}</>}
+     {section==='silhouette'&&<div className="coachFemaleShapes">{shapePicker(['roundness','bust','hips','glutes','thighs','calves'])}<p className="coachAvailability">Les mêmes zones sont disponibles pour tous les combattants. Le volume du buste est adapté à l’anatomie du modèle (pectoraux ou poitrine). Les transitions restent des approximations déformées sur le maillage skinné. Une déformation locale bornée des fessiers agit sur les sommets skinnés du bassin. De nouveaux morphs sculptés du visage et des modèles organiques détaillés restent nécessaires pour la qualité finale.</p></div>}
      {section==='visage'&&<>{shapePicker(['jaw','nose','eyes'])}<div className="coachSwatchSection"><strong>Couleur de l’iris</strong><div className="coachColorAtlas" role="group" aria-label="Couleurs des yeux">{EYE_TONES.map(t=><button key={t.hex} type="button" title={t.name} aria-pressed={look.eyeColor.toLowerCase()===t.hex.toLowerCase()} onClick={()=>update('eyeColor',t.hex)}><i style={{background:t.hex}}/>{t.name}</button>)}</div>{color('eyeColor','Couleur personnalisée')}{!colorAvailable('eyeColor')&&<small>La teinte est mémorisée. L’asset courant ne sépare pas encore suffisamment l’iris pour l’afficher correctement.</small>}</div></>}
-     {section==='peau'&&<div className="coachSkinEditor"><div className="coachPaletteMode"><strong>Coloration de la peau</strong><div className="coachPaletteSelect" role="group" aria-label="Palette de carnation"><button type="button" aria-pressed={skinPaletteMode==='realiste'} onClick={()=>setSkinPaletteMode('realiste')}>Réalisme</button><button type="button" aria-pressed={skinPaletteMode==='anime'} onClick={()=>setSkinPaletteMode('anime')}>Animation</button></div><small>Choix de couleurs de peau sans classification ethnique. Le mode Animation change la palette, pas le shader.</small></div><p className="coachAvailability">Choisissez une carnation naturelle. Le rendu préserve le grain et les détails de la texture du corps, sans superposer une seconde couleur sombre.</p><div className="coachSkinGrid" role="group" aria-label="Carnations naturelles">{(skinPaletteMode==='realiste'?SKIN_TONES:ANIME_SKIN_TONES).map(tone=><button type="button" key={tone.hex} disabled={!colorAvailable('skin')} className={`coachSkinTone ${look.skin.toLowerCase()===tone.hex?'active':''}`} aria-pressed={look.skin.toLowerCase()===tone.hex} onClick={()=>{selectFocus('peau');update('skin',tone.hex);}} title={tone.name}><span className="coachSkinSwatch" style={{backgroundColor:tone.hex}}/><span>{tone.name}</span></button>)}</div><small className="coachSkinHint">{!colorAvailable('skin')?'Les matériaux de peau de ce GLB ne sont pas encore séparés : teinte sauvegardée pour un maillage compatible.':'La teinte est appliquée au matériau reconnu en conservant sa texture source.'}</small>{color('skin','Nuance personnalisée')}</div>}
-     {section==='cheveux'&&<div className="coachSwatchSection"><strong>Chevelure et pilosité</strong>{choose('hairStyle','Coupe souhaitée',['rase','court','long'])}<div className="coachColorAtlas" role="group" aria-label="Couleurs de cheveux">{HAIR_TONES.map(t=><button key={t.hex} type="button" title={t.name} aria-pressed={look.hairColor.toLowerCase()===t.hex.toLowerCase()} onClick={()=>update('hairColor',t.hex)}><i style={{background:t.hex}}/>{t.name}</button>)}</div>{color('hairColor','Couleur personnalisée')}<small>Couleur appliquée aux vrais matériaux capillaires reconnus. Les coupes différentes demandent une chevelure 3D indépendante ; ce choix est enregistré, sans promettre de modification du maillage absent.</small></div>}
+     {section==='peau'&&<div className="coachSkinEditor"><div className="coachPaletteMode"><strong>Coloration de la peau</strong><div className="coachPaletteSelect" role="group" aria-label="Palette de carnation"><button type="button" aria-pressed={skinPaletteMode==='realiste'} onClick={()=>setSkinPaletteMode('realiste')}>Réalisme</button><button type="button" aria-pressed={skinPaletteMode==='anime'} onClick={()=>setSkinPaletteMode('anime')}>Animation</button></div><small>Choix de couleurs de peau sans classification ethnique. Le mode Animation change la palette, pas le shader.</small></div><p className="coachAvailability">Choisissez une carnation naturelle. Le rendu préserve le grain et les détails de la texture du corps, sans superposer une seconde couleur sombre.</p><div className="coachSkinGrid" role="group" aria-label="Carnations naturelles">{(skinPaletteMode==='realiste'?SKIN_TONES:ANIME_SKIN_TONES).map(tone=><button type="button" key={tone.hex} disabled={!colorAvailable('skin')} className={`coachSkinTone ${look.skin.toLowerCase()===tone.hex?'active':''}`} aria-pressed={look.skin.toLowerCase()===tone.hex} onClick={()=>{selectFocus('peau');update('skin',tone.hex);}} title={tone.name}><span className="coachSkinSwatch" style={{backgroundColor:tone.hex}}/><span>{tone.name}</span></button>)}</div><small className="coachSkinHint">{!colorAvailable('skin')?'Les matériaux de peau de ce GLB ne sont pas encore séparés : teinte sauvegardée pour un maillage compatible.':'La teinte est appliquée à la peau identifiable. Quitte automatiquement le mannequin gris pour rendre le changement visible.'}</small>{color('skin','Nuance personnalisée')}</div>}
+     {section==='cheveux'&&<div className="coachSwatchSection"><strong>Chevelure et pilosité</strong>{choose('hairStyle','Coupe souhaitée',['rase','court','long'])}<div className="coachColorAtlas" role="group" aria-label="Couleurs de cheveux">{HAIR_TONES.map(t=><button key={t.hex} type="button" title={t.name} aria-pressed={look.hairColor.toLowerCase()===t.hex.toLowerCase()} onClick={()=>update('hairColor',t.hex)}><i style={{background:t.hex}}/>{t.name}</button>)}</div>{color('hairColor','Couleur personnalisée')}<small>Les coupes et couleurs utilisent désormais une coiffure 3D légère fixée au crâne. Le rendu capillaire haut de gamme nécessitera encore de véritables assets spécialisés.</small></div>}
      {section==='tenue'&&<><p className="coachAvailability">L’aperçu charge la véritable tenue 3D de la discipline sélectionnée. Les couleurs sont modifiables uniquement sur les parties identifiées.</p><label className="coachField"><span>Tenue de discipline</span><select value={discipline} onChange={e=>{setDiscipline(e.target.value as LabDiscipline);setReport(null);}}>{LAB_DISCIPLINES.map(d=><option key={d} value={d}>{disciplineNames[d]}</option>)}</select></label>{discipline==='bjj'&&<label className="coachField"><span>Équipement JJB</span><select value={noGi?'nogi':'gi'} onChange={e=>{setNoGi(e.target.value==='nogi');setReport(null);}}><option value="gi">Gi · kimono</option><option value="nogi">No-Gi · rashguard</option></select></label>}{color('topColor','Couleur du haut existant')}{color('bottomColor','Couleur du bas existant')}</>}
      {section==='protections'&&<div className="coachAccessoryPanel"><p className="coachAvailability">Accessoires cumulables : activez les équipements déjà présents dans la tenue 3D. Plusieurs protections peuvent être utilisées ensemble.</p>{(['gloves','shins'] as const).map(layer=><label key={layer} className="coachAccessoryToggle"><input type="checkbox" checked={accessories.includes(layer)} disabled={!support?.colors[layer==='gloves'?'gloveColor':'shinColor']} onChange={e=>setAccessories(v=>e.target.checked?[...v.filter(x=>x!==layer),layer]:v.filter(x=>x!==layer))}/><span>{layer==='gloves'?'Gants':'Protège-tibias'}</span><small>{(support?.colors[layer==='gloves'?'gloveColor':'shinColor']??0)>0?'Équipement détecté dans le modèle':'Non présent dans cette tenue'}</small></label>)}{color('gloveColor','Couleur des gants')}{color('shinColor','Couleur des protège-tibias')}</div>}
     </div>
-    <details className="coachAdvanced"><summary>Réglages fins de la zone</summary><div className="coachFields">{section==='corps'&&<>{range('height','Taille relative',.9,1.1)}{range('shoulders','Épaules',.75,1.25,!!support?.shape.torsoVertices)}{range('muscle','Musculature',.7,1.35,!!support?.shape.torsoVertices)}{range('waist','Taille',.75,1.3,!!support?.shape.torsoVertices)}</>}{section==='visage'&&<>{range('jaw','Mâchoire',.8,1.2,faceAvailable('jaw'))}{range('nose','Nez',.8,1.2,faceAvailable('nose'))}{range('eyes','Yeux',.8,1.2,faceAvailable('eyes'))}</>}{section==='silhouette'&&<>{range('bust',look.sex==='femme'?'Volume de la poitrine':'Volume des pectoraux',.75,1.35,!!support?.shape.bustVertices)}{range('roundness','Rondeur générale',.7,1.3,!!support?.shape.torsoVertices)}{range('hips',look.sex==='femme'?'Hanches féminines':'Largeur du bassin',.75,1.35,!!support?.shape.hipVertices)}{range('glutes',look.sex==='femme'?'Galbe des fessiers':'Volume des fessiers',.75,1.35,!!support?.shape.hipVertices)}{range('thighs','Volume des cuisses',.75,1.3,!!support?.shape.thighVertices)}</>}</div></details>
+    <details className="coachAdvanced"><summary>Réglages fins de la zone</summary><div className="coachFields">{section==='corps'&&<>{range('height','Taille relative',.9,1.1)}{range('shoulders','Épaules',.75,1.25,!!support?.shape.torsoVertices)}{range('muscle','Musculature',.7,1.35,!!support?.shape.torsoVertices)}{range('waist','Taille',.75,1.3,!!support?.shape.torsoVertices)}{range('arms','Volume des bras',.75,1.3,!!support?.shape.armVertices)}</>}{section==='visage'&&<>{range('jaw','Mâchoire',.8,1.2,faceAvailable('jaw'))}{range('nose','Nez',.8,1.2,faceAvailable('nose'))}{range('eyes','Yeux',.8,1.2,faceAvailable('eyes'))}</>}{section==='silhouette'&&<>{range('bust',look.sex==='femme'?'Volume de la poitrine':'Volume des pectoraux',.75,1.35,!!support?.shape.bustVertices)}{range('roundness','Rondeur générale',.7,1.3,!!support?.shape.torsoVertices)}{range('hips',look.sex==='femme'?'Hanches féminines':'Largeur du bassin',.75,1.35,!!support?.shape.hipVertices)}{range('glutes',look.sex==='femme'?'Galbe des fessiers':'Volume des fessiers',.75,1.35,!!support?.shape.hipVertices)}{range('thighs','Volume des cuisses',.75,1.3,!!support?.shape.thighVertices)}{range('calves','Volume des mollets',.75,1.3,!!support?.shape.calfVertices)}</>}</div></details>
     
-    <div className="coachCrud"><button type="button" onClick={()=>{setTestingMotion(false);setPlaying(false);setLook(l=>normalizeCoachLook(randomShapeLook(l,Math.random,isShapeSupported)));recenter('corps');setMessage('Nouvelle combinaison morphologique générée. Enregistrez pour la conserver.');}}>↝ Silhouette aléatoire</button><button type="button" onClick={()=>window.dispatchEvent(new Event('cme-open-lab-coach'))}>Tester dans Mouvements</button><button type="button" onClick={newCoach}>Nouveau</button><button type="button" className="coachSave" onClick={saveCoach}>{selectedId?'Enregistrer les modifications':'Créer et enregistrer le coach'}</button>{selectedId&&<button type="button" onClick={removeCoach}>Supprimer</button>}</div>
-    <button className="coachReset" onClick={()=>{setLook(defaultCoachLook);setMessage('Apparence réinitialisée');}}>Réinitialiser le personnage</button>
+    <div className="coachCrud"><button type="button" onClick={()=>{setTestingMotion(false);setPlaying(false);setLook(l=>normalizeCoachLook(randomShapeLook(l,Math.random,isShapeSupported)));recenter('corps');setMessage('Nouvelle combinaison morphologique générée. Enregistrez pour la conserver.');}}>↝ Silhouette aléatoire</button><button type="button" disabled={referenceMode} onClick={tryCoachInLab}>▶ Tester dans Mouvements</button><button type="button" onClick={newCoach}>Nouveau</button><button type="button" className="coachSave" onClick={saveCoach}>{selectedId?'Enregistrer les modifications':'Créer et enregistrer le coach'}</button>{selectedId&&<button type="button" onClick={removeCoach}>Supprimer</button>}</div>
+    <button className="coachReset" onClick={()=>{setLook(normalizeCoachLook({...defaultCoachLook,sex:look.sex}));setMessage('Apparence réinitialisée');}}>Réinitialiser l’apparence</button>
     <details className="coachAdvanced" open={advancedOpen} onToggle={e=>setAdvancedOpen(e.currentTarget.open)}><summary>Gestion du profil <span>Importer · Exporter</span></summary><div className="coachActions">
       <button onClick={exportJson}>Exporter JSON</button>
       <button onClick={()=>importRef.current?.click()}>Importer JSON</button>

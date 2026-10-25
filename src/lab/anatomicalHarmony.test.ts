@@ -3,7 +3,7 @@ import {harmonizeBodyScalars,LIMITS,type BodyScalars} from './anatomicalHarmony'
 import {resolvedProportions} from './coachProportions';
 import {defaultCoachLook,normalizeCoachLook,parseCoachLookJson} from './StudioCoach';
 import {activeShapeGroups} from './visualShapePresets';
-const neutral:BodyScalars={shoulders:1,muscle:1,waist:1,roundness:1,hips:1,glutes:1,thighs:1,bust:1};
+const neutral:BodyScalars={shoulders:1,muscle:1,waist:1,roundness:1,hips:1,glutes:1,thighs:1,arms:1,calves:1,bust:1};
 describe('0.7.43 — morphologie homme/femme harmonisée',()=>{
  it('préserve à l’identique les proportions originales et valeurs enregistrées',()=>{
   expect(harmonizeBodyScalars('femme',neutral)).toEqual(neutral);

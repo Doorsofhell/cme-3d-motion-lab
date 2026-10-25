@@ -7,8 +7,8 @@ export function MorphThumbnail({part,value}:{part:ShapeKey;value:number}){
  const waist=part==='waist'?14+delta*26:14+(part==='roundness'?delta*17:0);
  const hips=part==='hips'?19+delta*32:19+(part==='roundness'?delta*23:part==='glutes'?delta*16:0);
  const bust=part==='bust'?4+delta*16:4;
- const thighs=part==='thighs'?9+delta*21:9;
- const muscle=part==='muscle'?delta*18:0;
+ const thighs=part==='thighs'?9+delta*21:9+(part==='calves'?delta*15:0);
+ const muscle=part==='muscle'?delta*18:part==='arms'?delta*10:0;
  const glutes=part==='glutes'?delta*12:0;
  if(face){
   const jaw=part==='jaw'?12+delta*35:12;
