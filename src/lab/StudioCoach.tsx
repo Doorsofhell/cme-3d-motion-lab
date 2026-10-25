@@ -78,7 +78,7 @@ const disciplineNames:Record<LabDiscipline,string>={boxing:'Boxe anglaise',kickb
 export function StudioCoach(){
  const [look,setLook]=useState<CoachLook>(()=>{try{const id=localStorage.getItem('cme-selected-coach');return normalizeCoachLook(readSavedCoaches(localStorage).find(x=>x.id===id)?.look??defaultCoachLook);}catch{return defaultCoachLook;}});
  const [selectedId,setSelectedId]=useState<string|null>(()=>{try{return localStorage.getItem('cme-selected-coach');}catch{return null;}});
- useEffect(()=>{const open=()=>{try{const id=localStorage.getItem('cme-selected-coach');const saved=readSavedCoaches(localStorage).find(x=>x.id===id);if(saved){setSelectedId(saved.id);setLook(normalizeCoachLook(saved.look));}}catch{}};window.addEventListener('cme-edit-selected-coach',open);return()=>window.removeEventListener('cme-edit-selected-coach',open);},[]);
+ useEffect(()=>{const open=()=>{try{const id=localStorage.getItem('cme-selected-coach');const saved=readSavedCoaches(localStorage).find(x=>x.id===id);if(saved){setSelectedId(saved.id);setLook(normalizeCoachLook(saved.look));setIdentity(v=>({...v,nickname:saved.nickname??'',heightCm:String(saved.heightCm??''),weightKg:String(saved.weightKg??''),handedness:saved.handedness??'right'}));if(LAB_DISCIPLINES.includes(saved.initialDiscipline as LabDiscipline))setDiscipline(saved.initialDiscipline as LabDiscipline);}}catch{}};window.addEventListener('cme-edit-selected-coach',open);return()=>window.removeEventListener('cme-edit-selected-coach',open);},[]);
  const [identity,setIdentity]=useState(()=>{try{const id=localStorage.getItem('cme-selected-coach');const c=readSavedCoaches(localStorage).find(x=>x.id===id);return {nickname:c?.nickname??'',heightCm:c?.heightCm?.toString()??'',weightKg:c?.weightKg?.toString()??'',handedness:c?.handedness??'right',nicknameVariant:0};}catch{return {nickname:'',heightCm:'',weightKg:'',handedness:'right' as const,nicknameVariant:0};}});
  const [section,setSection]=useState<Category>('corps');
  const [expandedShape,setExpandedShape]=useState<string|null>(null);
@@ -208,6 +208,9 @@ export function StudioCoach(){
     <button type="button" onClick={()=>setIdentity(v=>({ ...v,nickname:suggestCoachNickname({name:readSavedCoaches(localStorage).find(c=>c.id===selectedId)?.name??'Combattant',look,initialDiscipline:discipline},v.nicknameVariant),nicknameVariant:v.nicknameVariant+1}))}>Générer un surnom</button>
     <label>Taille (cm) <input aria-label="Taille en centimètres" type="number" min={100} max={250} step={1} value={identity.heightCm} onChange={e=>setIdentity(v=>({...v,heightCm:e.target.value}))}/></label>
     <label>Poids (kg) <input aria-label="Poids en kilogrammes" type="number" min={25} max={300} step={.1} value={identity.weightKg} onChange={e=>setIdentity(v=>({...v,weightKg:e.target.value}))}/></label>
+    <label>Main dominante <select aria-label="Main dominante" value={identity.handedness} onChange={e=>setIdentity(v=>({...v,handedness:e.target.value as 'right'|'left'}))}><option value="right">Droitier</option><option value="left">Gaucher</option></select></label>
+    <label>Discipline principale <select aria-label="Discipline principale" value={discipline} onChange={e=>{setDiscipline(e.target.value as LabDiscipline);setReport(null);}}>{LAB_DISCIPLINES.map(d=><option key={d} value={d}>{disciplineNames[d]}</option>)}</select></label>
+    <small className="coachIdentityHelp">Taille et poids adaptent progressivement les proportions 3D. Main dominante et discipline s’appliquent lors du test ; la création reste en pose neutre.</small>
    </div>
   </details>
   <p className="coachCreationNote">Création en pose neutre : choisissez une zone et sa forme. Pour exécuter ou valider des techniques, ouvrez <strong>Mouvements</strong>.</p>
