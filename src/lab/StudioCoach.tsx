@@ -16,6 +16,9 @@ import {studioTechniqueCatalog} from './studioTechniqueCatalog';
 import {activeShapeGroups,applyShapePreset,randomShapeLook,type ShapeGroup} from './visualShapePresets';
 import {MorphThumbnail} from './MorphThumbnail';
 import {AnatomyIcon} from './AnatomyIcon';
+import {PrecisionSlider,type PrecisionTone} from './PrecisionSlider';
+import {SculptorViewportTools} from './SculptorViewportTools';
+import {SculptorWireframe} from './SculptorWireframe';
 import {GROUPES_ANATOMIQUES,groupePourZone,type ZoneAnatomique} from './studioAnatomyNavigation';
 import {resolvedProportions} from './coachProportions';
 import {LIMITS} from './anatomicalHarmony';
@@ -116,6 +119,7 @@ export function StudioCoach(){
  const [playing,setPlaying]=useState(false);
  const [testingMotion,setTestingMotion]=useState(false);
  const [showSkeleton,setShowSkeleton]=useState(false);
+ const [filDeFer,setFilDeFer]=useState(false);
  const [report,setReport]=useState<NeutralRigReport|null>(null);
  const support=currentAtlasCapabilities(report,look.sex,false);
  const colors=useMemo(()=>({
@@ -199,10 +203,12 @@ export function StudioCoach(){
    </div>}
   </section>;
  })}</div>;
+ const precisionTone=(key:keyof CoachLook):PrecisionTone=>['muscle','thighs','calves','roundness'].includes(key)?'orange':['waist','bust','hips','glutes','jaw'].includes(key)?'rouge':'cyan';
  const range=(key:'height'|'shoulders'|'muscle'|'waist'|'roundness'|'hips'|'glutes'|'thighs'|'arms'|'calves'|'bust'|'jaw'|'nose'|'eyes',label:string,min:number,max:number,enabled=true)=>
-  <label className="coachField"><span>{label} <b>{look[key].toFixed(2)}</b></span>
-   <input type="range" min={min} max={max} step=".01" disabled={!enabled} value={look[key]} onFocus={()=>selectFocus(focusForSetting(key,section))} onChange={e=>update(key,Number(e.target.value))}/>
-   {!enabled&&<small>Déformation non disponible sur ce GLB</small>}</label>;
+  <PrecisionSlider label={label} valeur={look[key]} minimum={min} maximum={max}
+   actif={enabled} couleur={precisionTone(key)}
+   affichage={key==='height'&&Number(identity.heightCm)>0?(Number(identity.heightCm)*look.height/100).toFixed(2)+' m':undefined}
+   changer={v=>{selectFocus(focusForSetting(key,section));update(key,v);}}/>;
  const color=(key:'skin'|'eyeColor'|'hairColor'|'topColor'|'bottomColor'|'gloveColor'|'shinColor',label:string)=>
   <label className="coachColor"><span>{label}{!colorAvailable(key)&&<small> · maillage non identifié</small>}</span>
    <input type="color" disabled={!colorAvailable(key)} value={look[key]} onFocus={()=>selectFocus(focusForSetting(key,section))} onChange={e=>update(key,e.target.value)}/></label>;
