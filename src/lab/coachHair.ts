@@ -14,14 +14,15 @@ export function applyCoachHair(root:Object3D,style:HairStyle,color:string):numbe
   former.traverse(o=>{const mesh=o as Mesh;if(mesh.isMesh){mesh.geometry.dispose();(Array.isArray(mesh.material)?mesh.material:[mesh.material]).forEach(m=>m.dispose());}});
  }
  root.updateWorldMatrix(true,true);
- let bone:Bone|null=null,faceMesh:Mesh|null=null;
+ const bones:Bone[]=[],faces:Mesh[]=[];
  root.traverse(o=>{
-  if(o instanceof Bone&&/head$/i.test(o.name.replace(/[^a-z0-9]/gi,'')))bone=o;
+  if(o instanceof Bone&&/head$/i.test(o.name.replace(/[^a-z0-9]/gi,'')))bones.push(o);
   const mesh=o as Mesh;
   if(!mesh.isMesh||mesh.userData.cmeHiddenSource)return;
   if(isHair(mesh.name))mesh.visible=false;
-  if(!faceMesh&&/(?:^|[_:-])(head|face)(?:$|[_:-])/i.test(mesh.name))faceMesh=mesh;
+  if(/(?:^|[_:-])(head|face)(?:$|[_:-])/i.test(mesh.name))faces.push(mesh);
  });
+ const bone=bones[0],faceMesh=faces[0];
  if(!bone||style==='rase')return bone?1:0;
  const skull=new Box3();
  if(faceMesh)skull.setFromObject(faceMesh);

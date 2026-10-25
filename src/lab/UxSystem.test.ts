@@ -18,7 +18,8 @@ describe('CME-3D UX : parcours uniques, design system et accessibilité',()=>{
   expect(app).not.toContain("tab==='lab'&&reviewOpen");
  });
  it('conserve une seule surface de test et un seul éditeur de coach',()=>{
-  expect(app).toContain("tab==='lab'&&<MotionReview");
+  expect(app).toContain("tab==='lab'&&<details");
+  expect(app).toContain('<MotionReview');
   expect(app).not.toContain('cmeReviewToggle');
   expect(studio).toContain('Création en pose neutre');
   expect(studio).not.toContain('2 · Test des mouvements');

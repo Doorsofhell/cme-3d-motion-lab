@@ -267,8 +267,8 @@
 .coachExpertTools>summary{cursor:pointer;min-height:40px;display:flex;align-items:center;font-size:12px;font-weight:600}
 .coachShapeZoneCard{min-height:72px;padding:7px 10px}
 .coachShapeZoneCard .coachMorphIllustration{height:58px;width:52px;flex:0 0 52px}
-.coachCategories button{min-height:62px!important;gap:3px!important;padding:5px!important}
-.coachCategories button .coachCategoryIcon{width:24px!important;height:24px!important}
+.coachCategories button{min-height:62px;gap:3px;padding:5px}
+.coachCategories button .coachCategoryIcon{width:24px;height:24px}
 .coachCrud .coachSave{order:0;flex:1}
 .coachCrud button:disabled{opacity:.48}
 @media(max-width:390px){.coachStepNavigation button{font-size:11px;min-height:52px;padding:6px 2px}.coachStudioHeader h2{font-size:21px}}
