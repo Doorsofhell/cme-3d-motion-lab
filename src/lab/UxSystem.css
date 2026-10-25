@@ -150,3 +150,56 @@
 }
 @media(max-width:380px){.labTabs>button{padding:3px 0!important}.labTabs button span{font-size:9px!important}}
 @media(prefers-reduced-motion:reduce){.labApp *{scroll-behavior:auto!important;transition-duration:.01ms!important}}
+
+/* Studio : one editor and one gallery, with a stable Android preview and one save action. */
+.coachCreationNote{margin:0;padding:10px 14px;border-radius:12px;background:var(--ux-muted);color:var(--ux-subtle);font-size:12px;line-height:1.5}
+.coachCreationNote strong{color:var(--ux-text)}
+.labApp .coachCategories{gap:6px}
+.labApp .coachCategories button{min-height:44px;border-radius:10px}
+.labApp .coachFields{gap:12px}
+.labApp .coachAdvanced{border-top-color:var(--c-line)}
+.labApp .coachAdvanced>summary{color:var(--ux-text);font-weight:700}
+.labApp .coachIdentity{background:var(--ux-muted);border-radius:12px}
+.labApp .coachCrud{background:var(--ux-card);border-top:1px solid var(--c-line);padding-top:12px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.labApp .coachCrud .coachSave{grid-column:1/-1;order:-1;min-height:50px}
+.labApp .coachCrud button{width:100%;min-width:0;min-height:46px}
+.labApp .coachShapeZoneCard{background:var(--ux-muted);border-color:var(--c-line-strong);color:var(--ux-text)}
+.labApp .coachShapeZoneInfo strong{color:var(--ux-text)}
+.labApp .coachShapeZoneInfo small{color:var(--ux-subtle)}
+.labApp .coachShapeGroup.is-open .coachShapeZoneCard{background:color-mix(in srgb,var(--c-accent) 7%,var(--ux-card));border-color:var(--c-accent)}
+.labApp .coachShapePanel{background:var(--ux-card);border-color:var(--c-line)}
+.labApp .coachShapeOption{background:var(--ux-muted);border-color:var(--c-line-strong);color:var(--ux-text)}
+.labApp .coachShapeOption.active{border-color:var(--c-accent);background:color-mix(in srgb,var(--c-accent) 8%,var(--ux-card));color:var(--ux-text)}
+.labApp .coachShapeGroupTitle{color:var(--ux-text)}
+.labApp .coachShapeGroupTitle span{color:var(--ux-subtle)}
+.labApp .coachAvailability,.labApp .coachFocusLine{background:var(--ux-muted);color:var(--ux-subtle)}
+.labApp .coachFocusLine button{background:var(--ux-card);color:var(--ux-text);border-color:var(--c-line-strong)}
+.labApp .coachSkinTone{background:var(--ux-card);color:var(--ux-text);border-color:var(--c-line-strong)}
+.labApp .coachSkinTone.active{border-color:var(--c-accent)}
+.labApp .coachColor,.labApp .coachField{color:var(--ux-text)}
+.labApp .coachField select,.labApp .coachRigControls input{color:var(--ux-text);background:var(--ux-card);border-color:var(--c-line-strong)}
+.labApp .coachReset{color:var(--ux-subtle)}
+.labApp .coachStatus{color:var(--ux-link)}
+/* Test page must scroll as one journey: choose rig → play → review. */
+.labApp[data-cme-screen="lab"]{overflow-y:auto;overscroll-behavior-y:contain}
+.labApp[data-cme-screen="lab"] .quickBar,
+.labApp[data-cme-screen="lab"] .stage,
+.labApp[data-cme-screen="lab"] .transport,
+.labApp[data-cme-screen="lab"] .cmeReview{flex:0 0 auto}
+.labApp[data-cme-screen="lab"] .stage{min-height:clamp(285px,46dvh,600px);height:clamp(285px,46dvh,600px)}
+.labApp[data-cme-screen="lab"] .labTabs{position:sticky;bottom:0;z-index:30}
+.labApp .cmeCurrentMotion{display:grid;gap:4px;min-width:0;align-content:center;padding:6px 10px;border:1px solid var(--c-line);border-radius:10px;background:var(--ux-muted)}
+.labApp .cmeCurrentMotion span{font-size:10px;color:var(--ux-subtle)}
+.labApp .cmeCurrentMotion strong{font-size:12px;color:var(--ux-text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.labApp .cmeTechnicalFold{width:100%;border:1px solid var(--c-line);border-radius:12px;padding:12px;background:var(--ux-muted)}
+.labApp .cmeTechnicalFold summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-size:14px;font-weight:700;color:var(--ux-text)}
+.labApp .cmeTechnicalActions{display:flex;flex-wrap:wrap;gap:8px}
+.labApp .cmeTechnicalActions button{flex:1 1 180px;min-height:46px;border:1px solid var(--c-line-strong);background:var(--ux-card);color:var(--ux-text);border-radius:11px}
+.labApp .cmePageHeader p{font-size:13px;line-height:1.5;color:var(--ux-subtle)}
+@media(max-width:760px){
+ .labApp[data-cme-screen="lab"] .stage{min-height:clamp(260px,39dvh,430px);height:clamp(260px,39dvh,430px)}
+ .labApp[data-cme-screen="lab"] .quickBar{min-height:0;flex-wrap:wrap}
+ .labApp .cmeCurrentMotion{flex:1 1 100%}
+ .labApp .coachCrud{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .labApp .coachCrud .coachSave{grid-column:1/-1}
+}
