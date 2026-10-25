@@ -1,5 +1,5 @@
 import {describe,it,expect} from 'vitest';
-import {addSavedCoach,readSavedCoaches,COACH_STORAGE_KEY,coachSourceActor,findSavedCoach,updateSavedCoach,deleteSavedCoach} from './savedCoaches';
+import {addSavedCoach,readSavedCoaches,COACH_STORAGE_KEY,coachSourceActor,findSavedCoach,updateSavedCoach,deleteSavedCoach,suggestCoachNickname,coachIdentityManifest} from './savedCoaches';
 import {defaultCoachLook} from './StudioCoach';
 describe('linked coach library',()=>{
  it('persists coach profiles for the lab and studio with newest first',()=>{
@@ -43,5 +43,26 @@ describe('coach editing and deletion',()=>{
   expect(readSavedCoaches(storage)[0].name).toBe('Updated');
   deleteSavedCoach(storage,'stable');
   expect(readSavedCoaches(storage)).toEqual([]);
+ });
+});
+
+describe('identité du coach et préparation export Shadow',()=>{
+ it('conserve les anciens profils sans métadonnées',()=>{
+  const coach={id:'legacy',name:'Ancien',createdAt:'2026-10-24',look:defaultCoachLook};
+  expect(coachIdentityManifest(coach).nickname).toBeNull();
+  expect(coachIdentityManifest(coach).weightKg).toBeNull();
+ });
+ it('génère des surnoms déterministes et modifiables selon discipline',()=>{
+  const coach={name:'Amina',look:defaultCoachLook,initialDiscipline:'judo'};
+  expect(suggestCoachNickname(coach,0)).toBe(suggestCoachNickname(coach,0));
+  expect(suggestCoachNickname(coach,0)).not.toBe(suggestCoachNickname(coach,1));
+ });
+ it('produit un manifeste identité versionné sans promettre un GLB intégré',()=>{
+  const coach={id:'c1',name:'Test',nickname:'Le Roc',initialDiscipline:'judo',heightCm:178,weightKg:80,createdAt:'2026-10-25',look:defaultCoachLook};
+  const manifest=coachIdentityManifest(coach);
+  expect(manifest.schema).toBe('cme-coach-identity-v1');
+  expect(manifest.actor).toBe('mma-kadir');
+  expect(manifest.heightCm).toBe(178);
+  expect(manifest.nickname).toBe('Le Roc');
  });
 });
