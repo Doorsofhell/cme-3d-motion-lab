@@ -249,3 +249,8 @@
 .coachReferenceViews button[aria-pressed="true"]{background:#344760;color:white}
 @media(max-width:420px){.coachReferenceViews{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
+
+
+/* 0.7.42 — les références anatomiques réelles utilisent les contrôles Android partagés. */
+.coachAnatomicalReferenceSwitch button[aria-pressed="true"]{background:#28384d;color:#fff}
+.coachAnatomicalReferenceSwitch button+small{display:block;line-height:1.45}

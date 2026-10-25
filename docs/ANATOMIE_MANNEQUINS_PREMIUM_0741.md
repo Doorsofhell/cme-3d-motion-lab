@@ -44,3 +44,12 @@ Morphologie athlétique, identifiable à la silhouette sans tenue : poitrine nat
 
 ## Convention de communication avec le commanditaire
 Réponses en français, statut **réel** (préparé / codé / CI / fusionné / déployé / testé Android), corrections ordonnées, une proposition de choix actionnable quand une décision est nécessaire, sans répétition ni dérive vers Shadow. Ne pas prétendre au travail autonome après cette intervention ni à un déploiement non confirmé.
+
+
+## Jalon technique 0.7.42 — étalons 3D CC0
+- Homme : https://www.innerscene.com/tools/library/3d-parts/male-base-mesh-3d-person-rigged-a-pose-380e6d89
+- Femme : https://www.innerscene.com/tools/library/3d-parts/female-base-mesh-3d-person-rigged-a-pose-dba97ed5
+- Chaque asset est annoncé CC0, A-pose, 163 os, sans vêtements, environ 109 000 triangles. Vérification de la validité GLB, des sommets skinnés et de SHA256 dans `scripts/fetch-premium-anatomy.mjs`.
+- Les fichiers sont récupérés dans `public/anatomie` à chaque CI et inclus dans la publication Pages. Pas de remplacement silencieux si la source échoue.
+- Mode étalon en lecture seule : **n'affirme pas** l'équivalence des rigs MakeHuman/CME ni la perfection artistique à l'image ; le retargeting, les morphs localisés et l'inspection visuelle restent des portes bloquantes.
+
