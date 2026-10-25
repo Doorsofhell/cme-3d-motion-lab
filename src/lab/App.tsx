@@ -29,6 +29,7 @@ import {buildFullReport,useSessionJournal} from './SessionReport';
 import {useAutoIncidentQueue,type AutoCategory} from './AutoIncidents';
 import {autoClearEnabled,setAutoClearEnabled,clearApplicationCache} from './cachePolicy';
 import './style.css';
+import './UxSystem.css';
 import {getConfigModule} from '../config/moduleRegistry';
 
 function SavedCoachLibrary({openCoach,editCoach,selectedId}:{openCoach:(id:string)=>void;editCoach:(id:string)=>void;selectedId:string|null}){
@@ -231,7 +232,7 @@ export function App(){
  const [clearCacheOnOpen,setClearCacheOnOpen]=useState(autoClearEnabled);
  const [cacheMessage,setCacheMessage]=useState('');
  const [catalogMode,setCatalogMode]=useState<'techniques'|'sequences'>('techniques');
- const [reviewOpen,setReviewOpen]=useState(false);
+
  const [comparisonSnapshot,setComparisonSnapshot]=useState<string|null>(null);
  const [incidentOpen,setIncidentOpen]=useState(false);
  const [debug,setDebug]=useState(false),[catalogOpen,setCatalogOpen]=useState(false),[query,setQuery]=useState(''),[allCatalog,setAllCatalog]=useState(false);
@@ -297,10 +298,10 @@ export function App(){
   if(captured)setComparisonSnapshot(captured);
   setTab('comparison');setDebug(false);setCatalogOpen(false);
  };
- return <main className="labApp">
+ return <main className="labApp" data-cme-screen={tab}>
   <header className="labHeader">
-   <div className="branding"><span className="brandDot">C</span><div><strong>CME<span>–3D</span> <small>LAB</small> <span className="cmeVersion" aria-label={'Version '+CME_APP_VERSION}>v{CME_APP_VERSION}</span></strong><p>Laboratoire · Tests A/B</p></div></div>
-   <div className="headerActions"><span className="liveTag"><i/> Moteur local</span><button className="iconButton" title="Console de débogage" aria-label="Console de débogage" aria-expanded={debug} onClick={()=>setDebug(v=>!v)}>⌘</button><button className="iconButton" title="Réglages avancés" aria-label="Réglages avancés" aria-expanded={extra} onClick={()=>setExtra(v=>!v)}>⚙</button></div>
+   <div className="branding"><span className="brandDot">C</span><div><strong>CME<span>–3D</span> <span className="cmeVersion" aria-label={'Version '+CME_APP_VERSION}>v{CME_APP_VERSION}</span></strong><p>{tab==='studio'?'Créer et gérer les coachs':tab==='lab'?'Tester et évaluer les mouvements':tab==='technical'?'Diagnostics et outils techniques':tab==='versions'?'Nouveautés et historique':'Préférences et ressources'}</p></div></div>
+   <div className="headerActions"><span className="liveTag"><i/> Moteur local</span></div>
   </header>
   
   <div className="labContent" style={{display:tab==='lab'?'contents':'none'}}>
@@ -321,7 +322,7 @@ export function App(){
     {savedCoaches.length>0&&<optgroup label="Mes coachs personnalisés">{savedCoaches.map(c=><option key={c.id} value={'saved:'+c.id}>{c.name} · {c.look.sex}</option>)}</optgroup>}
    </select></label>
    <label><span>Discipline</span><select aria-label="Discipline" value={discipline} onChange={e=>{journal.record('discipline','Discipline : '+discipline+' → '+e.target.value,{coach:actor,style:renderStyle});reset();setDiscipline(e.target.value);setTechnique(techniques.find(t=>t.disciplines.includes(e.target.value))?.motion??'garde');onLog('Discipline : '+e.target.value);}}>{disciplines.map(([id,name])=><option key={id} value={id}>{name}</option>)}</select></label>
-   <label><span>{technique.startsWith('seq-')?'Enchaînement':'Technique'} · {currentTechniques.length}</span><div className="motionSelector"><button type="button" className="catalogButton" aria-label="Choisir une technique" onClick={()=>{setCatalogMode('techniques');setCatalogOpen(true);setQuery('');}}><span>{techniqueLabel}</span><strong>⌕</strong></button><button type="button" className="comboChoose" aria-label="Choisir un enchaînement complexe" onClick={()=>{setCatalogMode('sequences');setCatalogOpen(true);setQuery('');}}>×{currentSequences.length}</button></div></label>
+   <div className="cmeCurrentMotion" role="status"><span>À tester</span><strong>{techniqueLabel}</strong></div>
   </section>
   <section ref={stageFullscreen.ref as React.RefObject<HTMLElement>} className={`stage ${stageFullscreen.fullscreen?"cmeFullscreen":""}`} aria-label="Vue de test 3D" onDoubleClick={stageFullscreen.onDoubleClick} onTouchEnd={stageFullscreen.onTouchEnd}>
    <SceneToolbar actions={<SceneFullscreenButton fullscreen={stageFullscreen.fullscreen} onClick={stageFullscreen.toggle}/>}/>
@@ -331,17 +332,8 @@ export function App(){
    <SceneLoadingIndicator/>
    <div className="stageBottom"><span>{report?report.bones+' os · '+(report.techniqueFound?'Technique disponible':'Garde de secours'):'Initialisation du rig'}</span><span>{report?('Tenue '+outfit+' ✓'):'Chargement'}</span></div>
   </section>
-  <AndroidDiagnostics telemetry={androidTelemetry} active={labActive} context={{coach:actor,discipline,technique,qualite:quality,rendu:renderStyle}}/>
-   <details className="labTechnicalDetails"><summary>Outils techniques · Coach IA JSON</summary><section aria-label="Coach JSON Text-to-Animation" style={{padding:12,display:'grid',gap:8}}>
-<strong>Coach IA · Text-to-Animation (prototype local)</strong>
-<textarea aria-label="Plan JSON du coach" rows={4} value={coachJson} onChange={e=>setCoachJson(e.target.value)} style={{width:'100%',boxSizing:'border-box'}}/>
-<div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
-<button onClick={()=>{try{const plan=parseCoachPlan(coachJson);if(plan.discipline!==(outfit==='bjj-nogi'?'bjj':outfit))throw Error('Discipline JSON différente de la discipline sélectionnée');setCoachPlan(plan);setCoachError('');reset();onLog('Plan JSON activé');}catch(e){setCoachError(e instanceof Error?e.message:String(e));}}}>Exécuter le JSON</button>
-<button onClick={()=>{setCoachPlan(null);setCoachError('');reset();}}>Revenir au catalogue</button>
-</div>
-{coachError&&<span role="alert">{coachError}</span>}
-{coachPlan&&<span role="status">Plan actif : {coachPlan.sequence.length} étapes · TTS : {coachPlan.speech}</span>}
-</section></details>
+  
+
 <section className="transport" aria-label="Commandes d'animation">
    <div className="transportMain"><button className="playButton" onClick={()=>{journal.record('playback',playing?'Pause de l’animation':'Démarrage de l’animation',{technique,progress:playback.current.progress,speed});setPlaying(x=>!x);}}>{playing?'❚❚':'▶'} <span>{playing?'Pause':'Lecture'}</span></button><button className="resetButton" aria-label="Revenir au début" onClick={()=>{journal.record('playback','Retour au début de l’animation',{technique});reset();}}>↺</button>
     <div className="seek"><input aria-label="Position de lecture" type="range" min="0" max="1000" value={Math.round(progress*1000)} onChange={e=>{setPlaying(false);seek(Number(e.target.value)/1000);}} onPointerUp={()=>journal.record('playback','Positionnement manuel de l’animation',{technique,progress:playback.current.progress})}/><span>{Math.round(progress*100)}%</span></div>
@@ -354,22 +346,25 @@ export function App(){
     {discipline==='bjj'&&<button className="outfitToggle" aria-label="Changer tenue BJJ" onClick={()=>{journal.record('outfit','BJJ : '+(nogi?'no-gi → gi':'gi → no-gi'));reset();setNogi(x=>!x);}}>{nogi?'No-gi':'Gi'}</button>}
    </div>
   </section>
-  <details className="labTechnicalDetails"><summary>Diagnostic et signalement</summary><section className="bottomDebug" aria-label="Debug et incident"><button className="bottomDebugTrigger" onClick={()=>{journal.record('debug',debug?'Fermeture du debug':'Ouverture du debug');setDebug(x=>!x);}} aria-expanded={debug}><span className="debugDot"/> <strong>Debug en direct</strong> <span className="miniMetrics">{metrics.fps||'–'} FPS · {metrics.webgl} · {pendingDrafts.length} à examiner</span><span className="expandSymbol">{debug?'⌃':'⌄'}</span></button><button className="incidentButton" onClick={()=>{journal.record('incident','Ouverture de la déclaration manuelle d’incident',{technique,discipline,actor,progress:playback.current.progress});captureNow();setDebug(false);setIncidentOpen(true);}}>⚑ Signaler</button></section>
-  <section className="diagnostics" aria-label="Diagnostics">
-   <span><i className={report?.techniqueFound?'good':'bad'}/> {report?.techniqueFound?'Mouvement prêt ✓':'Motion à vérifier'}</span>
-   <span>Rig : {report?.bones??'–'} os</span><span>{metrics.fps||'–'} FPS · {metrics.drawCalls} appels</span>
-   <span className="footnote">IA locale expérimentale : entraînement validé en attente</span>
-  </section></details>
+
   </div>
-  {tab==='lab'&&<section className="cmeReviewToggle"><button type="button" aria-expanded={reviewOpen} onClick={()=>setReviewOpen(x=>!x)}>{reviewOpen?'Masquer la recette':'✓ Ouvrir la recette de tous les mouvements et enchaînements'}</button></section>}
-  {tab==='lab'&&reviewOpen&&<MotionReview entries={reviewEntries} discipline={discipline} coach={selectedCoach?.id??actor} selected={technique} onSelect={selectTechnique} engineVersion={CME_APP_VERSION} metrics={{...metrics,bones:report?.bones??null,techniqueFound:report?.techniqueFound??false}} rigReady={!!report} rigTechniqueFound={!!report?.techniqueFound}/>}
-  {tab==='lab'&&<ShadowCatalogPanel/>}
+  {tab==='lab'&&<MotionReview entries={reviewEntries} discipline={discipline} coach={selectedCoach?.id??actor} selected={technique} onSelect={selectTechnique} engineVersion={CME_APP_VERSION} metrics={{...metrics,bones:report?.bones??null,techniqueFound:report?.techniqueFound??false}} rigReady={!!report} rigTechniqueFound={!!report?.techniqueFound}/>}
+
   {tab==='gallery'&&<section className="cmeCoachGallery" aria-label="Galerie Coachs"><header><h2>Galerie Coachs</h2><p>Choisissez un combattant enregistré. Sa configuration est partagée avec Studio et le banc d'essai.</p></header><SavedCoachLibrary selectedId={selectedCoach?.id??null} openCoach={id=>{selectSavedCoach(id);setTab('lab');}} editCoach={id=>{try{localStorage.setItem('cme-selected-coach',id);}catch{}setTab('studio');}}/><button className="galleryCreate" type="button" onClick={()=>setTab('studio')}>Créer un combattant dans Studio</button></section>}
   {tab==='studio'&&<div className="cmeStudioHub"><StudioCoach/><section className="cmeStudioCoachList" aria-label="Liste des coachs du Studio"><h2>Mes coachs</h2><SavedCoachLibrary selectedId={selectedCoach?.id??null} openCoach={id=>{selectSavedCoach(id);setTab('lab');}} editCoach={id=>{try{localStorage.setItem('cme-selected-coach',id);window.dispatchEvent(new Event('cme-edit-selected-coach'));}catch{}}}/></section></div>}
   {tab==='versions'&&<VersionsPanel/>}
   {tab==='other'&&<section className="cmeOtherScreen" aria-label="Autres fonctionnalités"><h2>Autres</h2><p>Comparatif des moteurs, feuille de route, incidents et préférences.</p><div className="cmeOtherGrid"><button onClick={openComparison}>⇄ Comparatif CME / Shadow</button><button onClick={()=>setTab('roadmap')}>☷ Feuille de route</button><button onClick={()=>{void known.refresh();setTab('tracking');}}>⚑ Incidents</button><button onClick={()=>setTab('options')}>⚙ Paramètres</button></div><label className="cmeThemeSetting">Apparence de l'application<select aria-label="Thème de CME-3D" value={theme} onChange={e=>setTheme(e.target.value as 'auto'|'light'|'dark')}><option value="auto">Automatique · selon le système (jour/nuit)</option><option value="light">Toujours clair</option><option value="dark">Toujours sombre</option></select></label></section>}
   {tab==='roadmap'&&<RoadmapPanel/>}
-  {tab==='technical'&&<section className="cmeTechnicalScreen" aria-label="Centre technique"><h2>Technique</h2><p>Mesures de la dernière session des mouvements ; les valeurs sont disponibles après exécution d'un test.</p><div className="cmeDiagnosticGrid"><span>FPS <strong>{metrics.fps||'–'}</strong></span><span>WebGL <strong>{metrics.webgl}</strong></span><span>Draw calls <strong>{metrics.drawCalls}</strong></span><span>Triangles <strong>{metrics.triangles}</strong></span><span>Rig <strong>{report?.bones??'–'} os</strong></span></div><button type="button" onClick={()=>{setTab('lab');setDebug(true);}}>Ouvrir le test avec les diagnostics avancés</button><button type="button" onClick={exportReport}>Copier le rapport technique</button></section>}
+  {tab==='technical'&&<section className="cmeTechnicalScreen" aria-label="Centre technique"><header className="cmePageHeader"><h2>Technique</h2><p>Vérifier les mesures réelles, inspecter le rig et exporter un rapport de diagnostic.</p></header><div className="cmeDiagnosticGrid"><span>FPS <strong>{metrics.fps||'–'}</strong></span><span>WebGL <strong>{metrics.webgl}</strong></span><span>Draw calls <strong>{metrics.drawCalls}</strong></span><span>Triangles <strong>{metrics.triangles}</strong></span><span>Rig <strong>{report?.bones??'–'} os</strong></span></div><div className="cmeTechnicalActions"><button type="button" onClick={()=>setDebug(x=>!x)} aria-expanded={debug}>{debug?'Fermer le diagnostic':'Afficher le diagnostic détaillé'}</button><button type="button" onClick={exportReport}>Exporter le rapport de session</button><button type="button" onClick={()=>{journal.record('incident','Signalement manuel depuis Technique',{technique,discipline,actor});captureNow();setIncidentOpen(true);}}>Signaler un incident</button></div><AndroidDiagnostics telemetry={androidTelemetry} active={tab==='technical'} context={{coach:actor,discipline,technique,qualite:quality,rendu:renderStyle}}/><details className="cmeTechnicalFold"><summary>Prototype avancé · Exécuter un plan JSON</summary>   <details className="labTechnicalDetails"><summary>Outils techniques · Coach IA JSON</summary><section aria-label="Coach JSON Text-to-Animation" style={{padding:12,display:'grid',gap:8}}>
+<strong>Coach IA · Text-to-Animation (prototype local)</strong>
+<textarea aria-label="Plan JSON du coach" rows={4} value={coachJson} onChange={e=>setCoachJson(e.target.value)} style={{width:'100%',boxSizing:'border-box'}}/>
+<div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+<button onClick={()=>{try{const plan=parseCoachPlan(coachJson);if(plan.discipline!==(outfit==='bjj-nogi'?'bjj':outfit))throw Error('Discipline JSON différente de la discipline sélectionnée');setCoachPlan(plan);setCoachError('');reset();onLog('Plan JSON activé');}catch(e){setCoachError(e instanceof Error?e.message:String(e));}}}>Exécuter le JSON</button>
+<button onClick={()=>{setCoachPlan(null);setCoachError('');reset();}}>Revenir au catalogue</button>
+</div>
+{coachError&&<span role="alert">{coachError}</span>}
+{coachPlan&&<span role="status">Plan actif : {coachPlan.sequence.length} étapes · TTS : {coachPlan.speech}</span>}
+</section></details></details><details className="cmeTechnicalFold"><summary>Référentiels et techniques historiques</summary><ShadowCatalogPanel/><div className="cmeTechnicalActions"><button onClick={()=>{setCatalogMode('techniques');setCatalogOpen(true);setQuery('');}}>Parcourir les techniques</button><button onClick={()=>{setCatalogMode('sequences');setCatalogOpen(true);setQuery('');}}>Parcourir les enchaînements</button></div></details></section>}
   {tab==='options'&&<section className="cmeOptions" aria-label="Options CME-3D">
    <h2>Options du laboratoire</h2>
    <label className="cacheOption"><input type="checkbox" checked={clearCacheOnOpen} onChange={e=>{const enabled=e.target.checked;setClearCacheOnOpen(enabled);setAutoClearEnabled(enabled);setCacheMessage(enabled?'Vidage automatique activé pour chaque ouverture.':'Vidage automatique désactivé.');}}/><span><strong>Vider automatiquement le cache à chaque ouverture</strong><small>Activé par défaut. Supprime les caches CME-3D et désactive son service worker avant le chargement du moteur. Les préférences locales sont conservées.</small></span></label>
@@ -378,22 +373,22 @@ export function App(){
   </section>}
   {tab==='tracking'&&<IssueTracker drafts={pendingDrafts} onDismiss={autoDismiss} onClear={autoClear} onCopyReport={exportReport} {...known}/>}
   {tab==='comparison'&&<ComparisonPanel metrics={metrics} report={report} snapshot={comparisonSnapshot} actor={actor==='mma-amara'?'Amara':'Kadir'} discipline={discipline} technique={techniqueLabel} renderStyle={renderStyle} onOpenLab={()=>setTab('lab')} onCopyReport={exportReport}/>}
-  {tab==='lab'&&catalogOpen&&<div className="paletteBackdrop" onClick={()=>setCatalogOpen(false)}>
+  {tab==='technical'&&catalogOpen&&<div className="paletteBackdrop" onClick={()=>setCatalogOpen(false)}>
     <section className="catalogPalette" role="dialog" aria-label="Catalogue complet des techniques" onClick={e=>e.stopPropagation()}>
       <div className="paletteTitle"><strong>{catalogMode==='sequences'?'Enchaînements expérimentaux · '+visibleSequences.length:'Techniques · '+palette.length+' / '+techniques.length}</strong><button aria-label="Fermer le catalogue" onClick={()=>setCatalogOpen(false)}>×</button></div>
       <div className="paletteFilters"><input autoFocus aria-label="Rechercher une technique" value={query} onChange={e=>setQuery(e.target.value)} placeholder={catalogMode==='sequences'?'Jab → direct → crochet, lutte, genoux…':'Rechercher jab, crochet, projection…'}/>{catalogMode==='techniques'&&<label><input type="checkbox" checked={allCatalog} onChange={e=>setAllCatalog(e.target.checked)}/> Toutes disciplines</label>}</div>
       <div className="paletteList">{catalogMode==='sequences'?visibleSequences.map(t=><button key={t.id} disabled={!canRunSequence(t)} onClick={()=>selectTechnique(t.id)}><span>{t.name}<small>{t.motions.join(' → ')} · {t.motions.length} mouvements · {t.id.startsWith('shadow-')?'Shadow Studio · '+(t as SequenceEntry & {level?:string}).level:'expérimental'}{!canRunSequence(t)?' · gestes manquants':''}</small></span>{technique===t.id&&<b>✓</b>}</button>):palette.map(t=><button key={t.motion} onClick={()=>selectTechnique(t.motion)}><span>{t.name}<small>{categories[t.category]??t.category} · {t.motion}</small></span>{technique===t.motion&&<b>✓</b>}</button>)}</div>
     </section>
    </div>}
-  {tab==='lab'&&debug&&<aside className="debugPanel" role="region" aria-label="Console de débogage">
+  {tab==='technical'&&debug&&<aside className="debugPanel" role="region" aria-label="Console de débogage">
    <div className="debugTitle"><strong>⌘ Diagnostic · CME-3D</strong><div><button onClick={exportReport}>Copier rapport complet</button><button aria-label="Fermer la console" onClick={()=>setDebug(false)}>×</button></div></div>
    <div className="debugGrid"><span>WebGL <b>{metrics.webgl}</b></span><span>FPS <b>{metrics.fps}</b></span><span>Draw calls <b>{metrics.drawCalls}</b></span><span>Triangles <b>{metrics.triangles.toLocaleString('fr-FR')}</b></span><span>Textures <b>{metrics.textures}</b></span><span>Géométries <b>{metrics.geometries}</b></span><span>DPR <b>{metrics.dpr.toFixed(2)}</b></span><span>Rig <b>{report?.bones??'–'} os</b></span></div>
    <div className="debugSubject"><strong>{actor==='mma-amara'?'Amara':'Kadir'} · {discipline}</strong><span>Tenue : {outfit}</span><span>Style : {renderStyle} · {quality}</span><span>Mouvement : {technique} · {report?.techniqueFound?'résolu':'non trouvé'}</span></div>
    <div className="debugLog"><strong>Événements et erreurs</strong>{messages.length?messages.map((x,i)=><p key={i}>{x}</p>):<p>Aucun événement anormal signalé</p>}</div>
    <div className="debugFootnote">{pendingDrafts.length} anomalie(s) à soumettre (hors tickets existants). Aucun envoi automatique. <button className="debugReview" onClick={()=>{setDebug(false);setTab('tracking');}}>Examiner les signalements ↗</button> FPS mesurés dans la boucle Three.js.</div>
   </aside>}
-  {tab==='lab'&&extra&&<aside className="advanced" role="region" aria-label="Informations du banc d'essai"><button className="close" onClick={()=>setExtra(false)} aria-label="Fermer">×</button><h2>Banc d’essai · CME-3D</h2><p>Le rendu et les techniques utilisent des poses articulées et un moteur de mouvements intégrés dans CME-3D.</p><p>Comparaison des rendus Ultra-réaliste et Animation fitness en un clic, sur la même animation. Le module neuronal historique est expérimental, entraîné sur des données synthétiques : aucune amélioration biomécanique par IA n’est encore revendiquée.</p><p>La prochaine étape sera un correcteur temporel léger quantifié (ONNX Runtime WASM), entraîné et évalué sur un jeu de mouvements de combat adapté au modèle.</p><p>Un seul écran, sans défilement vertical. Aucune transmission cloud pendant l’animation.</p></aside>}
-  {tab==='lab'&&incidentOpen&&<IncidentReporter context={incidentContext} image={snapshot} onCapture={captureNow} onClose={()=>setIncidentOpen(false)}/>}
+  {tab==='technical'&&extra&&<aside className="advanced" role="region" aria-label="Informations du banc d'essai"><button className="close" onClick={()=>setExtra(false)} aria-label="Fermer">×</button><h2>Banc d’essai · CME-3D</h2><p>Le rendu et les techniques utilisent des poses articulées et un moteur de mouvements intégrés dans CME-3D.</p><p>Comparaison des rendus Ultra-réaliste et Animation fitness en un clic, sur la même animation. Le module neuronal historique est expérimental, entraîné sur des données synthétiques : aucune amélioration biomécanique par IA n’est encore revendiquée.</p><p>La prochaine étape sera un correcteur temporel léger quantifié (ONNX Runtime WASM), entraîné et évalué sur un jeu de mouvements de combat adapté au modèle.</p><p>Un seul écran, sans défilement vertical. Aucune transmission cloud pendant l’animation.</p></aside>}
+  {tab==='technical'&&incidentOpen&&<IncidentReporter context={incidentContext} image={snapshot} onCapture={captureNow} onClose={()=>setIncidentOpen(false)}/>}
   {!!reportText&&<div className="reportFallback" role="dialog" aria-label="Rapport complet CME-3D"><div className="reportFallbackInner"><div className="reportFallbackHead"><strong>Rapport complet · Copier vers ChatGPT</strong><button onClick={()=>setReportText('')} aria-label="Fermer le rapport">×</button></div><p>La copie automatique n’est pas autorisée par ton navigateur. Sélectionne le texte ci-dessous puis copie-le pour me l’envoyer ici.</p><textarea aria-label="Texte complet du rapport" value={reportText} readOnly onFocus={e=>e.currentTarget.select()}/><button onClick={()=>{if(navigator.clipboard?.writeText)void navigator.clipboard.writeText(reportText).then(()=>{setReportText('');onLog('Rapport copié manuellement');});}}>Réessayer la copie</button></div></div>}
  <nav className="labTabs" aria-label="Navigation principale CME-3D">
   <button className={tab==='studio'||tab==='gallery'?'selected':''} aria-current={tab==='studio'?'page':undefined} onClick={()=>{setTab('studio');setDebug(false);}}>♙ <span>Studio</span></button>

@@ -1,0 +1,205 @@
+/*
+ * CME-3D unified design system.
+ * No per-screen dark islands: all existing screens use the same semantic tokens.
+ * The only intentionally contrasting surface is the 3D canvas itself.
+ */
+:root{
+ --ux-card:var(--c-surface);
+ --ux-muted:var(--c-surface-2);
+ --ux-border:var(--c-line-strong);
+ --ux-text:var(--c-text);
+ --ux-subtle:var(--c-text-2);
+ --ux-link:var(--c-accent-ink);
+ --ux-radius:16px;
+ --ux-focus:2px solid var(--c-accent);
+ --ux-shadow:0 8px 28px rgba(29,40,58,.07);
+}
+.labApp{background:var(--c-bg);color:var(--ux-text);gap:10px;max-width:1640px}
+.labHeader{background:var(--ux-card);border:1px solid var(--c-line);border-radius:14px;padding:5px 13px;min-height:52px;height:52px;box-shadow:var(--ux-shadow)}
+.branding strong{letter-spacing:-.035em}
+.branding strong span{color:var(--c-accent-ink)}
+.branding p{color:var(--ux-subtle)}
+.branding small{background:var(--ux-muted);color:var(--ux-subtle)}
+.liveTag{color:var(--ux-subtle)}
+.labHeader .headerActions{display:flex;align-items:center;gap:8px}
+.labApp button:focus-visible,.labApp input:focus-visible,.labApp select:focus-visible,.labApp textarea:focus-visible,
+.labApp summary:focus-visible{outline:var(--ux-focus);outline-offset:2px}
+.labApp button,.labApp input,.labApp select,.labApp textarea{font-family:inherit}
+.labTabs{background:var(--ux-card)!important;border-color:var(--c-line)!important;box-shadow:var(--ux-shadow);border-radius:16px;min-height:65px}
+.labTabs>button{min-height:51px!important}
+.labTabs>button.selected{background:color-mix(in srgb,var(--c-accent) 13%,transparent)!important}
+.labTabs button span{color:inherit}
+.labApp .quickBar,.labApp .transport,.labApp .cmeReview,.labApp .cmeReviewToggle,
+.labApp .cmeStudioCoachList,.labApp .coachStudio,.labApp .cmeOtherScreen,
+.labApp .cmeTechnicalScreen,.labApp .cmeOptions,.labApp .engineComparison,
+.labApp .tracker,.labApp .roadmapPanel,.labApp .versionsPanel,.labApp .shadowCatalogPanel,
+.labApp .labTechnicalDetails,.labApp .savedCoachLibrary{
+ background:var(--ux-card);color:var(--ux-text);border:1px solid var(--c-line);border-radius:var(--ux-radius);
+ box-shadow:none;
+}
+.labApp .quickBar,.labApp .transport{box-shadow:var(--ux-shadow)}
+.labApp .coachStudio{padding:14px}
+.labApp .savedCoachItems button,.labApp .savedCoachEntry,.labApp .issueCard,
+.labApp .trackerSummary>div,.labApp .autoDraft,.labApp .comparisonFrame,
+.labApp .comparisonPlaceholder,.labApp .versionEntry,.labApp .versionPending,
+.labApp .cacheOption,.labApp .roadmapSummary button,.labApp .cmeDiagnosticGrid span,
+.labApp .cmeOtherGrid button,.labApp .labSelectedCoach,.labApp .cmeStudioWorkflow{
+ background:var(--ux-muted);color:var(--ux-text);border:1px solid var(--c-line);border-radius:13px;
+}
+.labApp .savedCoachLibrary p,.labApp .savedCoachLibrary small,
+.labApp .trackerTitle small,.labApp .trackerLegend,.labApp .trackerBottom,
+.labApp .trackerEmpty,.labApp .issueNumber,.labApp .comparisonNote,.labApp .comparisonFrame>small,
+.labApp .comparisonHead small,.labApp .comparisonPlaceholder,.labApp .versionPending p,
+.labApp .roadmapCount,.labApp .roadmapFooter,.labApp .autoDraft>p,.labApp .incidentPhoto p,
+.labApp .stageBottom,.labApp .labSelectedCoach,.labApp .coachCapability{
+ color:var(--ux-subtle);
+}
+.labApp .trackerSummary strong,.labApp .comparisonTable th,.labApp .roadmapPanel header small,
+.labApp .trackerTitle strong{color:var(--ux-text)}
+.labApp .roadmapFilters input,.labApp .roadmapFilters select,.labApp .shadowCatalogFilters input,
+.labApp .shadowCatalogFilters select,.labApp .paletteFilters>input,
+.labApp .cmeThemeSetting select,.labApp .coachField select,
+.labApp .cmeReviewFilters input,.labApp .cmeReviewFilters select,
+.labApp .cmeReviewDecision textarea,.labApp .reportFallbackInner textarea,
+.labApp .labTechnicalDetails textarea{
+ background:var(--ux-card);color:var(--ux-text);border:1px solid var(--ux-border);
+ border-radius:10px;min-height:44px;
+}
+.labApp .trackerTitle button,.labApp .autoDraftActions>button,.labApp .shadowCatalogPanel>button,
+.labApp .shadowCatalogRows>div,.labApp .incidentPhotoActions>button,
+.labApp .comparisonActions>button,.labApp .comparisonPlaceholder button,
+.labApp .catalogButton,.labApp .comboChoose,.labApp .outfitToggle,
+.labApp .bottomDebug,.labApp .bottomDebugTrigger,.labApp .roadmapSummary button,
+.labApp .cmeStudioWorkflow button:not(.active),.labApp .coachCrud button:not(.coachSave),
+.labApp .coachActions button:not(:first-child),.labApp .cmeReviewList button,
+.labApp .cmeReviewToggle button,.labApp .cmeOtherGrid button{
+ background:var(--ux-muted);color:var(--ux-text);border:1px solid var(--ux-border);
+ border-radius:10px;
+}
+.labApp .cmeReviewList button.active,.labApp .savedCoachItems button[aria-pressed=true],
+.labApp .roadmapSummary button[aria-pressed=true]{border-color:var(--c-accent);background:color-mix(in srgb,var(--c-accent) 8%,var(--ux-card))}
+.labApp .shadowCatalogPanel>button,.labApp .cmeReviewList button,.labApp .savedCoachItems button{min-height:48px}
+.labApp .comparisonFrame>strong,.labApp .comparisonTable td,.labApp .trackerIssuesHeader,
+.labApp .autoDraftActions>button,.labApp .bottomDebugTrigger strong{color:var(--ux-text)}
+.labApp .versionDetails a,.labApp .versionsLinks a,.labApp .versionPending a,
+.labApp .debugReview{color:var(--ux-link)}
+.labApp .versionToggle,.labApp .versionDetails{color:var(--ux-text)}
+.labApp .versionEntry{overflow:hidden}
+.labApp .versionsPanel{max-width:100%;width:100%;overflow-y:auto;padding:18px 20px 34px}
+.labApp .roadmapPanel{max-width:100%;overflow-y:auto;padding:18px 20px}
+.labApp .versionPending{margin:12px 0 18px}
+.labApp .roadmapSummary button strong{color:var(--ux-text)}
+.labApp .roadmapFilters label{color:var(--ux-text)}
+.labApp .comparisonSwitch{background:var(--ux-muted);border:1px solid var(--c-line)}
+.labApp .comparisonSwitch button{color:var(--ux-text)}
+.labApp .comparisonSwitch button.active{background:var(--c-accent);color:#fff}
+.labApp .comparisonTable th,.labApp .comparisonTable td{border-bottom-color:var(--c-line)}
+.labApp .engineComparison{overflow:auto}
+.labApp .comparisonUpload{background:var(--c-accent);color:#fff}
+.labApp .catalogPalette,.labApp .debugPanel,.labApp .reportFallbackInner{
+ background:var(--ux-card);color:var(--ux-text);border:1px solid var(--ux-border);border-radius:var(--ux-radius)
+}
+.labApp .paletteTitle button,.labApp .reportFallbackHead button{color:var(--ux-text)}
+.labApp .paletteFilters label,.labApp .paletteList>button,.labApp .paletteList>button small,
+.labApp .debugTitle,.labApp .debugSubject,.labApp .debugLog,.labApp .debugLog>strong,
+.labApp .debugFootnote,.labApp .reportFallbackInner p{color:var(--ux-text)}
+.labApp .paletteList>button,.labApp .debugTitle,.labApp .debugLog{border-color:var(--c-line)}
+.labApp .debugGrid span{background:var(--ux-muted);color:var(--ux-subtle)}
+.labApp .debugGrid b{color:var(--ux-text)}
+.labApp .debugTitle button{background:var(--ux-muted);color:var(--ux-text);border:1px solid var(--c-line)}
+.labApp .reportFallback{background:rgba(18,25,35,.62)}
+.labApp .incidentPhoto{background:var(--ux-muted);border-color:var(--c-line)}
+.labApp .incidentPhotoHead strong,.labApp .incidentPhotoHead span{color:var(--ux-text)}
+.labApp .shadowCatalogFilters input,.labApp .shadowCatalogFilters select{min-height:44px}
+.labApp .cmeStudioHub{overflow-y:auto;overscroll-behavior-y:contain}
+.labApp .cmeStudioHub .coachStudio{overflow:visible!important;flex:none}
+.labApp .coachEditor{min-width:0}
+.labApp .coachCapability{background:var(--ux-muted);border-color:var(--c-line)}
+.labApp .cmeStudioCoachList{padding:14px}
+.labApp .cmeStudioCoachList h2{margin:0 0 12px;font-size:18px}
+.labApp .cmeOtherScreen,.labApp .cmeTechnicalScreen{padding:20px}
+.labApp .cmeReview{max-height:none;overflow:visible;min-height:0}
+.labApp .cmeReviewList{max-height:clamp(210px,33dvh,410px)}
+.labApp .cmeReviewHeader h2{font-size:21px}
+.labApp .cmeReviewDecision{background:var(--ux-muted)}
+.labApp .cmeReviewDecision textarea{min-height:96px}
+.labApp .cmeReviewActions button:disabled{background:var(--c-line-strong);color:var(--ux-subtle)}
+.labApp .cmeOptions h2{margin:0 0 14px}
+.labApp .cacheOption small{color:var(--ux-subtle)}
+.labApp .cacheOption input{accent-color:var(--c-accent)}
+.labApp .cmeOtherGrid button,.labApp .cmeTechnicalScreen button{min-height:56px}
+.labApp .stage{border-color:var(--c-line-strong)}
+.labApp .stageTitle,.labApp .stageBottom{background:var(--ux-card);color:var(--ux-text)}
+.labApp .stagePill{color:var(--ux-link)}
+/* Keep 3D overlays legible irrespective of character background. */
+.labApp .cmeCameraAuto,.labApp .cmeFullscreenToggle{background:#fffef7f0;color:#243244;border-color:#b6c2cf}
+@media(max-width:760px){
+ .labApp{padding:6px 7px max(5px,env(safe-area-inset-bottom));gap:7px}
+ .labHeader{height:49px;min-height:49px;padding:4px 10px}
+ .labTabs{min-height:61px;border-radius:14px}
+ .labTabs>button{min-height:49px!important;font-size:19px!important;gap:4px}
+ .labTabs button span{font-size:clamp(9px,2.35vw,11px)!important}
+ .labApp .versionsPanel,.labApp .roadmapPanel,.labApp .cmeOtherScreen,
+ .labApp .cmeTechnicalScreen{padding:14px}
+ .labApp .cmeStudioCoachList{padding:10px}
+ .labApp .cmeReview{padding:12px}
+ .labApp .cmeReviewList{max-height:32dvh}
+ .labApp .paletteBackdrop{padding:6px}
+ .labApp .catalogPalette{max-height:86dvh}
+ .labApp button:not(.versionToggle){touch-action:manipulation}
+}
+@media(max-width:380px){.labTabs>button{padding:3px 0!important}.labTabs button span{font-size:9px!important}}
+@media(prefers-reduced-motion:reduce){.labApp *{scroll-behavior:auto!important;transition-duration:.01ms!important}}
+
+/* Studio : one editor and one gallery, with a stable Android preview and one save action. */
+.coachCreationNote{margin:0;padding:10px 14px;border-radius:12px;background:var(--ux-muted);color:var(--ux-subtle);font-size:12px;line-height:1.5}
+.coachCreationNote strong{color:var(--ux-text)}
+.labApp .coachCategories{gap:6px}
+.labApp .coachCategories button{min-height:44px;border-radius:10px}
+.labApp .coachFields{gap:12px}
+.labApp .coachAdvanced{border-top-color:var(--c-line)}
+.labApp .coachAdvanced>summary{color:var(--ux-text);font-weight:700}
+.labApp .coachIdentity{background:var(--ux-muted);border-radius:12px}
+.labApp .coachCrud{background:var(--ux-card);border-top:1px solid var(--c-line);padding-top:12px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.labApp .coachCrud .coachSave{grid-column:1/-1;order:-1;min-height:50px}
+.labApp .coachCrud button{width:100%;min-width:0;min-height:46px}
+.labApp .coachShapeZoneCard{background:var(--ux-muted);border-color:var(--c-line-strong);color:var(--ux-text)}
+.labApp .coachShapeZoneInfo strong{color:var(--ux-text)}
+.labApp .coachShapeZoneInfo small{color:var(--ux-subtle)}
+.labApp .coachShapeGroup.is-open .coachShapeZoneCard{background:color-mix(in srgb,var(--c-accent) 7%,var(--ux-card));border-color:var(--c-accent)}
+.labApp .coachShapePanel{background:var(--ux-card);border-color:var(--c-line)}
+.labApp .coachShapeOption{background:var(--ux-muted);border-color:var(--c-line-strong);color:var(--ux-text)}
+.labApp .coachShapeOption.active{border-color:var(--c-accent);background:color-mix(in srgb,var(--c-accent) 8%,var(--ux-card));color:var(--ux-text)}
+.labApp .coachShapeGroupTitle{color:var(--ux-text)}
+.labApp .coachShapeGroupTitle span{color:var(--ux-subtle)}
+.labApp .coachAvailability,.labApp .coachFocusLine{background:var(--ux-muted);color:var(--ux-subtle)}
+.labApp .coachFocusLine button{background:var(--ux-card);color:var(--ux-text);border-color:var(--c-line-strong)}
+.labApp .coachSkinTone{background:var(--ux-card);color:var(--ux-text);border-color:var(--c-line-strong)}
+.labApp .coachSkinTone.active{border-color:var(--c-accent)}
+.labApp .coachColor,.labApp .coachField{color:var(--ux-text)}
+.labApp .coachField select,.labApp .coachRigControls input{color:var(--ux-text);background:var(--ux-card);border-color:var(--c-line-strong)}
+.labApp .coachReset{color:var(--ux-subtle)}
+.labApp .coachStatus{color:var(--ux-link)}
+/* Test page must scroll as one journey: choose rig → play → review. */
+.labApp[data-cme-screen="lab"]{overflow-y:auto;overscroll-behavior-y:contain}
+.labApp[data-cme-screen="lab"] .quickBar,
+.labApp[data-cme-screen="lab"] .stage,
+.labApp[data-cme-screen="lab"] .transport,
+.labApp[data-cme-screen="lab"] .cmeReview{flex:0 0 auto}
+.labApp[data-cme-screen="lab"] .stage{min-height:clamp(285px,46dvh,600px);height:clamp(285px,46dvh,600px)}
+.labApp[data-cme-screen="lab"] .labTabs{position:sticky;bottom:0;z-index:30}
+.labApp .cmeCurrentMotion{display:grid;gap:4px;min-width:0;align-content:center;padding:6px 10px;border:1px solid var(--c-line);border-radius:10px;background:var(--ux-muted)}
+.labApp .cmeCurrentMotion span{font-size:10px;color:var(--ux-subtle)}
+.labApp .cmeCurrentMotion strong{font-size:12px;color:var(--ux-text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.labApp .cmeTechnicalFold{width:100%;border:1px solid var(--c-line);border-radius:12px;padding:12px;background:var(--ux-muted)}
+.labApp .cmeTechnicalFold summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-size:14px;font-weight:700;color:var(--ux-text)}
+.labApp .cmeTechnicalActions{display:flex;flex-wrap:wrap;gap:8px}
+.labApp .cmeTechnicalActions button{flex:1 1 180px;min-height:46px;border:1px solid var(--c-line-strong);background:var(--ux-card);color:var(--ux-text);border-radius:11px}
+.labApp .cmePageHeader p{font-size:13px;line-height:1.5;color:var(--ux-subtle)}
+@media(max-width:760px){
+ .labApp[data-cme-screen="lab"] .stage{min-height:clamp(260px,39dvh,430px);height:clamp(260px,39dvh,430px)}
+ .labApp[data-cme-screen="lab"] .quickBar{min-height:0;flex-wrap:wrap}
+ .labApp .cmeCurrentMotion{flex:1 1 100%}
+ .labApp .coachCrud{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .labApp .coachCrud .coachSave{grid-column:1/-1}
+}

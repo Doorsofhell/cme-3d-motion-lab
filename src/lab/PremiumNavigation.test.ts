@@ -26,7 +26,7 @@ describe('Navigation CME-3D : cinq onglets et galerie intégrée',()=>{
   expect(versions).toContain('Nouveautés et mises à jour');
   expect(app).toContain("tab==='versions'&&<VersionsPanel/>");
   expect(app).toContain("tab==='technical'&&<section");
-  expect(studio).toContain('Tester en Combat');
+  expect(studio).toContain('Tester dans Mouvements');
   expect(studio).toContain("new Event('cme-open-lab-coach')");
   expect(app).toContain("window.addEventListener('cme-open-lab-coach',open)");
  });

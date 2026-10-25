@@ -66,7 +66,9 @@ describe('instrumentation Android CME-3D',()=>{
   expect(lab).toContain('<AndroidFrameProbe telemetry={telemetry}/>');
   expect(studio).toContain('<AndroidFrameProbe telemetry={androidTelemetry}/>');
   expect(lab).toContain('<AndroidDiagnostics telemetry={androidTelemetry}');
-  expect(studio).toContain('<AndroidDiagnostics telemetry={androidTelemetry}');
+  expect(studio).toContain('androidTelemetry.finishLoad');
+  expect(studio).not.toContain('<AndroidDiagnostics telemetry={androidTelemetry}');
+  expect(lab).toContain('tab===\'technical\'');
   expect(lab).toContain('telemetry.recordContextLost');
   expect(studio).toContain('androidTelemetry.recordContextRestored');
   expect(studio).toContain("beginRigLoad(value as CoachLook['sex'],rigMode,'switch')");

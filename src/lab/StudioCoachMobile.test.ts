@@ -62,7 +62,9 @@ describe('Studio Coach : cohérence tactile Android',()=>{
   expect(css).toContain('height:clamp(186px,30dvh,300px)');
   expect(studio).toContain('coachLiveValues');
   expect(studio).toContain("range('bust','Volume de poitrine'");
-  expect(studio).toContain('aria-label="Technique ou enchaînement"');
+  expect(studio).toContain('Tester dans Mouvements');
+  expect(studio).not.toContain('aria-label="Technique ou enchaînement"');
+  expect(app).toContain('<MotionReview');
   expect(studio).toContain("localStorage.setItem('cme-lab-coach',id)");
   expect(app).toContain('<optgroup label="Mes coachs personnalisés">');
   expect(app).toContain("value={selectedCoach?'saved:'+selectedCoach.id:actor}");
