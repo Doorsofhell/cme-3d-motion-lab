@@ -5,10 +5,11 @@ export function MorphThumbnail({part,value}:{part:ShapeKey;value:number}){
  const face=['jaw','nose','eyes'].includes(part);
  const shoulders=part==='shoulders'?23+delta*38:23+(part==='muscle'?delta*19:0);
  const waist=part==='waist'?14+delta*26:14+(part==='roundness'?delta*17:0);
- const hips=part==='hips'?19+delta*32:19+(part==='roundness'?delta*23:0);
+ const hips=part==='hips'?19+delta*32:19+(part==='roundness'?delta*23:part==='glutes'?delta*16:0);
  const bust=part==='bust'?4+delta*16:4;
  const thighs=part==='thighs'?9+delta*21:9;
  const muscle=part==='muscle'?delta*18:0;
+ const glutes=part==='glutes'?delta*12:0;
  if(face){
   const jaw=part==='jaw'?12+delta*35:12;
   const eyeWidth=part==='eyes'?7+delta*12:7;
@@ -30,5 +31,6 @@ export function MorphThumbnail({part,value}:{part:ShapeKey;value:number}){
    fill="#cfaaa0" stroke="#6c625c" strokeWidth="1.6" strokeLinejoin="round"/>
   <path d={`M${45-waist} 60 Q45 ${65+bust} ${45+waist} 60 M${leftShoulder+8} 35 Q45 ${40+muscle+bust} ${rightShoulder-8} 35`} fill="none" stroke="#9f756c" strokeWidth="1.3"/>
   <path d="M45 54 L45 72" stroke="#a78277" strokeWidth="1" strokeDasharray="3 3"/>
+  {part==='glutes'&&<path d={`M${45-hips} 74 Q45 ${75+glutes} ${45+hips} 74`} fill="none" stroke="#8a655e" strokeWidth="2"/>}
  </svg>;
 }
