@@ -412,3 +412,11 @@ button{min-height:36px}
 :root[data-cme-theme="light"] .cmeCoachGallery{background:var(--c-surface);color:var(--c-text)}
 :root[data-cme-theme="light"] .savedCoachLibrary small{color:var(--c-text-2)}
 :root[data-cme-theme="auto"] .coachStudio,:root[data-cme-theme="dark"] .coachStudio{background:#f6f8fc;color:#202737}
+
+/* En mode Auto, appliquer également les correctifs de fonds clairs hérités. */
+@media(prefers-color-scheme:light){
+ :root[data-cme-theme="auto"] .labApp,:root[data-cme-theme="auto"] .cmeCoachGallery{background:var(--c-bg);color:var(--c-text)}
+ :root[data-cme-theme="auto"] .savedCoachLibrary,:root[data-cme-theme="auto"] .savedCoachEntry,:root[data-cme-theme="auto"] .savedCoachItems button,:root[data-cme-theme="auto"] .labTechnicalDetails,:root[data-cme-theme="auto"] .shadowCatalogPanel,:root[data-cme-theme="auto"] .cmeStudioWorkflow,:root[data-cme-theme="auto"] .cmeStudioWorkflow button{background:var(--c-surface-2);color:var(--c-text);border-color:var(--c-line-strong)}
+ :root[data-cme-theme="auto"] .stageTitle,:root[data-cme-theme="auto"] .stageBottom,:root[data-cme-theme="auto"] .labMoreMenu{background:var(--c-surface);color:var(--c-text)}
+ :root[data-cme-theme="auto"] .savedCoachLibrary small{color:var(--c-text-2)}
+}
