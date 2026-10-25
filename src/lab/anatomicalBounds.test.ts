@@ -43,7 +43,9 @@ describe('Audit Android anatomique H/F : cadrages 360°',()=>{
  it.each(['homme','femme'] as const)('garde la totalité du corps %s dans les quatre vues mobile',sex=>{
   const root=mannequin(sex);
   const body=mesurerSilhouetteVisible(root)!;
-  const bounds=new Box3().setFromObject(root);
+  root.updateWorldMatrix(true,true);
+  const bounds=new Box3();
+  root.children.forEach(obj=>{if(obj.visible)bounds.expandByObject(obj);});
   const corners=[
    new Vector3(bounds.min.x,bounds.min.y,bounds.min.z),
    new Vector3(bounds.min.x,bounds.min.y,bounds.max.z),
