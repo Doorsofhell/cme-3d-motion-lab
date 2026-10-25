@@ -1,7 +1,7 @@
 import {describe,expect,it} from 'vitest';
 import {readFileSync} from 'node:fs';
 const source=(name:string)=>readFileSync(new URL('./'+name,import.meta.url),'utf8');
-describe('Studio anatomique 0.7.41 — contrats d'intégration',()=>{
+describe("Studio anatomique 0.7.41 — contrats d'intégration",()=>{
  it('applique le mode mannequin au vrai rig et passe les orientations à la caméra partagée',()=>{
   expect(source('NeutralRig.tsx')).toContain("mode==='mannequin'");
   expect(source('NeutralRig.tsx')).toContain("orientation={orientation}");
