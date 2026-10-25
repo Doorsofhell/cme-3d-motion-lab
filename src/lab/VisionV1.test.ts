@@ -8,9 +8,10 @@ describe('vision CME-3D 1.0 : un atelier, cinq destinations',()=>{
  it('préserve les cinq destinations principales',()=>{
   for(const label of ['Studio','Mouvements','Technique','Versions','Autres'])expect(app).toContain('<span>'+label+'</span>');
  });
- it('utilise une scène unique dans Studio avec création et test',()=>{
-  expect(studio).toContain('1 · Création');
-  expect(studio).toContain('2 · Test des mouvements');
+ it('utilise une scène unique de création et un onglet distinct de recette',()=>{
+  expect(studio).toContain('Création en pose neutre');
+  expect(studio).not.toContain('2 · Test des mouvements');
+  expect(app).toContain('<MotionReview');
   expect((studio.match(/<Canvas\b/g)||[]).length).toBe(1);
  });
  it('maintient les deux sexes et les volumes féminins existants sans inventer un morph de fessiers',()=>{
