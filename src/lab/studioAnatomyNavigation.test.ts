@@ -5,8 +5,8 @@ import {GROUPES_ANATOMIQUES,groupePourZone,type ZoneAnatomique} from './studioAn
 const read=(p:string)=>readFileSync(new URL('./'+p,import.meta.url),'utf8');
 describe('Studio premium 0.7.47 — référence visuelle et commande réelles',()=>{
  const studio=read('StudioCoach.tsx'),css=read('StudioReferenceLook.css'),app=read('App.tsx');
- it('présente quatre groupes visuels donnant accès à sept zones sans doublon',()=>{
-  expect(GROUPES_ANATOMIQUES.map(g=>g.libelle)).toEqual(['Corps','Visage','Peau','Tenues']);
+ it('présente cinq groupes visuels donnant accès à sept zones sans doublon',()=>{
+  expect(GROUPES_ANATOMIQUES.map(g=>g.libelle)).toEqual(['Tête','Corps','Jambes','Peau','Tenues']);
   const zones=GROUPES_ANATOMIQUES.flatMap(g=>g.zones);
   expect(zones.length).toBe(7);
   expect(new Set(zones).size).toBe(7);
@@ -15,9 +15,9 @@ describe('Studio premium 0.7.47 — référence visuelle et commande réelles',(
   expect(studio).toContain('groupeActif.zones.includes(item)');
   expect(studio).toContain('<AnatomyIcon zone={groupe.icone}');
  });
- it('garde une scène sombre et la sélection homme/femme dans le viewport',()=>{
+ it('garde une scène sombre et la sélection homme/femme sans masquage',()=>{
   expect(studio).toContain('coachQuickChoice coachSexeVue');
-  expect(studio).toContain('#151921');
+  expect(studio).toContain('#090b0f');
   expect(css).toContain('.coachGroupesAnatomiques button');
   expect(css).toContain('min-height:54px');
   expect(css).toContain('coachSexeVue button');

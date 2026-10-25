@@ -35,6 +35,7 @@ import './UxSystem.css';
 import './CmePremiumMobile.css';
 import './StudioReferenceLook.css';
 import './StudioSceneLibre.css';
+import './SculptorWorkspace.css';
 import {getConfigModule} from '../config/moduleRegistry';
 
 function SavedCoachLibrary({openCoach,editCoach,selectedId}:{openCoach:(id:string)=>void;editCoach:(id:string)=>void;selectedId:string|null}){
