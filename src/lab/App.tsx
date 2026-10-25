@@ -49,7 +49,7 @@ const emptyMetrics:Metrics={fps:0,drawCalls:0,triangles:0,textures:0,geometries:
 export type Quality='performance'|'balanced'|'detail';
 export type RenderStyle='ultra'|'fitness'|'comic';
 export type Playback={progress:number;playing:boolean;speed:number};
-export type RigReport={bones:number;armClamps:number;footErrorMetres:number;techniqueFound:boolean;source:string};
+export type RigReport={bones:number;armClamps:number;footErrorMetres:number;techniqueFound:boolean;source:string;availableMotions?:string[]};
 const mobile=()=>typeof window!=='undefined'&&(window.matchMedia('(max-width:780px)').matches||/Android|iPhone/i.test(navigator.userAgent));
 const disciplines=[['boxe','Boxe anglaise'],['kickboxing','Kick-boxing'],['mma','MMA'],['muaythai','Muay-thaï'],['bjj','BJJ'],['judo','Judo']] as const;
 class ErrorBoundary extends Component<{children:ReactNode;onError:(message:string)=>void},{failed:boolean}>{
@@ -209,7 +209,7 @@ export function App(){
  const selectSavedCoach=(id:string)=>{try{const saved=findSavedCoach(localStorage,id);if(!saved)return;setSelectedCoach(saved);setActor(coachSourceActor(saved));if(saved.initialDiscipline){const d=saved.initialDiscipline==='boxing'?'boxe':saved.initialDiscipline;if(disciplines.some(([code])=>code===d))setDiscipline(d);}setTechnique('garde');setPlaying(false);localStorage.setItem('cme-lab-coach',id);setReport(null);setProgress(0);setExecutionEvidence(null);}catch{/* unavailable local storage */}};
  const [discipline,setDiscipline]=useState('boxe');
  const [nogi,setNogi]=useState(false);
- const [technique,setTechnique]=useState('crochet-avant');
+ const [technique,setTechnique]=useState('garde');
  const [executionEvidence,setExecutionEvidence]=useState<ExecutionEvidence|null>(null);
  const [coachJson,setCoachJson]=useState(JSON.stringify({discipline:'boxe',speech:'Garde haute, jab puis direct.',sequence:[{animationId:'garde',speed:1,repetitions:1},{animationId:'jab',speed:.8,repetitions:1},{animationId:'direct',speed:.9,repetitions:1}]}));
  const [coachPlan,setCoachPlan]=useState<CoachPlan|null>(null);
@@ -217,7 +217,7 @@ export function App(){
  const [quality,setQuality]=useState<Quality>('balanced');
  const [renderStyle,setRenderStyle]=useState<RenderStyle>('ultra');
  const [skeleton,setSkeleton]=useState(false);
- const [progress,setProgress]=useState(0),[playing,setPlaying]=useState(false),[speed,setSpeed]=useState(.5);
+ const [progress,setProgress]=useState(0),[playing,setPlaying]=useState(false),[speed,setSpeed]=useState(1);
  const [report,setReport]=useState<RigReport|null>(null);
  const [extra,setExtra]=useState(false);
  const [moreOpen,setMoreOpen]=useState(false);
@@ -261,7 +261,8 @@ export function App(){
  const currentSequences=useMemo(()=>sequences.filter(t=>t.discipline===discipline),[discipline]);
  const visibleSequences=useMemo(()=>currentSequences.filter(t=>(t.name+' '+t.motions.join(' ')).toLocaleLowerCase('fr-FR').includes(query.toLocaleLowerCase('fr-FR'))),[currentSequences,query]);
  const knownMotions=useMemo(()=>new Set(techniques.map(t=>t.motion)),[]);
- const reviewEntries=useMemo<ReviewMotion[]>(()=>[...currentTechniques.map(t=>({id:t.motion,name:t.name,kind:'technique' as const,motions:[t.motion]})),...currentSequences.map(t=>({id:t.id,name:t.name,kind:'sequence' as const,motions:t.motions}))],[currentTechniques,currentSequences]);
+ const reviewEntries=useMemo<ReviewMotion[]>(()=>[{id:'garde',name:'Garde de base',kind:'technique',motions:['garde']},...currentTechniques.filter(t=>t.motion!=='garde').map(t=>({id:t.motion,name:t.name,kind:'technique' as const,motions:[t.motion]})),...currentSequences.map(t=>({id:t.id,name:t.name,kind:'sequence' as const,motions:t.motions}))],[currentTechniques,currentSequences]);
+ const runnableEntries=useMemo(()=>reviewEntries.filter(e=>report?.availableMotions?.includes(e.id)),[reviewEntries,report?.availableMotions]);
  const canRunSequence=(entry:SequenceEntry)=>entry.motions.every(m=>knownMotions.has(m));
  const palette=useMemo(()=>techniques.filter(t=>(allCatalog||t.disciplines.includes(discipline))&&
    ((t.name+' '+t.id+' '+t.category).toLocaleLowerCase('fr-FR').includes(query.toLocaleLowerCase('fr-FR')))),[discipline,query,allCatalog]);
@@ -271,7 +272,7 @@ export function App(){
  const onMotionSample=useCallback((id:string,position:number,nowMs:number)=>{
   setExecutionEvidence(prev=>recordExecutionSample(prev,executionKey(actor,discipline,selectedCoach?.id??'',id),position,nowMs));
  },[actor,discipline,selectedCoach?.id]);
- const selectTechnique=(motion:string)=>{setExecutionEvidence(null);journal.record('technique','Technique sélectionnée : '+motion,{previous:technique,discipline,coach:actor});reset();setTechnique(motion);setCatalogOpen(false);onLog('Technique : '+motion);};
+ const selectTechnique=(motion:string)=>{setExecutionEvidence(null);journal.record('technique','Technique sélectionnée : '+motion,{previous:technique,discipline,coach:actor});reset();setCoachPlan(null);setTechnique(motion);setCatalogOpen(false);setPlaying(true);onLog('Lecture : '+motion);};
  const incidentContext:TestContext={actor:actor==='mma-amara'?'Amara':'Kadir',discipline,outfit,technique,renderStyle,quality,userAgent:navigator.userAgent,diagnostics:JSON.stringify({report,metrics,messages},null,2)};
  const {items:autoDrafts,record:autoRecord,dismiss:autoDismiss,clear:autoClear}=useAutoIncidentQueue(incidentContext,onLog);
  const pendingDrafts=useMemo(()=>unresolvedDrafts(autoDrafts,known.issues),[autoDrafts,known.issues]);
@@ -336,8 +337,15 @@ export function App(){
     <optgroup label="Coachs de référence">{fighterRoster.map(f=><option key={f.id} value={f.id} disabled={f.status!=='available'&&f.id!=='mma-naira'}>{f.name}{f.status==='in-production'?' · prototype cloné (non validé)':''}</option>)}</optgroup>
     {savedCoaches.length>0&&<optgroup label="Mes coachs personnalisés">{savedCoaches.map(c=><option key={c.id} value={'saved:'+c.id}>{c.name} · {c.look.sex}</option>)}</optgroup>}
    </select></label>
-   <label><span>Discipline</span><select aria-label="Discipline" value={discipline} onChange={e=>{journal.record('discipline','Discipline : '+discipline+' → '+e.target.value,{coach:actor,style:renderStyle});reset();setDiscipline(e.target.value);setTechnique(techniques.find(t=>t.disciplines.includes(e.target.value))?.motion??'garde');onLog('Discipline : '+e.target.value);}}>{disciplines.map(([id,name])=><option key={id} value={id}>{name}</option>)}</select></label>
-   <div className="cmeCurrentMotion" role="status"><span>À tester</span><strong>{techniqueLabel}</strong></div>
+   <label><span>Discipline</span><select aria-label="Discipline" value={discipline} onChange={e=>{journal.record('discipline','Discipline : '+discipline+' → '+e.target.value,{coach:actor,style:renderStyle});reset();setDiscipline(e.target.value);setTechnique('garde');onLog('Discipline : '+e.target.value);}}>{disciplines.map(([id,name])=><option key={id} value={id}>{name}</option>)}</select></label>
+   <label className="cmeQuickMotion"><span>Mouvement ou enchaînement</span>
+    <select aria-label="Mouvement ou enchaînement" value={runnableEntries.some(e=>e.id===technique)?technique:''} disabled={!runnableEntries.length} onChange={e=>selectTechnique(e.target.value)}>
+     {!runnableEntries.some(e=>e.id===technique)&&<option value="">Choisir un geste compatible</option>}
+     <optgroup label="Techniques disponibles">{runnableEntries.filter(e=>e.kind==='technique').map(e=><option key={e.id} value={e.id}>{e.name}</option>)}</optgroup>
+     <optgroup label="Enchaînements disponibles">{runnableEntries.filter(e=>e.kind==='sequence').map(e=><option key={e.id} value={e.id}>{e.name}</option>)}</optgroup>
+    </select>
+   </label>
+   <button type="button" className="cmeQuickRun" disabled={!runnableEntries.some(e=>e.id===technique)} onClick={()=>{seek(0);setExecutionEvidence(null);setCoachPlan(null);setPlaying(true);}}>▶ Exécuter</button>
   </section>
   <section ref={stageFullscreen.ref as React.RefObject<HTMLElement>} className={`stage ${stageFullscreen.fullscreen?"cmeFullscreen":""}`} aria-label="Vue de test 3D" onDoubleClick={stageFullscreen.onDoubleClick} onTouchEnd={stageFullscreen.onTouchEnd}>
    <SceneToolbar actions={<SceneFullscreenButton fullscreen={stageFullscreen.fullscreen} onClick={stageFullscreen.toggle}/>}/>
@@ -345,7 +353,7 @@ export function App(){
    {selectedCoach&&<div className="labSelectedCoach" role="status">Coach personnalisé : <strong>{selectedCoach.name}</strong> · {selectedCoach.look.sex} · animations canoniques</div>}
    <Viewer active={labActive} telemetry={androidTelemetry} coachLook={selectedCoach?.look??null} handedness={selectedCoach?.handedness??'right'} accessories={selectedCoach?.accessories} actor={actor} coachPlan={coachPlan} discipline={outfit} quality={quality} renderStyle={renderStyle} technique={technique} playback={playback} skeleton={skeleton} onReport={onReport} onMetrics={onMetrics} onLog={onLog} onIncident={autoRecord} onCaptureReady={setScreenshotHandler} onMotionSample={onMotionSample}/>
    <SceneLoadingIndicator/>
-   <div className="stageBottom"><span>{report?report.bones+' os · '+(report.techniqueFound?'Technique disponible':'Garde de secours'):'Initialisation du rig'}</span><span>{report?('Tenue '+outfit+' ✓'):'Chargement'}</span></div>
+   <div className="stageBottom"><span>{report?(report.techniqueFound?'Mouvement reconnu · '+report.bones+' os':'Mouvement non compatible · choisir un autre'):'Chargement du modèle 3D'}</span><span>{report?('Tenue '+outfit+' ✓'):'Chargement'}</span></div>
   </section>
   
 
@@ -363,7 +371,7 @@ export function App(){
   </section>
 
   </div>
-  {tab==='lab'&&<MotionReview entries={reviewEntries} discipline={discipline} coach={selectedCoach?.id??actor} selected={technique} onSelect={selectTechnique} engineVersion={CME_APP_VERSION} metrics={{...metrics,bones:report?.bones??null,techniqueFound:report?.techniqueFound??false}} rigReady={!!report} rigTechniqueFound={!!report?.techniqueFound} executionEvidence={executionEvidence?.key===currentExecutionKey?executionEvidence:null} playbackObserved={playbackWasObserved(executionEvidence,currentExecutionKey)} onPlay={()=>{seek(0);setExecutionEvidence(null);setPlaying(true);document.querySelector('.cmeAppContent')?.scrollTo({top:0,behavior:'smooth'});}}/>}
+  {tab==='lab'&&<details className="cmeMotionExpert"><summary>Validation et rapport technique · avancé</summary><MotionReview entries={reviewEntries} discipline={discipline} coach={selectedCoach?.id??actor} selected={technique} onSelect={selectTechnique} availableIds={report?.availableMotions??[]} engineVersion={CME_APP_VERSION} metrics={{...metrics,bones:report?.bones??null,techniqueFound:report?.techniqueFound??false}} rigReady={!!report} rigTechniqueFound={!!report?.techniqueFound} executionEvidence={executionEvidence?.key===currentExecutionKey?executionEvidence:null} playbackObserved={playbackWasObserved(executionEvidence,currentExecutionKey)} onPlay={()=>{seek(0);setExecutionEvidence(null);setPlaying(true);document.querySelector('.cmeAppContent')?.scrollTo({top:0,behavior:'smooth'});}}/></details>}
 
   {tab==='gallery'&&<section className="cmeCoachGallery" aria-label="Galerie Coachs"><header><h2>Galerie Coachs</h2><p>Choisissez un combattant enregistré. Sa configuration est partagée avec Studio et le banc d'essai.</p></header><SavedCoachLibrary selectedId={selectedCoach?.id??null} openCoach={id=>{selectSavedCoach(id);setTab('lab');}} editCoach={id=>{try{localStorage.setItem('cme-selected-coach',id);}catch{}setTab('studio');}}/><button className="galleryCreate" type="button" onClick={()=>setTab('studio')}>Créer un combattant dans Studio</button></section>}
   {tab==='studio'&&<div className="cmeStudioHub"><StudioCoach/><section className="cmeStudioCoachList" aria-label="Liste des coachs du Studio"><h2>Mes coachs</h2><SavedCoachLibrary selectedId={selectedCoach?.id??null} openCoach={id=>{selectSavedCoach(id);setTab('lab');}} editCoach={id=>{try{localStorage.setItem('cme-selected-coach',id);window.dispatchEvent(new Event('cme-edit-selected-coach'));}catch{}}}/></section></div>}
