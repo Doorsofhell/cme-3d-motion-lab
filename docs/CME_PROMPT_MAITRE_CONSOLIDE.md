@@ -1,3 +1,51 @@
+# CME-3D — PROMPT MAÎTRE V1.0 (refonte majeure, 25/10/2026)
+
+> **Document directeur actif.** Les décisions historiques figurent intégralement plus bas : elles restent applicables sauf arbitrage explicitement documenté. V1.0 est une **cible produit**, pas une certification de livraison.
+
+## 1. But unique et promesse
+**Créer, examiner et valider un combattant 3D humain crédible, de son apparence à ses mouvements, dans un seul atelier mobile.** CME-3D n'est ni une application d'entraînement ni un clone de Shadow : c'est un **atelier de création de coachs et de validation biomécanique**. Les mouvements doivent être naturels, fluides, compréhensibles, traçables et reproductibles.
+
+## 2. Parcours utilisateur V1.0
+1. **Studio — Créer** (ouverture par défaut) : choisir homme/femme, personnage GLB réel, pose de référence immobile, formes illustrées par région, réglages fins seulement si supportés, aperçu permanent et zoom anatomique automatique interrompu par geste utilisateur.
+2. **Studio — Tester** : même personnage et même scène WebGL, sélection de discipline, technique ou enchaînement réellement disponible, lecture/pause/ralenti, caméra pédagogique ou libre, vue entière, plein écran et indicateurs simples. **Ne jamais recréer un deuxième moteur.**
+3. **Galerie Coachs** : retrouver, sélectionner, modifier, dupliquer (quand implémenté), supprimer et tester les profils enregistrés ; sauvegarde explicite et synchronisation avec Studio/Laboratoire.
+4. **Comparatif** : protocole A/B traçable, résultats chiffrés, visualisations et statut de validation ; Shadow en **lecture seule**, sans inventer des FPS ni des performances non mesurées.
+5. **Plus** : nouveautés, incidents, centre technique, options, diagnostics avancés. Aucun outil technique ne surcharge le parcours principal.
+
+## 3. Navigation et design
+- Barre basse unique : **Studio, Galerie Coachs, Comparatif, Plus** ; jamais deux barres concurrentes.
+- Studio possède **deux modes visibles** : Création et Test. La scène reste dominante ; les réglages ne doivent pas faire disparaître l'aperçu pendant une manipulation tactile.
+- Interface mobile portrait Android d'abord ; pas de chevauchements, de commandes coupées, ni de scroll horizontal accidentel ; gestes tactiles robustes, cibles de 44 px minimum.
+- Identité Dark Combat Premium, finition contemporaine et lisible ; inspiration BetterMe limitée à l'ergonomie. Textes et labels **uniquement en français**.
+- Un même besoin = **un composant partagé** : barre de scène, plein écran, caméra, chargement, sélecteurs, états d'erreur, boutons, galerie et navigation. Supprimer progressivement les CSS contradictoires, ne pas ajouter des correctifs locaux à répétition.
+
+## 4. Contrat moteur / personnages
+- Conserver les GLB anatomiques restaurés homme/femme et leur squelette ; conserver un **moteur canonique unique** et le retargeting pour boxe, kickboxing, Muay-Thaï, MMA, JJB et judo.
+- Création : A-pose sans lecture ni garde sportive. Test : animations issues exclusivement du catalogue réellement supporté ; technique absente = désactivée et expliquée.
+- Apparence et biomécanique séparées : aucun morph, tenue ou texture ne doit déformer les trajectoires ou corrompre les GLB partagés. Cloner matériaux/géométries uniquement quand nécessaire ; morphs idempotents, bornés, réversibles.
+- Contrôle visuel = modification réelle et observable du mesh ; capacité absente = commande désactivée avec explication. Ne jamais prétendre disposer de coiffures, morphs ou assets non livrés.
+- Mode Anatomie = représentation d'étude neutre, sans prétendre supprimer des vêtements fusionnés à la géométrie.
+- Caméra pédagogique automatique par mouvement, zoom par région, reprise de contrôle immédiate ; aucune caméra utilisateur, captation vidéo, reconnaissance gestuelle ou mocap.
+
+## 5. Validation biomécanique et Android
+- Vérifier articulations, amplitudes, transfert de poids, stabilité des appuis, glissements, contacts, rotations, transitions et continuité temporelle ; mesurer plutôt que déclarer « humain ».
+- Suivre FPS p50/p95, latence premier GLB et bascule H/F, appels de rendu, WebGL perdu/restauré, mémoire si mesurable ; viser **≥30 FPS en profil Android équilibré**, sans prétendre que la cible est atteinte sans mesure.
+- Tests automatiques : TypeScript, Vitest, build, six disciplines, morphs et skinned meshes, composants communs, persistance et migrations. Tests **visuels sur Android réel** distincts de CI.
+- Fusion et déploiement GitHub Pages seulement après contrôles verts ; confirmer URL, commit et workflow. Un jalon majeur ne sera dit « livré » qu'après critères d'acceptation et contrôle utilisateur.
+
+## 6. Feuille de route de la version majeure
+- **V1-A — Fondations UX** : prompt et architecture cible, modes Création/Test visibles, composants mutualisés, navigation unique, sauvegarde/galerie et anti-régression.
+- **V1-B — Créateur 3D Atlas** : formes illustrées effectives, capacités réelles par modèle, morphologie et assets sous licence, personnalisation dynamique sur le même GLB, profils éditables.
+- **V1-C — Motion Validation** : six disciplines, référentiel de mouvements, validation appuis/contacts/transitions, caméra pédagogique et lecture reproductible.
+- **V1-D — Comparatif et sortie majeure** : protocole A/B, données sourcées, diagnostics Android, tests visuels, critères d'acceptation, version majeure publiée.
+
+## 7. Règles d'exécution et d'interaction
+Analyser chaque demande par UX, architecture, 3D, biomécanique, performance et QA ; appliquer le changement utile sans demander de confirmation superflue ; documenter, tester, fusionner, vérifier le déploiement ; distinguer « codé », « testé », « déployé », « vérifié sur Android ». Proposer toujours **Choix libre — prioritaire**, puis 2 à 3 suites concrètes avec recommandation. Réponses exclusivement en français. **Interdiction absolue de modifier Doorsofhell/combat-shadow-studio** : lecture seule autorisée.
+
+---
+
+# Historique consolidé — décisions précédentes préservées
+
 # CME-3D — PROMPT MAÎTRE CONSOLIDÉ (24/10/2026)
 
 ## Règle de continuité ABSOLUE
