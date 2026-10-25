@@ -23,18 +23,18 @@ describe('Studio Coach appearance isolation',()=>{
   const parsed=parseCoachLookJson(JSON.stringify({schema:'cme-coach-look-v1',look:{...legacy,sex:'femme'}}));
   expect(parsed.roundness).toBe(1);expect(parsed.hips).toBe(1);expect(parsed.thighs).toBe(1);
  });
- it('plafonne les réglages féminins et ne les applique pas aux profils masculins',()=>{
+ it('plafonne les mêmes réglages corporels pour femme et homme',()=>{
   const female=normalizeCoachLook({...defaultCoachLook,sex:'femme',hips:4,roundness:10,thighs:-4});
   expect(female.hips).toBe(1.35);expect(female.roundness).toBe(1.3);expect(female.thighs).toBe(.75);
   const male=normalizeCoachLook({...defaultCoachLook,sex:'homme',hips:1.3,roundness:1.2,thighs:1.1});
-  expect(male.hips).toBe(1);expect(male.roundness).toBe(1);expect(male.thighs).toBe(1);
+  expect(male.hips).toBe(1.3);expect(male.roundness).toBe(1.2);expect(male.thighs).toBe(1.1);
  });
- it('conserve les réglages de poitrine dans les profils et les remet à neutre sur un homme',()=>{
+ it('conserve les formes du thorax masculin dans le même profil',()=>{
   const female=normalizeCoachLook({...defaultCoachLook,sex:'femme',bust:8});
   expect(female.bust).toBe(1.35);
   const exported=JSON.stringify({schema:'cme-coach-look-v1',look:female});
   expect(parseCoachLookJson(exported).bust).toBe(1.35);
-  expect(normalizeCoachLook({...female,sex:'homme'}).bust).toBe(1);
+  expect(normalizeCoachLook({...female,sex:'homme'}).bust).toBe(1.35);
  });
  it('rejects invalid color values',()=>{
   expect(normalizeCoachLook({...defaultCoachLook,skin:'javascript:alert(1)'}).skin).toBe(defaultCoachLook.skin);
