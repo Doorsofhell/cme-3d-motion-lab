@@ -224,3 +224,7 @@ Lire et appliquer `docs/ANATOMIE_MANNEQUINS_PREMIUM_0741.md` : deux bases H/F or
 
 ## 25/10/2026 — v0.7.42 : étalons anatomiques réellement skinnés
 Deux bases organiques MakeHuman/MPFB CC0, femme et homme, 163 os, chargées en 3D et vues sous quatre angles. Elles sont indépendantes du rig canonique d'animation et demeurent en lecture seule jusqu'à retargeting/morphs validés. Aucun faux slider ; Shadow et mouvements canoniques inchangés. Source et contrôle de licence consignés dans docs/ANATOMICAL_CC0_SOURCES.md. Critères de qualité esthétique des images utilisateur toujours contraignants.
+
+
+## 25/10/2026 — Exigence 0.7.43 : personnalisation cohérente selon le sexe
+Parité de richesse homme/femme, pas une identité de proportions. Pour une femme, poitrine, taille, hanches, bassin, fessiers et cuisses doivent dessiner une silhouette féminine naturelle et harmonieuse quelle que soit la corpulence choisie, sans caricature ni modèle unique. Pour l'homme, pectoraux, carrure, bassin et musculature sont adaptés aux proportions du corps masculin. Les volumes se compensent avec interpolation douce et limites raisonnables. Chaque forme reste modifiable ; les valeurs brutes sauvegardées restent intactes, les anciens profils restent compatibles. Les maillages GLB de référence (163 os) sont encore en lecture seule, tandis que la morphologie réelle des coachs utilise des sommets skinnés clonés et ne modifie jamais les mouvements canoniques ni Shadow.

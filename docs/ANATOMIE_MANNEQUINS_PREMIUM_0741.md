@@ -53,3 +53,7 @@ Réponses en français, statut **réel** (préparé / codé / CI / fusionné / d
 - Les fichiers sont récupérés dans `public/anatomie` à chaque CI et inclus dans la publication Pages. Pas de remplacement silencieux si la source échoue.
 - Mode étalon en lecture seule : **n'affirme pas** l'équivalence des rigs MakeHuman/CME ni la perfection artistique à l'image ; le retargeting, les morphs localisés et l'inspection visuelle restent des portes bloquantes.
 
+
+
+### 0.7.43 — Adaptation morphologique par sexe, nouveau besoin du commanditaire
+La richesse fonctionnelle est identique, mais pas les volumes résultants. La femme doit rester crédible et harmonieuse : ajustements doux de poitrine / taille / hanches / fessiers / cuisses, y compris lors du changement de poids. Le modèle masculin a un volume pectoral et pelvien différent. Nouveaux fessiers sur les vrais sommets pondérés par le squelette, sans ajouter de primitives. Les GLB source, os, weights, animations et Shadow restent intacts. Limites documentées : cette déformation ne remplace pas des morph targets de sculpture originaux ; références CC0 encore en lecture seule, non retargetées.

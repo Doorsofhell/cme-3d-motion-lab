@@ -199,10 +199,15 @@ describe('Amara — personnalisation poitrine réellement appliquée au corps vi
   expect(Array.from(generated.array)).toEqual(reference);
   expect(bones.every((bone,i)=>bone.position.equals(pose[i]))).toBe(true);
  });
- it('ignore strictement le curseur poitrine sur un corps masculin',()=>{
-  const {root,body,geo}=skinnedFemale();
-  applyCoachLookGeometry(root,{...defaults,sex:'homme',bust:1.35});
-  expect(body.geometry).toBe(geo);
+ it('déforme les pectoraux masculins distinctement de la poitrine féminine',()=>{
+  const male=skinnedFemale(),female=skinnedFemale();
+  applyCoachLookGeometry(male.root,{...defaults,sex:'homme',bust:1.35});
+  applyCoachLookGeometry(female.root,{...defaults,sex:'femme',bust:1.35});
+  const o=male.geo.getAttribute('position'),m=male.body.geometry.getAttribute('position'),f=female.body.geometry.getAttribute('position');
+  const front=Array.from({length:m.count},(_,i)=>i).filter(i=>o.getZ(i)>0&&o.getY(i)>.3);
+  const diff=(g:typeof m)=>front.reduce((sum,i)=>sum+Math.abs(g.getZ(i)-o.getZ(i)),0);
+  expect(diff(m)).toBeGreaterThan(0);
+  expect(diff(f)).toBeGreaterThan(diff(m));
  });
 });
 describe('Silhouette femme — vrais volumes skinnés, sans déformation des os',()=>{
@@ -250,9 +255,10 @@ describe('Silhouette femme — vrais volumes skinnés, sans déformation des os'
   expect(geo.userData.cmeOwned).not.toBe(true);
   expect(Array.from(geo.getAttribute('position').array)).toEqual(reference);
  });
- it('n’active aucun volume féminin sur un coach masculin',()=>{
+ it('autorise les réglages masculins de bassin sans recopier la projection féminine',()=>{
   const {root,body,geo}=skinnedFemale();
-  applyCoachBodyShape(root,{sex:'homme',shoulders:1,muscle:1,waist:1,hips:1.35,roundness:1.3,thighs:1.3});
-  expect(body.geometry).toBe(geo);
+  applyCoachBodyShape(root,{sex:'homme',shoulders:1,muscle:1,waist:1,hips:1.25,roundness:1.1,thighs:1.2});
+  expect(body.geometry).not.toBe(geo);
+  expect(Array.from(body.geometry.getAttribute('position').array)).not.toEqual(Array.from(geo.getAttribute('position').array));
  });
 });

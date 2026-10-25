@@ -260,3 +260,7 @@ L'utilisateur confirme l'affichage de 0.7.40 et fournit les silhouettes mannequi
 
 ## 25/10/2026 — 0.7.42 : étalons CC0 intégrés sans régression
 Deux GLB anatomiques réels sans tenues, homme/femme, en A-pose, proviennent du catalogue Innerscene/MakeHuman CC0. Les nouveaux GLB ne remplacent pas les coachs actifs (squelette différent). Bouton de référence 3D, quatre vues, lecture seule. Les CI téléchargent et valident les binaires; Pages les sert sous /anatomie. Morphs indépendants, retargeting et revue visuelle physique restent ouverts.
+
+
+## 25/10/2026 — 0.7.43 : correction de la personnalisation anatomique
+Clarification : homme/femme possèdent les mêmes catégories éditables, avec **interprétation physiologique et esthétique différenciée**. Nouveau groupe fessiers, effet 3D postérieur sur pelvis skinné, couplage borné des régions voisines, vocabulaire féminin/masculin, compatibilité anciens profils et mêmes composants Studio/Laboratoire. Le rendu final des planches et le retargeting des étalons CC0 restent distincts, à ne pas annoncer comme livrés.

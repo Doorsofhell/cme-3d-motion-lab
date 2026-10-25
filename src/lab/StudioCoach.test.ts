@@ -19,9 +19,9 @@ describe('Studio Coach appearance isolation',()=>{
   expect('motion' in result).toBe(false);expect('skeleton' in result).toBe(false);
  });
  it('conserve les profils JSON antérieurs sans nouveaux volumes féminins',()=>{
-  const legacy=Object.fromEntries(Object.entries(defaultCoachLook).filter(([key])=>!['roundness','hips','thighs'].includes(key)));
+  const legacy=Object.fromEntries(Object.entries(defaultCoachLook).filter(([key])=>!['roundness','hips','glutes','thighs'].includes(key)));
   const parsed=parseCoachLookJson(JSON.stringify({schema:'cme-coach-look-v1',look:{...legacy,sex:'femme'}}));
-  expect(parsed.roundness).toBe(1);expect(parsed.hips).toBe(1);expect(parsed.thighs).toBe(1);
+  expect(parsed.roundness).toBe(1);expect(parsed.hips).toBe(1);expect(parsed.glutes).toBe(1);expect(parsed.thighs).toBe(1);
  });
  it('plafonne les réglages féminins et ne les applique pas aux profils masculins',()=>{
   const female=normalizeCoachLook({...defaultCoachLook,sex:'femme',hips:4,roundness:10,thighs:-4});
