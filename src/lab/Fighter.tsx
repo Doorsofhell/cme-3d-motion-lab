@@ -2,7 +2,7 @@ import {useEffect,useMemo,useRef,type RefObject} from 'react';
 import {useFrame} from '@react-three/fiber';
 import {useGLTF} from '@react-three/drei';
 import {clone} from 'three/examples/jsm/utils/SkeletonUtils.js';
-import {SkeletonHelper,type Mesh,type Object3D,MeshStandardMaterial,MeshToonMaterial,DoubleSide,DataTexture,RedFormat,UnsignedByteType,NearestFilter,Color,BackSide,SkinnedMesh} from 'three';
+import {SkeletonHelper,type Mesh,type Object3D,MeshStandardMaterial,MeshToonMaterial,DataTexture,RedFormat,UnsignedByteType,NearestFilter,BackSide,SkinnedMesh} from 'three';
 import {CoachRig} from '../shadow-engine/rig';
 import {getLibrary} from '../shadow-engine/library';
 import {MotionSampler} from '../shadow-engine/motion';
@@ -19,94 +19,86 @@ import {applyCoachLookGeometry} from './coachGeometry';
 import type {CoachLook} from './StudioCoach';
 import type {Playback,Quality,RenderStyle,RigReport} from './App';
 import {attachOutfit,enhanceHumanMaterial} from '../adapters/outfits';
-/** Original fitness-coaching aesthetic: simplified materials, not BetterMe assets. */
-// Six restrained tonal steps help reveal contours without flat shading.
+/** Règle CME-3D : trois rendus, exactement les mêmes actifs de tenue sportive.
+ * Le rendu Anime/Comics peut modifier les bandes de lumière et le contour,
+ * JAMAIS la couleur textile, les motifs, les matières cartographiées ni le costume.
+ */
 const fitnessGradient=new DataTexture(new Uint8Array([65,102,145,186,223,251]),6,1,RedFormat,UnsignedByteType);
 fitnessGradient.magFilter=NearestFilter;
 fitnessGradient.minFilter=NearestFilter;
 fitnessGradient.needsUpdate=true;
-export function applyFitnessStyle(root:Object3D){
- root.traverse(o=>{
-  const mesh=o as Mesh;
-  if(!mesh.isMesh)return;
-  const materials=Array.isArray(mesh.material)?mesh.material:[mesh.material];
-  const styled=materials.map(base=>{
-   const old=base as MeshStandardMaterial;
-   const name=(old.name+' '+mesh.name).toLowerCase();
-   // Keep photographs only for the exposed face and skin: preserving identity.
-   const skin=name.includes('f021_')||name.includes('m018_')||name.includes('body')||name.includes('head');
-   const isGlove=name.includes('gant')||name.includes('cuir-gant');
-   const outfitTop=name.includes('haut-')||name.includes('brassiere');
-   const shorts=name.includes('short-')||name.includes('ceinture-');
-   const shoes=name.includes('chaussure');
-   const trim=name.includes('liseré-');
-   const palette=trim?'#d6b180':shoes?'#f1f4f4':isGlove?'#24495e':outfitTop?'#393e51':shorts?'#25485c':'#f3f4f3';
-   const material=new MeshToonMaterial({
-    name:old.name+'-fitness',
-    // Preserve original textile detail: a near-white tint avoids darkening coloured maps twice.
-    color:old.map&&!skin?new Color(palette).lerp(new Color('#ffffff'),.75):new Color(palette),
-    map:old.map??null,
-    gradientMap:fitnessGradient,
-    normalMap:old.normalMap??null,
-    alphaMap:old.alphaMap??null,
-    normalScale:old.normalScale?.clone(),
-    vertexColors:old.vertexColors,
-    side:outfitTop?DoubleSide:old.side,
-    transparent:old.transparent,
-    opacity:old.opacity,
-    alphaTest:old.alphaTest
-   });
-   old.dispose();
-   return material;
-  });
-  mesh.material=Array.isArray(mesh.material)?styled:styled[0];
- });
-}
-/** Adult-animation cel shading: three hard light bands, bold ink and high-contrast costume colours. */
 const comicGradient=new DataTexture(new Uint8Array([36,122,245]),3,1,RedFormat,UnsignedByteType);
 comicGradient.magFilter=NearestFilter;
 comicGradient.minFilter=NearestFilter;
 comicGradient.needsUpdate=true;
-export function applyComicStyle(root:Object3D,quality:Quality){
- const outlines:Object3D[]=[];
- root.traverse(o=>{
-  const mesh=o as Mesh;
-  if(!mesh.isMesh||mesh.userData.cmeComicOutline)return;
-  const materials=Array.isArray(mesh.material)?mesh.material:[mesh.material];
-  const styled=materials.map(base=>{
-   const old=base as MeshStandardMaterial;
-   const name=(old.name+' '+mesh.name).toLowerCase();
-   const skin=/f021_|m018_|body|head|peau|visage/.test(name);
-   const gloves=/gant|cuir-gant/.test(name);
-   const top=/haut-|brassiere/.test(name);
-   const shorts=/short-|ceinture-/.test(name);
-   const shoes=/chaussure/.test(name);
-   const trim=/liseré-/.test(name);
-   const color=skin?'#e4c2ad':gloves?'#d7374c':top?'#315b9b':shorts?'#24385f':shoes?'#e1e9ef':trim?'#f5bc4d':'#9ab3cf';
-   const material=new MeshToonMaterial({
-    name:old.name+'-hero-ink',
-    color:old.map&&!skin?new Color(color).lerp(new Color('#ffffff'),.30):new Color(color),
-    // Keep actual skin pigmentation, facial detail and anatomical normal maps.
-    map:old.map??null,
-    gradientMap:comicGradient,normalMap:old.normalMap??null,alphaMap:old.alphaMap??null,
-    normalScale:old.normalScale?.clone(),vertexColors:old.vertexColors,
-    side:top?DoubleSide:old.side,transparent:old.transparent,
-    opacity:old.opacity,alphaTest:old.alphaTest
-   });
-   old.dispose();
-   return material;
+
+/** Convertit uniquement le traitement de l'éclairage. Préserve l'albédo et
+ * les textures du GLB Ultra : aucune recoloration héroïque ou automatique.
+ * Chaque scène est une copie locale ; les os / poids / animations sont intacts.
+ */
+function styliserEclairage(base:MeshStandardMaterial,gradient:DataTexture,suffixe:string):MeshToonMaterial{
+ return new MeshToonMaterial({
+  name:base.name+suffixe,
+  color:base.color.clone(),
+  map:base.map??null,
+  normalMap:base.normalMap??null,
+  normalScale:base.normalScale?.clone(),
+  alphaMap:base.alphaMap??null,
+  aoMap:base.aoMap??null,
+  lightMap:base.lightMap??null,
+  emissive:base.emissive?.clone(),
+  emissiveMap:base.emissiveMap??null,
+  emissiveIntensity:base.emissiveIntensity,
+  gradientMap:gradient,
+  vertexColors:base.vertexColors,
+  side:base.side,
+  transparent:base.transparent,
+  opacity:base.opacity,
+  alphaTest:base.alphaTest,
+  depthWrite:base.depthWrite,
+  depthTest:base.depthTest
+ });
+}
+export function applyFitnessStyle(root:Object3D){
+ root.traverse(object=>{
+  const mesh=object as Mesh;
+  if(!mesh.isMesh)return;
+  const originals=Array.isArray(mesh.material)?mesh.material:[mesh.material];
+  const styled=originals.map(material=>{
+   if(!(material instanceof MeshStandardMaterial))return material;
+   const result=styliserEclairage(material,fitnessGradient,'-fitness');
+   material.dispose();
+   return result;
   });
   mesh.material=Array.isArray(mesh.material)?styled:styled[0];
-  // Inverted-hull outline supports animated SkinnedMesh as well as static meshes.
-  // Keep the original skeleton/bind matrix; only the ink shell is offset.
-  // Performance tier omits the extra draw call, balanced/detail retain the ink.
-  if(quality!=='performance' && !mesh.userData.cmeComicOutline && !materials.some(m=>m.transparent && m.opacity<1)){
+ });
+}
+/** Bande dessinée sportive : bandes d'ombre et contours uniquement.
+ * Sur les six disciplines, le vêtement et la personnalisation sont identiques
+ * à Ultra réaliste, jusque dans leurs couleurs, textures et accessoires.
+ */
+export function applyComicStyle(root:Object3D,quality:Quality){
+ const outlines:Object3D[]=[];
+ root.traverse(object=>{
+  const mesh=object as Mesh;
+  if(!mesh.isMesh||mesh.userData.cmeComicOutline)return;
+  const originals=Array.isArray(mesh.material)?mesh.material:[mesh.material];
+  const styled=originals.map(material=>{
+   if(!(material instanceof MeshStandardMaterial))return material;
+   const result=styliserEclairage(material,comicGradient,'-comic');
+   material.dispose();
+   return result;
+  });
+  mesh.material=Array.isArray(mesh.material)?styled:styled[0];
+  // Coque graphique non destructive, sans changer les matrices ni les os.
+  // Désactivée en profil performance pour préserver le budget GPU Android.
+  if(quality!=='performance'&&!mesh.userData.cmeComicOutline&&!originals.some(m=>m.transparent&&m.opacity<1)){
    const outline=mesh.clone(false) as Mesh;
-   outline.name=mesh.name+'-ink-contour';
+   outline.name=mesh.name+'-comic-contour';
    outline.material=new MeshToonMaterial({color:'#080d1a',side:BackSide});
    outline.scale.multiplyScalar(1.012);
    outline.userData.cmeComicOutline=true;
-   if(mesh instanceof SkinnedMesh && outline instanceof SkinnedMesh){
+   if(mesh instanceof SkinnedMesh&&outline instanceof SkinnedMesh){
     outline.bind(mesh.skeleton,mesh.bindMatrix);
     outline.bindMode=mesh.bindMode;
    }
