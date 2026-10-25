@@ -10,6 +10,14 @@ L'utilisateur adopte une méthode **additive en cinq étapes avant tout code** :
 
 **Communication permanente :** choix libre prioritaire, Choix 1 (Recommandé), Choix 2, Choix 3 — quatre commandes cliquables en conclusion et une seule grande question à la fois. Les décisions UX déjà prises (mobile d'abord, viewport fixe, quatre onglets Studio Coach/Mouvements/Galerie/Plus) restent en vigueur. L'organisation des zones anatomiques n'est pas encore décidée.
 
+## Lot 0.7.46 — 25/10/2026 : première implémentation de l'architecture UX premium
+
+**Reformulation additive** : mettre en pratique les choix validés sans écraser le schéma. **Implémenté sur branche** : navigation basse unique quatre onglets (Studio Coach, Mouvements, Galerie, Plus) et composant partagé ; Galerie autonome ; menus secondaires de Plus préservant Comparatif CME/Shadow, Atlas (lien documentaire), Laboratoire, versions, options, incidents et feuille de route ; bouton de retour. **Cadrage Android** : scène fixe dominante, commandes scrollables dans leur propre panneau, conteneur applicatif et navigation non scrollables ; suppression de la clé de remontage associée au changement d'onglet.
+
+**Audit d'impact** : seuls UI, CSS, configuration, tests et docs sont touchés ; pas de modification des maillages GLB, des squelettes, des poids ou des animations. Aucune caméra utilisateur ou vision artificielle ; aucun actif 3D factice ajouté. Mesures FPS/latence réelles : **Non mesuré**. Tests requis : Vitest, TypeScript, CI, compilation et vérification du déploiement ; recette visuelle physique Android non réalisée automatiquement. Tous les boutons importants visent ≥44 px.
+
+**Suite structurante toujours ouverte** : organisation des zones anatomiques et de leurs réglages dans le panneau contextuel. Les vieux contrats de test à cinq onglets sont remplacés par des contrats des quatre destinations actuelles. Les règles CSS héritées nécessitent un chantier de consolidation après la première livraison.
+
 ## Décision confirmée — 25/10/2026 : **choix A, quatre onglets de navigation**
 
 La barre principale Android est **unique et fixe** dans l'ordre **Studio Coach → Mouvements → Galerie → Plus**. Dans **Plus** sont rangés, **sans aucune perte de fonctionnalité**, le Comparatif CME/Shadow (Shadow en lecture seule), l'Atlas biomécanique, le Laboratoire de diagnostic et mesures, les options, incidents, versions/nouveautés et utilitaires. Studio garde la grande scène 3D fixe et le panneau contextuel bas déjà validés ; Mouvements reprend le coach courant avec un sélecteur des animations réellement exécutables ; Galerie retrouve et gère les profils. Pas de second lecteur ni de cinquième barre.

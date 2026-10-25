@@ -4,7 +4,7 @@
   "items": [
     {
       "id": "studio",
-      "label": "Studio",
+      "label": "Studio Coach",
       "icon": "user-round-pen",
       "order": 1
     },
@@ -15,29 +15,25 @@
       "order": 2
     },
     {
-      "id": "technical",
-      "label": "Technique",
-      "icon": "cpu",
+      "id": "gallery",
+      "label": "Galerie",
+      "icon": "images",
       "order": 3
     },
     {
-      "id": "versions",
-      "label": "Versions",
-      "icon": "history",
-      "order": 4
-    },
-    {
       "id": "other",
-      "label": "Autres",
-      "icon": "grid",
-      "order": 5
+      "label": "Plus",
+      "icon": "ellipsis",
+      "order": 4
     }
   ],
   "secondary": [
     "comparison",
     "roadmap",
     "tracking",
-    "options"
+    "options",
+    "technical",
+    "versions"
   ],
   "defaultTheme": "auto",
   "themes": [

@@ -1,30 +1,31 @@
-// @ts-ignore — fichier source lu par Vitest dans Node
+// @ts-ignore — Vitest sous Node, inspection des fichiers de styles.
 import {readFileSync} from 'node:fs';
 import {describe,it,expect} from 'vitest';
-const read=(file:string)=>readFileSync(new URL('./'+file,import.meta.url),'utf8');
-const app=read('App.tsx'),css=read('UxSystem.css');
-describe('Android : barre de navigation fixe et viewport accessible',()=>{
- it('sépare le contenu scrollable de la barre des cinq destinations',()=>{
-  const contentOpen=app.indexOf('className="cmeAppContent"');
-  const contentClose=app.lastIndexOf('  </div>\n  {tab===\'technical\'&&catalogOpen');
-  const nav=app.indexOf('<nav className="labTabs"');
-  expect(contentOpen).toBeGreaterThan(-1);
-  expect(contentClose).toBeGreaterThan(contentOpen);
-  expect(nav).toBeGreaterThan(contentClose);
-  expect(app).toContain('key={tab} className="cmeAppContent"');
+const read=(f:string)=>readFileSync(new URL('./'+f,import.meta.url),'utf8');
+const app=read('App.tsx'),css=read('CmePremiumMobile.css'),oldCss=read('UxSystem.css');
+describe('Android : viewport permanent, panneau contextuel et barre unique',()=>{
+ it('garde le contenu principal entre l’entête et la barre à quatre onglets',()=>{
+  const contenu=app.indexOf('className="cmeAppContent"');
+  const navigation=app.lastIndexOf('<NavigationPrincipale ');
+  expect(contenu).toBeGreaterThan(-1);
+  expect(navigation).toBeGreaterThan(contenu);
+  expect(app).not.toContain('key={tab} className="cmeAppContent"');
+  expect(app).toContain('data-cme-screen={tab}');
  });
- it('ne fait plus défiler le menu inférieur avec la page Mouvements',()=>{
-  expect(css).toContain('.labApp[data-cme-screen="lab"]');
-  expect(css).toContain('.labApp .cmeAppContent{');
-  expect(css).toContain('overflow-y:auto');
-  expect(css).toContain('position:relative;bottom:auto');
-  expect(css).toContain('env(safe-area-inset-bottom)');
- });
- it('préserve le viewport 3D sur Android et évite la perte du tactile',()=>{
-  expect(css).toContain('.coachPreview:not(.cmeFullscreen):not(:fullscreen)');
-  expect(css).toContain('position:sticky;top:0');
-  expect(css).toContain('touch-action:none');
+ it('fixe la scène sans défilement commun et rend les réglages défilables',()=>{
+  expect(css).toContain('.labApp[data-cme-screen="studio"] .coachStudio');
+  expect(css).toContain('.labApp[data-cme-screen="studio"] .coachStudioLayout');
+  expect(css).toContain('.labApp[data-cme-screen="studio"] .coachPreview:not(.cmeFullscreen):not(:fullscreen)');
+  expect(css).toContain('overflow-y:auto!important;overflow-x:hidden!important;');
   expect(css).toContain('overscroll-behavior-y:contain');
-  expect(css).toContain('@media(max-width:760px)');
+  expect(css).toContain('touch-action:none');
+  expect(oldCss).toContain('.labApp .cmeAppContent{');
+ });
+ it('réserve une navigation tactilisable avec safe-area Android',()=>{
+  expect(css).toContain('grid-template-columns:repeat(4,minmax(0,1fr))');
+  expect(css).toContain('min-height:52px');
+  expect(css).toContain('min-height:44px!important');
+  expect(css).toContain('env(safe-area-inset-bottom)');
+  expect(css).toContain('@media(max-height:630px)');
  });
 });

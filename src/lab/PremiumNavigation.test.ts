@@ -1,33 +1,32 @@
-import {describe,it,expect} from 'vitest';
-// @ts-ignore — lecture locale des fichiers de composants sous Vitest, à l’image des tests Studio existants.
+// @ts-ignore — contrôle des fichiers applicatifs exécuté sous Vitest.
 import {readFileSync} from 'node:fs';
-const app=readFileSync(new URL('./App.tsx',import.meta.url),'utf8');
-const css=readFileSync(new URL('./style.css',import.meta.url),'utf8');
-const studio=readFileSync(new URL('./StudioCoach.tsx',import.meta.url),'utf8');
-const versions=readFileSync(new URL('./VersionsPanel.tsx',import.meta.url),'utf8');
-describe('Navigation CME-3D : cinq onglets et galerie intégrée',()=>{
- it('dispose de cinq destinations principales et regroupe les fonctions secondaires dans Autres',()=>{
-  const tabs=app.split('<nav className="labTabs"')[1].split('</nav>')[0];
-  expect((tabs.match(/<button className=/g)??[]).length).toBeGreaterThanOrEqual(5);
-  for(const title of ['Studio','Mouvements','Technique','Versions','Autres'])expect(tabs).toContain('<span>'+title+'</span>');
-  for(const title of ['Studio','Mouvements','Technique','Versions','Autres'])expect(tabs).toContain(title);
-  expect(tabs).not.toContain('<span>Laboratoire</span>');
+import {describe,it,expect} from 'vitest';
+import {NAVIGATION_PRINCIPALE} from './NavigationPrincipale';
+const read=(p:string)=>readFileSync(new URL('./'+p,import.meta.url),'utf8');
+describe('CME 0.7.46 — quatre destinations mobiles sans fonctions perdues',()=>{
+ const app=read('App.tsx'),css=read('CmePremiumMobile.css');
+ it('n’expose que quatre onglets ordonnés, avec libellés et icônes propres',()=>{
+  expect(NAVIGATION_PRINCIPALE).toEqual([
+   {id:'studio',libelle:'Studio Coach'},{id:'lab',libelle:'Mouvements'},
+   {id:'gallery',libelle:'Galerie'},{id:'other',libelle:'Plus'}
+  ]);
+  expect(app).toContain('<NavigationPrincipale actif={ongletActif}');
+  expect(css).toContain('grid-template-columns:repeat(4,minmax(0,1fr))');
+  expect(css).toContain('min-height:52px');
+  expect(css).toContain('env(safe-area-inset-bottom)');
  });
- it('conserve tous les profils enregistrés dans Studio',()=>{
-  expect(app).toContain('cmeStudioCoachList');
+ it('ne charge pas une galerie supplémentaire en dessous du viewport de Studio',()=>{
+  expect(app).toContain("tab==='studio'&&<div className=\"cmeStudioHub\"><StudioCoach/></div>");
+  expect(app).not.toContain('className="cmeStudioCoachList"');
+  expect(app).toContain("tab==='gallery'&&<section");
   expect(app).toContain('<SavedCoachLibrary selectedId={selectedCoach?.id??null}');
-  expect(app).toContain('selectSavedCoach(id);setTab(\'lab\')');
-  expect(app).toContain('readSavedCoaches(localStorage)');
   expect(app).toContain("window.addEventListener('cme-coaches-changed',refresh)");
-  expect(css).toContain('.cmeCoachGallery .savedCoachItems{display:grid');
-  expect(css).toContain('grid-template-columns:repeat(2,minmax(0,1fr))');
  });
- it('garde Versions en onglet autonome et offre une navigation vers Mouvements',()=>{
-  expect(versions).toContain('Nouveautés et mises à jour');
+ it('garde les fonctions techniques existantes accessibles depuis Plus',()=>{
+  for(const action of ["setTab('technical')","setTab('versions')","setTab('roadmap')","setTab('tracking')","setTab('options')","openComparison"])expect(app).toContain(action);
+  expect(app).toContain('Atlas biomécanique · référentiel');
+  expect(app).toContain('Retour à Plus');
   expect(app).toContain("tab==='versions'&&<VersionsPanel/>");
   expect(app).toContain("tab==='technical'&&<section");
-  expect(studio).toContain('Tester dans Mouvements');
-  expect(studio).toContain("new Event('cme-open-lab-coach')");
-  expect(app).toContain("window.addEventListener('cme-open-lab-coach',open)");
  });
 });

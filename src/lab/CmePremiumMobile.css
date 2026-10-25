@@ -1,0 +1,92 @@
+/* CME-3D 1.0 · lot UX mobile : une scène, un panneau, une navigation.
+ * Les styles concernent exclusivement le parcours mobile ; le bureau conserve
+ * sa grille. Aucun maillage, matériau ou mouvement n'est modifié ici.
+ */
+.cmeNavigationPrincipale{
+ display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;
+ gap:3px;min-width:0;width:100%;margin:0;
+ background:var(--c-surface,#20232c);
+ border:1px solid var(--c-line-strong,#454956);
+ border-radius:17px;padding:4px 5px max(5px,env(safe-area-inset-bottom));
+ box-shadow:0 -4px 18px #00000018;
+}
+.cmeNavigationPrincipale>button{
+ display:flex;flex-direction:column;align-items:center;justify-content:center;
+ gap:3px;min-width:0;min-height:52px;
+ padding:6px 2px;border:0;border-radius:12px;
+ color:var(--c-text-2,#a6a8b3);background:transparent;
+}
+.cmeNavigationPrincipale>button.selected{
+ color:var(--c-accent-ink,#ee6671);background:color-mix(in srgb,var(--c-accent-ink,#e45464) 12%,transparent);
+}
+.cmeNavigationPrincipale>button svg{height:22px;width:22px;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.9}
+.cmeNavigationPrincipale>button svg circle{fill:currentColor;stroke:none}
+.cmeNavigationPrincipale>button span{font-size:clamp(9px,2.4vw,12px);font-weight:650;white-space:nowrap;letter-spacing:-.01em;color:inherit}
+.cmeRetourPlus{flex:0 0 auto;align-self:flex-start;min-height:44px;border:1px solid var(--c-line-strong);border-radius:11px;padding:10px 14px;background:var(--c-surface);color:var(--c-text)}
+.cmeOtherGrid>a{display:flex;align-items:center;text-decoration:none;min-height:60px;background:var(--c-surface-2);border:1px solid var(--c-line-strong);border-radius:12px;color:var(--c-text);padding:12px;font-weight:650}
+.cmeOtherGrid button,.cmeOtherGrid>a{min-height:48px}
+@media(max-width:760px){
+ .labApp[data-cme-screen="studio"]{overflow:hidden!important;height:100dvh;max-height:100dvh}
+ .labApp[data-cme-screen="studio"] .cmeAppContent{
+  flex:1 1 auto;min-height:0;overflow:hidden!important;display:flex;flex-direction:column;
+ }
+ .labApp[data-cme-screen="studio"] .cmeStudioHub{
+  flex:1 1 auto;min-height:0;overflow:hidden!important;display:flex;flex-direction:column;gap:0;
+ }
+ .labApp[data-cme-screen="studio"] .coachStudio{
+  flex:1 1 auto;min-height:0;overflow:hidden!important;
+  display:flex!important;flex-direction:column;padding:6px 8px 8px;
+  background:var(--c-bg,#101116);
+ }
+ .labApp[data-cme-screen="studio"] .coachStudioHeader{flex:0 0 auto;padding:0 6px}
+ .labApp[data-cme-screen="studio"] .coachStudioHeader h2{font-size:17px;color:var(--c-text)}
+ .labApp[data-cme-screen="studio"] .coachStudioHeader small{font-size:9px}
+ .labApp[data-cme-screen="studio"] .coachStudioHeader p{display:none}
+ .labApp[data-cme-screen="studio"] .coachCreationNote{display:none}
+ .labApp[data-cme-screen="studio"] .coachStudioLayout{
+  flex:1 1 auto;min-height:0;max-height:100%;overflow:hidden!important;
+  display:flex!important;flex-direction:column;gap:8px;
+ }
+ .labApp[data-cme-screen="studio"] .coachPreview:not(.cmeFullscreen):not(:fullscreen){
+  position:relative!important;top:auto!important;z-index:2;
+  flex:1 1 55%;min-height:min(225px,38dvh)!important;
+  max-height:62%;height:auto!important;overflow:hidden;
+  border-radius:18px;border-color:#485262;
+ }
+ .labApp[data-cme-screen="studio"] .coachEditor{
+  flex:1 1 45%;min-width:0;min-height:0!important;max-height:none!important;
+  overflow-y:auto!important;overflow-x:hidden!important;
+  overscroll-behavior-y:contain;touch-action:pan-y;
+  -webkit-overflow-scrolling:touch;
+  padding:10px 12px max(12px,env(safe-area-inset-bottom));
+  border-radius:17px;border-color:var(--c-line-strong);
+  background:var(--c-surface);color:var(--c-text);
+ }
+ .labApp[data-cme-screen="studio"] .coachEditor .coachFields{
+  flex:none;min-height:0;overflow:visible!important;
+ }
+ .labApp[data-cme-screen="studio"] .coachEditor .coachStepNavigation{
+  grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;
+ }
+ .labApp[data-cme-screen="studio"] .coachEditor button:not([disabled]){
+  touch-action:manipulation;
+ }
+ .labApp[data-cme-screen="studio"] .coachEditor button,
+ .labApp[data-cme-screen="studio"] .coachEditor select,
+ .labApp[data-cme-screen="studio"] .coachEditor summary,
+ .cmeNavigationPrincipale>button{min-height:44px!important}
+ .labApp[data-cme-screen="studio"] .coachEditor .coachCrud{
+  position:sticky;bottom:-10px;z-index:4;
+  background:var(--c-surface);padding:8px 0;
+ }
+ .labApp[data-cme-screen="studio"] .coachEditor .coachQuickChoice button,
+ .labApp[data-cme-screen="studio"] .coachEditor .coachCategories button{min-width:0}
+ .labApp[data-cme-screen="studio"] .coachEditor .coachReferenceViews{grid-template-columns:repeat(4,minmax(0,1fr))}
+ .labApp[data-cme-screen="studio"] .coachEditor .coachReferenceViews button{font-size:10px;padding:5px 1px}
+ .labApp[data-cme-screen="studio"] .coachCanvasViewport canvas{touch-action:none}
+}
+@media(max-height:630px) and (max-width:760px){
+ .labApp[data-cme-screen="studio"] .coachPreview:not(.cmeFullscreen):not(:fullscreen){min-height:185px!important;max-height:58%}
+ .labApp[data-cme-screen="studio"] .coachStudioHeader p{display:none}
+}
+@media(prefers-reduced-motion:reduce){.cmeNavigationPrincipale *, .coachEditor *{scroll-behavior:auto}}
