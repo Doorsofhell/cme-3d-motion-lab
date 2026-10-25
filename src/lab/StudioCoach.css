@@ -88,9 +88,9 @@
 @media(max-width:760px){
  .coachStudio{padding:9px}
  .coachStudioLayout{display:flex;flex-direction:column;gap:12px}
- .coachPreview{flex:0 0 auto;min-height:260px;height:clamp(330px,55dvh,700px)}
+ .coachPreview{flex:0 0 auto;min-height:186px;height:clamp(186px,30dvh,300px)}
  .coachPreview.cmeFullscreen,.coachPreview:fullscreen,.coachPreview:-webkit-full-screen{height:100dvh;min-height:100dvh}
- .coachEditor{min-height:260px;overflow:visible}
+ .coachEditor{min-height:260px;overflow:visible;min-width:0}
  .coachFields{overflow:visible}
 }
 @media(max-width:400px){
@@ -203,3 +203,4 @@
 .cmeStudioWorkflow button:focus-visible{outline:3px solid #e9b46a;outline-offset:2px}
 .cmeStudioWorkflow span{flex:1 1 100%;padding:0 5px 4px;color:var(--c-text,#d6d7dd);font-size:12px}
 @media(max-width:420px){.cmeStudioWorkflow{gap:6px}.cmeStudioWorkflow button{flex-basis:115px;padding:8px;font-size:12px}}
+

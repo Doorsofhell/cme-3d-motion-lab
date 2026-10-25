@@ -8,7 +8,7 @@ export type RoadmapItem={id:string;title:string;area:string;status:RoadmapStatus
 export const roadmap:RoadmapItem[]=[
  {id:'UX-01',title:'Quatre destinations et navigation mobile unique',area:'Interface',status:'Livré',version:'0.7.27',priority:'P0',detail:'Studio, Galerie Coachs, Comparatif et Plus.'},
  {id:'UX-02',title:'Composants communs plein écran et caméra',area:'Interface',status:'Livré',version:'0.7.29',priority:'P0',detail:'Contrôles mutualisés ; ergonomie physique Android à confirmer.'},
- {id:'UX-03',title:'Éliminer les conflits CSS et chevauchements Android',area:'Interface',status:'À vérifier',version:'0.7.31',priority:'P0',detail:'Recette visuelle sur plusieurs tailles et orientations Android.'},
+ {id:'UX-03',title:'Éliminer les conflits CSS et chevauchements Android',area:'Interface',status:'À vérifier',version:'0.7.31',priority:'P0',detail:'Règles CSS sticky/plein écran et cibles tactiles renforcées en 0.7.31 ; recette visuelle sur Android physique toujours requise.'},
  {id:'UX-04',title:'Feuille de route et statuts versionnés',area:'Pilotage',status:'Livré',version:'0.7.30',priority:'P0',detail:'Suivi embarqué, recherche, filtres et version cible ; état édité dans Git.'},
  {id:'UX-05',title:'Unifier Studio Création et Test sur une scène 3D',area:'Interface',status:'En cours',version:'0.8.0',priority:'P0',detail:'Supprimer les doublons de scènes sans perdre les techniques.'},
  {id:'3D-01',title:'Préserver Kadir et Amara GLB historiques',area:'Personnages',status:'Livré',version:'0.7.29',priority:'P0',detail:'Rig, poids de skinning et assets sources conservés.'},
@@ -21,7 +21,7 @@ export const roadmap:RoadmapItem[]=[
  {id:'MO-01',title:'Inventaire complet des six disciplines',area:'Biomécanique',status:'En cours',version:'0.8.0',priority:'P0',detail:'Techniques et enchaînements avec support et provenance vérifiables.'},
  {id:'MO-02',title:'Validation des appuis, rotations et contacts',area:'Biomécanique',status:'À faire',version:'0.9.0',priority:'P0',detail:'Mesures reproductibles et validation experte, sans captation vidéo.'},
  {id:'QA-01',title:'Tests CI, TypeScript et non-régression GLB',area:'Qualité',status:'Livré',version:'0.7.29',priority:'P0',detail:'Garde-fous automatisés existants ; couverture à renforcer.'},
- {id:'QA-02',title:'Mesures FPS et latence GLB sur Android',area:'Qualité',status:'À vérifier',version:'0.8.0',priority:'P0',detail:'p50/p95, mémoire si mesurable et récupération WebGL sur appareil physique.'},
+ {id:'QA-02',title:'Mesures FPS et latence GLB sur Android',area:'Qualité',status:'À vérifier',version:'0.7.31',priority:'P0',detail:'Diagnostic 60 s déjà intégré ; mesurer FPS p50/p95, latence GLB et reprise WebGL sur appareil physique. Aucune performance certifiée sans relevé.'},
  {id:'QA-03',title:'Stress tests sur tous les mouvements',area:'Qualité',status:'À faire',version:'0.9.0',priority:'P1',detail:'Matrice personnages, techniques, vitesses, styles et tenues.'},
  {id:'SH-01',title:'Package moteur indépendant de React',area:'Portabilité',status:'À faire',version:'0.9.0',priority:'P0',detail:'API de simulation stable sans interface ni stockage navigateur.'},
  {id:'SH-02',title:'Export/import complet des combattants',area:'Portabilité',status:'À faire',version:'1.0.0',priority:'P0',detail:'Manifest, assets, licences, checksums et test aller-retour.'},
