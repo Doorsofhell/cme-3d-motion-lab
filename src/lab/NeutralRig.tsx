@@ -9,7 +9,7 @@ import {MotionSampler} from '../shadow-engine/motion';
 import {SequenceSampler} from './ComplexSequences';
 import {studioTechniqueCatalog,studioMotionOptions} from './studioTechniqueCatalog';
 import {restoreReferencePose} from './restorePose';
-import {applyNeutralAppearance,applyNeutralRigMaterials,inspectCoachMaterialZones,type NeutralAppearance} from './neutralAppearance';
+import {applyNeutralAppearance,applyNeutralRigMaterials,prepareEditableNeutralBody,inspectCoachMaterialZones,type NeutralAppearance} from './neutralAppearance';
 import {applyCoachLookGeometry,inspectCoachShapes,type CoachFaceShape,type CoachBodyShape} from './coachGeometry';
 import {CadrageSquelette} from './CadrageSquelette';
 import type {StudioFocusZone} from './studioFocus';
@@ -33,7 +33,7 @@ export type NeutralRigReport={sex:NeutralSex;discipline:LabDiscipline;motion:str
  */
 type NeutralRigProps={
  sex:NeutralSex;discipline:LabDiscipline;motionId:string;playing:boolean;speed:number;showSkeleton:boolean;
- onReport:(r:NeutralRigReport)=>void;creationPose?:boolean;noGi?:boolean;appearance?:NeutralAppearance;proportions?:CoachBodyShape & {height:number};face?:CoachFaceShape;autoCadrage?:boolean;focusZone?:StudioFocusZone;focusRequest?:number;mode?:'neutral'|'appearance';
+ onReport:(r:NeutralRigReport)=>void;creationPose?:boolean;noGi?:boolean;appearance?:NeutralAppearance;proportions?:CoachBodyShape & {height:number};face?:CoachFaceShape;autoCadrage?:boolean;focusZone?:StudioFocusZone;focusRequest?:number;mode?:'neutral'|'appearance'|'creator';
 };
 /** Appearance uses a genuine, already-shipped outfit GLB.
  * Neutral anatomy does not fetch or display an outfit.
@@ -70,14 +70,15 @@ function RigBody({sex,discipline,motionId,playing,speed,showSkeleton,onReport,cr
   });
   if(mode==='appearance'&&outfitScene)attachOutfit(root,outfitScene,true);
   if(mode==='neutral')applyNeutralRigMaterials(root);
+  if(mode==='creator')prepareEditableNeutralBody(root);
   return root;
  },[gltf.scene,mode,sex,outfitScene]);
  const appearanceSupport=useMemo(()=>({
   colors:inspectCoachMaterialZones(scene),shape:inspectCoachShapes(scene)
  }),[scene]);
- useLayoutEffect(()=>{if(mode==='appearance')applyNeutralAppearance(scene,appearance);},[scene,appearance,mode]);
+ useLayoutEffect(()=>{if(mode==='appearance'||mode==='creator')applyNeutralAppearance(scene,appearance);},[scene,appearance,mode]);
  useLayoutEffect(()=>{
-  if(mode==='appearance'){
+  if(mode==='appearance'||mode==='creator'){
    applyCoachLookGeometry(scene,{
     height:proportions?.height??1,
     shoulders:proportions?.shoulders??1,
