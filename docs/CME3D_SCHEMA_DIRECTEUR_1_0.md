@@ -1,3 +1,11 @@
+## 26/10/2026 — The Sculptor's Workspace, premier lot UX v0.7.49
+
+**Décision additive utilisateur :** interface de sculpture numérique « Studio 3D Lab » true black / anthracite ; viewport 3D réel 55 %, panneau inférieur 45 %, grille spatiale Three.js, commandes caméra latérales non superposées, deux axes X/Y de zones anatomiques, curseurs de précision à affichage monospacé et accent néon, galerie horizontale de vrais préréglages, validation par coche rouge. Le 4-onglets global Studio Coach / Mouvements / Galerie / Plus reste **inchangé**. Technologie existante React + R3F conservée (pas de migration RN/Flutter induite par la formulation du rôle).
+
+Les composants ajoutés sont `PrecisionSlider.tsx`, `SculptorViewportTools.tsx`, `SculptorWireframe.tsx` et `SculptorWorkspace.css`, décrits dans [`SCULPTORS_WORKSPACE_0749.md`](SCULPTORS_WORKSPACE_0749.md). Le maillage filaire est issu des vrais GLB, matériaux clonés puis restaurés, pas d'asset nouveau. Haptique de seuil facultative. Contrôles non supportés par le GLB désactivés avec raison. **Aucune** modification du dépôt Shadow, du rig canonique, des skin weights ou des trajectoires ; caméra utilisateur, vidéo, mocap et computer vision exclus.
+
+**Vérification exigée avant fusion** : tests Vitest / TypeScript / actifs GLB / build et CI verte ; déploiement vérifié. **Recette physique Android et FPS / GPU / latence : Non mesuré**, et restent à obtenir avant déclaration de conformité complète aux neuf maquettes. Le présent lot améliore la mise en page et les contrôles, pas les sculptures 3D finales.
+
 # CME-3D 1.0 — Schéma directeur produit et UX
 
 **Décision validée le 25 octobre 2026 — Option B : refonte mobile premium d'abord.**
