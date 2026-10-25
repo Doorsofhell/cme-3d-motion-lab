@@ -2,6 +2,12 @@
 
 > **Document directeur actif.** Les décisions historiques figurent intégralement plus bas : elles restent applicables sauf arbitrage explicitement documenté. V1.0 est une **cible produit**, pas une certification de livraison.
 
+## ARBITRAGE STRUCTURANT VALIDÉ — 25/10/2026 : option B, **refonte UX Android premium d'abord**
+
+**Décision prioritaire et active.** Le schéma directeur actuel est [`docs/CME3D_SCHEMA_DIRECTEUR_1_0.md`](CME3D_SCHEMA_DIRECTEUR_1_0.md). Le commanditaire privilégie **la reconstruction de l'expérience mobile inspirée des maquettes fournies**, **puis** l'intégration des nouveaux modèles anatomiques organiques et des animations avancées. Priorité d'exécution : UX architecture → design system → Studio Coach → parcours Mouvements/Galerie → recette UX Android → actifs organiques H/F → retargeting/motions → sortie 1.0. Corriger les bugs bloquants sans dévier vers une refonte du moteur non encore choisie. Maintenir entre-temps tous les modèles et mouvements existants sans régression.
+
+**Important :** le choix du nombre définitif d'onglets, du modèle d'agencement de l'écran Studio et des futurs assets 3D n'est **pas** inclus dans cette validation. Le **prochain arbitrage** porte exclusivement sur la structure tactile scène 3D / panneau de réglages. Ne pas présumer le choix de l'utilisateur. Une seule question stratégique à la fois, **choix libre prioritaire en premier, puis options cliquables**. Le présent addendum clarifie l'ordre d'exécution sans effacer le reste de ce prompt et son historique.
+
 ## 1. But unique et promesse
 **Créer, examiner et valider un combattant 3D humain crédible, de son apparence à ses mouvements, dans un seul atelier mobile.** CME-3D n'est ni une application d'entraînement ni un clone de Shadow : c'est un **atelier de création de coachs et de validation biomécanique**. Les mouvements doivent être naturels, fluides, compréhensibles, traçables et reproductibles.
 

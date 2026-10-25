@@ -1,5 +1,11 @@
 # Fil conducteur CME-3D — 2026-10-24
 
+## Décision confirmée — 25/10/2026 : priorité B, refonte mobile premium avant actifs et animations
+
+Le commanditaire sélectionne explicitement **B** pour CME-3D 1.0 : **refondre en premier tous les parcours UX/UI Android à partir des neuf maquettes visuelles, puis intégrer les modèles anatomiques futurs et les animations avancées**. Enregistrer comme arbitrage supérieur sur l'ordre des développements, non comme abandon des capacités biomécaniques acquises. Document de référence : [`CME3D_SCHEMA_DIRECTEUR_1_0.md`](CME3D_SCHEMA_DIRECTEUR_1_0.md).
+
+**Prochaine décision majeure seulement :** pattern de mise en page tactile du Studio (viewport stable avec panneau inférieur / immersif avec feuilles / hybride). Interagir désormais avec **choix libre d'abord**, puis boutons A/B/C effectivement cliquables, et ne poser qu'une question structurante par tour. Ne pas demander à nouveau la validation de la priorité B. Le dernier code publié reste 0.7.45 : ce lot documentaire ne constitue pas la refonte déjà développée.
+
 ## Décision produit permanente
 CME-3D est un **laboratoire biomécanique + éditeur premium de coachs**, et non une application d'entraînement. La marque reste **Shadow Dark Combat Premium** (rouge, noir, surfaces sobres), tandis que BetterMe inspire uniquement la simplicité, l'espacement, les catégories lisibles et la navigation mobile. **Ne jamais modifier le dépôt Combat Shadow Studio.**
 
