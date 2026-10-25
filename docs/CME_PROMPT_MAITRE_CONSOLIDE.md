@@ -178,3 +178,29 @@ Toute zone morphologique se choisit prioritairement via des **formes illustrées
 4. **V1-D — Recette et publication** : Vitest, TypeScript, build, non-régression GLB/tenues/profils, benchmark Android traçable et revue visuelle réelle avant l'annonce de CME-3D 1.0. Continuer à publier des versions 0.7.x/0.x tant que les critères de sortie ne sont pas satisfaits.
 
 **Contrat qualité des nouveaux morphs féminins** : transformation non destructive sur clone, idempotente, bornée et réversible ; symétrie contrôlée, silhouettes avant/profil/dos, absence d'artefacts aux hanches, entrejambe et jonction cuisse-fessier, comportement avec les 14 tenues et les six disciplines, préservation des bind matrices et du rig. Tout curseur non supporté est désactivé et explique le manque d'asset. Aucun fichier GLB source ni dépôt Shadow modifié. Aucun outil de capture/analyse vidéo, mocap ou upload vidéo.
+
+## 25/10/2026 — Exigences de livraison 1.0 : portabilité Shadow, tests exhaustifs, galerie et télémétrie
+**Arbitrage utilisateur, cumulatif et prioritaire, sans effacer les décisions antérieures.**
+
+### Contrat d'export indépendant de l'interface
+- CME-3D est le laboratoire source du futur moteur Shadow, **sans modifier le dépôt Shadow avant autorisation explicite**. Le moteur doit être extrait en package autonome sans dépendance React, CSS, écran, localStorage ou GitHub Pages. API stable : charger combattant, appliquer apparence, charger technique/enchaînement, avancer simulation, récupérer état biomécanique et métriques, libérer ressources.
+- Chaque combattant doit pouvoir être exporté sous forme de **paquet versionné** (manifest JSON avec identifiant stable, nom, surnom, sexe, discipline d'origine, taille/poids déclarés, morphologie, apparence, tenue, rig canonique, références d'assets GLB, animations et licences, checksum et version du schéma). Le manifeste seul ne suffit pas : l'export final doit contenir ou référencer de façon vérifiable tous les assets nécessaires, avec contrôle de licence, compatibilité et import Shadow reproductible. Interdire les faux boutons « Export Shadow » tant que l'import de bout en bout n'est pas prouvé.
+- Compatibilité à vérifier sur Android avec au moins deux GLB historiques, leurs équipements et les six disciplines ; tests aller-retour export/import, comparaison pose de référence, morphs, poids de skinning et animations.
+
+### Couverture complète des mouvements et stress tests
+- Toutes les **techniques et combinaisons** du catalogue consolidé (six disciplines, techniques individuelles et enchaînements, y compris les importations Shadow en lecture seule) doivent être **listables, filtrables, testables et diagnostiquables**. Aucun mouvement non supporté ne doit être présenté comme validé. Prévoir un inventaire avec identifiant stable, origine, discipline, compatibilité rig, état supporté/non supporté, motif, erreurs, durée et résultat.
+- Stress test automatisé : matrice combattant × discipline × technique/combinaison × vitesse × qualité, cycles répétés, alternance H/F, changements de tenue, perte/récupération WebGL simulée et transitions. Mesurer FPS p50/p95, latence GLB, temps de transition, collisions, pénétrations, stabilité des appuis, angles hors bornes, erreurs JS/WebGL et fuites mémoire quand mesurables. Journal horodaté, export de rapport et seuils explicites, **jamais de métrique fictive**.
+- Aucun outil de capture de mouvement par caméra, computer vision ou upload vidéo.
+
+### Ergonomie et écran de diagnostics
+- Conserver **Studio, Galerie Coachs, Comparatif, Plus** en navigation principale unique. Ne pas polluer les écrans principaux par les outils de test. Un **bandeau discret cliquable** affiche un graphique de fluidité réelle (historique FPS mesuré) et le **nombre d'erreurs observées** ; si aucune donnée, afficher « Non mesuré ». Son clic ouvre l'écran **Tests et performances** accessible aussi depuis **Plus**. Tests détaillés, paramètres, journaux et stress tests résident exclusivement dans cet écran ; ne pas ouvrir un cinquième onglet permanent.
+- Les composants et métriques sont mutualisés entre écrans, adaptatifs Android, avec cible tactile ≥44 px et dégradation explicite en cas de perte WebGL.
+
+### Galerie et identité du combattant
+- Galerie : vignette **capturée du vrai combattant** dans sa **discipline initiale enregistrée**, nom, surnom, sexe, taille, poids, morphologie et caractéristiques clés. Afficher un état de portrait indisponible si aucune capture vérifiable ; ne pas substituer un dessin prétendument issu du GLB.
+- Créateur : champs nom, surnom modifiable, **générateur aléatoire de surnom** cohérent avec caractéristiques et discipline, discipline initiale, taille (cm), poids (kg). Valeurs initiales non inventées pour les anciens profils ; migration non destructive. Le surnom reste éditable, le bouton peut régénérer et n'enregistre rien sans action de sauvegarde.
+- Portrait de galerie cadré avec la tenue et la pose de référence de la discipline initiale ; persister avec le profil, versionner les données et gérer les profils historiques.
+- Morphologie féminine réaliste et sportive (dont volume fessier indépendant, hanches, cuisses et poitrine), uniquement lorsque l'adaptateur GLB dispose des déformations réellement supportées.
+
+### Critères de sortie
+- Contrats TypeScript et tests d'intégration du paquet moteur, inventaire exhaustif, stress test déterministe, export/import combattant, galerie enrichie, mesures vérifiées sur Android physique et CI/CD verte. **Ne pas annoncer CME-3D 1.0 avant validation effective de ces critères.**
