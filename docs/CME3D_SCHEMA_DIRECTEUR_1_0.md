@@ -46,6 +46,31 @@ Une dépendance technique P0 bloquante peut être corrigée en cours de phase UX
 
 **Limite volontaire de cette décision :** le **nombre, les libellés et l'ordre exacts des destinations de la barre inférieure ne sont pas encore arbitrés**. Cette structure d'écran est approuvée ; aucune refonte de code UI n'est déclarée réalisée par le présent travail documentaire.
 
+## 1 ter. Navigation principale — **choix A, quatre onglets validé le 25/10/2026**
+
+**Arbitrage actif, supérieur aux variantes historiques conservées plus bas :** une seule barre de navigation Android, toujours en bas, avec **exactement quatre destinations dans cet ordre : 1. Studio Coach · 2. Mouvements · 3. Galerie · 4. Plus**. Aucune cinquième destination ne peut être ajoutée sans nouvelle décision explicite. Le Comparatif CME/Shadow, l'Atlas biomécanique et les fonctions techniques **restent intégralement accessibles depuis Plus** et **ne sont pas supprimés**.
+
+| Onglet | Rôle visible | Accès et comportement essentiels |
+| --- | --- | --- |
+| **Studio Coach** | Choisir homme/femme, modifier morphologie/visage/peau/cheveux/tenues et accessoires ; aperçu 3D fixe en haut, commandes contextuelles en bas | Destinataire par défaut à l'ouverture ; action primaire Enregistrer et raccourci Tester ce coach menant directement à Mouvements |
+| **Mouvements** | Choisir une discipline, technique ou séquence **réellement exécutable**, lancer/pause/ralenti/recommencer | Réutiliser le coach courant, garder l'état de sélection ; aucune seconde page de lecture concurrente dans Studio |
+| **Galerie** | Retrouver, charger, modifier, dupliquer et supprimer ses coachs sauvegardés | Ouvrir en édition dans Studio ou en essai dans Mouvements ; source commune de profils, sans perte de modifications |
+| **Plus** | Fonctions secondaires, recherche et contrôle qualité | **Comparatif CME vs Shadow (lecture seule pour Shadow)** ; Atlas biomécanique ; Laboratoire/Tests et performances ; diagnostics/CI/mesures ; Nouveautés/versions ; incidents ; réglages, cache, aide et exports autorisés |
+
+### Contrat d'implémentation (après la phase de schéma)
+
+- **Un seul composant BottomNavigation partagé** sur Studio Coach, Mouvements, Galerie et Plus. Quatre icônes cohérentes avec libellés français lisibles ; élément actif évident, cibles tactiles ≥44 px et respect de la safe-area Android.
+- Changer d'onglet ne doit pas écraser le coach, la personnalisation non enregistrée ou la caméra. En présence de modifications non sauvegardées, conserver le brouillon ou demander confirmation **avant** perte ; ne jamais effacer silencieusement.
+- Les pages sous Plus peuvent utiliser une navigation interne (retour/fil d'Ariane), mais **pas une deuxième barre d'onglets principale**. Un lien vers une fonction avancée ouvre son espace Plus, et revient à son contexte sans rupture.
+- **Aucun retrait fonctionnel** : déplacer le Comparatif, l'Atlas, l'instrumentation, les options et les diagnostics vers Plus ne signifie pas les désactiver. Préserver l'historique des décisions anciennes ; cette section constitue la nouvelle référence active en cas de contradiction.
+- Les écrans Android suivent l'architecture **A déjà validée** : grand viewport fixe et dominant dans Studio, panneau inférieur contextuel ; les autres pages conservent la même barre principale, les composants et la charte visuelle. Le plein écran demeure secondaire.
+- Tester les parcours **Studio → Mouvements → Studio**, **Galerie → Studio**, **Galerie → Mouvements**, et **Plus → Comparatif/Atlas → retour**, avec restitution correcte du même coach et sélection tactile fiable.
+- Ne pas utiliser des codes d'onglets historiques comme preuve de livraison de cette nouvelle arborescence. Mise à jour documentaire seulement à ce stade ; fusion et CI ne signifient pas recette UX Android déjà terminée.
+
+### Décision structurante suivante
+
+**Comment organiser la sélection des régions anatomiques et leurs réglages dans le panneau inférieur contextuel du Studio Coach ?** Arbitrer la navigation directe par zones, le parcours guidé, ou un modèle combiné. **Choix libre en premier**, puis A/B/C cliquables. Les zones, presets et contrôles à implémenter ensuite seront élaborés à partir des planches de référence ; ne pas redemander l'ordre des quatre onglets.
+
 ## 2. Vision du produit, sans confusion avec une maquette
 
 **CME-3D est un Studio Coach mobile premium ET un laboratoire de validation de mouvements de combat**, pas une application de coaching sportif ni un clone de Shadow Studio.
@@ -58,7 +83,7 @@ Espaces fonctionnels préservés :
 - **Galerie** : retrouver, dupliquer, modifier, supprimer, réutiliser et tester les profils.
 - **Comparatif CME/Shadow** (Shadow **lecture seule**), Atlas, télémétrie, incidents, options, nouveautés : fonctions conservées mais rangées hors du parcours principal.
 
-**Architecture d'écran approuvée — choix A :** viewport 3D fixe et dominant en haut ; panneau de personnalisation contextuel en bas ; navigation principale inférieure unique. **Prochain arbitrage : les destinations et libellés de cette barre basse**. Préserver provisoirement les entrées existantes et ne pas anticiper ce choix.
+**Architecture validée :** écran Studio **A** (viewport 3D fixe dominant en haut et panneau inférieur contextuel) ; navigation principale **A à quatre onglets dans cet ordre : Studio Coach, Mouvements, Galerie, Plus**. Comparatif CME/Shadow, Atlas et tous les outils avancés sont dans Plus. **Prochain arbitrage : organisation des zones anatomiques et des paramètres dans le panneau inférieur**. Voir les sections 1 bis et 1 ter.
 
 ## 3. Traduction des neuf maquettes fournies
 
@@ -123,6 +148,7 @@ Principes impératifs :
 | 25/10/2026 | Priorité **B** : refonte UX mobile premium depuis maquettes, avant nouveaux GLB et animations | **Validée** |
 | 25/10/2026 | Choix libre prioritaire + boutons cliquables + une question stratégique à la fois | **Validée** |
 | 25/10/2026 | **Choix A : viewport 3D fixe dominant en haut + panneau inférieur contextuel + navigation inférieure unique** | **Validée** |
-| À arbitrer | Destinations et libellés définitifs de la barre de navigation unique | **Prochaine décision** |
-| À arbitrer après navigation | Répartition fine des catégories anatomiques, presets/curseurs, ratios de hauteur et règles d'extension du panneau | **À venir** |
+| 25/10/2026 | **Choix A : barre basse unique à quatre onglets Studio Coach / Mouvements / Galerie / Plus**, Comparatif CME/Shadow, Atlas et technique dans Plus | **Validée** |
+| À arbitrer | Organisation des zones anatomiques et réglages contextuels : carte des zones, parcours guidé ou hybride | **Prochaine décision** |
+| À arbitrer après les zones | Préréglages/curseurs, ratios de hauteur et règles d'extension du panneau | **À venir** |
 | À arbitrer ultérieurement | Politique d'assets finaux, rig et méthode de personnalisation anatomique H/F | **Après UX stabilisée** |
