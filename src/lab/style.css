@@ -378,3 +378,37 @@ button{min-height:36px}
 .savedCoachPortraitPlaceholder{display:flex;align-items:center;justify-content:center;font-size:72px;color:#6e7688}
 .cmeCoachGallery .savedCoachEntry button:first-child{display:flex;flex-direction:column;align-items:stretch}
 @media(max-width:420px){.savedCoachPortrait,.savedCoachPortraitPlaceholder{height:144px}}
+
+
+/* v0.7.33 — navigation centrée sur le parcours utilisateur, 5 destinations. */
+.labTabs{grid-template-columns:repeat(5,minmax(0,1fr))!important;background:var(--c-surface)!important;box-shadow:0 -5px 18px rgba(31,44,62,.09)}
+.labTabs>button{font-size:20px!important;color:var(--c-text-2)!important}
+.labTabs>button.selected{background:rgba(196,57,65,.12)!important;color:var(--c-accent)!important}
+.labTabs button span{font-size:clamp(8px,2.1vw,11px)!important;white-space:nowrap}
+.cmeStudioHub{display:flex;flex-direction:column;flex:1 1 auto;min-height:0;overflow-y:auto;gap:14px}
+.cmeStudioHub .coachStudio{flex:0 0 auto;max-height:none!important}
+.cmeStudioCoachList{padding:15px;border-radius:16px;background:var(--c-surface);border:1px solid var(--c-line-strong)}
+.cmeStudioCoachList h2{margin:0 0 10px;font-size:18px}
+.cmeStudioCoachList .savedCoachLibrary{max-height:none;background:var(--c-surface);color:var(--c-text);border-color:var(--c-line)}
+.cmeStudioCoachList .savedCoachItems{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));overflow:visible}
+.cmeStudioCoachList .savedCoachEntry{min-width:0}
+.cmeStudioCoachList .savedCoachEntry button{min-width:0;white-space:normal}
+.cmeOtherScreen,.cmeTechnicalScreen{display:flex;flex-direction:column;gap:15px;flex:1 1 auto;overflow-y:auto;padding:18px;background:var(--c-surface);color:var(--c-text);border:1px solid var(--c-line);border-radius:18px}
+.cmeOtherScreen h2,.cmeTechnicalScreen h2{margin:0;font-size:22px}
+.cmeOtherGrid,.cmeDiagnosticGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.cmeOtherGrid button,.cmeDiagnosticGrid span{min-height:60px;background:var(--c-surface-2);border:1px solid var(--c-line-strong);border-radius:12px;color:var(--c-text);padding:12px;text-align:left;font-weight:650}
+.cmeThemeSetting{display:flex;flex-direction:column;gap:9px;font-size:14px;font-weight:700}
+.cmeThemeSetting select{width:100%;min-height:48px;padding:9px}
+@media(max-width:420px){.labTabs{gap:0;padding-left:2px;padding-right:2px}.labTabs>button{padding:4px 0!important}.cmeStudioCoachList .savedCoachItems{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* Thème clair natif : les préférences système gouvernent le mode Auto. */
+:root,:root[data-cme-theme="light"]{--c-bg:#f0f3f8;--c-surface:#fff;--c-surface-2:#f4f6fa;--c-text:#192336;--c-text-2:#57677d;--c-line:rgba(40,58,79,.12);--c-line-strong:rgba(40,58,79,.24);--c-accent-ink:#b52532;--c-gold:#8c6b39;color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-cme-theme="light"]):not([data-cme-theme="dark"]){--c-bg:#101116;--c-surface:#20232c;--c-surface-2:#2a2e39;--c-text:#f5f5f5;--c-text-2:#a6a8b3;--c-line:rgba(255,255,255,.09);--c-line-strong:rgba(255,255,255,.18);--c-accent-ink:#ff7378;--c-gold:#c8a96b;color-scheme:dark}
+:root[data-cme-theme="auto"]{--c-bg:#101116;--c-surface:#20232c;--c-surface-2:#2a2e39;--c-text:#f5f5f5;--c-text-2:#a6a8b3;--c-line:rgba(255,255,255,.09);--c-line-strong:rgba(255,255,255,.18);--c-accent-ink:#ff7378;--c-gold:#c8a96b;color-scheme:dark}}
+:root[data-cme-theme="dark"]{--c-bg:#101116;--c-surface:#20232c;--c-surface-2:#2a2e39;--c-text:#f5f5f5;--c-text-2:#a6a8b3;--c-line:rgba(255,255,255,.09);--c-line-strong:rgba(255,255,255,.18);--c-accent-ink:#ff7378;--c-gold:#c8a96b;color-scheme:dark}
+/* Override old Shadow-derived hardcoded dark surfaces in the default light mode. */
+:root[data-cme-theme="light"] .labApp,:root:not([data-cme-theme]) .labApp{background:var(--c-bg);color:var(--c-text)}
+:root[data-cme-theme="light"] .savedCoachLibrary,:root[data-cme-theme="light"] .savedCoachEntry,:root[data-cme-theme="light"] .savedCoachItems button,:root[data-cme-theme="light"] .labTechnicalDetails,:root[data-cme-theme="light"] .shadowCatalogPanel,:root[data-cme-theme="light"] .cmeStudioWorkflow,:root[data-cme-theme="light"] .cmeStudioWorkflow button{background:var(--c-surface-2);color:var(--c-text);border-color:var(--c-line-strong)}
+:root[data-cme-theme="light"] .stageTitle,:root[data-cme-theme="light"] .stageBottom,:root[data-cme-theme="light"] .labMoreMenu{background:var(--c-surface);color:var(--c-text)}
+:root[data-cme-theme="light"] .cmeCoachGallery{background:var(--c-surface);color:var(--c-text)}
+:root[data-cme-theme="light"] .savedCoachLibrary small{color:var(--c-text-2)}
+:root[data-cme-theme="auto"] .coachStudio,:root[data-cme-theme="dark"] .coachStudio{background:#f6f8fc;color:#202737}
