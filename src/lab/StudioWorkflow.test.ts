@@ -6,11 +6,11 @@ describe('contrat majeur V1 — atelier de création et validation',()=>{
  const studio=read('StudioCoach.tsx');
  const app=read('App.tsx');
  const css=read('StudioCoach.css');
- it('propose explicitement Création et Test dans une même scène',()=>{
-  expect(studio).toContain('1 · Création');
-  expect(studio).toContain('2 · Test des mouvements');
+ it('concentre Studio sur la personnalisation et renvoie les tests à Mouvements',()=>{
+  expect(studio).toContain('Création en pose neutre');
+  expect(studio).not.toContain('2 · Test des mouvements');
+  expect(studio).toContain('Tester dans Mouvements');
   expect(studio).toContain('setTestingMotion(false)');
-  expect(studio).toContain('setTestingMotion(true)');
   expect(studio).toContain('creationPose={!testingMotion}');
   expect(studio).toContain('playing={testingMotion&&playing}');
  });
@@ -23,9 +23,9 @@ describe('contrat majeur V1 — atelier de création et validation',()=>{
   expect(studio).toContain('<SceneCameraControls');
   expect(studio).toContain('<SceneLoadingBoundary');
  });
- it('assure des commandes tactiles accessibles et un état de mode visible',()=>{
-  expect(css).toContain('.cmeStudioWorkflow button');
+ it('assure des commandes tactiles accessibles et une sauvegarde sans doublon',()=>{
   expect(css).toContain('min-height:44px');
-  expect(studio).toContain('aria-pressed={testingMotion}');
+  expect((studio.match(/Tester dans Mouvements/g)||[]).length).toBe(1);
+  expect(studio).toContain('Réglages fins de la zone');
  });
 });
