@@ -22,7 +22,7 @@ describe('Studio Coach : cohérence tactile Android',()=>{
   expect(rig).toContain("props.mode==='appearance'?<OutfittedRig");
   expect(rig).toContain("attachOutfit(root,outfitScene,true)");
   expect(rig).toContain("'/tenues/'+costume+'.glb'");
-  expect(studio).toContain('SKIN_TONES.map(');
+  expect(studio).toContain("skinPaletteMode==='realiste'?SKIN_TONES:ANIME_SKIN_TONES");
   expect(studio).toContain('coachSkinGrid');
   expect(css).toContain('grid-template-columns:repeat(4,minmax(0,1fr))');
  });
