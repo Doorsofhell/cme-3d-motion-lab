@@ -46,8 +46,10 @@ describe('Studio Coach : cohérence tactile Android',()=>{
   const rig=readFileSync(new URL('./NeutralRig.tsx',import.meta.url),'utf8');
   expect(studio).toContain('sections.map(item=>');
   expect(studio).toContain("section==='silhouette'&&");
-  expect(studio).toContain("range('hips','Largeur des hanches'");
+  expect(studio).toContain("range('hips',look.sex==='femme'");
   expect(studio).toContain("range('thighs','Volume des cuisses'");
+  expect(studio).toContain("range('glutes',look.sex==='femme'");
+  expect(rig).toContain("glutes:proportions?.glutes??1");
   expect(studio).toContain("range('roundness','Rondeur générale'");
   expect(focus).toContain("silhouette:'hanches'");
   expect(rig).toContain("roundness:proportions?.roundness??1");
@@ -61,7 +63,7 @@ describe('Studio Coach : cohérence tactile Android',()=>{
   expect(css).toContain('position:sticky;top:0');
   expect(css).toContain('height:clamp(186px,30dvh,300px)');
   expect(studio).toContain('coachLiveValues');
-  expect(studio).toContain("range('bust','Volume de poitrine'");
+  expect(studio).toContain("range('bust',look.sex==='femme'");
   expect(studio).toContain('Tester dans Mouvements');
   expect(studio).not.toContain('aria-label="Technique ou enchaînement"');
   expect(app).toContain('<MotionReview');

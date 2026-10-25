@@ -12,8 +12,9 @@ describe("Studio anatomique 0.7.41 — contrats d'intégration",()=>{
  it('active la morphologie dans les deux aperçus neutres et garde les tenues séparées',()=>{
   const studio=source('StudioCoach.tsx');
   expect(studio).toContain("anatomicalPreview?'mannequin':'creator'");
-  expect(studio).toContain("range('hips','Largeur des hanches',.75,1.35,!!support?.shape.hipVertices)");
+  expect(studio).toContain("range('hips',look.sex==='femme'?'Hanches féminines':'Largeur du bassin',.75,1.35,!!support?.shape.hipVertices)");
   expect(studio).toContain("range('muscle','Musculature',.7,1.35,!!support?.shape.torsoVertices)");
+  expect(studio).toContain("range('glutes',look.sex==='femme'?'Galbe des fessiers':'Volume des fessiers'");
   expect(source('NeutralRig.tsx')).toContain("props.mode==='appearance'?<OutfittedRig");
  });
 });

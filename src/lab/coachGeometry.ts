@@ -1,7 +1,7 @@
 import {BufferAttribute,Mesh,Object3D,SkinnedMesh,type BufferGeometry} from 'three';
 import {cloneOwnedGeometry} from '../adapters/geometryOwnership';
 
-export type CoachBodyShape={shoulders:number;muscle:number;waist:number;sex?:'homme'|'femme';roundness?:number;hips?:number;thighs?:number;bust?:number};
+export type CoachBodyShape={shoulders:number;muscle:number;waist:number;sex?:'homme'|'femme';roundness?:number;hips?:number;glutes?:number;thighs?:number;bust?:number};
 export type CoachFaceShape={jaw:number;nose:number;eyes:number};
 export type FaceControl=keyof CoachFaceShape;
 export type CoachShapeSupport={torsoVertices:number;hipVertices:number;thighVertices:number;bustVertices:number;faceMorphs:Record<FaceControl,number>};
@@ -81,11 +81,8 @@ export function applyCoachBodyShape(root:Object3D,shape:CoachBodyShape):number{
   if(!state){
    const weights=computeTorsoWeights(o);
    if(!weights||!weights.some(x=>x>.4))return;
-   const female=shape.sex==='femme';
-   const femaleNeutral=!female||[
-    shape.roundness??1,shape.hips??1,shape.thighs??1,shape.bust??1
-   ].every(v=>Math.abs(v-1)<.001);
-   if(!cache.has(o)&&Math.abs(shape.shoulders-1)<.001&&Math.abs(shape.muscle-1)<.001&&Math.abs(shape.waist-1)<.001&&femaleNeutral)return;
+   const neutral=[shape.shoulders,shape.muscle,shape.waist,shape.roundness??1,shape.hips??1,shape.glutes??1,shape.thighs??1,shape.bust??1].every(v=>Math.abs(v-1)<.001);
+   if(!cache.has(o)&&neutral)return;
    const previous=o.geometry;
    const source=previous.getAttribute('position');
    const newGeo=cloneOwnedGeometry(previous);
@@ -104,6 +101,7 @@ export function applyCoachBodyShape(root:Object3D,shape:CoachBodyShape):number{
   const female=shape.sex==='femme';
   const roundness=clamp(shape.roundness??1,.7,1.3)-1;
   const hips=clamp(shape.hips??1,.75,1.35)-1;
+  const glutes=clamp(shape.glutes??1,.75,1.35)-1;
   const thighs=clamp(shape.thighs??1,.75,1.3)-1;
   const bust=clamp(shape.bust??1,.75,1.35)-1;
   // Compute the anterior chest envelope from the reference geometry rather
@@ -118,11 +116,23 @@ export function applyCoachBodyShape(root:Object3D,shape:CoachBodyShape):number{
   }
   const widthScale=count?Math.max(.1,(maxChestX-minChestX)*.5):.1;
   const chestCenterX=count?sumX/count:0,chestCenterY=count?sumY/count:0,chestCenterZ=count?sumZ/count:0;
-  const neutralShape=shoulder===0&&muscle===0&&waist===0&&roundness===0&&hips===0&&thighs===0&&bust===0;
+  // Anatomical backside, bound to genuine pelvis-weighted vertices (no extra mesh).
+  let px=0,py=0,pz=0,pc=0,minPX=Infinity,maxPX=-Infinity,minPY=Infinity,maxPY=-Infinity;
+  if(Math.abs(glutes)>.0001){
+   for(let j=0;j<state.weights.length/3;j++)if(state.weights[j*3+1]>.45){
+    const x=ref[j*3],y=ref[j*3+1],z=ref[j*3+2];
+    px+=x;py+=y;pz+=z;pc++;
+    minPX=Math.min(minPX,x);maxPX=Math.max(maxPX,x);
+    minPY=Math.min(minPY,y);maxPY=Math.max(maxPY,y);
+   }
+  }
+  const pcx=pc?px/pc:0,pcy=pc?py/pc:0,pcz=pc?pz/pc:0;
+  const prx=pc?Math.max(.1,(maxPX-minPX)*.5):1,pry=pc?Math.max(.15,(maxPY-minPY)*.5):1;
+  const neutralShape=shoulder===0&&muscle===0&&waist===0&&roundness===0&&hips===0&&glutes===0&&thighs===0&&bust===0;
   // Extra cloth clearance is deliberately tiny, weighted only to chest/hips.
   // It reduces poke-through for attached garments; it is not collision detection.
   const clothClearance=o.name.startsWith('tenue:')
-   ?Math.min(.012,Math.max(Math.abs(shoulder),Math.abs(muscle),Math.abs(waist),Math.abs(hips),Math.abs(thighs),Math.abs(roundness),Math.abs(bust))*.04):0;
+   ?Math.min(.012,Math.max(Math.abs(shoulder),Math.abs(muscle),Math.abs(waist),Math.abs(hips),Math.abs(glutes),Math.abs(thighs),Math.abs(roundness),Math.abs(bust))*.04):0;
   for(let i=0;i<position.count;i++){
    if(neutralShape){
     // Exact byte-level neutral restoration, including IEEE-754 negative zero.
@@ -146,7 +156,14 @@ export function applyCoachBodyShape(root:Object3D,shape:CoachBodyShape):number{
    const localized=front?Math.exp(-nx*nx*1.8-ny*ny*1.7):0;
    // Female breast fullness / male pectoral depth share one region with tailored amplitudes.
    const projection=bust*(female?.24:.11)*widthScale*chest*localized;
-   position.setXYZ(i,x*width,y,z*depth+projection);
+   // Local posterior Gaussian, continuous with hips/thighs through the linked
+   // dimensions. The same control exists for men with lower projection gain.
+   const dx=(Math.abs(x-pcx)-prx*.34)/(prx*.82);
+   const dy=(y-(pcy-pry*.04))/(pry*.77);
+   const back=pc>0&&z<pcz;
+   const envelope=back?Math.exp(-(dx*dx*1.35+dy*dy*1.75)):0;
+   const rear=glutes*(female?.14:.10)*prx*pelvis*envelope;
+   position.setXYZ(i,x*width,y,z*depth+projection-rear);
    if(extent>.4)modified++;
   }
   position.needsUpdate=true;

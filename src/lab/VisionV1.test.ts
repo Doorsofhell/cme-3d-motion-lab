@@ -14,11 +14,11 @@ describe('vision CME-3D 1.0 : un atelier, cinq destinations',()=>{
   expect(app).toContain('<MotionReview');
   expect((studio.match(/<Canvas\b/g)||[]).length).toBe(1);
  });
- it('maintient les deux sexes et les volumes féminins existants sans inventer un morph de fessiers',()=>{
+ it('maintient les sexes avec un volume de fessiers skinné explicite sans faux morph target',()=>{
   expect(studio).toContain("sex:'homme'");
   expect(studio).toContain("'femme'");
-  for(const key of ['roundness','hips','thighs','bust'])expect(studio).toContain(key);
-  expect(studio).toContain('morph anatomique dédié non présent');
+  for(const key of ['roundness','hips','glutes','thighs','bust'])expect(studio).toContain(key);
+  expect(studio).toContain('déformation locale bornée des fessiers');
  });
  it('conserve les protections GLB et les commandes de scène partagées',()=>{
   expect(studio).toContain('<NeutralRig');

@@ -7,7 +7,7 @@ describe('Portrait-robot : homme/femme et morphologie harmonisée',()=>{
  it('conserve les mêmes rubriques et les réglages corporels des deux sexes',()=>{
   const male=activeShapeGroups('homme').map(g=>g.id),female=activeShapeGroups('femme').map(g=>g.id);
   expect(male).toEqual(female);
-  for(const id of ['hips','bust','thighs','roundness'])expect(male).toContain(id);
+  for(const id of ['hips','bust','glutes','thighs','roundness'])expect(male).toContain(id);
   expect(normalizeCoachLook({...defaultCoachLook,sex:'homme',hips:1.2,bust:1.1}).hips).toBe(1.2);
  });
  it('lie taille et poids sans écraser les préférences manuelles',()=>{
