@@ -323,7 +323,7 @@ export function App(){
  };
  return <main className="labApp" data-cme-screen={tab}>
   <header className="labHeader">
-   <div className="branding"><span className="brandDot">C</span><div><strong>CME<span>–3D</span> <span className="cmeVersion" aria-label={'Version '+CME_APP_VERSION}>v{CME_APP_VERSION}</span></strong><p>{tab==='studio'?'Créer et personnaliser':tab==='lab'?'Tester les mouvements':tab==='gallery'?'Mes coachs':tab==='other'?'Outils et ressources':'Fonctions complémentaires'}</p></div></div>
+   <div className="branding"><span className="brandDot">C</span><div><strong>CME<span>–3D</span> <span className="cmeVersion" aria-label={'Version '+CME_APP_VERSION}>v{CME_APP_VERSION}</span></strong><p>{tab==='studio'?'Créer et personnaliser':tab==='lab'?'Simuler les mouvements':tab==='gallery'?'Mes coachs':tab==='other'?'Outils et ressources':'Fonctions complémentaires'}</p></div></div>
    <div className="headerActions"><span className="liveTag"><i/> Moteur local</span></div>
   </header>
   
@@ -382,7 +382,7 @@ export function App(){
   </div>
   {tab==='lab'&&<details className="cmeMotionExpert"><summary>Validation et rapport technique · avancé</summary><MotionReview entries={reviewEntries} discipline={discipline} coach={selectedCoach?.id??actor} selected={technique} onSelect={selectTechnique} availableIds={report?.availableMotions??[]} engineVersion={CME_APP_VERSION} metrics={{...metrics,bones:report?.bones??null,techniqueFound:report?.techniqueFound??false}} rigReady={!!report} rigTechniqueFound={!!report?.techniqueFound} executionEvidence={executionEvidence?.key===currentExecutionKey?executionEvidence:null} playbackObserved={playbackWasObserved(executionEvidence,currentExecutionKey)} onPlay={()=>{seek(0);setExecutionEvidence(null);setPlaying(true);document.querySelector('.cmeAppContent')?.scrollTo({top:0,behavior:'smooth'});}}/></details>}
 
-  {tab==='gallery'&&<section className="cmeCoachGallery" aria-label="Galerie Coachs"><header><h2>Galerie Coachs</h2><p>Choisissez un combattant enregistré. Sa configuration est partagée avec Studio et le banc d'essai.</p></header><SavedCoachLibrary selectedId={selectedCoach?.id??null} openCoach={id=>{selectSavedCoach(id);setTab('lab');}} editCoach={id=>{try{localStorage.setItem('cme-selected-coach',id);}catch{}setTab('studio');}}/><button className="galleryCreate" type="button" onClick={()=>setTab('studio')}>Créer un combattant dans Studio</button></section>}
+  {tab==='gallery'&&<section className="cmeCoachGallery" aria-label="Galerie Coachs"><header><h2>Galerie Coachs</h2><p>Choisissez un combattant enregistré. Sa configuration est partagée avec Studio et le banc d'essai.</p></header><SavedCoachLibrary selectedId={selectedCoach?.id??null} openCoach={id=>{selectSavedCoach(id);setTab('lab');}} editCoach={id=>{try{localStorage.setItem('cme-selected-coach',id);sessionStorage.setItem('cme-edit-request',id);}catch{}setTab('studio');}}/><button className="galleryCreate" type="button" onClick={()=>setTab('studio')}>Créer un combattant dans Studio</button></section>}
   {tab==='studio'&&<div className="cmeStudioHub"><StudioCoach/></div>}
   {tab==='versions'&&<VersionsPanel/>}
   {tab==='other'&&<section className="cmeOtherScreen" aria-label="Fonctions complémentaires"><h2>Plus</h2><p>Les outils spécialisés restent accessibles sans encombrer le Studio.</p>
