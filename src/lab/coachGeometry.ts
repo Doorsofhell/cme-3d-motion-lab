@@ -136,7 +136,7 @@ export function applyCoachBodyShape(root:Object3D,shape:CoachBodyShape):number{
   // than assuming that BufferGeometry.boundingBox was precalculated.
   let sumX=0,sumY=0,sumZ=0,count=0,minChestX=Infinity,maxChestX=-Infinity;
   if(Math.abs(bust)>.0001){
-   for(let j=0;j<state.weights.length/5;j++)if(state.weights[j*8]>.5){
+   for(let j=0;j<state.weights.length/8;j++)if(state.weights[j*8]>.5){
     const xx=ref[j*3],yy=ref[j*3+1],zz=ref[j*3+2];
     sumX+=xx;sumY+=yy;sumZ+=zz;count++;
     minChestX=Math.min(minChestX,xx);maxChestX=Math.max(maxChestX,xx);
@@ -147,7 +147,7 @@ export function applyCoachBodyShape(root:Object3D,shape:CoachBodyShape):number{
   // Anatomical backside, bound to genuine pelvis-weighted vertices (no extra mesh).
   let px=0,py=0,pz=0,pc=0,minPX=Infinity,maxPX=-Infinity,minPY=Infinity,maxPY=-Infinity;
   if(Math.abs(glutes)>.0001){
-   for(let j=0;j<state.weights.length/5;j++)if(state.weights[j*8+1]>.45){
+   for(let j=0;j<state.weights.length/8;j++)if(state.weights[j*8+1]>.45){
     const x=ref[j*3],y=ref[j*3+1],z=ref[j*3+2];
     px+=x;py+=y;pz+=z;pc++;
     minPX=Math.min(minPX,x);maxPX=Math.max(maxPX,x);
