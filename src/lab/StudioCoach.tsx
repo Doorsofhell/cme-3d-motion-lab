@@ -23,6 +23,7 @@ import {SculptorWireframe} from './SculptorWireframe';
 import {GROUPES_ANATOMIQUES,groupePourZone,type ZoneAnatomique} from './studioAnatomyNavigation';
 import {regionsPourGroupe,type SculptorRegion} from './sculptorRegions';
 import {SculptorRegionIcon} from './SculptorRegionIcon';
+import {SculptorFloatingPresets} from './SculptorFloatingPresets';
 import {resolvedProportions} from './coachProportions';
 import {LIMITS} from './anatomicalHarmony';
 import {EYE_TONES,HAIR_TONES} from './appearancePalettes';
@@ -180,6 +181,25 @@ export function StudioCoach(){
  const isShapeSupported=(group:ShapeGroup)=>!referenceMode&&canEditAtlasShape(group,support);
  useEffect(()=>{if(editorScrollRef.current)editorScrollRef.current.scrollTop=0;},[section,look.sex]);
  const groupeActif=groupePourZone(section);
+ const regionActive=regionsPourGroupe(groupeActif.id).find(cible=>
+   cible.zone===section&&(cible.forme===expandedShape||(!cible.forme&&section===cible.zone)))??null;
+ const actifPreset=regionActive?.forme;
+ const groupePreset=actifPreset&&actifPreset!=='height'?activeShapeGroups(look.sex).find(g=>g.id===actifPreset):null;
+ const presetDisponible=actifPreset==='height'?!referenceMode:
+   !!groupePreset&&isShapeSupported(groupePreset)&&!referenceMode;
+ const valeurPreset=actifPreset?look[actifPreset]:1;
+ const choisirFormeFlottante=(cle:NonNullable<SculptorRegion['forme']>,valeur:number)=>{
+  if(cle==='height'){
+   if(referenceMode)return;
+   setLook(v=>normalizeCoachLook({...v,height:valeur}));
+  }else{
+   const groupe=activeShapeGroups(look.sex).find(g=>g.id===cle);
+   if(!groupe||!isShapeSupported(groupe)||referenceMode)return;
+   setLook(v=>normalizeCoachLook(applyShapePreset(v,cle,valeur)));
+  }
+  // Le mouvement reste actif : le nouveau volume suit le même squelette.
+  recenter(focusForSetting(cle,section));
+ };
  const ouvrirZone=(item:Category)=>{
   const dressed=item==='tenue'||item==='protections';
   setStep(sectionStep[item]);setSection(item);setExpandedShape(item==='corps'?'shoulders':item==='silhouette'?'bust':item==='visage'?'jaw':null);recenter(focusForSection(item));
@@ -296,12 +316,14 @@ export function StudioCoach(){
      choisirVue={vue=>{setCameraAuto(false);setAnatomicalView(vue);recenter('corps');}}
      retablir={()=>{setCameraAuto(false);setAnatomicalView('face');recenter('corps');}}
      changerFilDeFer={()=>setFilDeFer(v=>!v)}/>
+     <SculptorFloatingPresets region={regionActive} sex={look.sex} valeur={valeurPreset}
+      disponible={presetDisponible} onChoisir={choisirFormeFlottante}/>
    </div>
    </div>
    <div className="coachEditor sculptorDashboard">
 
   
-  <p className="coachCreationNote">Création en pose neutre : choisissez une zone et sa forme. Pour exécuter ou valider des techniques, ouvrez <strong>Mouvements</strong>.</p>
+  <p className="coachCreationNote">Choisissez une zone à gauche, puis sa forme dans la barre verticale à droite du coach.</p>
     <nav className="coachGroupesAnatomiques sculptorXAxis" aria-label="Familles de personnalisation">
      {GROUPES_ANATOMIQUES.map(groupe=><button type="button" key={groupe.id}
       className={groupeActif.id===groupe.id?'active':''} aria-pressed={groupeActif.id===groupe.id}
@@ -359,7 +381,7 @@ export function StudioCoach(){
      {ANATOMICAL_VIEWS.map(v=><button key={v.id} type="button" aria-pressed={anatomicalView===v.id} title={'Orienter le mannequin : '+v.label} onClick={()=>{setCameraAuto(false);setAnatomicalView(v.id);recenter('corps');}}>{v.label}</button>)}
     </div>
     </details>
-    <details className="coachExpertTools"><summary>Informations techniques du modèle</summary><p className="coachCapability" role="status">{rigMode&&referenceMode?'Étalon anatomique réel en lecture seule : référence CC0 de 163 os. Modification du coach et animations désactivées dans ce mode.':support?('Zones reconnues : corps '+support.shape.torsoVertices+' sommets · peau '+support.colors.skin+' matériau(x) · iris '+support.colors.eyeColor+' · cheveux '+support.colors.hairColor+'. Les options sans géométrie source restent enregistrables mais non rendues.'):'Chargement du modèle anatomique et de la tenue…'}</p></details>
+    <details className="coachExpertTools coachStatsFold"><summary>Données techniques avancées</summary><p className="coachCapability" role="status">{rigMode&&referenceMode?'Étalon anatomique réel en lecture seule : référence CC0 de 163 os. Modification du coach et animations désactivées dans ce mode.':support?('Zones reconnues : corps '+support.shape.torsoVertices+' sommets · peau '+support.colors.skin+' matériau(x) · iris '+support.colors.eyeColor+' · cheveux '+support.colors.hairColor+'. Les options sans géométrie source restent enregistrables mais non rendues.'):'Chargement du modèle anatomique et de la tenue…'}</p></details>
 
 
 

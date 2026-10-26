@@ -37,6 +37,7 @@ import './CmePremiumMobile.css';
 import './StudioReferenceLook.css';
 import './StudioSceneLibre.css';
 import './SculptorWorkspace.css';
+import './SculptorFloatingPresets.css';
 import {getConfigModule} from '../config/moduleRegistry';
 
 function SavedCoachLibrary({openCoach,editCoach,selectedId}:{openCoach:(id:string)=>void;editCoach:(id:string)=>void;selectedId:string|null}){
@@ -388,7 +389,7 @@ export function App(){
     <div className="cmeOtherGrid">
       <button type="button" onClick={openComparison}>⇄ Comparatif CME / Shadow</button>
       <a href="https://github.com/Doorsofhell/cme-3d-motion-lab/blob/main/docs/biomecanique/README.md" target="_blank" rel="noopener noreferrer">☷ Atlas biomécanique · référentiel</a>
-      <button type="button" onClick={()=>setTab('technical')}>⌘ Laboratoire et diagnostics</button>
+      <details className="cmeOtherAdvanced"><summary>Outils techniques avancés</summary><button type="button" onClick={()=>setTab('technical')}>Ouvrir le laboratoire technique</button></details>
       <button type="button" onClick={()=>setTab('versions')}>✦ Nouveautés et versions</button>
       <button type="button" onClick={()=>setTab('roadmap')}>☷ Feuille de route</button>
       <button type="button" onClick={()=>{void known.refresh();setTab('tracking');}}>⚑ Incidents</button>
@@ -397,7 +398,7 @@ export function App(){
     <label className="cmeThemeSetting">Apparence de l'application<select aria-label="Thème de CME-3D" value={theme} onChange={e=>setTheme(e.target.value as 'auto'|'light'|'dark')}><option value="auto">Automatique · selon le système (jour/nuit)</option><option value="light">Toujours clair</option><option value="dark">Toujours sombre</option></select></label>
    </section>}
   {tab==='roadmap'&&<RoadmapPanel/>}
-  {tab==='technical'&&<section className="cmeTechnicalScreen" aria-label="Centre technique"><header className="cmePageHeader"><h2>Technique</h2><p>Vérifier les mesures réelles, inspecter le rig et exporter un rapport de diagnostic.</p></header><div className="cmeDiagnosticGrid"><span>FPS <strong>{metrics.fps>0?metrics.fps:'Non mesuré'}</strong></span><span>WebGL <strong>{metrics.webgl}</strong></span><span>Draw calls <strong>{metrics.drawCalls}</strong></span><span>Triangles <strong>{metrics.triangles}</strong></span><span>Rig <strong>{report?.bones??'–'} os</strong></span></div><div className="cmeTechnicalActions"><button type="button" onClick={()=>setDebug(x=>!x)} aria-expanded={debug}>{debug?'Fermer le diagnostic':'Afficher le diagnostic détaillé'}</button><button type="button" onClick={exportReport}>Exporter le rapport de session</button><button type="button" onClick={()=>{journal.record('incident','Signalement manuel depuis Technique',{technique,discipline,actor});captureNow();setIncidentOpen(true);}}>Signaler un incident</button></div><AndroidDiagnostics telemetry={androidTelemetry} active={tab==='technical'} context={{coach:actor,discipline,technique,qualite:quality,rendu:renderStyle}}/><details className="cmeTechnicalFold"><summary>Prototype avancé · Exécuter un plan JSON</summary>   <details className="labTechnicalDetails"><summary>Outils techniques · Coach IA JSON</summary><section aria-label="Coach JSON Text-to-Animation" style={{padding:12,display:'grid',gap:8}}>
+  {tab==='technical'&&<section className="cmeTechnicalScreen" aria-label="Centre technique"><header className="cmePageHeader"><h2>Technique</h2><p>Vérifier les mesures réelles, inspecter le rig et exporter un rapport de diagnostic.</p></header><div className="cmeDiagnosticGrid"><span>FPS <strong>{metrics.fps>0?metrics.fps:'Non mesuré'}</strong></span><span>WebGL <strong>{metrics.webgl}</strong></span><span>Draw calls <strong>{metrics.drawCalls}</strong></span><span>Triangles <strong>{metrics.triangles}</strong></span><span>Rig <strong>{report?.bones??'–'} os</strong></span></div><div className="cmeTechnicalActions"><button type="button" onClick={exportReport}>Exporter le rapport de session</button><button type="button" onClick={()=>{journal.record('incident','Signalement manuel depuis Technique',{technique,discipline,actor});captureNow();setIncidentOpen(true);}}>Signaler un incident</button></div><AndroidDiagnostics telemetry={androidTelemetry} active={tab==='technical'} context={{coach:actor,discipline,technique,qualite:quality,rendu:renderStyle}}/><details className="cmeTechnicalFold"><summary>Prototype avancé · Exécuter un plan JSON</summary>   <details className="labTechnicalDetails"><summary>Outils techniques · Coach IA JSON</summary><section aria-label="Coach JSON Text-to-Animation" style={{padding:12,display:'grid',gap:8}}>
 <strong>Coach IA · Text-to-Animation (prototype local)</strong>
 <textarea aria-label="Plan JSON du coach" rows={4} value={coachJson} onChange={e=>setCoachJson(e.target.value)} style={{width:'100%',boxSizing:'border-box'}}/>
 <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
