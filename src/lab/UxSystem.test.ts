@@ -6,7 +6,7 @@ describe('CME-3D UX : parcours uniques, design system et accessibilité',()=>{
  const app=source('App.tsx'),studio=source('StudioCoach.tsx'),theme=source('UxSystem.css');
  it('conserve quatre destinations sans barre de fonctions techniques flottante',()=>{
   const tabs=source('NavigationPrincipale.tsx');
-  for(const name of ['Studio Coach','Mouvements','Galerie','Plus'])expect(tabs).toContain("libelle:'"+name+"'");
+  for(const name of ['Studio Coach','Simulateur','Galerie','Plus'])expect(tabs).toContain("libelle:'"+name+"'");
   expect(app).toContain('data-cme-screen={tab}');
   expect(app).not.toContain('title="Console de débogage"');
   expect(app).not.toContain('title="Réglages avancés"');
@@ -26,7 +26,7 @@ describe('CME-3D UX : parcours uniques, design system et accessibilité',()=>{
   expect(studio).toContain('<CoachProfileEditor identite={identity}');
   expect(studio).not.toContain('2 · Test des mouvements');
   expect(studio.split('<Canvas ').length-1).toBe(1);
-  expect(studio).toContain('Tester dans Mouvements');
+  expect(studio).toContain('Tester dans Simulateur');
  });
  it('assure un socle de couleurs sémantiques et le défilement Android',()=>{
   expect(app).toContain("import './UxSystem.css'");

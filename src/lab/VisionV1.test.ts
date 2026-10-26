@@ -7,7 +7,7 @@ describe('vision CME-3D 1.0 : un atelier et quatre destinations',()=>{
  const studio=read('StudioCoach.tsx');
  it('préserve les quatre destinations principales, avec les outils dans Plus',()=>{
   const navigation=read('NavigationPrincipale.tsx');
-  for(const label of ['Studio Coach','Mouvements','Galerie','Plus'])expect(navigation).toContain("libelle:'"+label+"'");
+  for(const label of ['Studio Coach','Simulateur','Galerie','Plus'])expect(navigation).toContain("libelle:'"+label+"'");
   expect(app).toContain('Atlas biomécanique · référentiel');
   expect(app).toContain('Outils techniques avancés');
   expect(app).toContain("setTab('technical')");

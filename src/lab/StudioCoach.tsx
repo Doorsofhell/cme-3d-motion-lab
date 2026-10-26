@@ -24,7 +24,7 @@ import {GROUPES_ANATOMIQUES,groupePourZone,type ZoneAnatomique} from './studioAn
 import {regionsPourGroupe,type SculptorRegion} from './sculptorRegions';
 import {SculptorRegionIcon} from './SculptorRegionIcon';
 import {SculptorFloatingPresets} from './SculptorFloatingPresets';
-import {CoachProfileEditor} from './CoachProfileEditor';
+import {CoachProfileEditor,type CoachIdentityInput} from './CoachProfileEditor';
 import {resolvedProportions} from './coachProportions';
 import {LIMITS} from './anatomicalHarmony';
 import {EYE_TONES,HAIR_TONES} from './appearancePalettes';
@@ -98,7 +98,7 @@ export function StudioCoach(){
  const [look,setLook]=useState<CoachLook>(defaultCoachLook);
  const [selectedId,setSelectedId]=useState<string|null>(null);
  useEffect(()=>{const open=()=>{try{const id=localStorage.getItem('cme-selected-coach');const saved=readSavedCoaches(localStorage).find(x=>x.id===id);if(saved){setSelectedId(saved.id);setLook(normalizeCoachLook(saved.look));setIdentity(v=>({...v,name:saved.name,nickname:saved.nickname??'',heightCm:String(saved.heightCm??''),weightKg:String(saved.weightKg??''),handedness:saved.handedness??'right'}));setAccessories(saved.accessories??['gloves','shins']);if(LAB_DISCIPLINES.includes(saved.initialDiscipline as LabDiscipline))setDiscipline(saved.initialDiscipline as LabDiscipline);}}catch{}};window.addEventListener('cme-edit-selected-coach',open);return()=>window.removeEventListener('cme-edit-selected-coach',open);},[]);
- const [identity,setIdentity]=useState(()=>({name:'',nickname:'',heightCm:'',weightKg:'',handedness:'right' as const,nicknameVariant:0}));
+ const [identity,setIdentity]=useState<CoachIdentityInput>(()=>({name:'',nickname:'',heightCm:'',weightKg:'',handedness:'right',nicknameVariant:0}));
  const [section,setSection]=useState<Category>('corps');
  const editorScrollRef=useRef<HTMLDivElement|null>(null);
  const [step,setStep]=useState<Step>('morphologie');
@@ -446,7 +446,7 @@ export function StudioCoach(){
    </div>
      <footer className="coachCrud coachEditorFooter" aria-label="Validation et essai du coach">
       <button type="button" className="coachSave sculptorCommit" aria-label={selectedId?'Enregistrer les modifications':'Créer et enregistrer le coach'} title="Valider" onClick={saveCoach}>✓</button>
-      <button type="button" className="coachTest" disabled={referenceMode} onClick={tryCoachInLab}>▶ Tester dans Mouvements</button>
+      <button type="button" className="coachTest" disabled={referenceMode} onClick={tryCoachInLab}>▶ Tester dans Simulateur</button>
      </footer>
       </div>
       </div>

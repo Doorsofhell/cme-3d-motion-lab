@@ -34,10 +34,10 @@ describe('Studio premium 0.7.47 — référence visuelle et commande réelles',(
   expect(studio).toContain('creationPose={!testingMotion}');
  });
  it('signale sans simuler les actifs capillaires absents',()=>{
-  expect(studio).toContain("choose('hairStyle','Coupe souhaitée',['rase','court','long'],false)");
+  expect(studio).toContain('HAIR_STYLES.map(c=>');
   expect(studio).toContain('HAIR_TONES.map(t=><button key={t.hex} type="button" disabled');
   expect(studio).toContain('Coiffures spécialisées GLB non intégrées');
-  expect(studio).toContain("key!=='hairColor'&&!!support?.colors[key]");
+  expect(studio).toContain("key==='hairColor'?!!report?.appearanceSupport.hairReady");
   expect(studio).toContain("disabled={!colorAvailable('skin')}");
  });
 });
