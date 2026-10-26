@@ -35,7 +35,7 @@ describe('Studio premium 0.7.47 — référence visuelle et commande réelles',(
  });
  it('active les coiffures géométriques uniquement lorsque l’os Head existe',()=>{
   expect(studio).toContain('HAIR_STYLES.map(style=>');
-  expect(studio).toContain('HAIR_TONES.map(t=><button key={t.hex}');
+  expect(studio).toContain("hairPaletteMode==='realiste'?HAIR_TONES:ANIME_HAIR_TONES");
   expect(studio).toContain("key==='hairColor'?!!report?.hairAvailable&&!referenceMode");
   expect(studio).toContain("disabled={!colorAvailable('hairColor')}");
   expect(studio).toContain("disabled={!colorAvailable('skin')}");

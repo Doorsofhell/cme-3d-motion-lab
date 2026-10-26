@@ -20,3 +20,14 @@ export const HAIR_TONES=[
  {name:'Gris',hex:'#929397'},
  {name:'Blanc',hex:'#DFDCDB'}
 ] as const;
+
+/** Colorations illustrées pour les rendus Animation fitness et Comics. */
+export const ANIME_HAIR_TONES=[
+ {name:'Bleu nuit',hex:'#273A78'},
+ {name:'Bleu électrique',hex:'#247DB7'},
+ {name:'Violet',hex:'#6E4C96'},
+ {name:'Bordeaux',hex:'#85384D'},
+ {name:'Cuivré',hex:'#C16B48'},
+ {name:'Argent',hex:'#B6BACB'},
+ {name:'Rose poudré',hex:'#BA7EA0'}
+] as const;
