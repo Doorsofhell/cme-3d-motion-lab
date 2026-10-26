@@ -28,6 +28,7 @@ import {CoachProfileEditor} from './CoachProfileEditor';
 import {resolvedProportions} from './coachProportions';
 import {LIMITS} from './anatomicalHarmony';
 import {EYE_TONES,HAIR_TONES} from './appearancePalettes';
+import {HAIR_STYLES,type HairStyle} from './coachHair';
 import {captureCoachPortrait} from './coachPortrait';
 import {currentAtlasCapabilities,canEditAtlasShape} from './atlasCapabilities';
 import {ANATOMICAL_VIEWS,type AnatomicalView} from './AnatomicalReference';
@@ -38,7 +39,7 @@ export type CoachLook={
  sex:'homme'|'femme';height:number;shoulders:number;muscle:number;waist:number;
  roundness:number;hips:number;glutes:number;thighs:number;arms:number;calves:number;bust:number;neck:number;hands:number;feet:number;
  jaw:number;nose:number;eyes:number;skin:string;eyeColor:string;
- hairStyle:'rase'|'court'|'long';hairColor:string;
+ hairStyle:HairStyle;hairColor:string;
  top:'rashguard'|'tshirt'|'aucun';topColor:string;
  bottom:'short'|'legging';bottomColor:string;
  gloves:'boxe'|'mma'|'aucun';gloveColor:string;
@@ -61,7 +62,7 @@ export function normalizeCoachLook(input:Partial<CoachLook>):CoachLook{
   if(!/^#[0-9a-fA-F]{6}$/.test(out[k]))out[k]=defaultCoachLook[k];
  }
  if(!['homme','femme'].includes(out.sex))out.sex='homme';
- if(!['rase','court','long'].includes(out.hairStyle))out.hairStyle='court';
+ if(!HAIR_STYLES.some(coupe=>coupe.id===out.hairStyle))out.hairStyle='court';
  if(!['rashguard','tshirt','aucun'].includes(out.top))out.top='rashguard';
  if(!['short','legging'].includes(out.bottom))out.bottom='short';
  if(!['boxe','mma','aucun'].includes(out.gloves))out.gloves='boxe';
@@ -131,7 +132,7 @@ export function StudioCoach(){
  }),[look.skin,look.hairColor,look.eyeColor,look.topColor,look.bottomColor,look.gloveColor,look.shinColor,accessories]);
  const dimensions=useMemo(()=>resolvedProportions(look,Number(identity.heightCm)||undefined,Number(identity.weightKg)||undefined),[look,identity.heightCm,identity.weightKg]);
  const faceDimensions=useMemo(()=>({jaw:look.jaw,nose:look.nose,eyes:look.eyes}),[look.jaw,look.nose,look.eyes]);
- const colorAvailable=(key:'skin'|'eyeColor'|'hairColor'|'topColor'|'bottomColor'|'gloveColor'|'shinColor')=>key!=='hairColor'&&!!support?.colors[key]&&(!rigMode||key==='skin'||key==='eyeColor');
+ const colorAvailable=(key:'skin'|'eyeColor'|'hairColor'|'topColor'|'bottomColor'|'gloveColor'|'shinColor')=>key==='hairColor'?!!report?.hairSupported&&look.hairStyle!=='rase':!!support?.colors[key]&&(!rigMode||key==='skin'||key==='eyeColor');
  const faceAvailable=(key:'jaw'|'nose'|'eyes')=>!!support&&(!!support.shape.faceMorphs[key]||support.shape.faceVertices>0);
 
  const [androidTelemetry]=useState(()=>{
@@ -359,7 +360,27 @@ export function StudioCoach(){
      {section==='silhouette'&&<div className="coachFemaleShapes">{shapePicker(['hips','glutes','thighs','calves','feet'])}<p className="coachAvailability">Les mêmes zones sont disponibles pour tous les combattants. Le volume du buste est adapté à l’anatomie du modèle (pectoraux ou poitrine). Les transitions restent des approximations déformées sur le maillage skinné. Une déformation locale bornée des fessiers agit sur les sommets skinnés du bassin. De nouveaux morphs sculptés du visage et des modèles organiques détaillés restent nécessaires pour la qualité finale.</p></div>}
      {section==='visage'&&<>{shapePicker(['jaw','nose','eyes'])}<div className="coachSwatchSection"><strong>Couleur de l’iris</strong><div className="coachColorAtlas" role="group" aria-label="Couleurs des yeux">{EYE_TONES.map(t=><button key={t.hex} type="button" title={t.name} aria-pressed={look.eyeColor.toLowerCase()===t.hex.toLowerCase()} onClick={()=>update('eyeColor',t.hex)}><i style={{background:t.hex}}/>{t.name}</button>)}</div>{color('eyeColor','Couleur personnalisée')}{!colorAvailable('eyeColor')&&<small>La teinte est mémorisée. L’asset courant ne sépare pas encore suffisamment l’iris pour l’afficher correctement.</small>}</div></>}
      {section==='peau'&&<div className="coachSkinEditor"><div className="coachPaletteMode"><strong>Coloration de la peau</strong><div className="coachPaletteSelect" role="group" aria-label="Palette de carnation"><button type="button" aria-pressed={skinPaletteMode==='realiste'} onClick={()=>setSkinPaletteMode('realiste')}>Réalisme</button><button type="button" aria-pressed={skinPaletteMode==='anime'} onClick={()=>setSkinPaletteMode('anime')}>Animation</button></div><small>Choix de couleurs de peau sans classification ethnique. Le mode Animation change la palette, pas le shader.</small></div><p className="coachAvailability">Choisissez une carnation naturelle. Le rendu préserve le grain et les détails de la texture du corps, sans superposer une seconde couleur sombre.</p><div className="coachSkinGrid" role="group" aria-label="Carnations naturelles">{(skinPaletteMode==='realiste'?SKIN_TONES:ANIME_SKIN_TONES).map(tone=><button type="button" key={tone.hex} disabled={!colorAvailable('skin')} className={`coachSkinTone ${look.skin.toLowerCase()===tone.hex?'active':''}`} aria-pressed={look.skin.toLowerCase()===tone.hex} onClick={()=>{selectFocus('peau');update('skin',tone.hex);}} title={tone.name}><span className="coachSkinSwatch" style={{backgroundColor:tone.hex}}/><span>{tone.name}</span></button>)}</div><small className="coachSkinHint">{!colorAvailable('skin')?'Les matériaux de peau de ce GLB ne sont pas encore séparés : teinte sauvegardée pour un maillage compatible.':'La teinte est appliquée à la peau identifiable. Quitte automatiquement le mannequin gris pour rendre le changement visible.'}</small>{color('skin','Nuance personnalisée')}</div>}
-     {section==='cheveux'&&<div className="coachSwatchSection"><strong>Chevelure et pilosité</strong>{choose('hairStyle','Coupe souhaitée',['rase','court','long'],false)}<div className="coachColorAtlas" role="group" aria-label="Couleurs de cheveux">{HAIR_TONES.map(t=><button key={t.hex} type="button" disabled title={t.name} aria-pressed={look.hairColor.toLowerCase()===t.hex.toLowerCase()} onClick={()=>update('hairColor',t.hex)}><i style={{background:t.hex}}/>{t.name}</button>)}</div>{color('hairColor','Couleur personnalisée')}<small>Coiffures spécialisées GLB non intégrées. Les commandes restent indisponibles pour éviter un rendu approximatif.</small></div>}
+     {section==='cheveux'&&<div className="coachSwatchSection sculptorHairEditor">
+  <strong>Coiffure sculptée · homme et femme</strong>
+  <div className="sculptorHairStyleGrid" role="group" aria-label="Choisir une coupe de cheveux">
+   {HAIR_STYLES.map(coupe=><button type="button" key={coupe.id}
+     disabled={!report?.hairSupported} aria-pressed={look.hairStyle===coupe.id}
+     title={coupe.description} className={look.hairStyle===coupe.id?'active':''}
+     onClick={()=>update('hairStyle',coupe.id)}>
+      <span className="sculptorHairSymbol" aria-hidden="true">{coupe.id==='tresse'?'≋':coupe.id==='queue-haute'?'♧':coupe.id==='rase'?'◯':'◕'}</span>
+      <span>{coupe.label}</span>
+   </button>)}
+  </div>
+  <strong>Coloration des cheveux</strong>
+  <div className="coachColorAtlas" role="group" aria-label="Palette de colorations">
+   {HAIR_TONES.map(t=><button key={t.hex} type="button" disabled={!colorAvailable('hairColor')}
+      title={t.name} aria-pressed={look.hairColor.toLowerCase()===t.hex.toLowerCase()}
+      onClick={()=>update('hairColor',t.hex)}><i style={{background:t.hex}}/>{t.name}</button>)}
+  </div>
+  {color('hairColor','Nuance capillaire personnalisée')}
+  <small>{!report?.hairSupported?'Le GLB courant ne possède pas d’os de tête compatible : coiffures désactivées.':
+    'Les coupes utilisent des volumes 3D générés et attachés à l’os de tête, non des perruques GLB haute définition. La coloration se met à jour sans régénérer la coiffure.'}</small>
+ </div>}
      {section==='tenue'&&<><p className="coachAvailability">L’aperçu charge la véritable tenue 3D de la discipline sélectionnée. Les couleurs sont modifiables uniquement sur les parties identifiées.</p><label className="coachField"><span>Tenue de discipline</span><select value={discipline} onChange={e=>{setDiscipline(e.target.value as LabDiscipline);setReport(null);}}>{LAB_DISCIPLINES.map(d=><option key={d} value={d}>{disciplineNames[d]}</option>)}</select></label>{discipline==='bjj'&&<label className="coachField"><span>Équipement JJB</span><select value={noGi?'nogi':'gi'} onChange={e=>{setNoGi(e.target.value==='nogi');setReport(null);}}><option value="gi">Gi · kimono</option><option value="nogi">No-Gi · rashguard</option></select></label>}{color('topColor','Couleur du haut existant')}{color('bottomColor','Couleur du bas existant')}</>}
      {section==='protections'&&<div className="coachAccessoryPanel"><p className="coachAvailability">Accessoires cumulables : activez les équipements déjà présents dans la tenue 3D. Plusieurs protections peuvent être utilisées ensemble.</p>{(['gloves','shins'] as const).map(layer=><label key={layer} className="coachAccessoryToggle"><input type="checkbox" checked={accessories.includes(layer)} disabled={!support?.colors[layer==='gloves'?'gloveColor':'shinColor']} onChange={e=>setAccessories(v=>e.target.checked?[...v.filter(x=>x!==layer),layer]:v.filter(x=>x!==layer))}/><span>{layer==='gloves'?'Gants':'Protège-tibias'}</span><small>{(support?.colors[layer==='gloves'?'gloveColor':'shinColor']??0)>0?'Équipement détecté dans le modèle':'Non présent dans cette tenue'}</small></label>)}{color('gloveColor','Couleur des gants')}{color('shinColor','Couleur des protège-tibias')}</div>}
     </div>
