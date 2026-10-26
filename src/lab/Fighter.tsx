@@ -108,9 +108,9 @@ export function applyComicStyle(root:Object3D,quality:Quality){
  });
  return outlines;
 }
-export function Fighter({actor,outfit,technique,coachPlan,playback,skeleton,quality,renderStyle,onReport,onReady,onMotionSample,coachLook,handedness='right',accessories}: {
+export function Fighter({actor,outfit,technique,coachPlan,playback,skeleton,quality,renderStyle,onReport,onReady,onMotionSample,onRepetition,coachLook,handedness='right',accessories}: {
  actor:'mma-kadir'|'mma-amara'|'mma-naira';outfit:string;technique:string;coachPlan?:CoachPlan|null;playback:RefObject<Playback>;skeleton:boolean;
- quality:Quality;renderStyle:RenderStyle;onReport:(r:RigReport)=>void;onReady:()=>void;onMotionSample?:(id:string,progress:number,nowMs:number)=>void;coachLook?:CoachLook|null;handedness?:'right'|'left';accessories?:('gloves'|'shins')[];
+ quality:Quality;renderStyle:RenderStyle;onReport:(r:RigReport)=>void;onReady:()=>void;onMotionSample?:(id:string,progress:number,nowMs:number)=>void;onRepetition?:()=>void;coachLook?:CoachLook|null;handedness?:'right'|'left';accessories?:('gloves'|'shins')[];
 }){
  const base=import.meta.env.BASE_URL;
  // The original v0.31 Shadow coach rig + motion library is used unmodified.
@@ -179,7 +179,9 @@ export function Fighter({actor,outfit,technique,coachPlan,playback,skeleton,qual
  useFrame((_,dt)=>{
   if(!sampler)return;
   if(playback.current.playing){
-   playback.current.progress=(playback.current.progress+Math.min(dt,.05)*playback.current.speed/Math.max(.2,sampler.duration))%1;
+   const prochain=playback.current.progress+Math.min(dt,.05)*playback.current.speed/Math.max(.2,sampler.duration);
+    playback.current.progress=prochain%1;
+    if(prochain>=1)onRepetition?.();
   }
   const p=playback.current.progress;
   if(!playback.current.playing && lastSample.current===p)return;

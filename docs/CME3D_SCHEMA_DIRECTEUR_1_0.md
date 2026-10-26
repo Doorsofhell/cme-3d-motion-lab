@@ -1,3 +1,9 @@
+## 26/10/2026 — PRIORITÉ ENTRAÎNEMENT SHADOW / COACH CME (version 0.7.53)
+
+**Décision additive supérieure :** mêmes **six disciplines**, **quatre niveaux**, **techniques**, **208 exercices**, **programmes et six modes de séance** que `Doorsofhell/combat-shadow-studio` au commit source figé `b3df4f966b7f99f8ffab2686ec89c9e38b7b7452`. Seul le **configurateur de coach** diffère, et le **moteur CME-3D** demeure préféré lorsqu'il est plus avancé. Un coach créé dans Studio est réutilisé tel quel dans l'entraînement, sans seconde génération de personnage ou remplacement par une mascotte Shadow. Tenues sportives identiques sur tous les rendus, respect biomécanique absolu. Source Shadow en lecture seule ; ne jamais y écrire.
+
+Mise en œuvre : copie des modules de données et planification de Shadow sous `src/shadow-training`, machine de phases sans caméra/vidéo, écran `ShadowTrainingPanel` et adaptateur de mouvements vers `Fighter` / `CoachRig` CME. Séquences sans rig validé = indisponibles. Pas de fausses statistiques : répétitions depuis les boucles réellement terminées. Fonctionnalités dépendant des services Shadow (voix, synchronisation de stats, AR) **non prétendues par ce lot** ; AR/capture caméra interdites. Détails du protocole en cinq étapes et recette Android dans [`SHADOW_ENTRAINEMENT_PARITE_0753.md`](SHADOW_ENTRAINEMENT_PARITE_0753.md). **FPS/GPU/latence Android : Non mesuré**.
+
 ## 26 octobre 2026 — Lot 0.7.52 : moteur et interface de sculpture
 
 1. Décision additive : activer cou, mains, pieds lorsque le GLB supporte ces déformations ; palette verticale défilante de formes à droite du coach, sans le masquer ; retirer les boutons de statistiques ; conserver nom, surnom, taille, poids, discipline phare et main dominante accessibles sans popup.

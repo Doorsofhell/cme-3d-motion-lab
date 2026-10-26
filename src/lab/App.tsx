@@ -4,6 +4,8 @@ import {ACESFilmicToneMapping,NeutralToneMapping,SRGBColorSpace,CanvasTexture} f
 import {Fighter} from './Fighter';
 import {studioLightingPreset} from './studioLighting';
 import {StudioCoach} from './StudioCoach';
+import {ShadowTrainingPanel} from '../shadow-training/ShadowTrainingPanel';
+import type {DisciplineId} from '../shadow-training/domain/types';
 import {NavigationPrincipale,type DestinationPrincipale} from './NavigationPrincipale';
 import {useSceneFullscreen,SceneFullscreenButton} from './SceneFullscreen';
 import {SceneCameraControls,SceneToolbar,SceneLoadingIndicator} from './SceneControls';
@@ -124,9 +126,9 @@ function PerfProbe({onMetrics}:{onMetrics:(metrics:Metrics)=>void}){
  });
  return null;
 }
-function Viewer({actor,discipline,technique,coachPlan,quality,renderStyle,playback,skeleton,onReport,onMetrics,onLog,onIncident,onCaptureReady,onMotionSample,coachLook,handedness='right',accessories,active,telemetry}:{
+function Viewer({actor,discipline,technique,coachPlan,quality,renderStyle,playback,skeleton,onReport,onMetrics,onLog,onIncident,onCaptureReady,onMotionSample,onRepetition,coachLook,handedness='right',accessories,active,telemetry}:{
  actor:Actor;discipline:string;technique:string;coachPlan:CoachPlan|null;quality:Quality;renderStyle:RenderStyle;
- playback:RefObject<Playback>;skeleton:boolean;active:boolean;telemetry:AndroidTelemetry;coachLook?:CoachLook|null;handedness?:'right'|'left';accessories?:('gloves'|'shins')[];onReport:(r:RigReport)=>void;onMetrics:(m:Metrics)=>void;onLog:(message:string)=>void;onIncident:(category:AutoCategory,title:string,details:string)=>void;onCaptureReady:(capture:()=>string|null)=>void;onMotionSample:(id:string,progress:number,nowMs:number)=>void;
+ playback:RefObject<Playback>;skeleton:boolean;active:boolean;telemetry:AndroidTelemetry;coachLook?:CoachLook|null;handedness?:'right'|'left';accessories?:('gloves'|'shins')[];onReport:(r:RigReport)=>void;onMetrics:(m:Metrics)=>void;onLog:(message:string)=>void;onIncident:(category:AutoCategory,title:string,details:string)=>void;onCaptureReady:(capture:()=>string|null)=>void;onMotionSample:(id:string,progress:number,nowMs:number)=>void;onRepetition:()=>void;
 }){
  const [ready,setReady]=useState(false),[error,setError]=useState<string|null>(null),[slow,setSlow]=useState(false);
  const [retry,setRetry]=useState(0);
@@ -185,7 +187,7 @@ function Viewer({actor,discipline,technique,coachPlan,quality,renderStyle,playba
       <AndroidFrameProbe telemetry={telemetry}/>
 
      <Suspense fallback={null}>
-      <Fighter actor={actor} outfit={discipline} technique={technique} coachPlan={coachPlan} playback={playback} skeleton={skeleton} quality={quality} renderStyle={renderStyle} onReady={onReady} onReport={onReport} onMotionSample={onMotionSample} coachLook={coachLook} handedness={handedness} accessories={accessories}/>
+      <Fighter actor={actor} outfit={discipline} technique={technique} coachPlan={coachPlan} playback={playback} skeleton={skeleton} quality={quality} renderStyle={renderStyle} onReady={onReady} onReport={onReport} onMotionSample={onMotionSample} onRepetition={onRepetition} coachLook={coachLook} handedness={handedness} accessories={accessories}/>
      </Suspense>
      <SceneCameraControls target={[0,1,0]} minDistance={1.35} maxDistance={6}/>
     </Canvas>
@@ -206,7 +208,11 @@ export function App(){
     setSavedCoaches(items);
     const saved=findSavedCoach(localStorage,localStorage.getItem('cme-lab-coach'));
     setSelectedCoach(saved);
-    if(saved)setActor(coachSourceActor(saved));
+    if(saved){
+      setActor(coachSourceActor(saved));
+      const preferred=saved.initialDiscipline==='boxing'?'boxe':saved.initialDiscipline;
+      if(disciplines.some(([id])=>id===preferred))setDiscipline(preferred!);
+     }
    }catch{setSavedCoaches([]);setSelectedCoach(null);}
   };
   window.addEventListener('cme-coaches-changed',refresh);
@@ -225,6 +231,13 @@ export function App(){
  const [renderStyle,setRenderStyle]=useState<RenderStyle>('ultra');
  const [skeleton,setSkeleton]=useState(false);
  const [progress,setProgress]=useState(0),[playing,setPlaying]=useState(false),[speed,setSpeed]=useState(1);
+ const onShadowPlay=useCallback((active:boolean,nextSpeed:number)=>{setPlaying(v=>v===active?v:active);setSpeed(v=>v===nextSpeed?v:nextSpeed);},[]);
+ const onShadowRep=useCallback(()=>{window.dispatchEvent(new Event('cme-entrainement-repetition'));},[]);
+ const onShadowExercise=useCallback((nextDiscipline:DisciplineId,motion:string|null)=>{
+  setPlaying(false);setProgress(0);setCoachPlan(null);setExecutionEvidence(null);
+  if(nextDiscipline!==discipline){setDiscipline(nextDiscipline);setReport(null);}
+  setTechnique(motion??'garde');
+ },[discipline]);
  const [report,setReport]=useState<RigReport|null>(null);
  const [extra,setExtra]=useState(false);
  const [moreOpen,setMoreOpen]=useState(false);
@@ -330,54 +343,34 @@ export function App(){
   <div className="cmeAppContent" role="region" aria-label="Contenu de la rubrique active" tabIndex={-1}>
    {['technical','versions','roadmap','tracking','options','comparison'].includes(tab)&&<button type="button" className="cmeRetourPlus" onClick={()=>setTab('other')}>‹ Retour à Plus</button>}
   <div className="labContent" style={{display:tab==='lab'?'contents':'none'}}>
-  <section className="quickBar" aria-label="Sélection de test">
-   <label><span>Coach · {savedCoaches.length} personnalisé(s)</span><select aria-label="Coach" value={selectedCoach?'saved:'+selectedCoach.id:actor} onChange={e=>{
-    const value=e.target.value;
-    if(value.startsWith('saved:')){
-     selectSavedCoach(value.slice(6));
-     journal.record('coach','Coach personnalisé sélectionné : '+value.slice(6));
-    }else{
-     journal.record('coach','Changement de coach : '+actor+' → '+value);
-     reset();setSelectedCoach(null);
-     try{localStorage.removeItem('cme-lab-coach');}catch{}
-     setActor(value as Actor);
-    }
-   }}>
-    <optgroup label="Coachs de référence">{fighterRoster.map(f=><option key={f.id} value={f.id} disabled={f.status!=='available'&&f.id!=='mma-naira'}>{f.name}{f.status==='in-production'?' · prototype cloné (non validé)':''}</option>)}</optgroup>
-    {savedCoaches.length>0&&<optgroup label="Mes coachs personnalisés">{savedCoaches.map(c=><option key={c.id} value={'saved:'+c.id}>{c.name} · {c.look.sex}</option>)}</optgroup>}
-   </select></label>
-   <label><span>Discipline</span><select aria-label="Discipline" value={discipline} onChange={e=>{journal.record('discipline','Discipline : '+discipline+' → '+e.target.value,{coach:actor,style:renderStyle});reset();setDiscipline(e.target.value);setTechnique('garde');onLog('Discipline : '+e.target.value);}}>{disciplines.map(([id,name])=><option key={id} value={id}>{name}</option>)}</select></label>
-   <label className="cmeQuickMotion"><span>Mouvement ou enchaînement</span>
-    <select aria-label="Mouvement ou enchaînement" value={runnableEntries.some(e=>e.id===technique)?technique:''} disabled={!runnableEntries.length} onChange={e=>selectTechnique(e.target.value)}>
-     {!runnableEntries.some(e=>e.id===technique)&&<option value="">Choisir un geste compatible</option>}
-     <optgroup label="Techniques disponibles">{runnableEntries.filter(e=>e.kind==='technique').map(e=><option key={e.id} value={e.id}>{e.name}</option>)}</optgroup>
-     <optgroup label="Enchaînements disponibles">{runnableEntries.filter(e=>e.kind==='sequence').map(e=><option key={e.id} value={e.id}>{e.name}</option>)}</optgroup>
-    </select>
-   </label>
-   <button type="button" className="cmeQuickRun" disabled={!runnableEntries.some(e=>e.id===technique)} onClick={()=>{seek(0);setExecutionEvidence(null);setCoachPlan(null);setPlaying(true);}}>▶ Exécuter</button>
-  </section>
-  <section ref={stageFullscreen.ref as React.RefObject<HTMLElement>} className={`stage ${stageFullscreen.fullscreen?"cmeFullscreen":""}`} aria-label="Vue de test 3D" onDoubleClick={stageFullscreen.onDoubleClick} onTouchEnd={stageFullscreen.onTouchEnd}>
+  {tab==='lab'&&<ShadowTrainingPanel key={selectedCoach?.id??actor} discipline={discipline as DisciplineId}
+   coachName={selectedCoach?.name??(actor==='mma-amara'?'Amara':actor==='mma-naira'?'Naïra':'Kadir')}
+   availableMotions={report?.availableMotions??null}
+   coachOptions={[...fighterRoster.map(f=>({id:f.id,label:f.name,disabled:f.status!=='available'&&f.id!=='mma-naira'})),
+    ...savedCoaches.map(c=>({id:'saved:'+c.id,label:c.name+(c.nickname?' (« '+c.nickname+' »)':''),disabled:false}))]}
+   currentCoach={selectedCoach?'saved:'+selectedCoach.id:actor}
+   onCoachChange={value=>{
+    setPlaying(false);setReport(null);
+    if(value.startsWith('saved:'))selectSavedCoach(value.slice(6));
+    else{setSelectedCoach(null);setActor(value as Actor);try{localStorage.removeItem('cme-lab-coach');}catch{}}
+   }}
+   onExercise={onShadowExercise} onPlayback={onShadowPlay}/>}
+ <section ref={stageFullscreen.ref as React.RefObject<HTMLElement>} className={`stage ${stageFullscreen.fullscreen?"cmeFullscreen":""}`} aria-label="Vue de test 3D" onDoubleClick={stageFullscreen.onDoubleClick} onTouchEnd={stageFullscreen.onTouchEnd}>
    <SceneToolbar actions={<SceneFullscreenButton fullscreen={stageFullscreen.fullscreen} onClick={stageFullscreen.toggle}/>}/>
-   <div className="stageTitle"><span>{actor==='mma-amara'?'AMARA':'KADIR'} <em>· {renderStyle==='fitness'?'Animation fitness':renderStyle==='comic'?'Comics sportif · tenue d’origine':'Ultra-réaliste'}</em></span><span className="stagePill">MOTION / IK</span></div>
-   {selectedCoach&&<div className="labSelectedCoach" role="status">Coach personnalisé : <strong>{selectedCoach.name}</strong> · {selectedCoach.look.sex} · animations canoniques</div>}
-   <Viewer active={labActive} telemetry={androidTelemetry} coachLook={selectedCoach?.look??null} handedness={selectedCoach?.handedness??'right'} accessories={selectedCoach?.accessories} actor={actor} coachPlan={coachPlan} discipline={outfit} quality={quality} renderStyle={renderStyle} technique={technique} playback={playback} skeleton={skeleton} onReport={onReport} onMetrics={onMetrics} onLog={onLog} onIncident={autoRecord} onCaptureReady={setScreenshotHandler} onMotionSample={onMotionSample}/>
+   <div className="stageTitle"><span>{selectedCoach?.name??(actor==='mma-amara'?'AMARA':actor==='mma-naira'?'NAÏRA':'KADIR')} <em>· {renderStyle==='fitness'?'Animation fitness':renderStyle==='comic'?'Comics sportif · tenue d’origine':'Ultra-réaliste'}</em></span><span className="stagePill">MOTION / IK</span></div>
+   {selectedCoach&&<div className="labSelectedCoach" role="status">Coach personnalisé : <strong>{selectedCoach.name}</strong>{selectedCoach.nickname?' « '+selectedCoach.nickname+' »':''} · {selectedCoach.look.sex} · animations canoniques</div>}
+   <Viewer active={labActive} telemetry={androidTelemetry} coachLook={selectedCoach?.look??null} handedness={selectedCoach?.handedness??'right'} accessories={selectedCoach?.accessories} actor={actor} coachPlan={coachPlan} discipline={outfit} quality={quality} renderStyle={renderStyle} technique={technique} playback={playback} skeleton={skeleton} onReport={onReport} onMetrics={onMetrics} onLog={onLog} onIncident={autoRecord} onCaptureReady={setScreenshotHandler} onMotionSample={onMotionSample} onRepetition={onShadowRep}/>
    <SceneLoadingIndicator/>
    <div className="stageBottom"><span>{report?(report.techniqueFound?'Mouvement reconnu · '+report.bones+' os':'Mouvement non compatible · choisir un autre'):'Chargement du modèle 3D'}</span><span>{report?('Tenue '+outfit+' ✓'):'Chargement'}</span></div>
   </section>
   
 
-<section className="transport" aria-label="Commandes d'animation">
-   <div className="transportMain"><button className="playButton" onClick={()=>{journal.record('playback',playing?'Pause de l’animation':'Démarrage de l’animation',{technique,progress:playback.current.progress,speed});setPlaying(x=>!x);}}>{playing?'❚❚':'▶'} <span>{playing?'Pause':'Lecture'}</span></button><button className="resetButton" aria-label="Revenir au début" onClick={()=>{journal.record('playback','Retour au début de l’animation',{technique});reset();}}>↺</button>
-    <div className="seek"><input aria-label="Position de lecture" type="range" min="0" max="1000" value={Math.round(progress*1000)} onChange={e=>{setPlaying(false);seek(Number(e.target.value)/1000);}} onPointerUp={()=>journal.record('playback','Positionnement manuel de l’animation',{technique,progress:playback.current.progress})}/><span>{Math.round(progress*100)}%</span></div>
-    <select aria-label="Vitesse" className="speed" value={speed} onChange={e=>{journal.record('playback','Vitesse modifiée : '+speed+'× → '+e.target.value+'×',{technique});setSpeed(Number(e.target.value));}}><option value={.25}>¼×</option><option value={.5}>½×</option><option value={1}>1×</option></select>
-   </div>
-   <div className="compareBar">
+<details className="cmeRenderOptions" aria-label="Options graphiques de CME-3D"><summary>Apparence du rendu CME · Ultra / Fitness / Comics</summary><section className="transport" aria-label="Réglages graphiques facultatifs"><div className="compareBar">
     <div className="switchGroup" aria-label="Comparaison visuelle"><button className={renderStyle==='ultra'?'active':''} onClick={()=>{journal.record('style','Passage en Ultra-réaliste',{previous:renderStyle});reset();setRenderStyle('ultra');}}>Ultra-réaliste</button><button className={renderStyle==='fitness'?'active':''} onClick={()=>{journal.record('style','Passage en Animation fitness',{previous:renderStyle});reset();setRenderStyle('fitness');}}>Animation fitness</button><button className={renderStyle==='comic'?'active':''} onClick={()=>{journal.record('style','Passage en Roman graphique',{previous:renderStyle});reset();setRenderStyle('comic');}}>Comics · mêmes tenues</button></div>
     <label className="inlineSelect"><span>Qualité</span><select aria-label="Qualité graphique" value={quality} onChange={e=>{journal.record('quality','Qualité graphique '+quality+' → '+e.target.value);reset();setQuality(e.target.value as Quality);}}><option value="performance">Rapide</option><option value="balanced">Auto</option><option value="detail">Détail</option></select></label>
     <label className="checkMini"><input type="checkbox" checked={skeleton} onChange={e=>{journal.record('debug','Squelette '+(e.target.checked?'affiché':'masqué'));setSkeleton(e.target.checked);}}/>Os</label>
     {discipline==='bjj'&&<button className="outfitToggle" aria-label="Changer tenue BJJ" onClick={()=>{journal.record('outfit','BJJ : '+(nogi?'no-gi → gi':'gi → no-gi'));reset();setNogi(x=>!x);}}>{nogi?'No-gi':'Gi'}</button>}
-   </div>
-  </section>
+   </div></section></details>
 
   </div>
   {tab==='lab'&&<details className="cmeMotionExpert"><summary>Validation et rapport technique · avancé</summary><MotionReview entries={reviewEntries} discipline={discipline} coach={selectedCoach?.id??actor} selected={technique} onSelect={selectTechnique} availableIds={report?.availableMotions??[]} engineVersion={CME_APP_VERSION} metrics={{...metrics,bones:report?.bones??null,techniqueFound:report?.techniqueFound??false}} rigReady={!!report} rigTechniqueFound={!!report?.techniqueFound} executionEvidence={executionEvidence?.key===currentExecutionKey?executionEvidence:null} playbackObserved={playbackWasObserved(executionEvidence,currentExecutionKey)} onPlay={()=>{seek(0);setExecutionEvidence(null);setPlaying(true);document.querySelector('.cmeAppContent')?.scrollTo({top:0,behavior:'smooth'});}}/></details>}
