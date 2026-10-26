@@ -208,7 +208,11 @@ export function App(){
     setSavedCoaches(items);
     const saved=findSavedCoach(localStorage,localStorage.getItem('cme-lab-coach'));
     setSelectedCoach(saved);
-    if(saved)setActor(coachSourceActor(saved));
+    if(saved){
+      setActor(coachSourceActor(saved));
+      const preferred=saved.initialDiscipline==='boxing'?'boxe':saved.initialDiscipline;
+      if(disciplines.some(([id])=>id===preferred))setDiscipline(preferred!);
+     }
    }catch{setSavedCoaches([]);setSelectedCoach(null);}
   };
   window.addEventListener('cme-coaches-changed',refresh);
@@ -339,7 +343,7 @@ export function App(){
   <div className="cmeAppContent" role="region" aria-label="Contenu de la rubrique active" tabIndex={-1}>
    {['technical','versions','roadmap','tracking','options','comparison'].includes(tab)&&<button type="button" className="cmeRetourPlus" onClick={()=>setTab('other')}>‹ Retour à Plus</button>}
   <div className="labContent" style={{display:tab==='lab'?'contents':'none'}}>
-  {tab==='lab'&&<ShadowTrainingPanel discipline={discipline as DisciplineId}
+  {tab==='lab'&&<ShadowTrainingPanel key={selectedCoach?.id??actor} discipline={discipline as DisciplineId}
    coachName={selectedCoach?.name??(actor==='mma-amara'?'Amara':actor==='mma-naira'?'Naïra':'Kadir')}
    availableMotions={report?.availableMotions??null}
    coachOptions={[...fighterRoster.map(f=>({id:f.id,label:f.name,disabled:f.status!=='available'&&f.id!=='mma-naira'})),
@@ -361,18 +365,12 @@ export function App(){
   </section>
   
 
-<section className="transport" aria-label="Commandes d'animation">
-   <div className="transportMain"><button className="playButton" onClick={()=>{journal.record('playback',playing?'Pause de l’animation':'Démarrage de l’animation',{technique,progress:playback.current.progress,speed});setPlaying(x=>!x);}}>{playing?'❚❚':'▶'} <span>{playing?'Pause':'Lecture'}</span></button><button className="resetButton" aria-label="Revenir au début" onClick={()=>{journal.record('playback','Retour au début de l’animation',{technique});reset();}}>↺</button>
-    <div className="seek"><input aria-label="Position de lecture" type="range" min="0" max="1000" value={Math.round(progress*1000)} onChange={e=>{setPlaying(false);seek(Number(e.target.value)/1000);}} onPointerUp={()=>journal.record('playback','Positionnement manuel de l’animation',{technique,progress:playback.current.progress})}/><span>{Math.round(progress*100)}%</span></div>
-    <select aria-label="Vitesse" className="speed" value={speed} onChange={e=>{journal.record('playback','Vitesse modifiée : '+speed+'× → '+e.target.value+'×',{technique});setSpeed(Number(e.target.value));}}><option value={.25}>¼×</option><option value={.5}>½×</option><option value={1}>1×</option></select>
-   </div>
-   <div className="compareBar">
+<details className="cmeRenderOptions" aria-label="Options graphiques de CME-3D"><summary>Apparence du rendu CME · Ultra / Fitness / Comics</summary><section className="transport" aria-label="Réglages graphiques facultatifs"><div className="compareBar">
     <div className="switchGroup" aria-label="Comparaison visuelle"><button className={renderStyle==='ultra'?'active':''} onClick={()=>{journal.record('style','Passage en Ultra-réaliste',{previous:renderStyle});reset();setRenderStyle('ultra');}}>Ultra-réaliste</button><button className={renderStyle==='fitness'?'active':''} onClick={()=>{journal.record('style','Passage en Animation fitness',{previous:renderStyle});reset();setRenderStyle('fitness');}}>Animation fitness</button><button className={renderStyle==='comic'?'active':''} onClick={()=>{journal.record('style','Passage en Roman graphique',{previous:renderStyle});reset();setRenderStyle('comic');}}>Comics · mêmes tenues</button></div>
     <label className="inlineSelect"><span>Qualité</span><select aria-label="Qualité graphique" value={quality} onChange={e=>{journal.record('quality','Qualité graphique '+quality+' → '+e.target.value);reset();setQuality(e.target.value as Quality);}}><option value="performance">Rapide</option><option value="balanced">Auto</option><option value="detail">Détail</option></select></label>
     <label className="checkMini"><input type="checkbox" checked={skeleton} onChange={e=>{journal.record('debug','Squelette '+(e.target.checked?'affiché':'masqué'));setSkeleton(e.target.checked);}}/>Os</label>
     {discipline==='bjj'&&<button className="outfitToggle" aria-label="Changer tenue BJJ" onClick={()=>{journal.record('outfit','BJJ : '+(nogi?'no-gi → gi':'gi → no-gi'));reset();setNogi(x=>!x);}}>{nogi?'No-gi':'Gi'}</button>}
-   </div>
-  </section>
+   </div></section></details>
 
   </div>
   {tab==='lab'&&<details className="cmeMotionExpert"><summary>Validation et rapport technique · avancé</summary><MotionReview entries={reviewEntries} discipline={discipline} coach={selectedCoach?.id??actor} selected={technique} onSelect={selectTechnique} availableIds={report?.availableMotions??[]} engineVersion={CME_APP_VERSION} metrics={{...metrics,bones:report?.bones??null,techniqueFound:report?.techniqueFound??false}} rigReady={!!report} rigTechniqueFound={!!report?.techniqueFound} executionEvidence={executionEvidence?.key===currentExecutionKey?executionEvidence:null} playbackObserved={playbackWasObserved(executionEvidence,currentExecutionKey)} onPlay={()=>{seek(0);setExecutionEvidence(null);setPlaying(true);document.querySelector('.cmeAppContent')?.scrollTo({top:0,behavior:'smooth'});}}/></details>}
