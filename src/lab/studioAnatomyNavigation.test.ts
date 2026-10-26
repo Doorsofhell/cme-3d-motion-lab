@@ -36,7 +36,7 @@ describe('Studio premium 0.7.47 — référence visuelle et commande réelles',(
  it('signale sans simuler les actifs capillaires absents',()=>{
   expect(studio).toContain('HAIR_STYLES.map(c=>');
   expect(studio).toContain('HAIR_TONES.map(t=><button key={t.hex}');
-  expect(studio).toContain('Coiffures spécialisées GLB non intégrées');
+  expect(studio).toContain('Ces modèles capillaires ne sont pas des GLB photoréalistes.');
   expect(studio).toContain("key==='hairColor'?!!report?.appearanceSupport.hairReady");
   expect(studio).toContain("disabled={!colorAvailable('skin')}");
  });
