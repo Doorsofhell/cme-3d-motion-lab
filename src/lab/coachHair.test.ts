@@ -54,3 +54,27 @@ describe('V0.7.53 : sept coiffures géométriques réelles et colorables',()=>{
   expect(root.position.equals(p)).toBe(true);
  });
 });
+
+describe('0.7.54 — couleur capillaire instantanée et maillage stable',()=>{
+ it('réutilise le même matériau et les mêmes sommets pour foncé puis clair',()=>{
+  const {root,head,mesh}=actor();
+  applyCoachHair(root,'tresse','#17161a');
+  const accessory=head.getObjectByName('CME_COIFFURE_ADAPTATIVE') as Group;
+  const child=accessory.children[0] as Mesh,geometrie=child.geometry;
+  applyCoachHair(root,'tresse','#dfdcdb');
+  expect(head.getObjectByName('CME_COIFFURE_ADAPTATIVE')).toBe(accessory);
+  expect((accessory.children[0] as Mesh).geometry).toBe(geometrie);
+  expect((child.material as MeshStandardMaterial).color.getHexString()).toBe('dfdcdb');
+  applyCoachHair(root,'tresse','#17161a');
+  expect((child.material as MeshStandardMaterial).color.getHexString()).toBe('17161a');
+  expect(mesh.geometry).not.toBe(geometrie);
+ });
+ it('reconstruit réellement la géométrie quand la coupe change',()=>{
+  const {root,head}=actor();
+  applyCoachHair(root,'court','#4c382a');
+  const first=head.getObjectByName('CME_COIFFURE_ADAPTATIVE');
+  applyCoachHair(root,'boucles','#4c382a');
+  const second=head.getObjectByName('CME_COIFFURE_ADAPTATIVE');
+  expect(second).toBeDefined();expect(second).not.toBe(first);
+ });
+});
