@@ -1,5 +1,6 @@
 import {Mesh,MeshStandardMaterial,MeshToonMaterial,Object3D,Color,type Material} from 'three';
 import {NATIVE_SKIN_REFERENCE} from './skinTones';
+import {recolorSkinTexture} from './skinAlbedo';
 
 export type NeutralAppearance={
  skin:string;hairColor:string;topColor:string;bottomColor:string;gloveColor:string;shinColor?:string;eyeColor?:string;accessories?:('gloves'|'shins')[];
@@ -7,6 +8,7 @@ export type NeutralAppearance={
 export type AppearanceZone=Exclude<keyof NeutralAppearance,'accessories'>;
 
 const sourceColors=new WeakMap<Material,Color>();
+const sourceMaps=new WeakMap<Material,import('three').Texture>();
 const readableFallback=/^(?:material|mat)(?:[._ -]?[0-9]+)?$|^default(?:material)?$|^[0-9]+$/i;
 
 /** Specific costume/hair/eyes identifiers MUST beat generic body/skin identifiers. */
@@ -70,11 +72,22 @@ export function applyNeutralAppearance(root:Object3D,appearance?:NeutralAppearan
     if((zone==='skin'||zone==='eyeColor'||zone==='hairColor')&&material.map){
      let source=sourceColors.get(material);
      if(!source){source=material.color.clone();sourceColors.set(material,source);}
-     // Maps retain their painted albedo and fine texture: shift tint relative to a reference.
-     const reference=zone==='skin'?NATIVE_SKIN_REFERENCE:zone==='eyeColor'?'#4a2f1e':'#201713';
-     const base=new Color(reference),target=new Color(appearance[zone]);
-     const scale=(c:number,r:number)=>limit(c/Math.max(.002,r),.35,1.95);
-     material.color.setRGB(limit(source.r*scale(target.r,base.r),0,1),limit(source.g*scale(target.g,base.g),0,1),limit(source.b*scale(target.b,base.b),0,1));
+     if(!sourceMaps.has(material))sourceMaps.set(material,material.map);
+     const originalMap=sourceMaps.get(material)!;
+     const isSkin=zone==='skin';
+     const corrected=isSkin&&appearance.skin.toLowerCase()!==NATIVE_SKIN_REFERENCE.toLowerCase()
+      ?recolorSkinTexture(originalMap,appearance.skin):null;
+     if(isSkin&&corrected){
+      material.map=corrected;
+      material.color.set('#ffffff');
+     }else{
+      // On part TOUJOURS du matériau de référence : pas d'assombrissement cumulatif.
+      material.map=originalMap;
+      const reference=isSkin?NATIVE_SKIN_REFERENCE:zone==='eyeColor'?'#4a2f1e':'#201713';
+      const base=new Color(reference),target=new Color(appearance[zone]);
+      const scale=(c:number,r:number)=>limit(c/Math.max(.002,r),.35,1.95);
+      material.color.setRGB(limit(source.r*scale(target.r,base.r),0,1),limit(source.g*scale(target.g,base.g),0,1),limit(source.b*scale(target.b,base.b),0,1));
+     }
     }else{
      material.color.copy(new Color(appearance[zone]));
     }
