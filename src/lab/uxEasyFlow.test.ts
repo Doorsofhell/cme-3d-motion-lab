@@ -27,7 +27,12 @@ describe('Parcours UX 0.7.45',()=>{
   expect(fighter).toContain('entry.motions.every(id=>library.has(id))');
   expect(fighter).toContain('...rawSequences,...shadowSequences');
   expect(app).toContain("reviewEntries.filter(e=>report?.availableMotions?.includes(e.id))");
-  expect(app).toContain('▶ Exécuter');
-  expect(app).toContain('setCoachPlan(null);setTechnique(motion)');
+  const shadow=readFileSync(new URL('../shadow-training/ShadowTrainingPanel.tsx',import.meta.url),'utf8');
+  const bridge=readFileSync(new URL('../shadow-training/bridge.ts',import.meta.url),'utf8');
+  expect(app).toContain('<ShadowTrainingPanel');
+  expect(shadow).toContain('disabled={!canStart}');
+  expect(shadow).toContain('status.reason');
+  expect(bridge).toContain('imported.get(id)');
+  expect(app).toContain("setTechnique(motion??'garde')");
  });
 });

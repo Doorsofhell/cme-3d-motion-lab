@@ -68,8 +68,11 @@ describe('Studio Coach : cohérence tactile Android',()=>{
   expect(studio).not.toContain('aria-label="Technique ou enchaînement"');
   expect(app).toContain('<MotionReview');
   expect(studio).toContain("localStorage.setItem('cme-lab-coach',id)");
-  expect(app).toContain('<optgroup label="Mes coachs personnalisés">');
-  expect(app).toContain("value={selectedCoach?'saved:'+selectedCoach.id:actor}");
+  const shadowTraining=readFileSync(new URL('../shadow-training/ShadowTrainingPanel.tsx',import.meta.url),'utf8');
+  expect(app).toContain('<ShadowTrainingPanel');
+  expect(app).toContain("...savedCoaches.map(c=>({id:'saved:'+c.id");
+  expect(app).toContain('currentCoach={selectedCoach?');
+  expect(shadowTraining).toContain('Coach sélectionné pour l\'entraînement');
   expect(app).toContain("selectSavedCoach(value.slice(6))");
   expect(app).toContain("'cme-open-lab-coach'");
  });
