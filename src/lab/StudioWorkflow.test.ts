@@ -10,14 +10,14 @@ describe('contrat majeur V1 — atelier de création et validation',()=>{
   expect(studio).toContain('creationPose={!testingMotion}');
   expect(studio).toContain('<CoachProfileEditor identite={identity}');
   expect(studio).not.toContain('2 · Test des mouvements');
-  expect(studio).toContain('Tester dans Mouvements');
+  expect(studio).toContain('Ouvrir le Simulateur');
   expect(studio).toContain('setTestingMotion(false)');
   expect(studio).toContain('creationPose={!testingMotion}');
   expect(studio).toContain('playing={testingMotion&&playing}');
  });
  it('conserve une navigation principale à quatre destinations sans retrait des outils',()=>{
   const navigation=read('NavigationPrincipale.tsx');
-  for(const name of ['Studio Coach','Mouvements','Galerie','Plus'])expect(navigation).toContain("libelle:'"+name+"'");
+  for(const name of ['Studio Coach','Simulateur','Galerie','Plus'])expect(navigation).toContain("libelle:'"+name+"'");
   expect(app).toContain('Comparatif CME / Shadow');
   expect(app).toContain('Atlas biomécanique · référentiel');
  });

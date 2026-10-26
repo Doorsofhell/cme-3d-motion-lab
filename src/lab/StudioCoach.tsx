@@ -264,7 +264,7 @@ export function StudioCoach(){
   }
   // Une modification de l'apparence ne doit jamais réutiliser une ancienne image.
   if(existing&&JSON.stringify(existing.look)!==JSON.stringify(normalizeCoachLook(look))&&portrait===existing.portrait)portrait=undefined;
-  const profile={id,name:name.slice(0,60),createdAt:existing?.createdAt??new Date().toISOString(),look:normalizeCoachLook(look),portrait,nickname:identity.nickname.trim().slice(0,60)||undefined,initialDiscipline:discipline,handedness:identity.handedness,accessories,heightCm:identity.heightCm&&Number(identity.heightCm)>=100&&Number(identity.heightCm)<=250?Number(identity.heightCm):undefined,weightKg:identity.weightKg&&Number(identity.weightKg)>=25&&Number(identity.weightKg)<=300?Number(identity.weightKg):undefined};if(existing)updateSavedCoach(localStorage,profile);else addSavedCoach(localStorage,profile);localStorage.setItem('cme-selected-coach',id);localStorage.setItem('cme-lab-coach',id);setSelectedId(id);window.dispatchEvent(new Event('cme-coaches-changed'));setMessage(existing?'Coach mis à jour et sélectionné dans le Laboratoire.':'Coach enregistré et sélectionné dans le Laboratoire.');}catch{setMessage('Enregistrement impossible sur cet appareil.');}};
+  const profile={id,name:name.slice(0,60),createdAt:existing?.createdAt??new Date().toISOString(),look:normalizeCoachLook(look),portrait,nickname:identity.nickname.trim().slice(0,60)||undefined,initialDiscipline:discipline,handedness:identity.handedness,accessories,heightCm:identity.heightCm&&Number(identity.heightCm)>=100&&Number(identity.heightCm)<=250?Number(identity.heightCm):undefined,weightKg:identity.weightKg&&Number(identity.weightKg)>=25&&Number(identity.weightKg)<=300?Number(identity.weightKg):undefined};if(existing)updateSavedCoach(localStorage,profile);else addSavedCoach(localStorage,profile);localStorage.setItem('cme-selected-coach',id);localStorage.setItem('cme-lab-coach',id);setSelectedId(id);window.dispatchEvent(new Event('cme-coaches-changed'));setMessage(existing?'Coach mis à jour et sélectionné dans le Simulateur.':'Coach enregistré et sélectionné dans le Simulateur.');}catch{setMessage('Enregistrement impossible sur cet appareil.');}};
  const tryCoachInLab=()=>{try{
   // One-click preview: keep just one reusable profile instead of asking for
   // a name, and explicitly share the UNSAVED editor state with the lab.
@@ -432,7 +432,7 @@ export function StudioCoach(){
    </div>
      <footer className="coachCrud coachEditorFooter" aria-label="Validation et essai du coach">
       <button type="button" className="coachSave sculptorCommit" aria-label={selectedId?'Enregistrer les modifications':'Créer et enregistrer le coach'} title="Valider" onClick={saveCoach}>✓</button>
-      <button type="button" className="coachTest" disabled={referenceMode} onClick={tryCoachInLab}>▶ Tester dans Mouvements</button>
+      <button type="button" className="coachTest" disabled={referenceMode} onClick={tryCoachInLab}>▶ Ouvrir le Simulateur</button>
      </footer>
       </div>
       </div>

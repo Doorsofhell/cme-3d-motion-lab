@@ -64,7 +64,7 @@ describe('Studio Coach : cohérence tactile Android',()=>{
   expect(readFileSync(new URL('./CmePremiumMobile.css',import.meta.url),'utf8')).toContain('flex:1 1 55%');
   expect(studio).toContain('coachLiveValues');
   expect(studio).toContain("range('bust',look.sex==='femme'");
-  expect(studio).toContain('Tester dans Mouvements');
+  expect(studio).toContain('Ouvrir le Simulateur');
   expect(studio).not.toContain('aria-label="Technique ou enchaînement"');
   expect(app).toContain('<MotionReview');
   expect(studio).toContain("localStorage.setItem('cme-lab-coach',id)");
