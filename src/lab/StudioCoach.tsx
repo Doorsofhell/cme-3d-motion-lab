@@ -24,6 +24,7 @@ import {GROUPES_ANATOMIQUES,groupePourZone,type ZoneAnatomique} from './studioAn
 import {regionsPourGroupe,type SculptorRegion} from './sculptorRegions';
 import {SculptorRegionIcon} from './SculptorRegionIcon';
 import {SculptorFloatingPresets} from './SculptorFloatingPresets';
+import {HAIR_STYLES,type HairStyle} from './coachHair';
 import {CoachProfileEditor} from './CoachProfileEditor';
 import {resolvedProportions} from './coachProportions';
 import {LIMITS} from './anatomicalHarmony';
@@ -38,7 +39,7 @@ export type CoachLook={
  sex:'homme'|'femme';height:number;shoulders:number;muscle:number;waist:number;
  roundness:number;hips:number;glutes:number;thighs:number;arms:number;calves:number;bust:number;neck:number;hands:number;feet:number;
  jaw:number;nose:number;eyes:number;skin:string;eyeColor:string;
- hairStyle:'rase'|'court'|'long';hairColor:string;
+ hairStyle:HairStyle;hairColor:string;
  top:'rashguard'|'tshirt'|'aucun';topColor:string;
  bottom:'short'|'legging';bottomColor:string;
  gloves:'boxe'|'mma'|'aucun';gloveColor:string;
@@ -61,7 +62,7 @@ export function normalizeCoachLook(input:Partial<CoachLook>):CoachLook{
   if(!/^#[0-9a-fA-F]{6}$/.test(out[k]))out[k]=defaultCoachLook[k];
  }
  if(!['homme','femme'].includes(out.sex))out.sex='homme';
- if(!['rase','court','long'].includes(out.hairStyle))out.hairStyle='court';
+ if(!HAIR_STYLES.some(style=>style.id===out.hairStyle))out.hairStyle='court';
  if(!['rashguard','tshirt','aucun'].includes(out.top))out.top='rashguard';
  if(!['short','legging'].includes(out.bottom))out.bottom='short';
  if(!['boxe','mma','aucun'].includes(out.gloves))out.gloves='boxe';
@@ -93,18 +94,24 @@ const studioSteps:readonly {id:Step;label:string;first:Category}[]=[
  {id:'equipement',label:'3. Équipement',first:'tenue'}
 ];
 const disciplineNames:Record<LabDiscipline,string>={boxing:'Boxe anglaise',kickboxing:'Kick-boxing',muaythai:'Muay-thaï',mma:'MMA',bjj:'JJB',judo:'Judo'};
+function ouvertureDemandee(){
+ try{const id=sessionStorage.getItem('cme-edit-request');return id?readSavedCoaches(localStorage).find(c=>c.id===id)??null:null;}
+ catch{return null;}
+}
 export function StudioCoach(){
- const [look,setLook]=useState<CoachLook>(()=>{try{const id=localStorage.getItem('cme-selected-coach');return normalizeCoachLook(readSavedCoaches(localStorage).find(x=>x.id===id)?.look??defaultCoachLook);}catch{return defaultCoachLook;}});
- const [selectedId,setSelectedId]=useState<string|null>(()=>{try{return localStorage.getItem('cme-selected-coach');}catch{return null;}});
+ const [look,setLook]=useState<CoachLook>(()=>normalizeCoachLook(ouvertureDemandee()?.look??defaultCoachLook));
+ const [selectedId,setSelectedId]=useState<string|null>(()=>ouvertureDemandee()?.id??null);
  useEffect(()=>{const open=()=>{try{const id=localStorage.getItem('cme-selected-coach');const saved=readSavedCoaches(localStorage).find(x=>x.id===id);if(saved){setSelectedId(saved.id);setLook(normalizeCoachLook(saved.look));setIdentity(v=>({...v,name:saved.name,nickname:saved.nickname??'',heightCm:String(saved.heightCm??''),weightKg:String(saved.weightKg??''),handedness:saved.handedness??'right'}));setAccessories(saved.accessories??['gloves','shins']);if(LAB_DISCIPLINES.includes(saved.initialDiscipline as LabDiscipline))setDiscipline(saved.initialDiscipline as LabDiscipline);}}catch{}};window.addEventListener('cme-edit-selected-coach',open);return()=>window.removeEventListener('cme-edit-selected-coach',open);},[]);
- const [identity,setIdentity]=useState(()=>{try{const id=localStorage.getItem('cme-selected-coach');const c=readSavedCoaches(localStorage).find(x=>x.id===id);return {name:c?.name??'',nickname:c?.nickname??'',heightCm:c?.heightCm?.toString()??'',weightKg:c?.weightKg?.toString()??'',handedness:c?.handedness??'right',nicknameVariant:0};}catch{return {name:'',nickname:'',heightCm:'',weightKg:'',handedness:'right' as const,nicknameVariant:0};}});
+ const [identity,setIdentity]=useState(()=>{const c=ouvertureDemandee();return {name:c?.name??'',nickname:c?.nickname??'',heightCm:c?.heightCm?.toString()??'',weightKg:c?.weightKg?.toString()??'',handedness:c?.handedness??'right' as const,nicknameVariant:0};});
+ const [savedList,setSavedList]=useState(()=>{try{return readSavedCoaches(localStorage)}catch{return [];}});
+ useEffect(()=>{try{sessionStorage.removeItem('cme-edit-request')}catch{}},[]);
  const [section,setSection]=useState<Category>('corps');
  const editorScrollRef=useRef<HTMLDivElement|null>(null);
  const [step,setStep]=useState<Step>('morphologie');
  const [skinPaletteMode,setSkinPaletteMode]=useState<'realiste'|'anime'>('realiste');
  const [expandedShape,setExpandedShape]=useState<string|null>('shoulders');
  const [message,setMessage]=useState('');
- const [accessories,setAccessories]=useState<('gloves'|'shins')[]>(()=>{try{const id=localStorage.getItem('cme-selected-coach');return readSavedCoaches(localStorage).find(c=>c.id===id)?.accessories??['gloves','shins'];}catch{return ['gloves','shins'];}});
+ const [accessories,setAccessories]=useState<('gloves'|'shins')[]>(()=>ouvertureDemandee()?.accessories??['gloves','shins']);
  const [rigMode,setRigMode]=useState(true);
  const [anatomicalPreview,setAnatomicalPreview]=useState(false);
  const [referenceMode,setReferenceMode]=useState(false);
@@ -116,7 +123,7 @@ export function StudioCoach(){
  const recenter=(zone:StudioFocusZone)=>{setFocusZone(zone);setFocusRequest(n=>n+1);};
  const sceneFullscreen=useSceneFullscreen();
  const [advancedOpen,setAdvancedOpen]=useState(false);
- const [discipline,setDiscipline]=useState<LabDiscipline>('boxing');
+ const [discipline,setDiscipline]=useState<LabDiscipline>(()=>{const d=ouvertureDemandee()?.initialDiscipline;return LAB_DISCIPLINES.includes(d as LabDiscipline)?d as LabDiscipline:'boxing';});
  const [noGi,setNoGi]=useState(false);
  const [motionId,setMotionId]=useState('garde');
  const catalog=useMemo(()=>studioTechniqueCatalog(discipline),[discipline]);
@@ -131,7 +138,7 @@ export function StudioCoach(){
  }),[look.skin,look.hairColor,look.eyeColor,look.topColor,look.bottomColor,look.gloveColor,look.shinColor,accessories]);
  const dimensions=useMemo(()=>resolvedProportions(look,Number(identity.heightCm)||undefined,Number(identity.weightKg)||undefined),[look,identity.heightCm,identity.weightKg]);
  const faceDimensions=useMemo(()=>({jaw:look.jaw,nose:look.nose,eyes:look.eyes}),[look.jaw,look.nose,look.eyes]);
- const colorAvailable=(key:'skin'|'eyeColor'|'hairColor'|'topColor'|'bottomColor'|'gloveColor'|'shinColor')=>key!=='hairColor'&&!!support?.colors[key]&&(!rigMode||key==='skin'||key==='eyeColor');
+ const colorAvailable=(key:'skin'|'eyeColor'|'hairColor'|'topColor'|'bottomColor'|'gloveColor'|'shinColor')=>key==='hairColor'?!!report?.hairAvailable&&!referenceMode:!!support?.colors[key]&&(!rigMode||key==='skin'||key==='eyeColor');
  const faceAvailable=(key:'jaw'|'nose'|'eyes')=>!!support&&(!!support.shape.faceMorphs[key]||support.shape.faceVertices>0);
 
  const [androidTelemetry]=useState(()=>{
@@ -263,7 +270,7 @@ export function StudioCoach(){
   }
   // Une modification de l'apparence ne doit jamais réutiliser une ancienne image.
   if(existing&&JSON.stringify(existing.look)!==JSON.stringify(normalizeCoachLook(look))&&portrait===existing.portrait)portrait=undefined;
-  const profile={id,name:name.slice(0,60),createdAt:existing?.createdAt??new Date().toISOString(),look:normalizeCoachLook(look),portrait,nickname:identity.nickname.trim().slice(0,60)||undefined,initialDiscipline:discipline,handedness:identity.handedness,accessories,heightCm:identity.heightCm&&Number(identity.heightCm)>=100&&Number(identity.heightCm)<=250?Number(identity.heightCm):undefined,weightKg:identity.weightKg&&Number(identity.weightKg)>=25&&Number(identity.weightKg)<=300?Number(identity.weightKg):undefined};if(existing)updateSavedCoach(localStorage,profile);else addSavedCoach(localStorage,profile);localStorage.setItem('cme-selected-coach',id);localStorage.setItem('cme-lab-coach',id);setSelectedId(id);window.dispatchEvent(new Event('cme-coaches-changed'));setMessage(existing?'Coach mis à jour et sélectionné dans le Laboratoire.':'Coach enregistré et sélectionné dans le Laboratoire.');}catch{setMessage('Enregistrement impossible sur cet appareil.');}};
+  const profile={id,name:name.slice(0,60),createdAt:existing?.createdAt??new Date().toISOString(),look:normalizeCoachLook(look),portrait,nickname:identity.nickname.trim().slice(0,60)||undefined,initialDiscipline:discipline,handedness:identity.handedness,accessories,heightCm:identity.heightCm&&Number(identity.heightCm)>=100&&Number(identity.heightCm)<=250?Number(identity.heightCm):undefined,weightKg:identity.weightKg&&Number(identity.weightKg)>=25&&Number(identity.weightKg)<=300?Number(identity.weightKg):undefined};if(existing)updateSavedCoach(localStorage,profile);else addSavedCoach(localStorage,profile);setSavedList(readSavedCoaches(localStorage));localStorage.setItem('cme-selected-coach',id);localStorage.setItem('cme-lab-coach',id);setSelectedId(id);window.dispatchEvent(new Event('cme-coaches-changed'));setMessage(existing?'Coach mis à jour et sélectionné dans le Laboratoire.':'Coach enregistré et sélectionné dans le Laboratoire.');}catch{setMessage('Enregistrement impossible sur cet appareil.');}};
  const tryCoachInLab=()=>{try{
   // One-click preview: keep just one reusable profile instead of asking for
   // a name, and explicitly share the UNSAVED editor state with the lab.
@@ -277,8 +284,29 @@ export function StudioCoach(){
   window.dispatchEvent(new Event('cme-coaches-changed'));
   window.dispatchEvent(new Event('cme-open-lab-coach'));
  }catch{setMessage('Aperçu indisponible : stockage local bloqué sur cet appareil.');}};
- const newCoach=()=>{if(look.sex!=='homme')beginRigLoad('homme',rigMode,'switch');setSelectedId(null);setLook(defaultCoachLook);setIdentity({name:'',nickname:'',heightCm:'',weightKg:'',handedness:'right',nicknameVariant:0});setDiscipline('boxing');setAccessories(['gloves','shins']);try{localStorage.removeItem('cme-selected-coach');}catch{}setMessage('Nouveau personnage : choisissez un modèle neutre, puis personnalisez-le.');};
- const removeCoach=()=>{if(!selectedId||!window.confirm('Supprimer définitivement ce coach de cet appareil ?'))return;try{deleteSavedCoach(localStorage,selectedId);if(localStorage.getItem('cme-lab-coach')===selectedId)localStorage.removeItem('cme-lab-coach');localStorage.removeItem('cme-selected-coach');setSelectedId(null);setLook(defaultCoachLook);window.dispatchEvent(new Event('cme-coaches-changed'));setMessage('Coach supprimé.');}catch{setMessage('Suppression impossible.');}};
+ const newCoach=()=>{if(look.sex!=='homme')beginRigLoad('homme',rigMode,'switch');setSelectedId(null);setLook(defaultCoachLook);setIdentity({name:'',nickname:'',heightCm:'',weightKg:'',handedness:'right',nicknameVariant:0});setDiscipline('boxing');setAccessories(['gloves','shins']);try{localStorage.removeItem('cme-selected-coach');}catch{}setMessage('Humanoïde neutre : personnalisez-le, puis enregistrez le nouveau coach.');};
+ const removeCoach=()=>{if(!selectedId||!window.confirm('Supprimer définitivement ce coach de cet appareil ?'))return;try{deleteSavedCoach(localStorage,selectedId);setSavedList(readSavedCoaches(localStorage));if(localStorage.getItem('cme-lab-coach')===selectedId)localStorage.removeItem('cme-lab-coach');localStorage.removeItem('cme-selected-coach');setSelectedId(null);setLook(defaultCoachLook);window.dispatchEvent(new Event('cme-coaches-changed'));setMessage('Coach supprimé.');}catch{setMessage('Suppression impossible.');}};
+ const chargerCoach=(id:string)=>{
+  if(!id){newCoach();return;}
+  const c=readSavedCoaches(localStorage).find(v=>v.id===id);
+  if(!c){setMessage('Ce coach n’est plus disponible.');return;}
+  if(look.sex!==c.look.sex)beginRigLoad(c.look.sex,rigMode,'switch');
+  setSelectedId(c.id);setLook(normalizeCoachLook(c.look));
+  setIdentity({name:c.name,nickname:c.nickname??'',heightCm:String(c.heightCm??''),weightKg:String(c.weightKg??''),handedness:c.handedness??'right',nicknameVariant:0});
+  setAccessories(c.accessories??['gloves','shins']);
+  if(LAB_DISCIPLINES.includes(c.initialDiscipline as LabDiscipline))setDiscipline(c.initialDiscipline as LabDiscipline);
+  setReferenceMode(false);setAnatomicalPreview(false);setRigMode(true);setReport(null);
+  setMessage('Coach '+c.name+' chargé dans le configurateur.');
+ };
+ const dupliquerCoach=()=>{
+  const c=readSavedCoaches(localStorage).find(v=>v.id===selectedId);
+  if(!c){setMessage('Choisissez un coach enregistré avant de le dupliquer.');return;}
+  try{
+   const copy={...c,id:crypto.randomUUID(),createdAt:new Date().toISOString(),name:('Copie de '+c.name).slice(0,60),look:normalizeCoachLook({...c.look}),portrait:undefined};
+   addSavedCoach(localStorage,copy);setSavedList(readSavedCoaches(localStorage));chargerCoach(copy.id);
+   window.dispatchEvent(new Event('cme-coaches-changed'));setMessage('Coach dupliqué : personnalisez sa copie.');
+  }catch{setMessage('Duplication impossible.');}
+ };
  const exportJson=()=>{const json=JSON.stringify({schema:'cme-coach-look-v1',look},null,2);const blob=new Blob([json],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='cme-coach-look.json';a.click();URL.revokeObjectURL(url);setMessage('Configuration exportée : apparence uniquement, sans modification du moteur.');};
  return <section className="coachStudio" aria-label="Studio Coach">
   <header className="coachStudioHeader"><div><small>STUDIO COACH</small><h2>Mon combattant</h2><p>Choisis un modèle, personnalise-le, puis teste un geste.</p></div></header>
