@@ -1,0 +1,45 @@
+/* CME-3D 0.7.53 — studio premium : sélection des coachs et capillarité réelle. */
+.labApp[data-cme-screen="studio"] .sculptorCoachLibrary{
+ display:grid;grid-template-columns:minmax(0,1fr) auto auto;
+ align-items:end;gap:5px;min-height:0;padding:8px;
+ border:1px solid #36414f;border-radius:12px;
+ background:#20252c;
+}
+.labApp[data-cme-screen="studio"] .sculptorCoachLibrary label{
+ grid-column:1/-1;font-size:11px;font-weight:750;color:#bac8d5;
+}
+.labApp[data-cme-screen="studio"] .sculptorCoachLibrary select{
+ min-width:0;min-height:44px;padding:7px 5px;border-radius:9px;
+ color:#e9f1fb;background:#15191f;border:1px solid #506274;font-size:12px;
+}
+.labApp[data-cme-screen="studio"] .sculptorCoachLibrary button{
+ min-height:44px;min-width:60px;padding:6px;
+ color:#e3eef7;background:#303c4b;border:1px solid #516176;
+ border-radius:9px;font-size:11px;
+}
+.labApp[data-cme-screen="studio"] .sculptorCoachLibrary button:disabled{
+ opacity:.4;cursor:not-allowed;
+}
+.labApp[data-cme-screen="studio"] .sculptorHairStyles{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:6px;margin:8px 0 12px;
+}
+.labApp[data-cme-screen="studio"] .sculptorHairStyles button{
+ min-height:50px;padding:7px 5px;border-radius:10px;
+ background:#262c34;color:#ccd7e3;border:1px solid #424d5d;
+ font-size:11px;line-height:1.3;touch-action:manipulation;
+}
+.labApp[data-cme-screen="studio"] .sculptorHairStyles button.active{
+ border-color:var(--sculpt-cyan,#39d5f5);
+ color:#76e9ff;background:#123540;
+}
+.labApp[data-cme-screen="studio"] .sculptorHairStyles button:disabled{opacity:.4}
+.labApp[data-cme-screen="studio"] .sculptorHairEditor .coachColorAtlas button:disabled{
+ opacity:.45;
+}
+@media(max-width:380px){
+ .labApp[data-cme-screen="studio"] .sculptorCoachLibrary{
+  grid-template-columns:minmax(0,1fr) 62px 68px;gap:4px;
+ }
+ .labApp[data-cme-screen="studio"] .sculptorCoachLibrary button{min-width:0;padding:6px 3px}
+}
