@@ -44,8 +44,8 @@ export function ShadowTrainingPanel({discipline,coachName,availableMotions,coach
   if(mode==='personnalise')return customIds.length?customPlan({id:'cme-session',name:'Mon enchaînement',discipline,sequence:customIds},level,mode,options):null;
   if(choixType==='technique'&&chosenTechnique){
    const single={key:'tech-'+chosenTechnique.id,name:chosenTechnique.name,discipline,level,
-    sequence:[chosenTechnique.id],speed:mode==='technique'?.45:mode==='cardio'?.9:.7,
-    rest:mode==='technique'?2.4:.6,work:mode==='cardio'?60:mode==='rounds'?roundSec:null,
+    sequence:[chosenTechnique.id],speed:mode==='technique'?0.45:mode==='cardio'?0.9:0.7,
+    rest:mode==='technique'?2.4:0.6,work:mode==='cardio'?60:mode==='rounds'?roundSec:null,
     rounds:mode==='cardio'?5:mode==='rounds'?rounds:1,
     roundRest:mode==='cardio'?20:mode==='rounds'?restSec:0};
    return {mode,title:chosenTechnique.name,start:0,items:[single]};
@@ -74,10 +74,7 @@ export function ShadowTrainingPanel({discipline,coachName,availableMotions,coach
   if(!machine)return;
   const sync=()=>{
    const next=machine.tick();
-   setView(current=>{
-    if(current?.itemIndex!==next.itemIndex)pick(machine.item);
-    return next;
-   });
+   setView(next);
    onPlayback(next.phase==='travail'&&!next.paused,next.speed);
   };
   const id=window.setInterval(sync,100);

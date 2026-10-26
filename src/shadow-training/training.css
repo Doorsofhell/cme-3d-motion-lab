@@ -37,3 +37,12 @@
 .shadowTrainingHeading{font-size:11px}
 .shadowTrainingActions>.shadowTrainingPrimary{min-width:80px}
 }
+
+/* Les réglages de rendu CME restent disponibles, sans doubler les transports Shadow. */
+.cmeRenderOptions{margin:4px 8px;background:#151d28;color:#dae7f2;border:1px solid #344455;border-radius:11px}
+.cmeRenderOptions>summary{padding:9px 12px;min-height:44px;box-sizing:border-box;cursor:pointer;font-weight:650;font-size:12px}
+.cmeRenderOptions .transport{padding:7px;display:block!important;border:0;background:transparent}
+.cmeRenderOptions .compareBar{display:flex!important;gap:7px;flex-wrap:wrap}
+.cmeRenderOptions .switchGroup button{min-height:44px}
+.shadowTrainingSelectors label.shadowTrainingCoach{grid-column:span 1}
+@media(max-width:640px){.shadowTrainingSelectors label.shadowTrainingCoach{grid-column:span 1}}
