@@ -21,8 +21,8 @@ export function installSkinToneShader(material:MeshStandardMaterial|MeshToonMate
  uniform={value:new Color(hex)};
  skinTargets.set(material,uniform);
  const initialOnBeforeCompile=material.onBeforeCompile.bind(material);
- material.onBeforeCompile=shader=>{
-  initialOnBeforeCompile(shader);
+ material.onBeforeCompile=(shader,renderer)=>{
+  initialOnBeforeCompile(shader,renderer);
   shader.uniforms.cmeSkinTarget=uniform;
   shader.fragmentShader=shader.fragmentShader.replace(
    '#include <map_fragment>',
@@ -107,7 +107,7 @@ export function applyNeutralAppearance(root:Object3D,appearance?:NeutralAppearan
      let source=sourceColors.get(material);
      if(!source){source=material.color.clone();sourceColors.set(material,source);}
      // Maps retain their painted albedo and fine texture: shift tint relative to a reference.
-     const reference=zone==='skin'?NATIVE_SKIN_REFERENCE:zone==='eyeColor'?'#4a2f1e':'#201713';
+     const reference=zone==='eyeColor'?'#4a2f1e':'#201713';
      const base=new Color(reference),target=new Color(appearance[zone]);
      const scale=(c:number,r:number)=>limit(c/Math.max(.002,r),.35,1.95);
      material.color.setRGB(limit(source.r*scale(target.r,base.r),0,1),limit(source.g*scale(target.g,base.g),0,1),limit(source.b*scale(target.b,base.b),0,1));

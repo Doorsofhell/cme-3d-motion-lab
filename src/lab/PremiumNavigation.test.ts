@@ -7,7 +7,7 @@ describe('CME 0.7.46 — quatre destinations mobiles sans fonctions perdues',()=
  const app=read('App.tsx'),css=read('CmePremiumMobile.css');
  it('n’expose que quatre onglets ordonnés, avec libellés et icônes propres',()=>{
   expect(NAVIGATION_PRINCIPALE).toEqual([
-   {id:'studio',libelle:'Studio Coach'},{id:'lab',libelle:'Mouvements'},
+   {id:'studio',libelle:'Studio Coach'},{id:'lab',libelle:'Simulateur'},
    {id:'gallery',libelle:'Galerie'},{id:'other',libelle:'Plus'}
   ]);
   expect(app).toContain('<NavigationPrincipale actif={ongletActif}');

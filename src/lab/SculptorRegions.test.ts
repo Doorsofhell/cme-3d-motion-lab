@@ -36,7 +36,7 @@ describe('Studio 0.7.50 : sous-zones anatomiques directement pilotables',()=>{
   expect(studio).toContain('faceAvailable(');
   expect(studio).toContain('!!support?.shape.hipVertices');
   expect(studio).toContain('!!support?.shape.calfVertices');
-  expect(studio).toContain("choose('hairStyle','Coupe souhaitée',['rase','court','long'],false)");
+  expect(studio).toContain("HAIR_STYLES.map(style=>");
   expect(icons).toContain('COURBES');
  });
  it('respecte 44 px minimum, un rail défilant et la navigation globale inchangée',()=>{
@@ -45,7 +45,7 @@ describe('Studio 0.7.50 : sous-zones anatomiques directement pilotables',()=>{
   expect(css).toContain('touch-action:pan-y');
   expect(css).toContain('.sculptorRegionIcon');
   expect(file('NavigationPrincipale.tsx')).toContain('Studio Coach');
-  expect(file('NavigationPrincipale.tsx')).toContain('Mouvements');
+  expect(file('NavigationPrincipale.tsx')).toContain('Simulateur');
   expect(file('NavigationPrincipale.tsx')).toContain('Galerie');
   expect(file('NavigationPrincipale.tsx')).toContain('Plus');
  });
