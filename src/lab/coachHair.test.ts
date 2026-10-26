@@ -25,7 +25,7 @@ describe('V0.7.45 : coiffures réellement visibles',()=>{
   applyCoachHair(root,'court','#111111');
   applyCoachHair(root,'long','#dfdcdb');
   const wig=head.getObjectByName('CME_COIFFURE_ADAPTATIVE') as Group;
-  expect(wig.children.length).toBe(15);
+  expect(wig.children.length).toBe(21);
   expect(((wig.children[0] as Mesh).material as MeshStandardMaterial).color.getHexString()).toBe('dfdcdb');
   expect(head.children.filter(x=>x.name==='CME_COIFFURE_ADAPTATIVE')).toHaveLength(1);
   expect(applyCoachHair(root,'rase','#ffffff')).toBe(1);

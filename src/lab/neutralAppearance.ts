@@ -45,9 +45,9 @@ export function relativeSkinColor(original:Color,targetHex:string):Color{
  const scale=(channel:number,referenceChannel:number)=>
   limit(channel/Math.max(.001,referenceChannel),.48,1.65);
  return new Color().setRGB(
-  limit(original.r*scale(target.r,reference.r),0,1),
-  limit(original.g*scale(target.g,reference.g),0,1),
-  limit(original.b*scale(target.b,reference.b),0,1)
+  limit(original.r*scale(target.r,reference.r),0,2.5),
+  limit(original.g*scale(target.g,reference.g),0,2.5),
+  limit(original.b*scale(target.b,reference.b),0,2.5)
  );
 }
 
@@ -73,8 +73,9 @@ export function applyNeutralAppearance(root:Object3D,appearance?:NeutralAppearan
      // Maps retain their painted albedo and fine texture: shift tint relative to a reference.
      const reference=zone==='skin'?NATIVE_SKIN_REFERENCE:zone==='eyeColor'?'#4a2f1e':'#201713';
      const base=new Color(reference),target=new Color(appearance[zone]);
-     const scale=(c:number,r:number)=>limit(c/Math.max(.002,r),.35,1.95);
-     material.color.setRGB(limit(source.r*scale(target.r,base.r),0,1),limit(source.g*scale(target.g,base.g),0,1),limit(source.b*scale(target.b,base.b),0,1));
+     const scale=(c:number,r:number)=>limit(c/Math.max(.002,r),.25,3.2);
+     // Un gain de lumière linéaire >1 éclaircit un albédo GLB sombre, sans perdre sa map.
+     material.color.setRGB(limit(source.r*scale(target.r,base.r),0,2.5),limit(source.g*scale(target.g,base.g),0,2.5),limit(source.b*scale(target.b,base.b),0,2.5));
     }else{
      material.color.copy(new Color(appearance[zone]));
     }

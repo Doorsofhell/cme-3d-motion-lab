@@ -15,7 +15,7 @@ import {CadrageSquelette} from './CadrageSquelette';
 import type {StudioFocusZone} from './studioFocus';
 import type {AnatomicalView} from './AnatomicalReference';
 import {attachOutfit} from '../adapters/outfits';
-import {applyCoachHair,type HairStyle} from './coachHair';
+import {applyCoachHair,hasCoachHairAnchor,type HairStyle} from './coachHair';
 
 export const LAB_DISCIPLINES=['boxing','kickboxing','muaythai','mma','bjj','judo'] as const;
 export type LabDiscipline=typeof LAB_DISCIPLINES[number];
@@ -26,7 +26,7 @@ export const NEUTRAL_ASSETS:Record<NeutralSex,string>={
 };
 export type NeutralRigReport={sex:NeutralSex;discipline:LabDiscipline;motion:string;available:boolean;bones:number;duration:number;
  motions:Array<{id:string;label:string;kind:'technique'|'sequence';supported:boolean}>;
- appearanceSupport:{colors:ReturnType<typeof inspectCoachMaterialZones>;shape:ReturnType<typeof inspectCoachShapes>};
+ appearanceSupport:{colors:ReturnType<typeof inspectCoachMaterialZones>;shape:ReturnType<typeof inspectCoachShapes>;hairReady:boolean};
 };
 
 /** Existing Mixamo-compatible, skinned human assets, stripped of the coach wardrobe.
@@ -77,7 +77,7 @@ function RigBody({sex,discipline,motionId,playing,speed,showSkeleton,onReport,cr
   return root;
  },[gltf.scene,mode,sex,outfitScene]);
  const appearanceSupport=useMemo(()=>({
-  colors:inspectCoachMaterialZones(scene),shape:inspectCoachShapes(scene)
+  colors:inspectCoachMaterialZones(scene),shape:inspectCoachShapes(scene),hairReady:hasCoachHairAnchor(scene)
  }),[scene]);
  useLayoutEffect(()=>{if(mode==='appearance'||mode==='creator')applyNeutralAppearance(scene,appearance);},[scene,appearance,mode]);
  useLayoutEffect(()=>{if(mode==='appearance'||mode==='creator')applyCoachHair(scene,hairStyle,appearance?.hairColor??'#201713');else applyCoachHair(scene,'rase',appearance?.hairColor??'#201713');},[scene,mode,hairStyle,appearance?.hairColor]);
