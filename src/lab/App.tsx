@@ -38,6 +38,7 @@ import './StudioReferenceLook.css';
 import './StudioSceneLibre.css';
 import './SculptorWorkspace.css';
 import './SculptorFloatingPresets.css';
+import './StudioHairLibrary.css';
 import {getConfigModule} from '../config/moduleRegistry';
 
 function SavedCoachLibrary({openCoach,editCoach,selectedId}:{openCoach:(id:string)=>void;editCoach:(id:string)=>void;selectedId:string|null}){

@@ -37,3 +37,34 @@ describe('V0.7.45 : coiffures réellement visibles',()=>{
   expect(root.position.equals(p)).toBe(true);
  });
 });
+
+describe('0.7.53 — coiffures en volume et recoloration sans reconstruction',()=>{
+ for(const style of ['degrade','court','mi-long','long','queue-haute','tresse'] as const){
+  it('crée une géométrie distincte fixée à Head : '+style,()=>{
+   const {root,head,mesh}=actor(),before=mesh.geometry;
+   expect(applyCoachHair(root,style,'#392018')).toBeGreaterThan(2);
+   const object=head.getObjectByName('CME_COIFFURE_ADAPTATIVE') as Group;
+   expect(object.userData.cmeHairStyle).toBe(style);
+   expect(object.children.every(child=>(child as Mesh).geometry!==undefined)).toBe(true);
+   expect(mesh.geometry).toBe(before);
+  });
+ }
+ it('recolore en place sans réallouer de géométrie, y compris vers une couleur plus claire',()=>{
+  const {root,head}=actor();
+  applyCoachHair(root,'tresse','#17161a');
+  const a=head.getObjectByName('CME_COIFFURE_ADAPTATIVE') as Group;
+  const mesh=a.children[0] as Mesh,geometry=mesh.geometry;
+  applyCoachHair(root,'tresse','#dfdcdb');
+  const b=head.getObjectByName('CME_COIFFURE_ADAPTATIVE') as Group;
+  expect(b).toBe(a);expect((b.children[0] as Mesh).geometry).toBe(geometry);
+  expect(((b.children[0] as Mesh).material as MeshStandardMaterial).color.getHexString()).toBe('dfdcdb');
+ });
+ it('maintient la coiffure sous le Bone pour suivre toute pose d’animation',()=>{
+  const {root,head}=actor();
+  applyCoachHair(root,'queue-haute','#735132');
+  const object=head.getObjectByName('CME_COIFFURE_ADAPTATIVE') as Group;
+  head.rotation.z=.35;root.updateWorldMatrix(true,true);
+  expect(object.parent).toBe(head);
+  expect(object.matrixWorld.elements).toBeDefined();
+ });
+});
