@@ -34,6 +34,14 @@ function clean(root:Object3D){
  * animations, coordonnées canoniques et skinning inchangés.
  * Ce sont des formes procédurales, pas des GLB capillaires professionnels. */
 export function applyCoachHair(root:Object3D,style:HairStyle,color:string):number{
+ const current=root.getObjectByName(TAG) as Group|undefined;
+ if(current?.userData.cmeHairStyle===style){
+  // Une coloration ne doit jamais reconstruire les sommets capillaires ni
+  // perturber le coach animé. L'os et toutes les géométries restent stables.
+  const existing=current.userData.cmeHairMaterial as MeshStandardMaterial|undefined;
+  if(existing)existing.color.set(color);
+  return current.children.length;
+ }
  clean(root);
  root.updateWorldMatrix(true,true);
  const bones:Bone[]=[],faces:Mesh[]=[];
@@ -53,7 +61,9 @@ export function applyCoachHair(root:Object3D,style:HairStyle,color:string):numbe
  const w=Math.max(.14,Math.min(.29,size.x)),h=Math.max(.20,Math.min(.38,size.y)),d=Math.max(.15,Math.min(.30,size.z));
  const attachment=new Group();attachment.name=TAG;
  attachment.position.copy(bone.worldToLocal(centre.clone()));
+ attachment.userData.cmeHairStyle=style;
  const mat=new MeshStandardMaterial({name:'cme-cheveux-proceduraux',color:new Color(color),roughness:.82,metalness:0});
+ attachment.userData.cmeHairMaterial=mat;
  const add=(geo:BufferGeometry,x=0,y=0,z=0):Mesh=>{
   const m=new Mesh(geo,mat);m.position.set(x,y,z);m.castShadow=false;attachment.add(m);return m;
  };
