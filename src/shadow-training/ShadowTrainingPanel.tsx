@@ -24,6 +24,8 @@ export function ShadowTrainingPanel({discipline,coachName,availableMotions,coach
  const [level,setLevel]=useState<LevelId>('debutant');
  const [mode,setMode]=useState<TrainingMode>('libre');
  const [exerciseId,setExerciseId]=useState<string|null>(null);
+ const [choixType,setChoixType]=useState<'exercice'|'technique'>('exercice');
+ const [techniqueId,setTechniqueId]=useState<string>('garde');
  const [programId,setProgramId]=useState<string|null>(null);
  const [roundSec,setRoundSec]=useState(120);
  const [restSec,setRestSec]=useState(30);
@@ -36,11 +38,20 @@ export function ShadowTrainingPanel({discipline,coachName,availableMotions,coach
  const programs=useMemo(()=>PROGRAMS.filter(x=>x.discipline===discipline||x.discipline==='mixte'),[discipline]);
  const chosenProgram=programId&&programs.some(x=>x.id===programId)?programId:programs[0]?.id??null;
  const selectable=useMemo(()=>TECHNIQUES.filter(x=>x.disciplines.includes(discipline)),[discipline]);
+ const chosenTechnique=selectable.find(x=>x.id===techniqueId)??selectable[0];
  const plan=useMemo(()=>{
   if(mode==='programme')return chosenProgram?programPlan(chosenProgram):null;
   if(mode==='personnalise')return customIds.length?customPlan({id:'cme-session',name:'Mon enchaînement',discipline,sequence:customIds},level,mode,options):null;
+  if(choixType==='technique'&&chosenTechnique){
+   const single={key:'tech-'+chosenTechnique.id,name:chosenTechnique.name,discipline,level,
+    sequence:[chosenTechnique.id],speed:mode==='technique'?.45:mode==='cardio'?.9:.7,
+    rest:mode==='technique'?2.4:.6,work:mode==='cardio'?60:mode==='rounds'?roundSec:null,
+    rounds:mode==='cardio'?5:mode==='rounds'?rounds:1,
+    roundRest:mode==='cardio'?20:mode==='rounds'?restSec:0};
+   return {mode,title:chosenTechnique.name,start:0,items:[single]};
+  }
   return chosen?exercisePlan(chosen,mode,options):null;
- },[mode,chosen,chosenProgram,discipline,level,customIds.join('|'),roundSec,restSec,rounds]);
+ },[mode,chosen,chosenProgram,discipline,level,customIds.join('|'),roundSec,restSec,rounds,choixType,chosenTechnique]);
  const machine=useMemo(()=>plan&&plan.items.length?new ShadowTrainingMachine(plan):null,[plan]);
  const [view,setView]=useState<ShadowSessionState|null>(()=>machine?.snapshot()??null);
  const pick=useCallback((item:PlanItem|undefined)=>{
@@ -90,7 +101,7 @@ export function ShadowTrainingPanel({discipline,coachName,availableMotions,coach
  const status=item?shadowItemAvailability(item,availableMotions):{supported:false,motion:null,reason:'Choisir un exercice'};
  const canStart=!!machine&&status.supported;
  const selectDiscipline=(d:DisciplineId)=>{
-  setExerciseId(null);setProgramId(null);setCustomIds([]);onExercise(d,null);
+  setExerciseId(null);setProgramId(null);setCustomIds([]);setTechniqueId('garde');onExercise(d,null);
  };
  const add=()=>{
   if(!selectable.some(t=>t.id===toAdd)||customIds.length>=20)return;
@@ -107,10 +118,15 @@ export function ShadowTrainingPanel({discipline,coachName,availableMotions,coach
     {LEVELS.map(l=><option key={l.id} value={l.id}>{l.name}</option>)}</select></label>
    <label>Mode<select aria-label="Mode Shadow" value={mode} onChange={e=>setMode(e.target.value as TrainingMode)}>
     {MODES.map(x=><option key={x} value={x}>{MODE_LABEL[x]}</option>)}</select></label>
+   {mode!=='programme'&&mode!=='personnalise'&&<label>Catalogue<select aria-label="Type de choix Shadow" value={choixType} onChange={e=>setChoixType(e.target.value as 'exercice'|'technique')}>
+    <option value="exercice">Exercices</option><option value="technique">Techniques</option>
+   </select></label>}
    {mode==='programme'?<label className="shadowTrainingWide">Programme Shadow<select aria-label="Programme Shadow" value={chosenProgram??''} onChange={e=>setProgramId(e.target.value)}>
     {programs.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}</select></label>:
     mode==='personnalise'?<label className="shadowTrainingWide">Ajouter une technique Shadow<select aria-label="Technique pour l'enchaînement" value={toAdd} onChange={e=>setToAdd(e.target.value)}>
      {selectable.map(t=><option key={t.id} value={t.id}>{t.name}</option>)}</select></label>:
+    choixType==='technique'?<label className="shadowTrainingWide">Technique Shadow<select aria-label="Technique Shadow" value={chosenTechnique?.id??''} onChange={e=>setTechniqueId(e.target.value)}>
+     {selectable.map(x=><option key={x.id} value={x.id}>{x.name}</option>)}</select></label>:
     <label className="shadowTrainingWide">Exercice / mouvement Shadow<select aria-label="Exercice Shadow" value={chosen??''} onChange={e=>setExerciseId(e.target.value)}>
      {byDiscipline.map(x=><option key={x.id} value={x.id}>{x.name}</option>)}</select></label>}
   </div>
