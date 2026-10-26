@@ -1,4 +1,4 @@
-import {useCallback,useEffect,useMemo,useRef,useState} from 'react';
+import {useCallback,useEffect,useMemo,useState} from 'react';
 import {DISCIPLINES,LEVELS} from './domain/types';
 import type {DisciplineId,LevelId,TrainingMode} from './domain/types';
 import {TECHNIQUES} from './domain/techniques';
@@ -10,6 +10,7 @@ import {ShadowTrainingMachine,type ShadowSessionState} from './session';
 import './training.css';
 
 type Options={discipline:DisciplineId;coachName:string;availableMotions:readonly string[]|null;
+ coachOptions:readonly {id:string;label:string;disabled:boolean}[];currentCoach:string;onCoachChange:(id:string)=>void;
  onExercise:(discipline:DisciplineId,motion:string|null)=>void;
  onPlayback:(playing:boolean,speed:number)=>void;
 };
@@ -19,7 +20,7 @@ const format=(n:number)=>{const x=Math.max(0,Math.ceil(n));return `${Math.floor(
  * le Canvas et la biomécanique appartiennent à CME-3D.
  * Pas d'accès caméra, capture vidéo ou suivi des personnes.
  */
-export function ShadowTrainingPanel({discipline,coachName,availableMotions,onExercise,onPlayback}:Options){
+export function ShadowTrainingPanel({discipline,coachName,availableMotions,coachOptions,currentCoach,onCoachChange,onExercise,onPlayback}:Options){
  const [level,setLevel]=useState<LevelId>('debutant');
  const [mode,setMode]=useState<TrainingMode>('libre');
  const [exerciseId,setExerciseId]=useState<string|null>(null);
@@ -42,11 +43,9 @@ export function ShadowTrainingPanel({discipline,coachName,availableMotions,onExe
  },[mode,chosen,chosenProgram,discipline,level,customIds.join('|'),roundSec,restSec,rounds]);
  const machine=useMemo(()=>plan&&plan.items.length?new ShadowTrainingMachine(plan):null,[plan]);
  const [view,setView]=useState<ShadowSessionState|null>(()=>machine?.snapshot()??null);
- const lastMotion=useRef<string|null>(null);
  const pick=useCallback((item:PlanItem|undefined)=>{
   if(!item){onExercise(discipline,null);return;}
   const availability=shadowItemAvailability(item,availableMotions);
-  lastMotion.current=availability.motion;
   onExercise(item.discipline,availability.motion);
  },[onExercise,availableMotions,discipline]);
  // When the plan changes, return to Shadow's "Prêt" and select the target exercise.
@@ -76,6 +75,12 @@ export function ShadowTrainingPanel({discipline,coachName,availableMotions,onExe
   window.addEventListener('pagehide',invisible);
   return()=>{clearInterval(id);document.removeEventListener('visibilitychange',invisible);window.removeEventListener('pagehide',invisible);};
  },[machine,onPlayback]);
+ useEffect(()=>{
+  if(!machine)return;
+  const rep=()=>{machine.onRep();setView(machine.snapshot());};
+  window.addEventListener('cme-entrainement-repetition',rep);
+  return()=>window.removeEventListener('cme-entrainement-repetition',rep);
+ },[machine]);
  const act=(fn:(s:ShadowTrainingMachine)=>void)=>{
   if(!machine)return;
   fn(machine);setView(machine.snapshot());const next=machine.snapshot();
@@ -94,6 +99,8 @@ export function ShadowTrainingPanel({discipline,coachName,availableMotions,onExe
  return <section className="shadowTraining" aria-label="Entraînement selon le catalogue Shadow">
   <div className="shadowTrainingHeading"><strong>Entraînement</strong><span>Coach : <b>{coachName}</b></span></div>
   <div className="shadowTrainingSelectors">
+   <label className="shadowTrainingCoach">Coach<select aria-label="Coach sélectionné pour l'entraînement" value={currentCoach} onChange={e=>onCoachChange(e.target.value)}>
+    {coachOptions.map(x=><option key={x.id} value={x.id} disabled={x.disabled}>{x.label}</option>)}</select></label>
    <label>Discipline<select aria-label="Discipline Shadow" value={discipline} onChange={e=>selectDiscipline(e.target.value as DisciplineId)}>
     {DISCIPLINES.map(d=><option value={d.id} key={d.id}>{d.name}</option>)}</select></label>
    <label>Niveau<select aria-label="Niveau Shadow" value={level} onChange={e=>{setLevel(e.target.value as LevelId);setExerciseId(null);}}>

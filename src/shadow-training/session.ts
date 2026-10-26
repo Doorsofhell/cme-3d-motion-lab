@@ -33,7 +33,7 @@ export class ShadowTrainingMachine{
  start(){
   if(!this.item)return;
   if(this.state.phase==='termine'){this.state.itemIndex=Math.max(0,this.plan.start);this.state.round=1;this.state.reps=0;}
-  this.state.paused=false;this.state.banner=null;this.pendingItem=false;
+  this.state.paused=false;this.state.banner=null;
   this.enter('decompte',COUNTDOWN);
  }
  pause(){
@@ -53,7 +53,7 @@ export class ShadowTrainingMachine{
   if(index<0||index>=this.plan.items.length)return;
   this.timer.pause();this.active.pause();
   this.state.itemIndex=index;this.state.round=1;this.state.reps=0;this.state.paused=false;
-  this.state.speed=this.plan.items[index].speed;this.pendingItem=false;
+  this.state.speed=this.plan.items[index].speed;
   this.enter('pret',0);
  }
  setSpeed(v:number){this.state.speed=Math.min(1.5,Math.max(.25,v));}
@@ -73,11 +73,11 @@ export class ShadowTrainingMachine{
     else this.enter('travail',it.work);
    }else if(this.state.itemIndex<this.plan.items.length-1){
     this.state.itemIndex++;this.state.round=1;this.state.reps=0;
-    this.state.speed=this.item?.speed??.7;this.pendingItem=true;
+    this.state.speed=this.item?.speed??.7;
     this.enter('repos',Math.max(BETWEEN_ITEMS,Math.min(it.roundRest,30)), 'Prochain : '+(this.item?.label??this.item?.name));
    }else this.enter('termine',0);
   }else if(this.state.phase==='repos'&&remaining<=0){
-   this.pendingItem=false;this.enter('travail',this.item?.work??0);
+   this.enter('travail',this.item?.work??0);
   }
   const timed=this.state.phase==='decompte'||this.state.phase==='repos'||(this.state.phase==='travail'&&!!this.item?.work);
   this.state.remaining=timed?Math.max(0,this.phaseLength-this.timer.elapsed/1000):null;
