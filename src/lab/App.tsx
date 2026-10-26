@@ -2,6 +2,7 @@ import {Suspense,Component,useCallback,useEffect,useLayoutEffect,useMemo,useRef,
 import {Canvas,useThree,useFrame} from '@react-three/fiber';
 import {ACESFilmicToneMapping,NeutralToneMapping,SRGBColorSpace,CanvasTexture} from 'three';
 import {Fighter} from './Fighter';
+import {studioLightingPreset} from './studioLighting';
 import {StudioCoach} from './StudioCoach';
 import {NavigationPrincipale,type DestinationPrincipale} from './NavigationPrincipale';
 import {useSceneFullscreen,SceneFullscreenButton} from './SceneFullscreen';
@@ -36,6 +37,7 @@ import './CmePremiumMobile.css';
 import './StudioReferenceLook.css';
 import './StudioSceneLibre.css';
 import './SculptorWorkspace.css';
+import './SculptorFloatingPresets.css';
 import {getConfigModule} from '../config/moduleRegistry';
 
 function SavedCoachLibrary({openCoach,editCoach,selectedId}:{openCoach:(id:string)=>void;editCoach:(id:string)=>void;selectedId:string|null}){
@@ -87,22 +89,22 @@ function Lights({quality,renderStyle}:{quality:Quality;renderStyle:RenderStyle})
  const {gl}=useThree();
  const fitness=renderStyle==='fitness';
  const comic=renderStyle==='comic';
+ const profile=studioLightingPreset(renderStyle);
  useEffect(()=>{
   gl.outputColorSpace=SRGBColorSpace;
   gl.toneMapping=fitness?ACESFilmicToneMapping:NeutralToneMapping;
-  gl.toneMappingExposure=fitness?1.04:comic?1.0:1.12;
- },[gl,fitness,comic]);
+  gl.toneMappingExposure=profile.exposure;
+ },[gl,fitness,comic,profile.exposure]);
  return <>
-  <hemisphereLight args={fitness?['#fffdf5','#e4e6e7',1.5]:comic?['#d9e4ff','#1a2642',0.64]:['#fffaf4','#919aa2',1.42]}/>
-  <directionalLight position={[2.1,3.7,3.3]} intensity={fitness?1.65:comic?2.35:2.05}
-   color={fitness?'#ffffff':'#fff7f1'} castShadow={quality==='detail'&&!mobile()} shadow-mapSize={[1024,1024]}/>
-  <directionalLight position={[-3.1,1.8,2.2]} intensity={fitness?.78:comic?.12:.83} color={fitness?'#ffffff':'#cadff3'}/>
-  <directionalLight position={[0.8,2.6,-2.6]} intensity={fitness?.64:comic?.18:1.20} color={fitness?'#f4f8fa':'#f2f5ff'}/>
-  <directionalLight position={[-1,4.5,-1]} intensity={fitness?.25:comic?.06:.33} color="#fff6ea"/>
-  <directionalLight position={[.3,1.8,4.5]} intensity={fitness?.25:comic?.06:.36} color="#f9fbfc"/>
+  <hemisphereLight args={[profile.hemisphere.sky,profile.hemisphere.ground,profile.hemisphere.intensity]}/>
+  <directionalLight position={profile.key.position} intensity={profile.key.intensity} color={profile.key.color}
+   castShadow={quality==='detail'&&!mobile()} shadow-mapSize={[1024,1024]}/>
+  <directionalLight position={profile.fill.position} intensity={profile.fill.intensity} color={profile.fill.color}/>
+  <directionalLight position={profile.rim.position} intensity={profile.rim.intensity} color={profile.rim.color}/>
+  <directionalLight position={profile.front.position} intensity={profile.front.intensity} color={profile.front.color}/>
   <mesh rotation={[-Math.PI/2,0,0]} position={[0,-.013,0]} receiveShadow>
    <planeGeometry args={[8,8]}/>
-   <meshStandardMaterial color={fitness?'#d7dce0':comic?'#151c31':'#313940'} roughness={1} metalness={0}/>
+   <meshStandardMaterial color={profile.floor} roughness={1} metalness={0}/>
   </mesh>
   <StudioContact renderStyle={renderStyle}/>
  </>;
@@ -387,7 +389,7 @@ export function App(){
     <div className="cmeOtherGrid">
       <button type="button" onClick={openComparison}>⇄ Comparatif CME / Shadow</button>
       <a href="https://github.com/Doorsofhell/cme-3d-motion-lab/blob/main/docs/biomecanique/README.md" target="_blank" rel="noopener noreferrer">☷ Atlas biomécanique · référentiel</a>
-      <button type="button" onClick={()=>setTab('technical')}>⌘ Laboratoire et diagnostics</button>
+      <details className="cmeOtherAdvanced"><summary>Outils techniques avancés</summary><button type="button" onClick={()=>setTab('technical')}>Ouvrir le laboratoire technique</button></details>
       <button type="button" onClick={()=>setTab('versions')}>✦ Nouveautés et versions</button>
       <button type="button" onClick={()=>setTab('roadmap')}>☷ Feuille de route</button>
       <button type="button" onClick={()=>{void known.refresh();setTab('tracking');}}>⚑ Incidents</button>
@@ -396,7 +398,7 @@ export function App(){
     <label className="cmeThemeSetting">Apparence de l'application<select aria-label="Thème de CME-3D" value={theme} onChange={e=>setTheme(e.target.value as 'auto'|'light'|'dark')}><option value="auto">Automatique · selon le système (jour/nuit)</option><option value="light">Toujours clair</option><option value="dark">Toujours sombre</option></select></label>
    </section>}
   {tab==='roadmap'&&<RoadmapPanel/>}
-  {tab==='technical'&&<section className="cmeTechnicalScreen" aria-label="Centre technique"><header className="cmePageHeader"><h2>Technique</h2><p>Vérifier les mesures réelles, inspecter le rig et exporter un rapport de diagnostic.</p></header><div className="cmeDiagnosticGrid"><span>FPS <strong>{metrics.fps>0?metrics.fps:'Non mesuré'}</strong></span><span>WebGL <strong>{metrics.webgl}</strong></span><span>Draw calls <strong>{metrics.drawCalls}</strong></span><span>Triangles <strong>{metrics.triangles}</strong></span><span>Rig <strong>{report?.bones??'–'} os</strong></span></div><div className="cmeTechnicalActions"><button type="button" onClick={()=>setDebug(x=>!x)} aria-expanded={debug}>{debug?'Fermer le diagnostic':'Afficher le diagnostic détaillé'}</button><button type="button" onClick={exportReport}>Exporter le rapport de session</button><button type="button" onClick={()=>{journal.record('incident','Signalement manuel depuis Technique',{technique,discipline,actor});captureNow();setIncidentOpen(true);}}>Signaler un incident</button></div><AndroidDiagnostics telemetry={androidTelemetry} active={tab==='technical'} context={{coach:actor,discipline,technique,qualite:quality,rendu:renderStyle}}/><details className="cmeTechnicalFold"><summary>Prototype avancé · Exécuter un plan JSON</summary>   <details className="labTechnicalDetails"><summary>Outils techniques · Coach IA JSON</summary><section aria-label="Coach JSON Text-to-Animation" style={{padding:12,display:'grid',gap:8}}>
+  {tab==='technical'&&<section className="cmeTechnicalScreen" aria-label="Centre technique"><header className="cmePageHeader"><h2>Technique</h2><p>Vérifier les mesures réelles, inspecter le rig et exporter un rapport de diagnostic.</p></header><div className="cmeDiagnosticGrid"><span>FPS <strong>{metrics.fps>0?metrics.fps:'Non mesuré'}</strong></span><span>WebGL <strong>{metrics.webgl}</strong></span><span>Draw calls <strong>{metrics.drawCalls}</strong></span><span>Triangles <strong>{metrics.triangles}</strong></span><span>Rig <strong>{report?.bones??'–'} os</strong></span></div><div className="cmeTechnicalActions"><button type="button" onClick={exportReport}>Exporter le rapport de session</button><button type="button" onClick={()=>{journal.record('incident','Signalement manuel depuis Technique',{technique,discipline,actor});captureNow();setIncidentOpen(true);}}>Signaler un incident</button></div><AndroidDiagnostics telemetry={androidTelemetry} active={tab==='technical'} context={{coach:actor,discipline,technique,qualite:quality,rendu:renderStyle}}/><details className="cmeTechnicalFold"><summary>Prototype avancé · Exécuter un plan JSON</summary>   <details className="labTechnicalDetails"><summary>Outils techniques · Coach IA JSON</summary><section aria-label="Coach JSON Text-to-Animation" style={{padding:12,display:'grid',gap:8}}>
 <strong>Coach IA · Text-to-Animation (prototype local)</strong>
 <textarea aria-label="Plan JSON du coach" rows={4} value={coachJson} onChange={e=>setCoachJson(e.target.value)} style={{width:'100%',boxSizing:'border-box'}}/>
 <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>

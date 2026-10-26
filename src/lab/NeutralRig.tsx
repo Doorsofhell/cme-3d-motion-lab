@@ -96,6 +96,9 @@ function RigBody({sex,discipline,motionId,playing,speed,showSkeleton,onReport,cr
     arms:proportions?.arms??1,
     calves:proportions?.calves??1,
     bust:proportions?.bust??1,
+    neck:proportions?.neck??1,
+    hands:proportions?.hands??1,
+    feet:proportions?.feet??1,
     jaw:face?.jaw??1,
     nose:face?.nose??1,
     eyes:face?.eyes??1
@@ -104,7 +107,7 @@ function RigBody({sex,discipline,motionId,playing,speed,showSkeleton,onReport,cr
    // Anatomie reste rigoureusement neutre, y compris après changement de profil.
    scene.scale.setScalar(1);
   }
- },[scene,mode,proportions?.height,proportions?.shoulders,proportions?.muscle,proportions?.waist,proportions?.sex,proportions?.roundness,proportions?.hips,proportions?.glutes,proportions?.thighs,proportions?.arms,proportions?.calves,proportions?.bust,face?.jaw,face?.nose,face?.eyes]);
+ },[scene,mode,proportions?.height,proportions?.shoulders,proportions?.muscle,proportions?.waist,proportions?.sex,proportions?.roundness,proportions?.hips,proportions?.glutes,proportions?.thighs,proportions?.arms,proportions?.calves,proportions?.bust,proportions?.neck,proportions?.hands,proportions?.feet,face?.jaw,face?.nose,face?.eyes]);
  const rig=useMemo(()=>new CoachRig(scene),[scene]);
  const library=useMemo(()=>getLibrary(rig,discipline),[rig,discipline]);
  const motionEntries=useMemo(()=>studioMotionOptions(studioTechniqueCatalog(discipline),id=>library.has(id)),[discipline,library]);

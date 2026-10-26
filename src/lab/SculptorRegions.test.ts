@@ -7,10 +7,10 @@ import {SHAPE_GROUPS} from './visualShapePresets';
 const file=(p:string)=>readFileSync(new URL('./'+p,import.meta.url),'utf8');
 describe('Studio 0.7.50 : sous-zones anatomiques directement pilotables',()=>{
  const studio=file('StudioCoach.tsx'),icons=file('SculptorRegionIcon.tsx'),css=file('SculptorWorkspace.css');
- it('expose 18 cibles sans répétition, en conservant les cinq catégories X',()=>{
+ it('expose 21 cibles sans répétition, en conservant les cinq catégories X',()=>{
   expect(GROUPES_ANATOMIQUES).toHaveLength(5);
   const all=GROUPES_ANATOMIQUES.flatMap(g=>regionsPourGroupe(g.id));
-  expect(all).toHaveLength(18);
+  expect(all).toHaveLength(21);
   expect(new Set(all.map(x=>x.id)).size).toBe(all.length);
   for(const groupe of GROUPES_ANATOMIQUES)expect(REGIONS_SCULPTEUR[groupe.id].length).toBeGreaterThan(0);
  });

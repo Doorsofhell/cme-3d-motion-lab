@@ -17,6 +17,8 @@ export const REGIONS_SCULPTEUR:Readonly<Record<GroupeAnatomique['id'],readonly S
   cible('bust','Poitrine / pectoraux','corps','bust'),
   cible('muscle','Muscles','corps','muscle'),
   cible('arms','Bras','corps','arms'),
+  cible('neck','Cou','corps','neck'),
+  cible('hands','Mains','corps','hands'),
   cible('waist','Taille','corps','waist'),
   cible('roundness','Rondeur','corps','roundness')
  ],
@@ -24,7 +26,8 @@ export const REGIONS_SCULPTEUR:Readonly<Record<GroupeAnatomique['id'],readonly S
   cible('hips','Hanches','silhouette','hips'),
   cible('glutes','Fessiers','silhouette','glutes'),
   cible('thighs','Cuisses','silhouette','thighs'),
-  cible('calves','Mollets','silhouette','calves')
+  cible('calves','Mollets','silhouette','calves'),
+  cible('feet','Pieds','silhouette','feet')
  ],
  peau:[cible('peau','Teint','peau')],
  equipement:[cible('tenue','Tenue','tenue'),cible('protections','Protections','protections')]

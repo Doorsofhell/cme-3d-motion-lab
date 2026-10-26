@@ -18,7 +18,7 @@ export function focusForSetting(key:string,section:StudioSection):StudioFocusZon
   skin:'peau',hairStyle:'cheveux',hairColor:'cheveux',
   top:'buste',topColor:'buste',bottom:'jambes',bottomColor:'jambes',
   gloves:'mains',gloveColor:'mains',shins:'tibias',shinColor:'tibias',
-  roundness:'corps',hips:'hanches',chest:'buste',bust:'buste',thighs:'jambes',glutes:'hanches'
+  neck:'buste',hands:'mains',feet:'jambes',roundness:'corps',hips:'hanches',chest:'buste',bust:'buste',thighs:'jambes',glutes:'hanches'
  };
  return setting[key]??defaults[section];
 }

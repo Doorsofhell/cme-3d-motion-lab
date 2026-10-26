@@ -14,14 +14,16 @@ describe('CME-3D UX : parcours uniques, design system et accessibilité',()=>{
  it('réserve les paramètres experts et le JSON à Technique',()=>{
   expect(app).toContain("tab==='technical'&&<section");
   expect(app).toContain('Prototype avancé · Exécuter un plan JSON');
-  expect(app).toContain('Laboratoire et diagnostics');
+  expect(app).toContain('Outils techniques avancés');
+  expect(app).toContain("setTab('technical')");
   expect(app).not.toContain("tab==='lab'&&reviewOpen");
  });
  it('conserve une seule surface de test et un seul éditeur de coach',()=>{
   expect(app).toContain("tab==='lab'&&<details");
   expect(app).toContain('<MotionReview');
   expect(app).not.toContain('cmeReviewToggle');
-  expect(studio).toContain('Création en pose neutre');
+  expect(studio).toContain('creationPose={!testingMotion}');
+  expect(studio).toContain('<CoachProfileEditor identite={identity}');
   expect(studio).not.toContain('2 · Test des mouvements');
   expect(studio.split('<Canvas ').length-1).toBe(1);
   expect(studio).toContain('Tester dans Mouvements');

@@ -15,7 +15,10 @@ const COURBES:Record<string,string>={
  hips:'M6 3q6 6 12 0M6 3l-3 10 5 8m10-18 3 10-5 8M8 21q4-3 8 0',
  glutes:'M5 5q7 3 14 0m-14 0q-5 13 4 15 3 0 3-6 0 6 3 6 9-2 4-15M12 9v7',
  thighs:'M6 3q6 3 12 0M6 3l-2 18h6l2-12 2 12h6L18 3',
- calves:'M5 3q-3 11 4 18h3M19 3q3 11-4 18h-3M5 11q3 2 4 0m6 0q1 2 4 0'
+ calves:'M5 3q-3 11 4 18h3M19 3q3 11-4 18h-3M5 11q3 2 4 0m6 0q1 2 4 0',
+ neck:'M9 3v6L5 13v7h14v-7l-4-4V3M9 9q3 3 6 0',
+ hands:'M8 20V10M8 13 6 7M11 13V4m3 9V5m3 8V8m-9 7c0 6 9 8 11 2V9',
+ feet:'M6 3v10q-5 5-3 7h17q2-4-3-5l-6-3V3'
 };
 export function SculptorRegionIcon({cible}:Props){
  if(cible.id==='cheveux'||cible.id==='peau'||cible.id==='tenue'||cible.id==='protections')
