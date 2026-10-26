@@ -16,6 +16,7 @@ import {studioTechniqueCatalog} from './studioTechniqueCatalog';
 import {activeShapeGroups,applyShapePreset,randomShapeLook,type ShapeGroup} from './visualShapePresets';
 import {MorphThumbnail} from './MorphThumbnail';
 import {AnatomyIcon} from './AnatomyIcon';
+import {studioLightingPreset} from './studioLighting';
 import {PrecisionSlider,type PrecisionTone} from './PrecisionSlider';
 import {SculptorViewportTools} from './SculptorViewportTools';
 import {SculptorWireframe} from './SculptorWireframe';
@@ -277,7 +278,10 @@ export function StudioCoach(){
     
     <div className="coachCanvasViewport"><Canvas key={canvasRetry} onCreated={onCanvasCreated} camera={{position:[0,1.3,4.5],fov:38}} dpr={[1,1.5]} gl={{antialias:true,preserveDrawingBuffer:true}}>
      <AndroidFrameProbe telemetry={androidTelemetry}/>
-     <color attach="background" args={['#090b0f']}/><gridHelper args={[8,16,'#17454e','#14242d']} position={[0,-0.01,0]}/><hemisphereLight args={['#fff8ef','#677388',1.05]}/><ambientLight intensity={0.65}/><directionalLight position={[3,5,4]} intensity={1.55}/>
+     <color attach="background" args={['#090b0f']}/><gridHelper args={[8,16,'#17454e','#14242d']} position={[0,-0.01,0]}/><hemisphereLight args={[studioLightingPreset('ultra').hemisphere.sky,studioLightingPreset('ultra').hemisphere.ground,studioLightingPreset('ultra').hemisphere.intensity]}/>
+      <directionalLight position={studioLightingPreset('ultra').key.position} color={studioLightingPreset('ultra').key.color} intensity={studioLightingPreset('ultra').key.intensity}/>
+      <directionalLight position={studioLightingPreset('ultra').fill.position} color={studioLightingPreset('ultra').fill.color} intensity={studioLightingPreset('ultra').fill.intensity}/>
+      <directionalLight position={studioLightingPreset('ultra').rim.position} color={studioLightingPreset('ultra').rim.color} intensity={studioLightingPreset('ultra').rim.intensity}/>
      <SceneLoadingBoundary>{rigMode&&referenceMode?<AnatomicalReferenceRig key={'reference-'+look.sex} sex={look.sex} orientation={anatomicalView} focusZone={focusZone} focusRequest={focusRequest} autoCadrage={!cameraAuto}/>:<NeutralRig key={`${look.sex}-${rigMode?(anatomicalPreview?'mannequin':'creator'):'appearance'}`} mode={rigMode?(anatomicalPreview?'mannequin':'creator'):'appearance'} sex={look.sex} discipline={discipline} noGi={noGi} motionId={testingMotion?motionId:'garde'} creationPose={!testingMotion} playing={testingMotion&&playing} speed={1} showSkeleton={showSkeleton} autoCadrage={!cameraAuto} focusZone={focusZone} focusRequest={focusRequest} orientation={anatomicalView} onReport={handleRigReport} appearance={colors} proportions={dimensions} face={faceDimensions} hairStyle={look.hairStyle}/>}</SceneLoadingBoundary>
      <SceneCameraControls automatic={cameraAuto} motion={motionId}/>
      <SculptorWireframe actif={filDeFer&&!referenceMode&&!!report} version={`${look.sex}-${rigMode}-${report?.sex??"chargement"}`}/>

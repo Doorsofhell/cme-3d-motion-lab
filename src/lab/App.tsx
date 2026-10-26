@@ -2,6 +2,7 @@ import {Suspense,Component,useCallback,useEffect,useLayoutEffect,useMemo,useRef,
 import {Canvas,useThree,useFrame} from '@react-three/fiber';
 import {ACESFilmicToneMapping,NeutralToneMapping,SRGBColorSpace,CanvasTexture} from 'three';
 import {Fighter} from './Fighter';
+import {studioLightingPreset} from './studioLighting';
 import {StudioCoach} from './StudioCoach';
 import {NavigationPrincipale,type DestinationPrincipale} from './NavigationPrincipale';
 import {useSceneFullscreen,SceneFullscreenButton} from './SceneFullscreen';
@@ -87,22 +88,22 @@ function Lights({quality,renderStyle}:{quality:Quality;renderStyle:RenderStyle})
  const {gl}=useThree();
  const fitness=renderStyle==='fitness';
  const comic=renderStyle==='comic';
+ const profile=studioLightingPreset(renderStyle);
  useEffect(()=>{
   gl.outputColorSpace=SRGBColorSpace;
   gl.toneMapping=fitness?ACESFilmicToneMapping:NeutralToneMapping;
-  gl.toneMappingExposure=fitness?1.04:comic?1.0:1.12;
- },[gl,fitness,comic]);
+  gl.toneMappingExposure=profile.exposure;
+ },[gl,fitness,comic,profile.exposure]);
  return <>
-  <hemisphereLight args={fitness?['#fffdf5','#e4e6e7',1.5]:comic?['#d9e4ff','#1a2642',0.64]:['#fffaf4','#919aa2',1.42]}/>
-  <directionalLight position={[2.1,3.7,3.3]} intensity={fitness?1.65:comic?2.35:2.05}
-   color={fitness?'#ffffff':'#fff7f1'} castShadow={quality==='detail'&&!mobile()} shadow-mapSize={[1024,1024]}/>
-  <directionalLight position={[-3.1,1.8,2.2]} intensity={fitness?.78:comic?.12:.83} color={fitness?'#ffffff':'#cadff3'}/>
-  <directionalLight position={[0.8,2.6,-2.6]} intensity={fitness?.64:comic?.18:1.20} color={fitness?'#f4f8fa':'#f2f5ff'}/>
-  <directionalLight position={[-1,4.5,-1]} intensity={fitness?.25:comic?.06:.33} color="#fff6ea"/>
-  <directionalLight position={[.3,1.8,4.5]} intensity={fitness?.25:comic?.06:.36} color="#f9fbfc"/>
+  <hemisphereLight args={[profile.hemisphere.sky,profile.hemisphere.ground,profile.hemisphere.intensity]}/>
+  <directionalLight position={profile.key.position} intensity={profile.key.intensity} color={profile.key.color}
+   castShadow={quality==='detail'&&!mobile()} shadow-mapSize={[1024,1024]}/>
+  <directionalLight position={profile.fill.position} intensity={profile.fill.intensity} color={profile.fill.color}/>
+  <directionalLight position={profile.rim.position} intensity={profile.rim.intensity} color={profile.rim.color}/>
+  <directionalLight position={profile.front.position} intensity={profile.front.intensity} color={profile.front.color}/>
   <mesh rotation={[-Math.PI/2,0,0]} position={[0,-.013,0]} receiveShadow>
    <planeGeometry args={[8,8]}/>
-   <meshStandardMaterial color={fitness?'#d7dce0':comic?'#151c31':'#313940'} roughness={1} metalness={0}/>
+   <meshStandardMaterial color={profile.floor} roughness={1} metalness={0}/>
   </mesh>
   <StudioContact renderStyle={renderStyle}/>
  </>;
