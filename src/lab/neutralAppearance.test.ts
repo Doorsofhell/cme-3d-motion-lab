@@ -1,8 +1,23 @@
 import {describe,it,expect} from 'vitest';
 import {Mesh,MeshStandardMaterial,MeshToonMaterial,Object3D,BoxGeometry,Texture,Color} from 'three';
-import {appearanceZone,applyNeutralAppearance,inspectCoachMaterialZones,relativeSkinColor} from './neutralAppearance';
+import {appearanceZone,applyNeutralAppearance,inspectCoachMaterialZones,relativeSkinColor,readSkinToneTarget,installSkinToneShader} from './neutralAppearance';
 import {NATIVE_SKIN_REFERENCE,SKIN_TONES} from './skinTones';
 describe('skinned appearance adapter isolation',()=>{
+ it('reconstruit le teint clair à partir de la couleur cible et préserve les normales, sans cumul',()=>{
+  const mat=new MeshStandardMaterial({name:'f021_body',color:'#74503a',map:new Texture()});
+  installSkinToneShader(mat,'#553729');
+  const before=mat.color.clone();
+  installSkinToneShader(mat,'#efcdb5');
+  expect(readSkinToneTarget(mat)?.getHexString()).toBe(new Color('#efcdb5').getHexString());
+  expect(mat.color.equals(before)).toBe(true);
+  const shader={fragmentShader:'#include <map_fragment>\nvoid main() {',uniforms:{}} as unknown as Parameters<typeof mat.onBeforeCompile>[0];
+  mat.onBeforeCompile(shader,{} as never);
+  expect(shader.fragmentShader).toContain('cmeSkinTarget*cmeSkinDetail');
+  expect(shader.fragmentShader).toContain('uniform vec3 cmeSkinTarget;');
+  expect(shader.uniforms.cmeSkinTarget.value).toBe(readSkinToneTarget(mat)?.getHexString()===undefined?null:shader.uniforms.cmeSkinTarget.value);
+  installSkinToneShader(mat,'#553729');
+  expect(readSkinToneTarget(mat)?.getHexString()).toBe(new Color('#553729').getHexString());
+ });
  it('applique les teintes aux matériaux Toon de Fitness/Comics sans perdre les textures',()=>{
   const root=new Object3D(),sourceMap=new Texture();
   const face=new Mesh(new BoxGeometry(),new MeshToonMaterial({name:'skin_head-fitness',color:'#ffffff',map:sourceMap}));
@@ -12,7 +27,8 @@ describe('skinned appearance adapter isolation',()=>{
   const material=face.material as MeshToonMaterial;
   // A textured skin gets a RELATIVE correction to retain the original albedo,
   // not the raw #aabbcc double-multiplied into its texture.
-  expect(material.color.getHexString()).toBe(relativeSkinColor(new Color('#ffffff'),'#aabbcc').getHexString());
+  expect(readSkinToneTarget(material)?.getHexString()).toBe(new Color('#aabbcc').getHexString());
+  expect(material.color.getHexString()).toBe('ffffff');
   expect(material.map).toBe(sourceMap);
  });
 
@@ -23,15 +39,18 @@ describe('skinned appearance adapter isolation',()=>{
   root.add(body);
   const input={skin:NATIVE_SKIN_REFERENCE,hairColor:'#201713',topColor:'#222222',bottomColor:'#333333',gloveColor:'#444444'};
   applyNeutralAppearance(root,input);
-  expect((body.material as MeshStandardMaterial).color.getHexString()).toBe(original.getHexString());
-  expect((body.material as MeshStandardMaterial).map).toBe(map);
+  const shaderMaterial=body.material as MeshStandardMaterial;
+  expect(readSkinToneTarget(shaderMaterial)?.getHexString()).toBe(new Color(NATIVE_SKIN_REFERENCE).getHexString());
+  expect(shaderMaterial.color.getHexString()).toBe(original.getHexString());
+  expect(shaderMaterial.map).toBe(map);
   applyNeutralAppearance(root,{...input,skin:SKIN_TONES[0].hex});
-  const bright=(body.material as MeshStandardMaterial).color.clone();
+  const bright=readSkinToneTarget(shaderMaterial)!;
   applyNeutralAppearance(root,{...input,skin:SKIN_TONES[7].hex});
-  const deep=(body.material as MeshStandardMaterial).color.clone();
+  const deep=readSkinToneTarget(shaderMaterial)!;
   expect(bright.getHSL({h:0,s:0,l:0}).l).toBeGreaterThan(deep.getHSL({h:0,s:0,l:0}).l);
-  applyNeutralAppearance(root,input);
-  expect((body.material as MeshStandardMaterial).color.getHexString()).toBe(original.getHexString());
+  applyNeutralAppearance(root,{...input,skin:SKIN_TONES[0].hex});
+  expect(readSkinToneTarget(shaderMaterial)?.getHexString()).toBe(new Color(SKIN_TONES[0].hex).getHexString());
+  expect(shaderMaterial.color.getHexString()).toBe(original.getHexString());
  });
  it('distingue les gants, cheveux et tenues des maillages skinnés parents',()=>{
   expect(appearanceZone('skin_body_glove')).toBe('gloveColor');
