@@ -26,7 +26,7 @@ export const NEUTRAL_ASSETS:Record<NeutralSex,string>={
 };
 export type NeutralRigReport={sex:NeutralSex;discipline:LabDiscipline;motion:string;available:boolean;bones:number;duration:number;
  motions:Array<{id:string;label:string;kind:'technique'|'sequence';supported:boolean}>;
- appearanceSupport:{colors:ReturnType<typeof inspectCoachMaterialZones>;shape:ReturnType<typeof inspectCoachShapes>};
+ appearanceSupport:{colors:ReturnType<typeof inspectCoachMaterialZones>;shape:ReturnType<typeof inspectCoachShapes>};hairSupported:boolean;
 };
 
 /** Existing Mixamo-compatible, skinned human assets, stripped of the coach wardrobe.
@@ -76,6 +76,7 @@ function RigBody({sex,discipline,motionId,playing,speed,showSkeleton,onReport,cr
   if(mode==='mannequin')applyAnatomicalMannequinMaterials(root);
   return root;
  },[gltf.scene,mode,sex,outfitScene]);
+ const hairSupported=useMemo(()=>{let yes=false;scene.traverse(o=>{if(o.type==='Bone'&&/head$/i.test(o.name.replace(/[^a-z0-9]/gi,'')))yes=true;});return yes;},[scene]);
  const appearanceSupport=useMemo(()=>({
   colors:inspectCoachMaterialZones(scene),shape:inspectCoachShapes(scene)
  }),[scene]);
@@ -123,8 +124,8 @@ function RigBody({sex,discipline,motionId,playing,speed,showSkeleton,onReport,cr
  const time=useRef(0);
  useEffect(()=>{time.current=0;},[sex,discipline,motionId]);
  useEffect(()=>{
-  onReport({sex,discipline,motion:selected?.id??motion?.id??'garde',available:playable,bones:skeleton.bones.length,duration:sampler?.duration??0,appearanceSupport,motions:motionEntries});
- },[sex,discipline,motionId,motion,library,sampler,skeleton,onReport,appearanceSupport,motionEntries,selected?.id,playable]);
+  onReport({sex,discipline,motion:selected?.id??motion?.id??'garde',available:playable,bones:skeleton.bones.length,duration:sampler?.duration??0,appearanceSupport,hairSupported,motions:motionEntries});
+ },[sex,discipline,motionId,motion,library,sampler,skeleton,onReport,appearanceSupport,hairSupported,motionEntries,selected?.id,playable]);
  useEffect(()=>()=>{skeleton.dispose();scene.traverse(o=>{
   const m=o as Mesh;
   if(!m.isMesh)return;
