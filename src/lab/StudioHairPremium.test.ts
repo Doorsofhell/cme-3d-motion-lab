@@ -1,5 +1,5 @@
 import {describe,it,expect} from 'vitest';
-import {Bone,BoxGeometry,Group,Mesh,MeshStandardMaterial,Texture,Color} from 'three';
+import {Bone,BoxGeometry,Group,Mesh,MeshStandardMaterial,Texture} from 'three';
 import {HAIR_STYLES,hasCoachHairAnchor,applyCoachHair} from './coachHair';
 import {applyNeutralAppearance} from './neutralAppearance';
 import {defaultCoachLook,normalizeCoachLook} from './StudioCoach';
