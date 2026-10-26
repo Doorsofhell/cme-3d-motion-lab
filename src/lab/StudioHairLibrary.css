@@ -1,0 +1,59 @@
+/* CME-3D 0.7.53 : pilotage du configurateur, indépendant du Canvas WebGL. */
+.labApp[data-cme-screen="studio"] .sculptorCoachLibrary{
+ display:flex;flex:0 0 auto;align-items:center;gap:5px;
+ box-sizing:border-box;min-width:0;max-width:100%;
+ padding:5px 7px;background:#171a20;border:1px solid #373e48;border-radius:12px;
+ overflow-x:auto;scrollbar-width:none;
+}
+.labApp[data-cme-screen="studio"] .sculptorCoachLibrary::-webkit-scrollbar{display:none}
+.labApp[data-cme-screen="studio"] .sculptorCoachLibrary label{font-size:11px;font-weight:700;color:#bbcada;white-space:nowrap}
+.labApp[data-cme-screen="studio"] .sculptorCoachLibrary select{
+ flex:1 1 auto;min-width:112px;max-width:260px;min-height:44px;
+ color:#edf1f7;background:#252b35;border:1px solid #455365;
+ border-radius:9px;padding:7px;font-size:12px;
+}
+.labApp[data-cme-screen="studio"] .sculptorCoachLibrary button{
+ flex:0 0 auto;box-sizing:border-box;min-width:65px;min-height:44px;
+ color:#e2e8f1;background:#262f39;border:1px solid #445266;
+ border-radius:9px;padding:7px 8px;font-size:11px;font-weight:650;
+}
+.labApp[data-cme-screen="studio"] .sculptorCoachLibrary button:disabled{
+ opacity:.38;cursor:not-allowed;
+}
+.labApp[data-cme-screen="studio"] .sculptorHairStyleGrid{
+ display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:7px;margin:8px 0 15px;
+}
+.labApp[data-cme-screen="studio"] .sculptorHairStyleGrid button{
+ box-sizing:border-box;min-height:70px;min-width:0;padding:7px 3px;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;
+ gap:6px;background:#272b32;color:#dae4ef;
+ border:1px solid #3e4654;border-radius:12px;
+ font-weight:700;font-size:11px;touch-action:manipulation;
+}
+.labApp[data-cme-screen="studio"] .sculptorHairStyleGrid button.active{
+ color:#a6f1ff;background:#12323d;border-color:#39d5f5;
+ box-shadow:inset 0 0 0 1px #227d93;
+}
+.labApp[data-cme-screen="studio"] .sculptorHairStyleGrid button:disabled{
+ opacity:.4;cursor:not-allowed;
+}
+.labApp[data-cme-screen="studio"] .sculptorHairSymbol{
+ font-size:24px;font-family:system-ui;color:inherit;
+}
+.labApp[data-cme-screen="studio"] .sculptorHairEditor .coachColorAtlas button{
+ min-height:52px!important;min-width:44px;
+}
+@media(max-width:760px){
+ .labApp[data-cme-screen="studio"] .sculptorCoachLibrary{
+  gap:4px;padding:4px 5px;
+ }
+ .labApp[data-cme-screen="studio"] .sculptorCoachLibrary label{display:none}
+ .labApp[data-cme-screen="studio"] .sculptorCoachLibrary select{min-width:128px}
+ .labApp[data-cme-screen="studio"] .sculptorCoachLibrary button{
+  min-width:58px;padding:5px 6px;font-size:10px;
+ }
+ .labApp[data-cme-screen="studio"] .sculptorHairStyleGrid{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+ }
+}
