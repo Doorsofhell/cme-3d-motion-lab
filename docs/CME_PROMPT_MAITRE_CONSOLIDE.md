@@ -1,3 +1,15 @@
+## 26 octobre 2026 — Lot 0.7.52 : moteur et interface de sculpture
+
+1. Décision additive : activer cou, mains, pieds lorsque le GLB supporte ces déformations ; palette verticale défilante de formes à droite du coach, sans le masquer ; retirer les boutons de statistiques ; conserver nom, surnom, taille, poids, discipline phare et main dominante accessibles sans popup.
+
+2. Impacts : déformations de géométries clonées en conservant les os et poids de skinning ; cache des normales et limites si les paramètres sont identiques ; éclairage key/fill/rim mutualisé ; matériaux des tenues sportives et textures de référence conservés en Ultra, Fitness et Comics. Réglages de profil persistés avec la morphologie.
+
+3. Règles d'or : Shadow non modifié ; aucun vêtement héroïque, faux asset, faux morph, caméra utilisateur, mocap ou vidéo ; trajets biomécaniques et mouvements canoniques intacts. Les contrôles sans actif GLB restent désactivés.
+
+4. Qualité : Vitest, typecheck, validation GLB, build, CI verte avant fusion et Pages vérifiée. Android physique et performances FPS p50/p95, GPU et latence NON MESURÉS.
+
+5. Traçabilité : mise à jour sans effacer les anciennes décisions. Les détails cheveux, yeux, doigts et orteils demandent encore des actifs réels avant d'être annoncés comme personnalisables.
+
 ## RÈGLE ARTISTIQUE PRIORITAIRE — 26/10/2026 : même tenue sportive sur les trois styles
 
 **Arbitrage utilisateur explicite, additif et prioritaire :** la demande initiale de tenues inspirées de super-héros est abandonnée. Il ne faut créer **aucun costume héroïque, blason, cape, motif de marque protégée ni équipement fantaisiste**. CME-3D reste un laboratoire biomécanique et sportif. Pour **boxe anglaise, kick-boxing, Muay-thaï, MMA, JJB/BJJ et judo**, les coachs homme/femme conservent dans **Ultra réaliste**, **Animation fitness** et **Comics** les **mêmes fichiers GLB de vêtements et accessoires sportifs**. Leurs couleurs, motifs, textures, transparences et personnalisations enregistrées restent identiques, sous réserve du rendu de la lumière différent. Le mode Comics caractérise **l'illustration et l'éclairage** du même coach ; il ne transforme ni son uniforme ni ses protections. Le libellé est **« Comics · mêmes tenues »**, plus « Héros comics ».
