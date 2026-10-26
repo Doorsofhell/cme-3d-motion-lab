@@ -28,7 +28,7 @@ import {HAIR_STYLES,type HairStyle} from './coachHair';
 import {CoachProfileEditor} from './CoachProfileEditor';
 import {resolvedProportions} from './coachProportions';
 import {LIMITS} from './anatomicalHarmony';
-import {EYE_TONES,HAIR_TONES} from './appearancePalettes';
+import {EYE_TONES,HAIR_TONES,ANIME_HAIR_TONES} from './appearancePalettes';
 import {captureCoachPortrait} from './coachPortrait';
 import {currentAtlasCapabilities,canEditAtlasShape} from './atlasCapabilities';
 import {ANATOMICAL_VIEWS,type AnatomicalView} from './AnatomicalReference';
@@ -109,6 +109,7 @@ export function StudioCoach(){
  const editorScrollRef=useRef<HTMLDivElement|null>(null);
  const [step,setStep]=useState<Step>('morphologie');
  const [skinPaletteMode,setSkinPaletteMode]=useState<'realiste'|'anime'>('realiste');
+ const [hairPaletteMode,setHairPaletteMode]=useState<'realiste'|'anime'>('realiste');
  const [expandedShape,setExpandedShape]=useState<string|null>('shoulders');
  const [message,setMessage]=useState('');
  const [accessories,setAccessories]=useState<('gloves'|'shins')[]>(()=>ouvertureDemandee()?.accessories??['gloves','shins']);
@@ -284,8 +285,8 @@ export function StudioCoach(){
   window.dispatchEvent(new Event('cme-coaches-changed'));
   window.dispatchEvent(new Event('cme-open-lab-coach'));
  }catch{setMessage('Aperçu indisponible : stockage local bloqué sur cet appareil.');}};
- const newCoach=()=>{if(look.sex!=='homme')beginRigLoad('homme',rigMode,'switch');setSelectedId(null);setLook(defaultCoachLook);setIdentity({name:'',nickname:'',heightCm:'',weightKg:'',handedness:'right',nicknameVariant:0});setDiscipline('boxing');setAccessories(['gloves','shins']);try{localStorage.removeItem('cme-selected-coach');}catch{}setMessage('Humanoïde neutre : personnalisez-le, puis enregistrez le nouveau coach.');};
- const removeCoach=()=>{if(!selectedId||!window.confirm('Supprimer définitivement ce coach de cet appareil ?'))return;try{deleteSavedCoach(localStorage,selectedId);setSavedList(readSavedCoaches(localStorage));if(localStorage.getItem('cme-lab-coach')===selectedId)localStorage.removeItem('cme-lab-coach');localStorage.removeItem('cme-selected-coach');setSelectedId(null);setLook(defaultCoachLook);window.dispatchEvent(new Event('cme-coaches-changed'));setMessage('Coach supprimé.');}catch{setMessage('Suppression impossible.');}};
+ const newCoach=()=>{if(!rigMode){beginRigLoad(look.sex,true,'mode');setRigMode(true);}setReferenceMode(false);setAnatomicalPreview(false);setSelectedId(null);setLook({...defaultCoachLook,sex:look.sex});setIdentity({name:'',nickname:'',heightCm:'',weightKg:'',handedness:'right',nicknameVariant:0});setDiscipline('boxing');setAccessories(['gloves','shins']);try{localStorage.removeItem('cme-selected-coach');}catch{}setMessage('Humanoïde neutre : personnalisez-le, puis enregistrez le nouveau coach.');};
+ const removeCoach=()=>{if(!selectedId||!window.confirm('Supprimer définitivement ce coach de cet appareil ?'))return;try{deleteSavedCoach(localStorage,selectedId);setSavedList(readSavedCoaches(localStorage));if(localStorage.getItem('cme-lab-coach')===selectedId)localStorage.removeItem('cme-lab-coach');localStorage.removeItem('cme-selected-coach');setSelectedId(null);setReferenceMode(false);setRigMode(true);setLook({...defaultCoachLook,sex:look.sex});window.dispatchEvent(new Event('cme-coaches-changed'));setMessage('Coach supprimé.');}catch{setMessage('Suppression impossible.');}};
  const chargerCoach=(id:string)=>{
   if(!id){newCoach();return;}
   const c=readSavedCoaches(localStorage).find(v=>v.id===id);
@@ -408,8 +409,12 @@ export function StudioCoach(){
          onClick={()=>update('hairStyle',style.id)}>{style.label}</button>)}
        </div>
        <strong>Colorations</strong>
+       <div className="coachPaletteSelect" role="group" aria-label="Gamme de coloration des cheveux">
+        <button type="button" aria-pressed={hairPaletteMode==='realiste'} onClick={()=>setHairPaletteMode('realiste')}>Naturelles</button>
+        <button type="button" aria-pressed={hairPaletteMode==='anime'} onClick={()=>setHairPaletteMode('anime')}>Animation</button>
+       </div>
        <div className="coachColorAtlas" role="group" aria-label="Colorations des cheveux">
-        {HAIR_TONES.map(t=><button key={t.hex} type="button"
+        {(hairPaletteMode==='realiste'?HAIR_TONES:ANIME_HAIR_TONES).map(t=><button key={t.hex} type="button"
          disabled={!colorAvailable('hairColor')}
          title={t.name} aria-pressed={look.hairColor.toLowerCase()===t.hex.toLowerCase()}
          onClick={()=>update('hairColor',t.hex)}><i style={{background:t.hex}}/>{t.name}</button>)}
