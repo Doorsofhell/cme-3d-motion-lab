@@ -1,0 +1,75 @@
+/* 0.7.52 : la palette est sur un rail distinct hors du Canvas, jamais devant l'avatar. */
+.labApp[data-cme-screen="studio"] .sculptorViewportFrame{
+ grid-template-columns:minmax(0,1fr) 44px minmax(86px,94px);
+ column-gap:2px;position:relative;
+}
+.labApp[data-cme-screen="studio"] .sculptorFloatingPresets{
+ background:#101418;border-left:1px solid #343d48;
+ display:flex;flex-direction:column;align-items:stretch;
+ min-height:0;min-width:0;max-height:100%;overflow:hidden;
+ color:#dae0e7;border-radius:10px 12px 12px 10px;
+}
+.labApp[data-cme-screen="studio"] .sculptorFloatingHead{
+ display:flex;flex-direction:column;align-items:center;text-align:center;
+ gap:1px;min-height:46px;padding:6px 3px 4px;
+ border-bottom:1px solid #38414c;background:#191d24;
+}
+.labApp[data-cme-screen="studio"] .sculptorFloatingHead strong{
+ font-size:11px;line-height:1.15;overflow-wrap:anywhere;
+}
+.labApp[data-cme-screen="studio"] .sculptorFloatingHead small{
+ font-size:9px;color:#a3aebc;
+}
+.labApp[data-cme-screen="studio"] .sculptorFloatingList{
+ display:flex;flex-direction:column;gap:6px;flex:1 1 auto;
+ min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;
+ scrollbar-width:thin;scrollbar-color:#535d66 #101418;
+ touch-action:pan-y;padding:6px 3px 14px;
+}
+.labApp[data-cme-screen="studio"] .sculptorFloatingPreset{
+ box-sizing:border-box;display:flex;flex-direction:column;
+ align-items:center;justify-content:center;flex:0 0 auto;
+ gap:3px;min-height:76px;width:100%;max-width:100%;
+ padding:6px 2px;color:#cbd3db;background:#252930;
+ border:1px solid #3b444f;border-radius:11px;
+ touch-action:manipulation;
+}
+.labApp[data-cme-screen="studio"] .sculptorFloatingPreset .coachMorphIllustration{
+ display:block;width:51px;height:49px;max-width:100%;flex:none;
+}
+.labApp[data-cme-screen="studio"] .sculptorFloatingPreset span{
+ font-size:10px;line-height:1.13;text-align:center;overflow-wrap:anywhere;
+}
+.labApp[data-cme-screen="studio"] .sculptorFloatingPreset.is-active{
+ background:#102b35;color:#81e6ff;
+ border-color:var(--sculpt-cyan);box-shadow:inset 0 0 0 1px #1d8396;
+}
+.labApp[data-cme-screen="studio"] .sculptorFloatingPreset:focus-visible{
+ outline:2px solid var(--sculpt-cyan);outline-offset:-2px;
+}
+.labApp[data-cme-screen="studio"] .sculptorFloatingUnavailable,
+.labApp[data-cme-screen="studio"] .sculptorFloatingHint{
+ padding:12px 5px;font-size:10px;line-height:1.35;
+ color:#abb4c2;text-align:center;overflow-wrap:anywhere;
+}
+.labApp[data-cme-screen="studio"] .sculptorPresetHeight{
+ display:grid;place-items:center;min-height:46px;width:46px;
+ color:#7fdcf1;font-size:34px;font-weight:bold;
+}
+.labApp[data-cme-screen="studio"] .sculptorDashboardWorkspace .coachShapeGroups{
+ display:none!important;
+}
+/* Les mesures restent internes ; aucun bouton statistiques dans le parcours. */
+.labApp[data-cme-screen="studio"] .coachPreviewLabel,
+.labApp[data-cme-screen="studio"] .coachLiveValues,
+.labApp[data-cme-screen="studio"] .coachCapability{display:none!important}
+@media(max-width:365px){
+ .labApp[data-cme-screen="studio"] .sculptorViewportFrame{
+  grid-template-columns:minmax(0,1fr) 44px 81px;
+ }
+ .labApp[data-cme-screen="studio"] .sculptorFloatingPreset{min-height:68px}
+ .labApp[data-cme-screen="studio"] .sculptorFloatingPreset .coachMorphIllustration{width:45px;height:42px}
+}
+@media(prefers-reduced-motion:reduce){
+ .labApp[data-cme-screen="studio"] .sculptorFloatingPreset{transition:none}
+}
