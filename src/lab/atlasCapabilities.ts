@@ -15,6 +15,9 @@ export function canEditAtlasShape(group:ShapeGroup,support:ReturnType<typeof cur
   case 'thigh':return support.shape.thighVertices>0;
   case 'arm':return support.shape.armVertices>0;
   case 'calf':return support.shape.calfVertices>0;
+  case 'neck':return support.shape.neckVertices>0;
+  case 'hand':return support.shape.handVertices>0;
+  case 'foot':return support.shape.footVertices>0;
   case 'bust':return support.shape.bustVertices>0;
   case 'face':return !!support.shape.faceMorphs[group.id as 'jaw'|'nose'|'eyes']||support.shape.faceVertices>0;
  }

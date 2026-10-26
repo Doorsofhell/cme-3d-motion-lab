@@ -1,7 +1,7 @@
 import type {CoachLook} from './StudioCoach';
 import {harmonizeBodyScalars,type BodyScalars} from './anatomicalHarmony';
 export type Handedness='right'|'left';
-export type CoachDimensions=Pick<CoachLook,'sex'|'height'|'shoulders'|'muscle'|'waist'|'roundness'|'hips'|'glutes'|'thighs'|'arms'|'calves'|'bust'>;
+export type CoachDimensions=Pick<CoachLook,'sex'|'height'|'shoulders'|'muscle'|'waist'|'roundness'|'hips'|'glutes'|'thighs'|'arms'|'calves'|'bust'|'neck'|'hands'|'feet'>;
 /** Art-directed BMI proxy, not a diagnostic or verified anthropometric model.
  * Female and male source GLBs are independent; the saved sliders stay intact.
  */
@@ -23,6 +23,9 @@ export function resolvedProportions(look:CoachLook,heightCm?:number,weightKg?:nu
   calves:look.calves+fullness*(female?.105:.085),
   bust:look.bust+fullness*(female?.08:.075)
  };
- return {sex:look.sex,height:clamp(h/baseHeight,.9,1.1),...harmonizeBodyScalars(look.sex,values)};
+ return {sex:look.sex,height:clamp(h/baseHeight,.9,1.1),...harmonizeBodyScalars(look.sex,values),
+ neck:clamp((look.neck??1)+fullness*.025,.8,1.2),
+ hands:clamp((look.hands??1)+fullness*.015,.8,1.2),
+ feet:clamp((look.feet??1)+fullness*.015,.8,1.2)};
 }
 export const handLabel=(hand:Handedness)=>hand==='left'?'Gaucher · garde inversée':'Droitier · garde standard';
