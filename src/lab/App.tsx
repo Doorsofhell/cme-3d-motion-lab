@@ -4,6 +4,8 @@ import {ACESFilmicToneMapping,NeutralToneMapping,SRGBColorSpace,CanvasTexture} f
 import {Fighter} from './Fighter';
 import {studioLightingPreset} from './studioLighting';
 import {StudioCoach} from './StudioCoach';
+import {ShadowTrainingPanel} from '../shadow-training/ShadowTrainingPanel';
+import type {DisciplineId} from '../shadow-training/domain/types';
 import {NavigationPrincipale,type DestinationPrincipale} from './NavigationPrincipale';
 import {useSceneFullscreen,SceneFullscreenButton} from './SceneFullscreen';
 import {SceneCameraControls,SceneToolbar,SceneLoadingIndicator} from './SceneControls';
@@ -124,9 +126,9 @@ function PerfProbe({onMetrics}:{onMetrics:(metrics:Metrics)=>void}){
  });
  return null;
 }
-function Viewer({actor,discipline,technique,coachPlan,quality,renderStyle,playback,skeleton,onReport,onMetrics,onLog,onIncident,onCaptureReady,onMotionSample,coachLook,handedness='right',accessories,active,telemetry}:{
+function Viewer({actor,discipline,technique,coachPlan,quality,renderStyle,playback,skeleton,onReport,onMetrics,onLog,onIncident,onCaptureReady,onMotionSample,onRepetition,coachLook,handedness='right',accessories,active,telemetry}:{
  actor:Actor;discipline:string;technique:string;coachPlan:CoachPlan|null;quality:Quality;renderStyle:RenderStyle;
- playback:RefObject<Playback>;skeleton:boolean;active:boolean;telemetry:AndroidTelemetry;coachLook?:CoachLook|null;handedness?:'right'|'left';accessories?:('gloves'|'shins')[];onReport:(r:RigReport)=>void;onMetrics:(m:Metrics)=>void;onLog:(message:string)=>void;onIncident:(category:AutoCategory,title:string,details:string)=>void;onCaptureReady:(capture:()=>string|null)=>void;onMotionSample:(id:string,progress:number,nowMs:number)=>void;
+ playback:RefObject<Playback>;skeleton:boolean;active:boolean;telemetry:AndroidTelemetry;coachLook?:CoachLook|null;handedness?:'right'|'left';accessories?:('gloves'|'shins')[];onReport:(r:RigReport)=>void;onMetrics:(m:Metrics)=>void;onLog:(message:string)=>void;onIncident:(category:AutoCategory,title:string,details:string)=>void;onCaptureReady:(capture:()=>string|null)=>void;onMotionSample:(id:string,progress:number,nowMs:number)=>void;onRepetition:()=>void;
 }){
  const [ready,setReady]=useState(false),[error,setError]=useState<string|null>(null),[slow,setSlow]=useState(false);
  const [retry,setRetry]=useState(0);
@@ -185,7 +187,7 @@ function Viewer({actor,discipline,technique,coachPlan,quality,renderStyle,playba
       <AndroidFrameProbe telemetry={telemetry}/>
 
      <Suspense fallback={null}>
-      <Fighter actor={actor} outfit={discipline} technique={technique} coachPlan={coachPlan} playback={playback} skeleton={skeleton} quality={quality} renderStyle={renderStyle} onReady={onReady} onReport={onReport} onMotionSample={onMotionSample} coachLook={coachLook} handedness={handedness} accessories={accessories}/>
+      <Fighter actor={actor} outfit={discipline} technique={technique} coachPlan={coachPlan} playback={playback} skeleton={skeleton} quality={quality} renderStyle={renderStyle} onReady={onReady} onReport={onReport} onMotionSample={onMotionSample} onRepetition={onRepetition} coachLook={coachLook} handedness={handedness} accessories={accessories}/>
      </Suspense>
      <SceneCameraControls target={[0,1,0]} minDistance={1.35} maxDistance={6}/>
     </Canvas>
@@ -225,6 +227,13 @@ export function App(){
  const [renderStyle,setRenderStyle]=useState<RenderStyle>('ultra');
  const [skeleton,setSkeleton]=useState(false);
  const [progress,setProgress]=useState(0),[playing,setPlaying]=useState(false),[speed,setSpeed]=useState(1);
+ const onShadowPlay=useCallback((active:boolean,nextSpeed:number)=>{setPlaying(v=>v===active?v:active);setSpeed(v=>v===nextSpeed?v:nextSpeed);},[]);
+ const onShadowRep=useCallback(()=>{window.dispatchEvent(new Event('cme-entrainement-repetition'));},[]);
+ const onShadowExercise=useCallback((nextDiscipline:DisciplineId,motion:string|null)=>{
+  setPlaying(false);setProgress(0);setCoachPlan(null);setExecutionEvidence(null);
+  if(nextDiscipline!==discipline){setDiscipline(nextDiscipline);setReport(null);}
+  setTechnique(motion??'garde');
+ },[discipline]);
  const [report,setReport]=useState<RigReport|null>(null);
  const [extra,setExtra]=useState(false);
  const [moreOpen,setMoreOpen]=useState(false);
@@ -330,37 +339,23 @@ export function App(){
   <div className="cmeAppContent" role="region" aria-label="Contenu de la rubrique active" tabIndex={-1}>
    {['technical','versions','roadmap','tracking','options','comparison'].includes(tab)&&<button type="button" className="cmeRetourPlus" onClick={()=>setTab('other')}>‹ Retour à Plus</button>}
   <div className="labContent" style={{display:tab==='lab'?'contents':'none'}}>
-  <section className="quickBar" aria-label="Sélection de test">
-   <label><span>Coach · {savedCoaches.length} personnalisé(s)</span><select aria-label="Coach" value={selectedCoach?'saved:'+selectedCoach.id:actor} onChange={e=>{
-    const value=e.target.value;
-    if(value.startsWith('saved:')){
-     selectSavedCoach(value.slice(6));
-     journal.record('coach','Coach personnalisé sélectionné : '+value.slice(6));
-    }else{
-     journal.record('coach','Changement de coach : '+actor+' → '+value);
-     reset();setSelectedCoach(null);
-     try{localStorage.removeItem('cme-lab-coach');}catch{}
-     setActor(value as Actor);
-    }
-   }}>
-    <optgroup label="Coachs de référence">{fighterRoster.map(f=><option key={f.id} value={f.id} disabled={f.status!=='available'&&f.id!=='mma-naira'}>{f.name}{f.status==='in-production'?' · prototype cloné (non validé)':''}</option>)}</optgroup>
-    {savedCoaches.length>0&&<optgroup label="Mes coachs personnalisés">{savedCoaches.map(c=><option key={c.id} value={'saved:'+c.id}>{c.name} · {c.look.sex}</option>)}</optgroup>}
-   </select></label>
-   <label><span>Discipline</span><select aria-label="Discipline" value={discipline} onChange={e=>{journal.record('discipline','Discipline : '+discipline+' → '+e.target.value,{coach:actor,style:renderStyle});reset();setDiscipline(e.target.value);setTechnique('garde');onLog('Discipline : '+e.target.value);}}>{disciplines.map(([id,name])=><option key={id} value={id}>{name}</option>)}</select></label>
-   <label className="cmeQuickMotion"><span>Mouvement ou enchaînement</span>
-    <select aria-label="Mouvement ou enchaînement" value={runnableEntries.some(e=>e.id===technique)?technique:''} disabled={!runnableEntries.length} onChange={e=>selectTechnique(e.target.value)}>
-     {!runnableEntries.some(e=>e.id===technique)&&<option value="">Choisir un geste compatible</option>}
-     <optgroup label="Techniques disponibles">{runnableEntries.filter(e=>e.kind==='technique').map(e=><option key={e.id} value={e.id}>{e.name}</option>)}</optgroup>
-     <optgroup label="Enchaînements disponibles">{runnableEntries.filter(e=>e.kind==='sequence').map(e=><option key={e.id} value={e.id}>{e.name}</option>)}</optgroup>
-    </select>
-   </label>
-   <button type="button" className="cmeQuickRun" disabled={!runnableEntries.some(e=>e.id===technique)} onClick={()=>{seek(0);setExecutionEvidence(null);setCoachPlan(null);setPlaying(true);}}>▶ Exécuter</button>
-  </section>
-  <section ref={stageFullscreen.ref as React.RefObject<HTMLElement>} className={`stage ${stageFullscreen.fullscreen?"cmeFullscreen":""}`} aria-label="Vue de test 3D" onDoubleClick={stageFullscreen.onDoubleClick} onTouchEnd={stageFullscreen.onTouchEnd}>
+  {tab==='lab'&&<ShadowTrainingPanel discipline={discipline as DisciplineId}
+   coachName={selectedCoach?.name??(actor==='mma-amara'?'Amara':actor==='mma-naira'?'Naïra':'Kadir')}
+   availableMotions={report?.availableMotions??null}
+   coachOptions={[...fighterRoster.map(f=>({id:f.id,label:f.name,disabled:f.status!=='available'&&f.id!=='mma-naira'})),
+    ...savedCoaches.map(c=>({id:'saved:'+c.id,label:c.name+(c.nickname?' (« '+c.nickname+' »)':''),disabled:false}))]}
+   currentCoach={selectedCoach?'saved:'+selectedCoach.id:actor}
+   onCoachChange={value=>{
+    setPlaying(false);setReport(null);
+    if(value.startsWith('saved:'))selectSavedCoach(value.slice(6));
+    else{setSelectedCoach(null);setActor(value as Actor);try{localStorage.removeItem('cme-lab-coach');}catch{}}
+   }}
+   onExercise={onShadowExercise} onPlayback={onShadowPlay}/>}
+ <section ref={stageFullscreen.ref as React.RefObject<HTMLElement>} className={`stage ${stageFullscreen.fullscreen?"cmeFullscreen":""}`} aria-label="Vue de test 3D" onDoubleClick={stageFullscreen.onDoubleClick} onTouchEnd={stageFullscreen.onTouchEnd}>
    <SceneToolbar actions={<SceneFullscreenButton fullscreen={stageFullscreen.fullscreen} onClick={stageFullscreen.toggle}/>}/>
-   <div className="stageTitle"><span>{actor==='mma-amara'?'AMARA':'KADIR'} <em>· {renderStyle==='fitness'?'Animation fitness':renderStyle==='comic'?'Comics sportif · tenue d’origine':'Ultra-réaliste'}</em></span><span className="stagePill">MOTION / IK</span></div>
-   {selectedCoach&&<div className="labSelectedCoach" role="status">Coach personnalisé : <strong>{selectedCoach.name}</strong> · {selectedCoach.look.sex} · animations canoniques</div>}
-   <Viewer active={labActive} telemetry={androidTelemetry} coachLook={selectedCoach?.look??null} handedness={selectedCoach?.handedness??'right'} accessories={selectedCoach?.accessories} actor={actor} coachPlan={coachPlan} discipline={outfit} quality={quality} renderStyle={renderStyle} technique={technique} playback={playback} skeleton={skeleton} onReport={onReport} onMetrics={onMetrics} onLog={onLog} onIncident={autoRecord} onCaptureReady={setScreenshotHandler} onMotionSample={onMotionSample}/>
+   <div className="stageTitle"><span>{selectedCoach?.name??(actor==='mma-amara'?'AMARA':actor==='mma-naira'?'NAÏRA':'KADIR')} <em>· {renderStyle==='fitness'?'Animation fitness':renderStyle==='comic'?'Comics sportif · tenue d’origine':'Ultra-réaliste'}</em></span><span className="stagePill">MOTION / IK</span></div>
+   {selectedCoach&&<div className="labSelectedCoach" role="status">Coach personnalisé : <strong>{selectedCoach.name}</strong>{selectedCoach.nickname?' « '+selectedCoach.nickname+' »':''} · {selectedCoach.look.sex} · animations canoniques</div>}
+   <Viewer active={labActive} telemetry={androidTelemetry} coachLook={selectedCoach?.look??null} handedness={selectedCoach?.handedness??'right'} accessories={selectedCoach?.accessories} actor={actor} coachPlan={coachPlan} discipline={outfit} quality={quality} renderStyle={renderStyle} technique={technique} playback={playback} skeleton={skeleton} onReport={onReport} onMetrics={onMetrics} onLog={onLog} onIncident={autoRecord} onCaptureReady={setScreenshotHandler} onMotionSample={onMotionSample} onRepetition={onShadowRep}/>
    <SceneLoadingIndicator/>
    <div className="stageBottom"><span>{report?(report.techniqueFound?'Mouvement reconnu · '+report.bones+' os':'Mouvement non compatible · choisir un autre'):'Chargement du modèle 3D'}</span><span>{report?('Tenue '+outfit+' ✓'):'Chargement'}</span></div>
   </section>
