@@ -24,6 +24,7 @@ import {GROUPES_ANATOMIQUES,groupePourZone,type ZoneAnatomique} from './studioAn
 import {regionsPourGroupe,type SculptorRegion} from './sculptorRegions';
 import {SculptorRegionIcon} from './SculptorRegionIcon';
 import {SculptorFloatingPresets} from './SculptorFloatingPresets';
+import {HAIR_STYLES,type HairStyle} from './coachHair';
 import {CoachProfileEditor} from './CoachProfileEditor';
 import {resolvedProportions} from './coachProportions';
 import {LIMITS} from './anatomicalHarmony';
@@ -38,7 +39,7 @@ export type CoachLook={
  sex:'homme'|'femme';height:number;shoulders:number;muscle:number;waist:number;
  roundness:number;hips:number;glutes:number;thighs:number;arms:number;calves:number;bust:number;neck:number;hands:number;feet:number;
  jaw:number;nose:number;eyes:number;skin:string;eyeColor:string;
- hairStyle:'rase'|'court'|'long';hairColor:string;
+ hairStyle:HairStyle;hairColor:string;
  top:'rashguard'|'tshirt'|'aucun';topColor:string;
  bottom:'short'|'legging';bottomColor:string;
  gloves:'boxe'|'mma'|'aucun';gloveColor:string;
@@ -61,7 +62,7 @@ export function normalizeCoachLook(input:Partial<CoachLook>):CoachLook{
   if(!/^#[0-9a-fA-F]{6}$/.test(out[k]))out[k]=defaultCoachLook[k];
  }
  if(!['homme','femme'].includes(out.sex))out.sex='homme';
- if(!['rase','court','long'].includes(out.hairStyle))out.hairStyle='court';
+ if(!HAIR_STYLES.some(style=>style.id===out.hairStyle))out.hairStyle='court';
  if(!['rashguard','tshirt','aucun'].includes(out.top))out.top='rashguard';
  if(!['short','legging'].includes(out.bottom))out.bottom='short';
  if(!['boxe','mma','aucun'].includes(out.gloves))out.gloves='boxe';
@@ -93,18 +94,24 @@ const studioSteps:readonly {id:Step;label:string;first:Category}[]=[
  {id:'equipement',label:'3. Équipement',first:'tenue'}
 ];
 const disciplineNames:Record<LabDiscipline,string>={boxing:'Boxe anglaise',kickboxing:'Kick-boxing',muaythai:'Muay-thaï',mma:'MMA',bjj:'JJB',judo:'Judo'};
+function ouvertureDemandee(){
+ try{const id=sessionStorage.getItem('cme-edit-request');return id?readSavedCoaches(localStorage).find(c=>c.id===id)??null:null;}
+ catch{return null;}
+}
 export function StudioCoach(){
- const [look,setLook]=useState<CoachLook>(()=>{try{const id=localStorage.getItem('cme-selected-coach');return normalizeCoachLook(readSavedCoaches(localStorage).find(x=>x.id===id)?.look??defaultCoachLook);}catch{return defaultCoachLook;}});
- const [selectedId,setSelectedId]=useState<string|null>(()=>{try{return localStorage.getItem('cme-selected-coach');}catch{return null;}});
+ const [look,setLook]=useState<CoachLook>(()=>normalizeCoachLook(ouvertureDemandee()?.look??defaultCoachLook));
+ const [selectedId,setSelectedId]=useState<string|null>(()=>ouvertureDemandee()?.id??null);
  useEffect(()=>{const open=()=>{try{const id=localStorage.getItem('cme-selected-coach');const saved=readSavedCoaches(localStorage).find(x=>x.id===id);if(saved){setSelectedId(saved.id);setLook(normalizeCoachLook(saved.look));setIdentity(v=>({...v,name:saved.name,nickname:saved.nickname??'',heightCm:String(saved.heightCm??''),weightKg:String(saved.weightKg??''),handedness:saved.handedness??'right'}));setAccessories(saved.accessories??['gloves','shins']);if(LAB_DISCIPLINES.includes(saved.initialDiscipline as LabDiscipline))setDiscipline(saved.initialDiscipline as LabDiscipline);}}catch{}};window.addEventListener('cme-edit-selected-coach',open);return()=>window.removeEventListener('cme-edit-selected-coach',open);},[]);
- const [identity,setIdentity]=useState(()=>{try{const id=localStorage.getItem('cme-selected-coach');const c=readSavedCoaches(localStorage).find(x=>x.id===id);return {name:c?.name??'',nickname:c?.nickname??'',heightCm:c?.heightCm?.toString()??'',weightKg:c?.weightKg?.toString()??'',handedness:c?.handedness??'right',nicknameVariant:0};}catch{return {name:'',nickname:'',heightCm:'',weightKg:'',handedness:'right' as const,nicknameVariant:0};}});
+ const [identity,setIdentity]=useState(()=>{const c=ouvertureDemandee();return {name:c?.name??'',nickname:c?.nickname??'',heightCm:c?.heightCm?.toString()??'',weightKg:c?.weightKg?.toString()??'',handedness:c?.handedness??'right' as const,nicknameVariant:0};});
+ const [savedList,setSavedList]=useState(()=>{try{return readSavedCoaches(localStorage)}catch{return [];}});
+ useEffect(()=>{try{sessionStorage.removeItem('cme-edit-request')}catch{}},[]);
  const [section,setSection]=useState<Category>('corps');
  const editorScrollRef=useRef<HTMLDivElement|null>(null);
  const [step,setStep]=useState<Step>('morphologie');
  const [skinPaletteMode,setSkinPaletteMode]=useState<'realiste'|'anime'>('realiste');
  const [expandedShape,setExpandedShape]=useState<string|null>('shoulders');
  const [message,setMessage]=useState('');
- const [accessories,setAccessories]=useState<('gloves'|'shins')[]>(()=>{try{const id=localStorage.getItem('cme-selected-coach');return readSavedCoaches(localStorage).find(c=>c.id===id)?.accessories??['gloves','shins'];}catch{return ['gloves','shins'];}});
+ const [accessories,setAccessories]=useState<('gloves'|'shins')[]>(()=>ouvertureDemandee()?.accessories??['gloves','shins']);
  const [rigMode,setRigMode]=useState(true);
  const [anatomicalPreview,setAnatomicalPreview]=useState(false);
  const [referenceMode,setReferenceMode]=useState(false);
@@ -116,7 +123,7 @@ export function StudioCoach(){
  const recenter=(zone:StudioFocusZone)=>{setFocusZone(zone);setFocusRequest(n=>n+1);};
  const sceneFullscreen=useSceneFullscreen();
  const [advancedOpen,setAdvancedOpen]=useState(false);
- const [discipline,setDiscipline]=useState<LabDiscipline>('boxing');
+ const [discipline,setDiscipline]=useState<LabDiscipline>(()=>{const d=ouvertureDemandee()?.initialDiscipline;return LAB_DISCIPLINES.includes(d as LabDiscipline)?d as LabDiscipline:'boxing';});
  const [noGi,setNoGi]=useState(false);
  const [motionId,setMotionId]=useState('garde');
  const catalog=useMemo(()=>studioTechniqueCatalog(discipline),[discipline]);
@@ -131,7 +138,7 @@ export function StudioCoach(){
  }),[look.skin,look.hairColor,look.eyeColor,look.topColor,look.bottomColor,look.gloveColor,look.shinColor,accessories]);
  const dimensions=useMemo(()=>resolvedProportions(look,Number(identity.heightCm)||undefined,Number(identity.weightKg)||undefined),[look,identity.heightCm,identity.weightKg]);
  const faceDimensions=useMemo(()=>({jaw:look.jaw,nose:look.nose,eyes:look.eyes}),[look.jaw,look.nose,look.eyes]);
- const colorAvailable=(key:'skin'|'eyeColor'|'hairColor'|'topColor'|'bottomColor'|'gloveColor'|'shinColor')=>key!=='hairColor'&&!!support?.colors[key]&&(!rigMode||key==='skin'||key==='eyeColor');
+ const colorAvailable=(key:'skin'|'eyeColor'|'hairColor'|'topColor'|'bottomColor'|'gloveColor'|'shinColor')=>key==='hairColor'?!!report?.hairAvailable&&!referenceMode:!!support?.colors[key]&&(!rigMode||key==='skin'||key==='eyeColor');
  const faceAvailable=(key:'jaw'|'nose'|'eyes')=>!!support&&(!!support.shape.faceMorphs[key]||support.shape.faceVertices>0);
 
  const [androidTelemetry]=useState(()=>{
@@ -263,7 +270,7 @@ export function StudioCoach(){
   }
   // Une modification de l'apparence ne doit jamais réutiliser une ancienne image.
   if(existing&&JSON.stringify(existing.look)!==JSON.stringify(normalizeCoachLook(look))&&portrait===existing.portrait)portrait=undefined;
-  const profile={id,name:name.slice(0,60),createdAt:existing?.createdAt??new Date().toISOString(),look:normalizeCoachLook(look),portrait,nickname:identity.nickname.trim().slice(0,60)||undefined,initialDiscipline:discipline,handedness:identity.handedness,accessories,heightCm:identity.heightCm&&Number(identity.heightCm)>=100&&Number(identity.heightCm)<=250?Number(identity.heightCm):undefined,weightKg:identity.weightKg&&Number(identity.weightKg)>=25&&Number(identity.weightKg)<=300?Number(identity.weightKg):undefined};if(existing)updateSavedCoach(localStorage,profile);else addSavedCoach(localStorage,profile);localStorage.setItem('cme-selected-coach',id);localStorage.setItem('cme-lab-coach',id);setSelectedId(id);window.dispatchEvent(new Event('cme-coaches-changed'));setMessage(existing?'Coach mis à jour et sélectionné dans le Laboratoire.':'Coach enregistré et sélectionné dans le Laboratoire.');}catch{setMessage('Enregistrement impossible sur cet appareil.');}};
+  const profile={id,name:name.slice(0,60),createdAt:existing?.createdAt??new Date().toISOString(),look:normalizeCoachLook(look),portrait,nickname:identity.nickname.trim().slice(0,60)||undefined,initialDiscipline:discipline,handedness:identity.handedness,accessories,heightCm:identity.heightCm&&Number(identity.heightCm)>=100&&Number(identity.heightCm)<=250?Number(identity.heightCm):undefined,weightKg:identity.weightKg&&Number(identity.weightKg)>=25&&Number(identity.weightKg)<=300?Number(identity.weightKg):undefined};if(existing)updateSavedCoach(localStorage,profile);else addSavedCoach(localStorage,profile);setSavedList(readSavedCoaches(localStorage));localStorage.setItem('cme-selected-coach',id);localStorage.setItem('cme-lab-coach',id);setSelectedId(id);window.dispatchEvent(new Event('cme-coaches-changed'));setMessage(existing?'Coach mis à jour et sélectionné dans le Laboratoire.':'Coach enregistré et sélectionné dans le Laboratoire.');}catch{setMessage('Enregistrement impossible sur cet appareil.');}};
  const tryCoachInLab=()=>{try{
   // One-click preview: keep just one reusable profile instead of asking for
   // a name, and explicitly share the UNSAVED editor state with the lab.
@@ -277,8 +284,29 @@ export function StudioCoach(){
   window.dispatchEvent(new Event('cme-coaches-changed'));
   window.dispatchEvent(new Event('cme-open-lab-coach'));
  }catch{setMessage('Aperçu indisponible : stockage local bloqué sur cet appareil.');}};
- const newCoach=()=>{if(look.sex!=='homme')beginRigLoad('homme',rigMode,'switch');setSelectedId(null);setLook(defaultCoachLook);setIdentity({name:'',nickname:'',heightCm:'',weightKg:'',handedness:'right',nicknameVariant:0});setDiscipline('boxing');setAccessories(['gloves','shins']);try{localStorage.removeItem('cme-selected-coach');}catch{}setMessage('Nouveau personnage : choisissez un modèle neutre, puis personnalisez-le.');};
- const removeCoach=()=>{if(!selectedId||!window.confirm('Supprimer définitivement ce coach de cet appareil ?'))return;try{deleteSavedCoach(localStorage,selectedId);if(localStorage.getItem('cme-lab-coach')===selectedId)localStorage.removeItem('cme-lab-coach');localStorage.removeItem('cme-selected-coach');setSelectedId(null);setLook(defaultCoachLook);window.dispatchEvent(new Event('cme-coaches-changed'));setMessage('Coach supprimé.');}catch{setMessage('Suppression impossible.');}};
+ const newCoach=()=>{if(look.sex!=='homme')beginRigLoad('homme',rigMode,'switch');setSelectedId(null);setLook(defaultCoachLook);setIdentity({name:'',nickname:'',heightCm:'',weightKg:'',handedness:'right',nicknameVariant:0});setDiscipline('boxing');setAccessories(['gloves','shins']);try{localStorage.removeItem('cme-selected-coach');}catch{}setMessage('Humanoïde neutre : personnalisez-le, puis enregistrez le nouveau coach.');};
+ const removeCoach=()=>{if(!selectedId||!window.confirm('Supprimer définitivement ce coach de cet appareil ?'))return;try{deleteSavedCoach(localStorage,selectedId);setSavedList(readSavedCoaches(localStorage));if(localStorage.getItem('cme-lab-coach')===selectedId)localStorage.removeItem('cme-lab-coach');localStorage.removeItem('cme-selected-coach');setSelectedId(null);setLook(defaultCoachLook);window.dispatchEvent(new Event('cme-coaches-changed'));setMessage('Coach supprimé.');}catch{setMessage('Suppression impossible.');}};
+ const chargerCoach=(id:string)=>{
+  if(!id){newCoach();return;}
+  const c=readSavedCoaches(localStorage).find(v=>v.id===id);
+  if(!c){setMessage('Ce coach n’est plus disponible.');return;}
+  if(look.sex!==c.look.sex)beginRigLoad(c.look.sex,rigMode,'switch');
+  setSelectedId(c.id);setLook(normalizeCoachLook(c.look));
+  setIdentity({name:c.name,nickname:c.nickname??'',heightCm:String(c.heightCm??''),weightKg:String(c.weightKg??''),handedness:c.handedness??'right',nicknameVariant:0});
+  setAccessories(c.accessories??['gloves','shins']);
+  if(LAB_DISCIPLINES.includes(c.initialDiscipline as LabDiscipline))setDiscipline(c.initialDiscipline as LabDiscipline);
+  setReferenceMode(false);setAnatomicalPreview(false);setRigMode(true);setReport(null);
+  setMessage('Coach '+c.name+' chargé dans le configurateur.');
+ };
+ const dupliquerCoach=()=>{
+  const c=readSavedCoaches(localStorage).find(v=>v.id===selectedId);
+  if(!c){setMessage('Choisissez un coach enregistré avant de le dupliquer.');return;}
+  try{
+   const copy={...c,id:crypto.randomUUID(),createdAt:new Date().toISOString(),name:('Copie de '+c.name).slice(0,60),look:normalizeCoachLook({...c.look}),portrait:undefined};
+   addSavedCoach(localStorage,copy);setSavedList(readSavedCoaches(localStorage));chargerCoach(copy.id);
+   window.dispatchEvent(new Event('cme-coaches-changed'));setMessage('Coach dupliqué : personnalisez sa copie.');
+  }catch{setMessage('Duplication impossible.');}
+ };
  const exportJson=()=>{const json=JSON.stringify({schema:'cme-coach-look-v1',look},null,2);const blob=new Blob([json],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='cme-coach-look.json';a.click();URL.revokeObjectURL(url);setMessage('Configuration exportée : apparence uniquement, sans modification du moteur.');};
  return <section className="coachStudio" aria-label="Studio Coach">
   <header className="coachStudioHeader"><div><small>STUDIO COACH</small><h2>Mon combattant</h2><p>Choisis un modèle, personnalise-le, puis teste un geste.</p></div></header>
@@ -325,6 +353,17 @@ export function StudioCoach(){
 
   
   <p className="coachCreationNote">Choisissez une zone à gauche, puis sa forme dans la barre verticale à droite du coach.</p>
+    <div className="sculptorCoachChooser">
+      <label>Humanoïde ou coach enregistré
+       <select aria-label="Choisir un humanoïde neutre ou un coach enregistré" value={selectedId??''} onChange={e=>chargerCoach(e.currentTarget.value)}>
+        <option value="">Humanoïde neutre · {look.sex==='homme'?'Homme':'Femme'}</option>
+        {savedList.map(c=><option key={c.id} value={c.id}>{c.name}{c.nickname?' · '+c.nickname:''}</option>)}
+       </select>
+      </label>
+      <button type="button" onClick={newCoach}>Nouveau</button>
+      <button type="button" disabled={!selectedId} onClick={dupliquerCoach}>Dupliquer</button>
+      <button type="button" disabled={!selectedId} onClick={removeCoach}>Supprimer</button>
+     </div>
     <nav className="coachGroupesAnatomiques sculptorXAxis" aria-label="Familles de personnalisation">
      {GROUPES_ANATOMIQUES.map(groupe=><button type="button" key={groupe.id}
       className={groupeActif.id===groupe.id?'active':''} aria-pressed={groupeActif.id===groupe.id}
@@ -359,7 +398,25 @@ export function StudioCoach(){
      {section==='silhouette'&&<div className="coachFemaleShapes">{shapePicker(['hips','glutes','thighs','calves','feet'])}<p className="coachAvailability">Les mêmes zones sont disponibles pour tous les combattants. Le volume du buste est adapté à l’anatomie du modèle (pectoraux ou poitrine). Les transitions restent des approximations déformées sur le maillage skinné. Une déformation locale bornée des fessiers agit sur les sommets skinnés du bassin. De nouveaux morphs sculptés du visage et des modèles organiques détaillés restent nécessaires pour la qualité finale.</p></div>}
      {section==='visage'&&<>{shapePicker(['jaw','nose','eyes'])}<div className="coachSwatchSection"><strong>Couleur de l’iris</strong><div className="coachColorAtlas" role="group" aria-label="Couleurs des yeux">{EYE_TONES.map(t=><button key={t.hex} type="button" title={t.name} aria-pressed={look.eyeColor.toLowerCase()===t.hex.toLowerCase()} onClick={()=>update('eyeColor',t.hex)}><i style={{background:t.hex}}/>{t.name}</button>)}</div>{color('eyeColor','Couleur personnalisée')}{!colorAvailable('eyeColor')&&<small>La teinte est mémorisée. L’asset courant ne sépare pas encore suffisamment l’iris pour l’afficher correctement.</small>}</div></>}
      {section==='peau'&&<div className="coachSkinEditor"><div className="coachPaletteMode"><strong>Coloration de la peau</strong><div className="coachPaletteSelect" role="group" aria-label="Palette de carnation"><button type="button" aria-pressed={skinPaletteMode==='realiste'} onClick={()=>setSkinPaletteMode('realiste')}>Réalisme</button><button type="button" aria-pressed={skinPaletteMode==='anime'} onClick={()=>setSkinPaletteMode('anime')}>Animation</button></div><small>Choix de couleurs de peau sans classification ethnique. Le mode Animation change la palette, pas le shader.</small></div><p className="coachAvailability">Choisissez une carnation naturelle. Le rendu préserve le grain et les détails de la texture du corps, sans superposer une seconde couleur sombre.</p><div className="coachSkinGrid" role="group" aria-label="Carnations naturelles">{(skinPaletteMode==='realiste'?SKIN_TONES:ANIME_SKIN_TONES).map(tone=><button type="button" key={tone.hex} disabled={!colorAvailable('skin')} className={`coachSkinTone ${look.skin.toLowerCase()===tone.hex?'active':''}`} aria-pressed={look.skin.toLowerCase()===tone.hex} onClick={()=>{selectFocus('peau');update('skin',tone.hex);}} title={tone.name}><span className="coachSkinSwatch" style={{backgroundColor:tone.hex}}/><span>{tone.name}</span></button>)}</div><small className="coachSkinHint">{!colorAvailable('skin')?'Les matériaux de peau de ce GLB ne sont pas encore séparés : teinte sauvegardée pour un maillage compatible.':'La teinte est appliquée à la peau identifiable. Quitte automatiquement le mannequin gris pour rendre le changement visible.'}</small>{color('skin','Nuance personnalisée')}</div>}
-     {section==='cheveux'&&<div className="coachSwatchSection"><strong>Chevelure et pilosité</strong>{choose('hairStyle','Coupe souhaitée',['rase','court','long'],false)}<div className="coachColorAtlas" role="group" aria-label="Couleurs de cheveux">{HAIR_TONES.map(t=><button key={t.hex} type="button" disabled title={t.name} aria-pressed={look.hairColor.toLowerCase()===t.hex.toLowerCase()} onClick={()=>update('hairColor',t.hex)}><i style={{background:t.hex}}/>{t.name}</button>)}</div>{color('hairColor','Couleur personnalisée')}<small>Coiffures spécialisées GLB non intégrées. Les commandes restent indisponibles pour éviter un rendu approximatif.</small></div>}
+     {section==='cheveux'&&<div className="coachSwatchSection sculptorHairEditor">
+       <strong>Coiffures du coach</strong>
+       <small>Sept coiffures géométriques liées au squelette. Les modèles capillaires GLB sculptés individuellement restent un perfectionnement ultérieur.</small>
+       <div className="sculptorHairStyles" role="group" aria-label="Choisir une coiffure">
+        {HAIR_STYLES.map(style=><button type="button" key={style.id}
+         disabled={!colorAvailable('hairColor')}
+         aria-pressed={look.hairStyle===style.id} title={style.description}
+         onClick={()=>update('hairStyle',style.id)}>{style.label}</button>)}
+       </div>
+       <strong>Colorations</strong>
+       <div className="coachColorAtlas" role="group" aria-label="Colorations des cheveux">
+        {HAIR_TONES.map(t=><button key={t.hex} type="button"
+         disabled={!colorAvailable('hairColor')}
+         title={t.name} aria-pressed={look.hairColor.toLowerCase()===t.hex.toLowerCase()}
+         onClick={()=>update('hairColor',t.hex)}><i style={{background:t.hex}}/>{t.name}</button>)}
+       </div>
+       {color('hairColor','Couleur personnalisée')}
+       {!colorAvailable('hairColor')&&<small>Le GLB chargé ne possède pas d’os tête compatible : coiffures indisponibles sur cet actif.</small>}
+      </div>}
      {section==='tenue'&&<><p className="coachAvailability">L’aperçu charge la véritable tenue 3D de la discipline sélectionnée. Les couleurs sont modifiables uniquement sur les parties identifiées.</p><label className="coachField"><span>Tenue de discipline</span><select value={discipline} onChange={e=>{setDiscipline(e.target.value as LabDiscipline);setReport(null);}}>{LAB_DISCIPLINES.map(d=><option key={d} value={d}>{disciplineNames[d]}</option>)}</select></label>{discipline==='bjj'&&<label className="coachField"><span>Équipement JJB</span><select value={noGi?'nogi':'gi'} onChange={e=>{setNoGi(e.target.value==='nogi');setReport(null);}}><option value="gi">Gi · kimono</option><option value="nogi">No-Gi · rashguard</option></select></label>}{color('topColor','Couleur du haut existant')}{color('bottomColor','Couleur du bas existant')}</>}
      {section==='protections'&&<div className="coachAccessoryPanel"><p className="coachAvailability">Accessoires cumulables : activez les équipements déjà présents dans la tenue 3D. Plusieurs protections peuvent être utilisées ensemble.</p>{(['gloves','shins'] as const).map(layer=><label key={layer} className="coachAccessoryToggle"><input type="checkbox" checked={accessories.includes(layer)} disabled={!support?.colors[layer==='gloves'?'gloveColor':'shinColor']} onChange={e=>setAccessories(v=>e.target.checked?[...v.filter(x=>x!==layer),layer]:v.filter(x=>x!==layer))}/><span>{layer==='gloves'?'Gants':'Protège-tibias'}</span><small>{(support?.colors[layer==='gloves'?'gloveColor':'shinColor']??0)>0?'Équipement détecté dans le modèle':'Non présent dans cette tenue'}</small></label>)}{color('gloveColor','Couleur des gants')}{color('shinColor','Couleur des protège-tibias')}</div>}
     </div>

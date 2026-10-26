@@ -17,7 +17,7 @@ describe('contrat majeur V1 — atelier de création et validation',()=>{
  });
  it('conserve une navigation principale à quatre destinations sans retrait des outils',()=>{
   const navigation=read('NavigationPrincipale.tsx');
-  for(const name of ['Studio Coach','Mouvements','Galerie','Plus'])expect(navigation).toContain("libelle:'"+name+"'");
+  for(const name of ['Studio Coach','Simulateur','Galerie','Plus'])expect(navigation).toContain("libelle:'"+name+"'");
   expect(app).toContain('Comparatif CME / Shadow');
   expect(app).toContain('Atlas biomécanique · référentiel');
  });

@@ -1,3 +1,15 @@
+## 26/10/2026 — Décision 0.7.53 : vrai Studio Coach neutre, coiffures ajustables, carnation réversible et Simulateur
+
+**1. Reformulation additive**. Conserver l'application CME-3D 1.0 et tous ses arbitrages visuels. Le Studio Coach ouvre un humanoïde neutre (homme initialement, bascule femme en haut) : choix explicite d'un coach mémorisé, chargement, création, duplication, modification et suppression ; son profil conserve nom, surnom, taille, poids, discipline phare et main dominante. La destination de navigation « Mouvements » se nomme maintenant **Simulateur** (identifiant interne `lab` inchangé). La reprise fonctionnelle totale du module d'entraînement Shadow demeure un chantier distinct ; ne pas la considérer comme terminée.
+
+**2. Impacts techniques / qualité 3D.** Le moteur `coachHair.ts` propose sept **vraies géométries capillaires procédurales** distinctes et neuf teintures préexistantes : rasé, court, dégradé, boucles, long, queue haute, tresse. Ces géométries sont attachées à l'os Head réel, supprimées et libérées proprement à chaque changement. Le résultat est une amélioration fonctionnelle, **pas un nouveau pack de cheveux GLB sculptés professionnels**. Une commande ne devient active que si un os Head existe, indépendamment des éventuels cheveux d'origine. Pour les maillages de peau texturés, un uniforme shader définit directement la nuance et corrige le détail de luminance, sans multiplier les teintes précédentes ; retour clair → foncé → clair, texte, UV, normales et rig intacts. Les six disciplines utilisent les mêmes tenues sportives que le mode Ultra, sans costumes héroïques.
+
+**3. Règles d'or.** Aucun changement de trajectoire, de `CoachRig`, de poids de skinning, d'animations ou du dépôt Shadow (lecture seule). Aucune caméra utilisateur, vidéo, mocap, capture vidéo ou computer vision. Les coiffures procédurales sont décrites comme telles ; aucune forme GLB inexistante n'est revendiquée. Les zones sans géométrie compatible restent désactivées.
+
+**4. Critères qualité**. TypeScript, Vitest : sept coiffures distinctes, remplacement propre et sans accumulation, retour peau claire foncée claire, shader sans écrasement des cartes; profil de coach préservé ; navigation `Simulateur` ; scripts GLB/build et deux CI verts avant fusion ; déploiement GitHub Pages confirmé. Recette sur vrai téléphone Android, conformité visuelle des coiffures et teintes, performance FPS/GPU : **Non mesuré**, à effectuer séparément.
+
+**5. Documentation**. Règle reportée dans le schéma directeur, le prompt maître et le fil conducteur avec ce jalon. Les étapes successives ne doivent pas effacer les décisions antérieures.
+
 ## 26 octobre 2026 — Lot 0.7.52 : moteur et interface de sculpture
 
 1. Décision additive : activer cou, mains, pieds lorsque le GLB supporte ces déformations ; palette verticale défilante de formes à droite du coach, sans le masquer ; retirer les boutons de statistiques ; conserver nom, surnom, taille, poids, discipline phare et main dominante accessibles sans popup.
