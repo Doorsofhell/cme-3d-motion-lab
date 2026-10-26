@@ -7,6 +7,37 @@ export type NeutralAppearance={
 export type AppearanceZone=Exclude<keyof NeutralAppearance,'accessories'>;
 
 const sourceColors=new WeakMap<Material,Color>();
+/** Uniforme isolé par matériau cloné. La nuance de peau est la nouvelle
+ * couleur de référence, pas un multiplicateur accumulé sur la texture sombre.
+ * Le détail lumineux de la texture est conservé dans le shader avant l'éclairage.
+ * Les vraies textures, normales, UV, skinning et animations restent intacts.
+ */
+type SkinUniform={value:Color};
+const skinTargets=new WeakMap<Material,SkinUniform>();
+export function readSkinToneTarget(material:Material):Color|undefined{return skinTargets.get(material)?.value.clone();}
+export function installSkinToneShader(material:MeshStandardMaterial|MeshToonMaterial,hex:string):void{
+ let uniform=skinTargets.get(material);
+ if(uniform){uniform.value.set(hex);return;}
+ uniform={value:new Color(hex)};
+ skinTargets.set(material,uniform);
+ const initialOnBeforeCompile=material.onBeforeCompile.bind(material);
+ material.onBeforeCompile=shader=>{
+  initialOnBeforeCompile(shader);
+  shader.uniforms.cmeSkinTarget=uniform;
+  shader.fragmentShader=shader.fragmentShader.replace(
+   '#include <map_fragment>',
+   `#include <map_fragment>
+    // Recalibrage réversible : la texture conserve son micro-relief et
+    // son contraste de luminance, la couleur choisie pilote le teint.
+    float cmeSkinLuma=dot(diffuseColor.rgb,vec3(0.2126,0.7152,0.0722));
+    float cmeSkinDetail=0.70+0.30*smoothstep(0.035,0.72,cmeSkinLuma);
+    diffuseColor.rgb=clamp(cmeSkinTarget*cmeSkinDetail,0.0,1.0);`
+  ).replace('void main() {','uniform vec3 cmeSkinTarget;\nvoid main() {');
+ };
+ material.customProgramCacheKey=()=> 'cme-skin-ton-direct-v1';
+ material.needsUpdate=true;
+}
+
 const readableFallback=/^(?:material|mat)(?:[._ -]?[0-9]+)?$|^default(?:material)?$|^[0-9]+$/i;
 
 /** Specific costume/hair/eyes identifiers MUST beat generic body/skin identifiers. */
@@ -67,7 +98,12 @@ export function applyNeutralAppearance(root:Object3D,appearance?:NeutralAppearan
    const zone=zoneFor(mesh,material);
    if(!zone)continue;
    if(appearance&&appearance[zone]){
-    if((zone==='skin'||zone==='eyeColor'||zone==='hairColor')&&material.map){
+    if(zone==='skin'&&material.map){
+     installSkinToneShader(material,appearance[zone]);
+     // Aucun cumul des corrections lorsque l'utilisateur passe clair → foncé → clair.
+     count++;continue;
+    }
+    if((zone==='eyeColor'||zone==='hairColor')&&material.map){
      let source=sourceColors.get(material);
      if(!source){source=material.color.clone();sourceColors.set(material,source);}
      // Maps retain their painted albedo and fine texture: shift tint relative to a reference.
