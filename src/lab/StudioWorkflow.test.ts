@@ -29,7 +29,7 @@ describe('contrat majeur V1 — atelier de création et validation',()=>{
  });
  it('assure des commandes tactiles accessibles et une sauvegarde sans doublon',()=>{
   expect(css).toContain('min-height:44px');
-  expect((studio.match(/Tester dans Mouvements/g)||[]).length).toBe(1);
+  expect((studio.match(/Ouvrir le Simulateur/g)||[]).length).toBe(1);
   expect(studio).toContain('Réglages fins de la zone');
  });
 });
