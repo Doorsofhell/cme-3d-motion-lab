@@ -31,6 +31,8 @@ jobs:
         run: npm ci
       - name: Run unit tests
         run: npm test
+      - name: Fetch and validate CC0 anatomy GLBs
+        run: npm run fetch:anatomy
       - name: Build GitHub Pages PWA
         run: npm run build -- --mode pages
       - name: Configure Pages

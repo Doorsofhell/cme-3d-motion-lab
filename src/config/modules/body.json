@@ -1,0 +1,68 @@
+{
+  "id": "body",
+  "version": 2,
+  "sexes": [
+    "homme",
+    "femme"
+  ],
+  "pose": "reference",
+  "groups": [
+    {
+      "id": "shoulders",
+      "label": "Épaules",
+      "driver": "geometry",
+      "range": [
+        0.75,
+        1.25
+      ]
+    },
+    {
+      "id": "muscle",
+      "label": "Musculature",
+      "driver": "geometry",
+      "range": [
+        0.7,
+        1.35
+      ]
+    },
+    {
+      "id": "waist",
+      "label": "Taille",
+      "driver": "geometry",
+      "range": [
+        0.75,
+        1.3
+      ]
+    },
+    {
+      "id": "hips",
+      "label": "Hanches",
+      "driver": "geometry",
+      "range": [
+        0.75,
+        1.35
+      ]
+    },
+    {
+      "id": "thighs",
+      "label": "Cuisses",
+      "driver": "geometry",
+      "range": [
+        0.75,
+        1.3
+      ]
+    },
+    {
+      "id": "bust",
+      "label": "Poitrine",
+      "driver": "geometry",
+      "range": [
+        0.75,
+        1.35
+      ]
+    }
+  ],
+  "implementation": "skinned-mesh-weighted",
+  "sexAdaptive": true,
+  "heightWeightLinked": true
+}

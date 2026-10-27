@@ -1,0 +1,44 @@
+{
+  "id": "navigation",
+  "version": 1,
+  "items": [
+    {
+      "id": "studio",
+      "label": "Studio Coach",
+      "icon": "user-round-pen",
+      "order": 1
+    },
+    {
+      "id": "lab",
+      "label": "Mouvements",
+      "icon": "play",
+      "order": 2
+    },
+    {
+      "id": "gallery",
+      "label": "Galerie",
+      "icon": "images",
+      "order": 3
+    },
+    {
+      "id": "other",
+      "label": "Plus",
+      "icon": "ellipsis",
+      "order": 4
+    }
+  ],
+  "secondary": [
+    "comparison",
+    "roadmap",
+    "tracking",
+    "options",
+    "technical",
+    "versions"
+  ],
+  "defaultTheme": "auto",
+  "themes": [
+    "auto",
+    "light",
+    "dark"
+  ]
+}

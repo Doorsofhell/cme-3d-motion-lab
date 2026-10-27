@@ -1,0 +1,34 @@
+{
+  "id": "face",
+  "version": 1,
+  "groups": [
+    {
+      "id": "jaw",
+      "label": "Mâchoire",
+      "driver": "morphTarget",
+      "range": [
+        0.8,
+        1.2
+      ]
+    },
+    {
+      "id": "nose",
+      "label": "Nez",
+      "driver": "morphTarget",
+      "range": [
+        0.8,
+        1.2
+      ]
+    },
+    {
+      "id": "eyes",
+      "label": "Yeux",
+      "driver": "morphTarget",
+      "range": [
+        0.8,
+        1.2
+      ]
+    }
+  ],
+  "requireActualMorphTargets": true
+}

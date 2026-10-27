@@ -1,0 +1,248 @@
+/* CME-3D 0.7.47 — direction artistique issue des neuf maquettes de référence :
+ * studio sombre, grande scène, quatre familles anatomiques illustrées,
+ * sous-zones contextuelles et action principale rouge.
+ * Ne crée aucun faux actif de morphologie ni animation.
+ */
+.labApp[data-cme-screen="studio"]{
+ --coach-fond:#11151c;--coach-panneau:#1e232e;--coach-surface:#292f3b;
+ --coach-contour:#3b4555;--coach-texte:#edf0f6;--coach-secondaire:#a9b2c0;
+ --coach-rouge:#e51c43;--coach-cyan:#56c5f5;
+ background:var(--coach-fond);
+}
+.labApp[data-cme-screen="studio"] .coachStudio{
+ background:var(--coach-fond)!important;color:var(--coach-texte)!important;
+ border-color:transparent;
+}
+.labApp[data-cme-screen="studio"] .coachStudioHeader small{color:var(--coach-cyan)}
+.labApp[data-cme-screen="studio"] .coachStudioHeader h2{color:var(--coach-texte)}
+.labApp[data-cme-screen="studio"] .coachStudioHeader p{color:var(--coach-secondaire)}
+.labApp[data-cme-screen="studio"] .coachPreview:not(.cmeFullscreen):not(:fullscreen){
+ background:radial-gradient(ellipse at 52% 38%,#242c39 0%,#151b24 54%,#10141b 100%);
+ border:1px solid #353e50!important;box-shadow:0 12px 32px #0007;
+}
+/* Graticule léger et repères discrets comme dans les références. */
+.labApp[data-cme-screen="studio"] .coachPreview:not(.cmeFullscreen):not(:fullscreen)::before{
+ content:"";position:absolute;inset:12% 13%;pointer-events:none;z-index:1;
+ background:
+ linear-gradient(#8291a066,#8291a066) left top/33px 1px no-repeat,
+ linear-gradient(#8291a066,#8291a066) left top/1px 33px no-repeat,
+ linear-gradient(#8291a066,#8291a066) right top/33px 1px no-repeat,
+ linear-gradient(#8291a066,#8291a066) right top/1px 33px no-repeat,
+ linear-gradient(#8291a066,#8291a066) left bottom/33px 1px no-repeat,
+ linear-gradient(#8291a066,#8291a066) left bottom/1px 33px no-repeat,
+ linear-gradient(#8291a066,#8291a066) right bottom/33px 1px no-repeat,
+ linear-gradient(#8291a066,#8291a066) right bottom/1px 33px no-repeat;
+ opacity:.48;
+}
+.labApp[data-cme-screen="studio"] .coachPreviewLabel{
+ background:#161d29da;color:#eef2fa;border:1px solid #3b496050;
+ font-size:10px;bottom:8px;max-width:52%;
+}
+.labApp[data-cme-screen="studio"] .coachLiveValues{
+ color:#ced9e6;background:#192433c9;border:1px solid #39485c77;
+ max-width:47%;font-size:9px;
+}
+.labApp[data-cme-screen="studio"] .cmeSceneToolbar .coachRigSwitch{
+ background:#1c2431f2;border:1px solid #3f4d61;border-radius:11px;
+}
+.labApp[data-cme-screen="studio"] .cmeSceneToolbar .coachRigSwitch button{
+ background:#252e3c;color:#d4dce8;min-width:60px;
+}
+.labApp[data-cme-screen="studio"] .cmeSceneToolbar .coachRigSwitch button.active{
+ color:white;background:#354860;border:1px solid #4d6784;
+}
+.labApp[data-cme-screen="studio"] .cmeSceneToolbar .cmeCameraAuto,
+.labApp[data-cme-screen="studio"] .cmeSceneToolbar .cmeFullscreenToggle{
+ background:#1c2431ee;color:#edf1f7;border:1px solid #465369;
+}
+.labApp[data-cme-screen="studio"] .coachSexeVue{
+ position:absolute;top:64px;left:50%;transform:translateX(-50%);
+ z-index:11;display:flex!important;align-items:center;justify-content:center;
+ width:max-content;max-width:calc(100% - 36px);gap:4px;padding:4px;
+ background:#151b25ed;border:1px solid #46536a;border-radius:14px;
+ box-shadow:0 6px 15px #0006;
+}
+.labApp[data-cme-screen="studio"] .coachSexeVue button{
+ padding:8px 14px;min-height:44px;min-width:74px;border:0;border-radius:9px;
+ background:transparent;color:#b9c6d8;font-size:12px;font-weight:750;
+}
+.labApp[data-cme-screen="studio"] .coachSexeVue button.active{
+ color:#fff;background:#305e78;box-shadow:inset 0 0 0 1px #58c4f08a;
+}
+.labApp[data-cme-screen="studio"] .coachEditor{
+ background:var(--coach-panneau)!important;
+ color:var(--coach-texte)!important;border:1px solid #3b4351!important;
+ box-shadow:0 12px 25px #0005;
+}
+.labApp[data-cme-screen="studio"] .coachGroupesAnatomiques{
+ display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;
+ background:#181d27;padding:5px;border-radius:14px;min-width:0;
+}
+.labApp[data-cme-screen="studio"] .coachGroupesAnatomiques button{
+ display:flex;flex-direction:column;align-items:center;justify-content:center;
+ gap:3px;min-width:0;min-height:54px;border-radius:11px;padding:5px 1px;
+ background:#252c39;border:1px solid #3e4858;color:#aebace;
+ font-size:10px;font-weight:750;line-height:1.2;
+}
+.labApp[data-cme-screen="studio"] .coachGroupesAnatomiques button.active{
+ color:var(--coach-cyan);background:#203141;border:1px solid #459ed3;
+ box-shadow:inset 0 -3px #50c9f1;
+}
+.labApp[data-cme-screen="studio"] .coachGroupesAnatomiques .coachGroupeIcone{
+ width:27px;height:27px;stroke-width:1.8;
+}
+.labApp[data-cme-screen="studio"] .coachCategories{
+ display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));
+ gap:7px;background:transparent;border:0;
+}
+.labApp[data-cme-screen="studio"] .coachCategories button{
+ display:flex;flex-direction:row;gap:7px;align-items:center;justify-content:center;
+ min-height:44px;padding:5px 7px;border-radius:10px;
+ color:#bbc6d5;background:#2a303e;border:1px solid #414b5c;
+ font-size:11px;font-weight:650;
+}
+.labApp[data-cme-screen="studio"] .coachCategories button.active{
+ color:#fff;background:#4b2639;border-color:#d73657;
+}
+.labApp[data-cme-screen="studio"] .coachCategories button .coachCategoryIcon{
+ width:23px;height:23px;color:inherit;flex:0 0 23px;
+}
+.labApp[data-cme-screen="studio"] .coachCategories button span{font-size:11px}
+.labApp[data-cme-screen="studio"] .coachZoneCourante{
+ display:flex;align-items:center;gap:9px;font-size:14px;font-weight:750;
+ color:var(--coach-texte);margin:0;padding:8px 0 3px;border-bottom:1px solid #3d4858;
+}
+.labApp[data-cme-screen="studio"] .coachZoneCourante svg{width:25px;height:25px;color:var(--coach-cyan)}
+.labApp[data-cme-screen="studio"] .coachExpertTools,
+.labApp[data-cme-screen="studio"] .coachAdvanced,
+.labApp[data-cme-screen="studio"] .coachIdentity{
+ color:#d5dce7;background:#252b37;border:1px solid #3a4556;
+ border-radius:11px;
+}
+.labApp[data-cme-screen="studio"] .coachExpertTools summary,
+.labApp[data-cme-screen="studio"] .coachAdvanced summary,
+.labApp[data-cme-screen="studio"] .coachIdentity summary{
+ color:#dce5ef;cursor:pointer;min-height:44px;padding:7px 8px;font-size:12px;
+}
+.labApp[data-cme-screen="studio"] .coachExpertTools[open],
+.labApp[data-cme-screen="studio"] .coachAdvanced[open],
+.labApp[data-cme-screen="studio"] .coachIdentity[open]{padding-bottom:9px}
+.labApp[data-cme-screen="studio"] .coachStepNavigation{background:#171e29}
+.labApp[data-cme-screen="studio"] .coachStepNavigation button{color:#aab8c9}
+.labApp[data-cme-screen="studio"] .coachStepNavigation button[aria-pressed="true"]{background:#284e69;color:white}
+.labApp[data-cme-screen="studio"] .coachFocusLine,
+.labApp[data-cme-screen="studio"] .coachAvailability,
+.labApp[data-cme-screen="studio"] .coachRigControls,
+.labApp[data-cme-screen="studio"] .coachAnatomicalReferenceSwitch{
+ background:#252d39;color:#bdc8d7;border:1px solid #394558;
+}
+.labApp[data-cme-screen="studio"] .coachFocusLine button,
+.labApp[data-cme-screen="studio"] .coachReferenceViews button,
+.labApp[data-cme-screen="studio"] .coachAnatomicalReferenceSwitch button{
+ background:#2b3747;color:#e0e8f2;border:1px solid #536378;min-height:44px;
+}
+.labApp[data-cme-screen="studio"] .coachReferenceViews button[aria-pressed="true"]{
+ color:white;background:#254f68;border-color:#62c6e9;
+}
+.labApp[data-cme-screen="studio"] .coachField,
+.labApp[data-cme-screen="studio"] .coachColor,
+.labApp[data-cme-screen="studio"] .coachSwatchSection>strong,
+.labApp[data-cme-screen="studio"] .coachShapeGroupTitle{color:#e2eaf4}
+.labApp[data-cme-screen="studio"] .coachField b{color:#73c7ef}
+.labApp[data-cme-screen="studio"] .coachField input[type="range"]{
+ width:100%;min-height:44px;accent-color:var(--coach-cyan);
+}
+.labApp[data-cme-screen="studio"] .coachField input:disabled,
+.labApp[data-cme-screen="studio"] .coachField select:disabled,
+.labApp[data-cme-screen="studio"] .coachColor input:disabled{opacity:.4}
+.labApp[data-cme-screen="studio"] .coachField small,
+.labApp[data-cme-screen="studio"] .coachColor small,
+.labApp[data-cme-screen="studio"] .coachSkinHint,
+.labApp[data-cme-screen="studio"] .coachShapeZoneInfo small,
+.labApp[data-cme-screen="studio"] .coachShapeGroupTitle span{color:#9eabba}
+.labApp[data-cme-screen="studio"] .coachShapeZoneCard,
+.labApp[data-cme-screen="studio"] .coachShapeOption,
+.labApp[data-cme-screen="studio"] .coachColorAtlas button,
+.labApp[data-cme-screen="studio"] .coachSkinTone{
+ background:#293140;color:#e2e9f1;border:1px solid #435163;
+}
+.labApp[data-cme-screen="studio"] .coachShapeGroup.is-open .coachShapeZoneCard,
+.labApp[data-cme-screen="studio"] .coachShapeOption.active,
+.labApp[data-cme-screen="studio"] .coachSkinTone.active,
+.labApp[data-cme-screen="studio"] .coachColorAtlas button[aria-pressed="true"]{
+ background:#20384b;color:#fff;border:2px solid #5ac2e5;
+}
+.labApp[data-cme-screen="studio"] .coachShapePanel{
+ background:#212a37;border:1px solid #44516a;padding:8px;
+}
+.labApp[data-cme-screen="studio"] .coachShapeZoneInfo strong,
+.labApp[data-cme-screen="studio"] .coachShapeOption span,
+.labApp[data-cme-screen="studio"] .coachSkinTone span{color:inherit}
+.labApp[data-cme-screen="studio"] .coachShapeOption .coachMorphIllustration{
+ filter:drop-shadow(0 1px 4px #0008);
+}
+.labApp[data-cme-screen="studio"] .coachColorAtlas button:disabled{
+ opacity:.35;cursor:not-allowed;
+}
+.labApp[data-cme-screen="studio"] .coachSwatchSection>small,
+.labApp[data-cme-screen="studio"] .coachIdentityHelp{color:#b4c1d0}
+.labApp[data-cme-screen="studio"] .coachSkinEditor,
+.labApp[data-cme-screen="studio"] .coachPaletteMode,
+.labApp[data-cme-screen="studio"] .coachSwatchSection{color:#e8eef7}
+.labApp[data-cme-screen="studio"] .coachPaletteSelect button,
+.labApp[data-cme-screen="studio"] .coachField select,
+.labApp[data-cme-screen="studio"] .coachIdentityFields input,
+.labApp[data-cme-screen="studio"] .coachIdentityFields select{
+ background:#2d3543;color:#eef3f9;border:1px solid #485769;
+ min-height:44px;border-radius:10px;
+}
+.labApp[data-cme-screen="studio"] .coachPaletteSelect button[aria-pressed="true"]{
+ background:#27638a;color:white;border-color:#6bc7ec;
+}
+.labApp[data-cme-screen="studio"] .coachAccessoryToggle{
+ background:#29323f;color:#e0e8f3;border:1px solid #455267;
+}
+.labApp[data-cme-screen="studio"] .coachAccessoryToggle small{color:#aab6c5}
+.labApp[data-cme-screen="studio"] .coachCrud{
+ background:var(--coach-panneau);border:0;padding:7px 0;
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;
+}
+.labApp[data-cme-screen="studio"] .coachCrud button{
+ background:#2a3340;color:#e4ebf2;border:1px solid #495569;min-height:44px;
+}
+.labApp[data-cme-screen="studio"] .coachCrud .coachSave{
+ order:-1;grid-column:1/-1;min-height:52px;border:0;
+ background:linear-gradient(100deg,#d6183d,#ed2249);
+ color:#fff;font-size:15px;font-weight:800;letter-spacing:.01em;
+ box-shadow:0 5px 13px #a50c2c4b;
+}
+.labApp[data-cme-screen="studio"] .coachReset{color:#bfcedf}
+.labApp[data-cme-screen="studio"] .coachStatus{color:#7ddab6}
+.labApp[data-cme-screen="studio"] .coachLiveValues{font-variant-numeric:tabular-nums}
+@media(max-width:760px){
+ .labApp[data-cme-screen="studio"] .coachPreview:not(.cmeFullscreen):not(:fullscreen){
+  flex:1 1 57%;max-height:64%;
+ }
+ .labApp[data-cme-screen="studio"] .coachEditor{
+  flex:1 1 43%;padding:8px 10px max(8px,env(safe-area-inset-bottom));
+ }
+ .labApp[data-cme-screen="studio"] .coachStudioHeader{padding:1px 5px}
+ .labApp[data-cme-screen="studio"] .coachEditor .coachCrud{
+  position:sticky;bottom:-8px;z-index:7;
+  box-shadow:0 -9px 18px var(--coach-panneau);
+ }
+ .labApp[data-cme-screen="studio"] .coachSexeVue{top:58px}
+ .labApp[data-cme-screen="studio"] .coachGroupesAnatomiques .coachGroupeIcone{width:25px;height:25px}
+ .labApp[data-cme-screen="studio"] .coachGroupesAnatomiques button{font-size:9px}
+ .labApp[data-cme-screen="studio"] .coachShapeGrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+ .labApp[data-cme-screen="studio"] .coachShapeOption{min-height:96px}
+}
+@media(max-width:390px){
+ .labApp[data-cme-screen="studio"] .coachRigSwitch button{min-width:54px;padding:5px}
+ .labApp[data-cme-screen="studio"] .coachSexeVue button{min-width:62px;padding:6px}
+ .labApp[data-cme-screen="studio"] .coachCategories button span{font-size:10px}
+}
+@media(max-height:680px) and (max-width:760px){
+ .labApp[data-cme-screen="studio"] .coachSexeVue{top:54px}
+ .labApp[data-cme-screen="studio"] .coachPreviewLabel,.labApp[data-cme-screen="studio"] .coachLiveValues{font-size:9px}
+}

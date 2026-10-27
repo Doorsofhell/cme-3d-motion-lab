@@ -1,0 +1,33 @@
+.cmeReviewToggle{padding:8px 12px;background:var(--c-surface);border:1px solid var(--c-line);border-radius:14px}
+.cmeReviewToggle button{width:100%;min-height:46px;border:1px solid var(--c-line-strong);background:var(--c-surface-2);color:var(--c-text);border-radius:12px;font-weight:750}
+.cmeReview{display:grid;gap:15px;min-height:0;max-height:75dvh;overflow:auto;padding:16px;background:var(--c-surface);color:var(--c-text);border:1px solid var(--c-line-strong);border-radius:18px}
+.cmeReviewHeader{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.cmeReviewHeader h2{font-size:18px;margin:0}.cmeReviewHeader p,.cmeReviewHint{color:var(--c-text-2);font-size:12px;margin:5px 0}
+.cmeReviewHeader button,.cmeReviewActions button{padding:11px 14px;min-height:44px;border-radius:12px;background:var(--c-accent);color:white;border:0;font-weight:700}
+.cmeReviewFilters{display:flex;gap:8px}.cmeReviewFilters input{min-width:0;flex:2;background:var(--c-surface-2);color:var(--c-text);border:1px solid var(--c-line-strong);border-radius:10px;padding:10px}.cmeReviewFilters select{min-width:0;flex:1;padding:8px}
+.cmeReviewList{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));max-height:280px;overflow-y:auto;gap:8px}
+.cmeReviewList button{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;text-align:left;padding:12px;min-height:76px;background:var(--c-surface-2);color:var(--c-text);border:1px solid var(--c-line);border-radius:13px}
+.cmeReviewList button.active{border:2px solid var(--c-accent)}.cmeReviewList button:disabled{opacity:.5}
+.cmeReviewList span{display:grid;gap:5px;min-width:0;overflow-wrap:anywhere}.cmeReviewList small{font-size:11px;color:var(--c-text-2)}
+.cmeReviewList em{font-size:10px;white-space:nowrap;font-style:normal;color:var(--c-text-2)}
+.cmeReviewDecision{display:grid;gap:10px;background:var(--c-surface-2);border-radius:15px;padding:14px}
+.cmeReviewDecision h3,.cmeReviewDecision p{margin:0}.cmeReviewDecision p,.cmeReviewDecision small{color:var(--c-text-2);font-size:12px}
+.cmeReviewDecision label{display:grid;gap:7px;font-weight:650;font-size:13px}
+.cmeReviewDecision textarea{width:100%;background:var(--c-surface);color:var(--c-text);border:1px solid var(--c-line-strong);border-radius:10px;padding:10px;font:inherit;resize:vertical}
+.cmeReviewActions{display:flex;gap:8px;flex-wrap:wrap}.cmeReviewActions button{flex:1 1 150px}
+.cmeReviewActions button:disabled{opacity:.45;cursor:not-allowed}
+@media(max-width:500px){.cmeReview{padding:10px;max-height:75dvh}.cmeReviewList{grid-template-columns:1fr;max-height:215px}.cmeReviewHeader button{width:100%}.cmeReviewFilters{flex-direction:column}}
+
+
+/* Recette : la preuve d'exécution provient des échantillons 3D, jamais du seul catalogue. */
+.cmePlaybackWitness{display:flex;flex-wrap:wrap;justify-content:space-between;gap:7px;
+ padding:10px 12px;background:var(--ux-card,var(--c-surface));color:var(--ux-text,var(--c-text));
+ border:1px solid var(--c-line-strong);border-radius:11px;font-size:12px}
+.cmePlaybackWitness small{color:var(--ux-subtle,var(--c-text-2));font-size:11px}
+.cmeReviewPlay{min-height:48px;padding:10px 14px;border-radius:11px;
+ border:1px solid var(--c-accent);background:var(--c-accent);color:#fff;font-weight:750}
+.cmeReviewPlay:disabled{opacity:.45}
+.cmeReviewList button:disabled{opacity:.95}
+.cmeReviewList button[aria-pressed=true]{outline:2px solid var(--c-accent);outline-offset:0}
+.cmeReviewDecision label textarea{font-size:14px;line-height:1.45}
+@media(max-width:760px){.cmeReviewPlay{width:100%}.cmePlaybackWitness{flex-direction:column}}

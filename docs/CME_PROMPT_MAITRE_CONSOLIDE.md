@@ -1,3 +1,191 @@
+## 26/10/2026 — Lot 0.7.54, optimisation des cheveux / palettes pour Studio et Simulateur
+
+**Choix additif conservé :** Studio Coach (humanoïde neutre de départ, choix Homme/Femme en haut) et Simulateur distinct avec un unique profil de coach sauvegardé. Les six disciplines, les tenues sportives identiques entre Ultra/Fitness/Comics, les techniques Shadow, l'éditeur morphologique H/F, la teinte de peau réversible et la gestion créer/dupliquer/modifier/supprimer restent obligatoires.
+
+**Développement :** le moteur capillaire `coachHair.ts` conserve désormais **la même coiffure, la même géométrie Three.js et le même matériau** lorsqu'on ne change que le coloris. La reconstruction a lieu seulement lors du passage à une coupe différente ; le rattachement est sur l'os Head du véritable GLB. Sept coupes réelles procédurales (rasé/court/dégradé/boucles/long/queue haute/tresse) et colorations du Studio : palette Naturelles, palette Animation, couleur libre. La nouvelle coloration est enregistrée dans le profil utilisé aussi par le Simulateur, sans modification du squelette. Le bouton Nouveau conserve le sexe en cours et rétablit l'humanoïde neutre.
+
+**Contrôles transversaux :** ergonomie Android compacte, éléments capillaires invisibles si os Head absent, performances CPU/GPU améliorées qualitativement en évitant les allocations ; **aucune mesure FPS, GPU, p50/p95 revendiquée**. Tester par Vitest l'identité du maillage clair→foncé→clair, le vrai changement géométrique entre coupes, l'absence de modification des os, typecheck, validateur GLB, build, deux CI vertes avant fusion, publication Pages après vérification. Contrôle physique Android et comparaison de qualité visuelle restent nécessaires. Shadow demeure strictement en lecture seule. Aucun actif GLB capillaire haute définition n'est revendiqué.
+
+## 26/10/2026 — Décision 0.7.53 : vrai Studio Coach neutre, coiffures ajustables, carnation réversible et Simulateur
+
+**1. Reformulation additive**. Conserver l'application CME-3D 1.0 et tous ses arbitrages visuels. Le Studio Coach ouvre un humanoïde neutre (homme initialement, bascule femme en haut) : choix explicite d'un coach mémorisé, chargement, création, duplication, modification et suppression ; son profil conserve nom, surnom, taille, poids, discipline phare et main dominante. La destination de navigation « Mouvements » se nomme maintenant **Simulateur** (identifiant interne `lab` inchangé). La reprise fonctionnelle totale du module d'entraînement Shadow demeure un chantier distinct ; ne pas la considérer comme terminée.
+
+**2. Impacts techniques / qualité 3D.** Le moteur `coachHair.ts` propose sept **vraies géométries capillaires procédurales** distinctes et neuf teintures préexistantes : rasé, court, dégradé, boucles, long, queue haute, tresse. Ces géométries sont attachées à l'os Head réel, supprimées et libérées proprement à chaque changement. Le résultat est une amélioration fonctionnelle, **pas un nouveau pack de cheveux GLB sculptés professionnels**. Une commande ne devient active que si un os Head existe, indépendamment des éventuels cheveux d'origine. Pour les maillages de peau texturés, un uniforme shader définit directement la nuance et corrige le détail de luminance, sans multiplier les teintes précédentes ; retour clair → foncé → clair, texte, UV, normales et rig intacts. Les six disciplines utilisent les mêmes tenues sportives que le mode Ultra, sans costumes héroïques.
+
+**3. Règles d'or.** Aucun changement de trajectoire, de `CoachRig`, de poids de skinning, d'animations ou du dépôt Shadow (lecture seule). Aucune caméra utilisateur, vidéo, mocap, capture vidéo ou computer vision. Les coiffures procédurales sont décrites comme telles ; aucune forme GLB inexistante n'est revendiquée. Les zones sans géométrie compatible restent désactivées.
+
+**4. Critères qualité**. TypeScript, Vitest : sept coiffures distinctes, remplacement propre et sans accumulation, retour peau claire foncée claire, shader sans écrasement des cartes; profil de coach préservé ; navigation `Simulateur` ; scripts GLB/build et deux CI verts avant fusion ; déploiement GitHub Pages confirmé. Recette sur vrai téléphone Android, conformité visuelle des coiffures et teintes, performance FPS/GPU : **Non mesuré**, à effectuer séparément.
+
+**5. Documentation**. Règle reportée dans le schéma directeur, le prompt maître et le fil conducteur avec ce jalon. Les étapes successives ne doivent pas effacer les décisions antérieures.
+
+## 26 octobre 2026 — Lot 0.7.52 : moteur et interface de sculpture
+
+1. Décision additive : activer cou, mains, pieds lorsque le GLB supporte ces déformations ; palette verticale défilante de formes à droite du coach, sans le masquer ; retirer les boutons de statistiques ; conserver nom, surnom, taille, poids, discipline phare et main dominante accessibles sans popup.
+
+2. Impacts : déformations de géométries clonées en conservant les os et poids de skinning ; cache des normales et limites si les paramètres sont identiques ; éclairage key/fill/rim mutualisé ; matériaux des tenues sportives et textures de référence conservés en Ultra, Fitness et Comics. Réglages de profil persistés avec la morphologie.
+
+3. Règles d'or : Shadow non modifié ; aucun vêtement héroïque, faux asset, faux morph, caméra utilisateur, mocap ou vidéo ; trajets biomécaniques et mouvements canoniques intacts. Les contrôles sans actif GLB restent désactivés.
+
+4. Qualité : Vitest, typecheck, validation GLB, build, CI verte avant fusion et Pages vérifiée. Android physique et performances FPS p50/p95, GPU et latence NON MESURÉS.
+
+5. Traçabilité : mise à jour sans effacer les anciennes décisions. Les détails cheveux, yeux, doigts et orteils demandent encore des actifs réels avant d'être annoncés comme personnalisables.
+
+## RÈGLE ARTISTIQUE PRIORITAIRE — 26/10/2026 : même tenue sportive sur les trois styles
+
+**Arbitrage utilisateur explicite, additif et prioritaire :** la demande initiale de tenues inspirées de super-héros est abandonnée. Il ne faut créer **aucun costume héroïque, blason, cape, motif de marque protégée ni équipement fantaisiste**. CME-3D reste un laboratoire biomécanique et sportif. Pour **boxe anglaise, kick-boxing, Muay-thaï, MMA, JJB/BJJ et judo**, les coachs homme/femme conservent dans **Ultra réaliste**, **Animation fitness** et **Comics** les **mêmes fichiers GLB de vêtements et accessoires sportifs**. Leurs couleurs, motifs, textures, transparences et personnalisations enregistrées restent identiques, sous réserve du rendu de la lumière différent. Le mode Comics caractérise **l'illustration et l'éclairage** du même coach ; il ne transforme ni son uniforme ni ses protections. Le libellé est **« Comics · mêmes tenues »**, plus « Héros comics ».
+
+**Application des cinq contrôles :**
+1. Reformulation additive : conserver les six disciplines, mouvements / enchaînements / rigging existants, la personnalisation H/F et les arbitrages UX 1.0. Abandonner uniquement la proposition non validée des habits héroïques.
+2. Impacts : dans `Fighter.tsx`, supprimer les palettes textiles automatiques des shaders Toon Fitness et Comics ; préserver `color`, `map`, `normalMap`, `alphaMap`, état alpha, côtés des matériaux et noms d'origine ; n'adapter que les bandes lumineuses et les contours (optionnels selon GPU). Réutiliser le même `tenues/${outfit}.glb` dans les trois modes et le même `CoachRig`, `MotionSampler`, `SequenceSampler` et `CoachPlanSampler`.
+3. Règles d'or : aucun ajout d'actif GLB simulé, aucune modification du dépôt Shadow, aucun changement d'os, poids de skinning, trajectoires, postures, techniques ou séquences ; pas de caméra / vidéo / mocap / computer vision. Les commandes sans ressource valide restent désactivées.
+4. Validation : tests des six familles de tenues sur les deux conversions graphiques, invariance de couleur/albédo / textures/mesh/rig, personnalisation `applyNeutralAppearance` dans Ultra/Fitness/Comics et stabilité de la sélection des GLB / samplers ; TypeScript, Vitest, contrôles GLB, build, deux CI vertes puis publication vérifiée. Rendu sur vrai Android et FPS/GPU : **Non mesuré**.
+5. Traçabilité : conserver cette règle au prompt maître, schéma directeur et fil conducteur, avec référence `TENUES_UNIFIEES_TROIS_RENDUS_0751.md`. Cette livraison ne sculpte pas de nouveaux humanoïdes, n'ajoute pas de vêtements GLB et ne certifie pas la finesse des tissus à l'écran.
+
+**Priorité pour les prochaines versions :** améliorer seulement matériaux, éclairage et rendu sportif des assets existants (ou intégrer de vrais GLB après vérification), sans aucune tenue héroïque. La personnalisation réelle doit toujours s'appliquer aux **coachs animés**, y compris les rendus Fitness et Comics, quelle que soit la discipline.
+
+## 26/10/2026 — Lot 0.7.50 : accès direct aux régions anatomiques sur l'axe Y
+
+**1. Reformulation additive.** Après la livraison et le déploiement vérifié de 0.7.49, prolonger « The Sculptor’s Workspace » : la barre X conserve cinq grandes familles ; le rail Y propose **18 cibles précises**, au lieu de deux grands boutons Corps/Visage sans personnalisation directe. Les quatre onglets globaux et toutes les décisions maîtresses précédentes sont conservés.
+
+**2. Impacts UX et 3D.** Ajout des composants `sculptorRegions.ts` et `SculptorRegionIcon.tsx` : yeux, nez, mâchoire, cheveux ; stature, épaules, poitrine/pectoraux, muscles, bras, taille, rondeur ; hanches, fessiers, cuisses, mollets ; peau, tenue, protections. Chacun commande uniquement la sélection `expandedShape` existante ; affichage contextuel de **son** curseur et de ses vrais presets, recadrage via les os GLB déjà reconnus. Les couleurs, morphologies homme/femme et dépendances biomécaniques restent sous contrôle des mêmes capacités GLB. Aucune modification du squelette ni de l'Atlas.
+
+**3. Règles d'or.** Shadow strictement en lecture seule ; coiffures sans GLB spécialisé inactives ; les morphologies sans sommets compatibles restent désactivées et expliquées dans le panneau ; aucun suivi, vidéo, webcam, reconnaissance d'images ou motion capture. Aucune mesure FPS/latence/GPU inventée.
+
+**4. Critères de validation.** Vitest des 18 cibles uniques, des 13 morphologies canonisées, de l'intégrité des cinq familles, de la sélection réelle et de la hauteur des boutons de **52 px** ; typecheck, tests GLB, compilation et CI verte avant fusion, publication Pages vérifiée. Recette visuelle sur Android physique, quatre vues et test tactile de toutes les cibles requis séparément. **FPS p50/p95, GPU, latence et ergonomie physique : Non mesuré.**
+
+**5. Documentation.** Nouvelle décision intégrée au schéma directeur, prompt maître et fil conducteur, sans annuler la version 0.7.49 ou ses autres jalons. La valeur des curseurs reste une variation relative tant qu'aucune mesure de référence réelle n'existe.
+
+## 26/10/2026 — The Sculptor's Workspace, premier lot UX v0.7.49
+
+**Décision additive utilisateur :** interface de sculpture numérique « Studio 3D Lab » true black / anthracite ; viewport 3D réel 55 %, panneau inférieur 45 %, grille spatiale Three.js, commandes caméra latérales non superposées, deux axes X/Y de zones anatomiques, curseurs de précision à affichage monospacé et accent néon, galerie horizontale de vrais préréglages, validation par coche rouge. Le 4-onglets global Studio Coach / Mouvements / Galerie / Plus reste **inchangé**. Technologie existante React + R3F conservée (pas de migration RN/Flutter induite par la formulation du rôle).
+
+Les composants ajoutés sont `PrecisionSlider.tsx`, `SculptorViewportTools.tsx`, `SculptorWireframe.tsx` et `SculptorWorkspace.css`, décrits dans [`SCULPTORS_WORKSPACE_0749.md`](SCULPTORS_WORKSPACE_0749.md). Le maillage filaire est issu des vrais GLB, matériaux clonés puis restaurés, pas d'asset nouveau. Haptique de seuil facultative. Contrôles non supportés par le GLB désactivés avec raison. **Aucune** modification du dépôt Shadow, du rig canonique, des skin weights ou des trajectoires ; caméra utilisateur, vidéo, mocap et computer vision exclus.
+
+**Vérification exigée avant fusion** : tests Vitest / TypeScript / actifs GLB / build et CI verte ; déploiement vérifié. **Recette physique Android et FPS / GPU / latence : Non mesuré**, et restent à obtenir avant déclaration de conformité complète aux neuf maquettes. Le présent lot améliore la mise en page et les contrôles, pas les sculptures 3D finales.
+
+# CME-3D — PROMPT MAÎTRE V1.0 (refonte majeure, 25/10/2026)
+
+> **Document directeur actif.** Les décisions historiques figurent intégralement plus bas : elles restent applicables sauf arbitrage explicitement documenté. V1.0 est une **cible produit**, pas une certification de livraison.
+
+## Protocole permanent validé le 25/10/2026
+
+**Méthode préalable à toute évolution, en français :** 1. Reformuler la demande comme un ajout et préserver les décisions validées. 2. Étudier les impacts sur UX Android, maillage GLB/rigging, biomécanique, FPS/GPU et composants partagés. 3. Vérifier les règles ci-dessous. 4. Prévoir Vitest, TypeScript, CI verte, test visuel sur Android réel et zones tactiles d'au moins 44 px. 5. Mettre à jour le schéma directeur et le fil conducteur.
+
+**Règles impératives :** le dépôt `Doorsofhell/combat-shadow-studio` reste exclusivement en lecture seule. Aucun paramètre de coupe, visage, morphologie, vêtement ou couleur n'est actif sans ressource 3D et rendu réellement compatibles avec le modèle chargé ; sinon désactiver la commande avec une explication. Ni volume simulé par recoloration, ni géométrie approximative présentée comme un actif GLB professionnel. Les adaptations d'apparence ne modifient ni squelette canonique, ni poids de skinning, ni trajectoires. Aucune caméra utilisateur, captation ou analyse vidéo, mocap ou vision par ordinateur. Aucune mesure FPS, latence ou GPU inventée : afficher « Non mesuré » en l'absence de données.
+
+**Dette à auditer dans un lot technique séparé :** les coiffures procédurales et certains réglages de secours de `src/lab/coachHair.ts`, `src/lab/coachFaceGeometry.ts` et `src/lab/StudioCoach.tsx` devront être confrontés aux vrais actifs disponibles. Une option non réellement prise en charge sera désactivée, sans retirer les possibilités garanties par le GLB. Cette règle documentaire ne vaut pas correction déjà réalisée.
+
+**Décisions conservées :** refonte UX mobile avant nouveaux modèles et animations ; grand viewport fixe, panneau contextuel inférieur ; navigation unique **Studio Coach, Mouvements, Galerie, Plus**, avec Comparatif CME/Shadow et Atlas dans Plus. L'organisation des zones anatomiques reste à trancher.
+
+**Communication obligatoire :** terminer chaque réponse avec quatre choix cliquables, dans cet ordre et sous ces libellés : **Choix libre prioritaire**, **Choix 1 (Recommandé)**, **Choix 2**, **Choix 3**. Ne poser qu'une grande question à la fois. Ne jamais confondre documenté, codé, CI verte, fusionné, déployé et testé physiquement sur Android.
+
+## Incident Android documenté et lot 0.7.48 : reconstruire réellement l'interface Studio
+
+**Constat transmis le 25/10/2026 :** la capture Android de CME-3D 0.7.47 montre le sélecteur Homme/Femme et les commandes Tenue / Corps neutre / caméra devant le haut du mannequin, les réglages anatomiques repoussés hors du panneau visible et les actions Enregistrer / Tester / Hasard / Nouveau / Supprimer prenant presque tout l'espace inférieur. Cette composition ne respecte pas les neuf maquettes visuelles et empêche la personnalisation fluide.
+
+**1 — Reformulation additive.** Priorité absolue à une interface utilisable avec personnage dégagé. Les arbitrages UX B (Android premium avant nouveaux GLB), A (viewport fixe dominant + panneau contextuel) et A (barre unique Studio Coach, Mouvements, Galerie, Plus) sont conservés.
+
+**2 — Impacts transversaux.** Cause racine : commandes placées dans le même élément que le Canvas, gestion/validation dans le scroll de personnalisation, et anciens sélecteurs CSS concurrents. La refonte sépare les responsabilités de DOM : barre compacte H/F + caméra **hors scène**, viewport Canvas autonome, navigation par groupes et sous-zones fixe en haut du panneau, unique conteneur vertical scrollable de paramètres, validation Enregistrer/Tester dans un pied indépendant, opérations non urgentes dans un volet replié. La caméra/les poses/morphs existants sont réutilisés ; aucun GLB, rig canonique, poids, trajectoire ou atlas n'est modifié.
+
+**3 — Règles d'or.** Shadow demeure en lecture seule et n'est pas modifié. Aucun faux asset de personnalisation, capture vidéo, webcam, mocap ou vision par ordinateur ajouté ; contrôles capillaires sans GLB spécialisé toujours désactivés. FPS, p50/p95, GPU et latence physiques : **Non mesuré**.
+
+**4 — Validation.** Vitest doit garantir l'ordre réel des régions du DOM, l'absence de commandes dans le viewport, le scroll isolé, les quatre onglets et les boutons tactiles d'au moins 44 px ; TypeScript, contrôles GLB, compilation, deux workflows CI verts avant fusion et Pages vérifiée. **Recette manuelle indispensable sur le même smartphone Android que la capture**, aux quatre vues anatomiques, avec clavier/safe-area et navigation Studio→Mouvements→Galerie. La CI ne prouve pas le rendu du téléphone.
+
+**5 — Exécution et documentation.** Lot 0.7.48 : nouveau StudioSceneLibre.css chargé après les anciens styles ; StudioCoach restructuré en coachSceneControls / coachSceneStack / coachEditorScroll / coachEditorFooter et contrôles secondaires repliés. Les 4 familles et 7 sous-zones restent accessibles ; les valeurs et presets anatomiques s'affichent en premier. Le titre mobile redondant est masqué pour rendre plus de place au mannequin. Ce travail porte sur l'interface réellement codée, pas sur une prétendue finalisation de tous les actifs de CME-3D 1.0.
+
+**Suite :** confirmer visuellement sur Android que tête, torse et pieds ne sont plus masqués ; ajuster les proportions du panneau uniquement selon des captures réelles ; maintenir les contrôles sans actifs GLB désactivés.
+
+## Décision visuelle libre et lot UX 0.7.47 — 25/10/2026
+
+**Arbitrage utilisateur actif :** la priorité visuelle absolue est de rapprocher CME-3D des neuf maquettes transmises, sans présumer l'adoption du toucher direct sur le maillage. Les choix déjà validés demeurent : refonte Android avant moteur 3D définitif ; grande scène fixe dominante en haut ; panneau inférieur contextuel ; une seule navigation inférieure Studio Coach / Mouvements / Galerie / Plus.
+
+**Traduction implémentée dans ce lot :** fond et scène anthracite, repères de cadrage discrets, vrai mannequin Three.js, choix Homme/Femme directement sur la scène, quatre **familles anatomiques illustrées** (Corps, Visage, Peau, Tenues) et sept sous-zones conservées (Corps, Silhouette, Visage, Cheveux, Peau, Tenue, Protections). La sélection d'une zone recadre le modèle, mais ne change pas son squelette. Préréglages visuels et palette contrôlés par les actifs chargés ; réglages fins, vue orthogonale et parcours guidé accessibles dans des sections secondaires. Sélection cyan, validation rouge, cibles tactiles d'au moins 44 px et panneau scrollable séparé de la scène.
+
+**Méthode en cinq étapes appliquée :** (1) décision libre additive fidèle aux images ; (2) impacts sur composition UI, CSS, caméra, couleur d'arrière-plan et composants partagés ; aucun changement du rig, des weights ou des animations ; (3) Shadow sanctuarisé et aucune captation ni animation factice ajoutée ; palettes peau dépendantes du rapport réel des matériaux, choix de coiffures sans actif GLB spécialisé désactivés et explicitement expliqués ; (4) Vitest, typecheck, build, validations GLB et CI obligatoirement verts avant fusion ; contrôle visuel Android physique toujours nécessaire ; (5) schéma directeur, prompt maître et fil conducteur mis à jour.
+
+**Limites :** ces neuf images restent des maquettes de direction artistique, pas les actifs GLB de CME. Les deux modèles anatomiques définitifs, les textures réalistes complètes, les cheveux spécialisés et les morphs du visage restent des jalons 3D futurs. Les anciennes coiffures procédurales encore présentes dans la couche moteur constituent une dette distincte : ne pas les décrire comme des assets professionnels. Aucun résultat réel FPS / GPU / latence Android n'est revendiqué : **Non mesuré**.
+
+**Prochaine priorité opérationnelle recommandée :** recette visuelle sur un Android physique et consolidation des derniers conflits CSS, puis audit des capacités GLB face/cheveux/peau pour compléter l'interface sans placebo. L'interaction directe par toucher anatomique du mesh reste optionnelle et non validée par ce choix libre.
+
+## Exécution technique — 25/10/2026 : premier lot UX 0.7.46
+
+**Portée** : remplacement du menu historique à cinq onglets par le composant commun `NavigationPrincipale` à **quatre destinations Studio Coach / Mouvements / Galerie / Plus**. La Galerie est désormais indépendante du Studio. Plus conserve Comparatif CME/Shadow (Shadow lecture seule), lien vers l'Atlas documentaire, Laboratoire, incidents, options, versions et feuille de route. Un retour explicite relie les vues secondaires à Plus.
+
+Le Studio Android donne priorité au **viewport 3D fixe et dominant**, avec un **panneau inférieur contextuel autonome et scrollable**. Le parcours conserve les quatre angles et les sept zones existantes sans changer les modèles ni le rig. Le composant Canvas n'est plus démonté à cause de la clé portée par le conteneur de contenu. Les styles UX sont regroupés dans `src/lab/CmePremiumMobile.css` pour ce lot ; le nettoyage des nombreuses règles CSS historiques reste un chantier ciblé. Le recueil des métriques GPU/FPS réelles, les essais Android physique et les futures ressources GLB restent **« Non mesuré » / à valider**.
+
+**Audit 5 étapes** : (1) ajout compatible avec B + A + navigation A ; (2) impact limité à l'UX Android et aux composants d'application/config/tests, pas aux GLB/biomécanique ; (3) Shadow en lecture seule, aucun faux contrôle ajouté, rig/skinWeights et motions inchangés, aucun tracking ; (4) Vitest, typecheck, builds et CI requis avant fusion, touch targets ≥44 px, recette Android physique encore requise ; (5) documentation et release 0.7.46 mises à jour. **Version 1.0 reste une cible, pas une livraison terminée.**
+
+**Dette visuelle prioritaire suivante** : organiser l'édition anatomique dans le panneau inférieur (navigation par zones illustrées, sélection directe du mesh ou modèle hybride) ; cette décision n'est pas encore tranchée. Contrôler en parallèle les commandes sans actif GLB pour conformité « zéro placebo » sans casser la présente refonte.
+
+## ARBITRAGE DE NAVIGATION VALIDÉ — 25/10/2026 : **choix A, quatre onglets**
+
+**Référence active et prioritaire sur tous les fragments historiques incompatibles ci-dessous :** la barre de navigation Android est **unique**, fixe en bas, avec **exactement quatre onglets ordonnés : Studio Coach → Mouvements → Galerie → Plus**. Le Comparatif **CME/Shadow** (Shadow strictement en lecture seule), l'**Atlas biomécanique** et **toutes les fonctionnalités techniques** (Laboratoire, performances, diagnostics, incidents, options, nouveautés, cache, aide et exports autorisés) restent accessibles dans **Plus**, sans retrait, perte de mesures ou création d'un cinquième onglet.
+
+- **Studio Coach** : édition du même coach dans la grande scène 3D supérieure fixe, panneau anatomique inférieur contextuel, raccourci vers Mouvements.
+- **Mouvements** : sélection discipline/technique/enchaînement disponible, exécution, pause, vitesse et caméra ; reprend le coach en cours, sans doublon de lecteur.
+- **Galerie** : enregistrer, retrouver, éditer, dupliquer, supprimer et tester les profils ; données et brouillons cohérents avec Studio et Mouvements.
+- **Plus** : routes secondaires pour Comparatif, Atlas, diagnostics, options et outils existants. Ne jamais confondre déplacement de menu et abandon de fonctionnalité.
+
+**Priorités précédentes préservées :** option B (refonte UX mobile avant nouveaux GLB et animations), option A pour la mise en page (viewport 3D fixe dominant + panneau de réglages inférieur), composants partagés, Android, parité anatomique H/F adaptée au sexe, sécurité et non-régression Shadow. Voir les sections 1 bis et **1 ter** de [`CME3D_SCHEMA_DIRECTEUR_1_0.md`](CME3D_SCHEMA_DIRECTEUR_1_0.md).
+
+**Prochaine question stratégique, et elle seule :** comment sélectionner les zones anatomiques et présenter leurs réglages dans le panneau inférieur (sélection libre directe par zones / parcours guidé / combinaison des deux). **Choix libre PRIORITAIRE**, puis options cliquables. Les quatre onglets ne doivent plus être soumis au vote. **Ce lot modifie les décisions documentées, pas l'interface runtime ; ne pas annoncer la refonte déjà déployée.**
+
+## ARBITRAGE UX VALIDÉ — 25/10/2026 : **choix A, Studio Coach scène fixe + panneau inférieur**
+
+**Décision active complétant la priorité B déjà validée.** Le Studio Coach Android adopte un **grand viewport 3D fixe et dominant dans la zone haute**, des **réglages anatomiques contextuels dans un panneau inférieur** et **une seule barre de navigation principale fixe tout en bas**. L'interface doit rester proche de la composition des maquettes fournies sans copier leurs assets. Aucun réglage ne doit déplacer la scène hors écran ; le panneau peut défiler ou être étendu de manière maîtrisée, mais le personnage reste visible en édition. Caméra 360°, zoom par zone, boutons ≥44 px, safe-areas Android, validation primaire distincte du quai, composants réutilisés, rendu homme/femme cohérent, état partagé Studio/Galerie/Mouvements, non-régression des modèles et des animations actuels. Détails, contraintes et tests d'acceptation : [`CME3D_SCHEMA_DIRECTEUR_1_0.md`](CME3D_SCHEMA_DIRECTEUR_1_0.md), section « 1 bis ».
+
+**Décision ultérieure du 25/10/2026 :** le choix des destinations est désormais **tranché : Studio Coach, Mouvements, Galerie, Plus** ; cette liste fixe remplace toute autre variante décrite dans les anciennes sections. Le prochain arbitrage porte sur les **zones anatomiques du panneau inférieur**. Une seule prochaine question majeure, choix libre **d'abord**, puis options cliquables. La validation du schéma ne constitue pas une implémentation du layout.
+
+## ARBITRAGE STRUCTURANT VALIDÉ — 25/10/2026 : option B, **refonte UX Android premium d'abord**
+
+**Décision prioritaire et active.** Le schéma directeur actuel est [`docs/CME3D_SCHEMA_DIRECTEUR_1_0.md`](CME3D_SCHEMA_DIRECTEUR_1_0.md). Le commanditaire privilégie **la reconstruction de l'expérience mobile inspirée des maquettes fournies**, **puis** l'intégration des nouveaux modèles anatomiques organiques et des animations avancées. Priorité d'exécution : UX architecture → design system → Studio Coach → parcours Mouvements/Galerie → recette UX Android → actifs organiques H/F → retargeting/motions → sortie 1.0. Corriger les bugs bloquants sans dévier vers une refonte du moteur non encore choisie. Maintenir entre-temps tous les modèles et mouvements existants sans régression.
+
+**Mise à jour cumulée du 25/10/2026 :** l'agencement du Studio est validé en **A** (viewport fixe dominant + panneau inférieur) et les **quatre onglets** en **A** (Studio Coach, Mouvements, Galerie, Plus). Les futurs actifs 3D restent à planifier après le lot UX. **Prochaine décision : organisation des zones anatomiques dans le panneau inférieur**, choix libre prioritaire puis options cliquables. Les anciennes variantes sont conservées uniquement en tant qu'historique.
+
+## 1. But unique et promesse
+**Créer, examiner et valider un combattant 3D humain crédible, de son apparence à ses mouvements, dans un seul atelier mobile.** CME-3D n'est ni une application d'entraînement ni un clone de Shadow : c'est un **atelier de création de coachs et de validation biomécanique**. Les mouvements doivent être naturels, fluides, compréhensibles, traçables et reproductibles.
+
+## 2. Parcours utilisateur V1.0
+1. **Studio — Créer** (ouverture par défaut) : choisir homme/femme, personnage GLB réel, pose de référence immobile, formes illustrées par région, réglages fins seulement si supportés, aperçu permanent et zoom anatomique automatique interrompu par geste utilisateur.
+2. **Studio — Tester** : même personnage et même scène WebGL, sélection de discipline, technique ou enchaînement réellement disponible, lecture/pause/ralenti, caméra pédagogique ou libre, vue entière, plein écran et indicateurs simples. **Ne jamais recréer un deuxième moteur.**
+3. **Galerie Coachs** : retrouver, sélectionner, modifier, dupliquer (quand implémenté), supprimer et tester les profils enregistrés ; sauvegarde explicite et synchronisation avec Studio/Laboratoire.
+4. **Comparatif** : protocole A/B traçable, résultats chiffrés, visualisations et statut de validation ; Shadow en **lecture seule**, sans inventer des FPS ni des performances non mesurées.
+5. **Plus** : nouveautés, incidents, centre technique, options, diagnostics avancés. Aucun outil technique ne surcharge le parcours principal.
+
+## 3. Navigation et design
+- Barre basse unique **approuvée le 25/10/2026** : **Studio Coach, Mouvements, Galerie, Plus**. Comparatif CME/Shadow, Atlas et technique accessibles depuis Plus ; jamais deux barres concurrentes.
+- Studio possède **deux modes visibles** : Création et Test. La scène reste dominante ; les réglages ne doivent pas faire disparaître l'aperçu pendant une manipulation tactile.
+- Interface mobile portrait Android d'abord ; pas de chevauchements, de commandes coupées, ni de scroll horizontal accidentel ; gestes tactiles robustes, cibles de 44 px minimum.
+- Identité Dark Combat Premium, finition contemporaine et lisible ; inspiration BetterMe limitée à l'ergonomie. Textes et labels **uniquement en français**.
+- Un même besoin = **un composant partagé** : barre de scène, plein écran, caméra, chargement, sélecteurs, états d'erreur, boutons, galerie et navigation. Supprimer progressivement les CSS contradictoires, ne pas ajouter des correctifs locaux à répétition.
+
+## 4. Contrat moteur / personnages
+- Conserver les GLB anatomiques restaurés homme/femme et leur squelette ; conserver un **moteur canonique unique** et le retargeting pour boxe, kickboxing, Muay-Thaï, MMA, JJB et judo.
+- Création : A-pose sans lecture ni garde sportive. Test : animations issues exclusivement du catalogue réellement supporté ; technique absente = désactivée et expliquée.
+- Apparence et biomécanique séparées : aucun morph, tenue ou texture ne doit déformer les trajectoires ou corrompre les GLB partagés. Cloner matériaux/géométries uniquement quand nécessaire ; morphs idempotents, bornés, réversibles.
+- Contrôle visuel = modification réelle et observable du mesh ; capacité absente = commande désactivée avec explication. Ne jamais prétendre disposer de coiffures, morphs ou assets non livrés.
+- Mode Anatomie = représentation d'étude neutre, sans prétendre supprimer des vêtements fusionnés à la géométrie.
+- Caméra pédagogique automatique par mouvement, zoom par région, reprise de contrôle immédiate ; aucune caméra utilisateur, captation vidéo, reconnaissance gestuelle ou mocap.
+
+## 5. Validation biomécanique et Android
+- Vérifier articulations, amplitudes, transfert de poids, stabilité des appuis, glissements, contacts, rotations, transitions et continuité temporelle ; mesurer plutôt que déclarer « humain ».
+- Suivre FPS p50/p95, latence premier GLB et bascule H/F, appels de rendu, WebGL perdu/restauré, mémoire si mesurable ; viser **≥30 FPS en profil Android équilibré**, sans prétendre que la cible est atteinte sans mesure.
+- Tests automatiques : TypeScript, Vitest, build, six disciplines, morphs et skinned meshes, composants communs, persistance et migrations. Tests **visuels sur Android réel** distincts de CI.
+- Fusion et déploiement GitHub Pages seulement après contrôles verts ; confirmer URL, commit et workflow. Un jalon majeur ne sera dit « livré » qu'après critères d'acceptation et contrôle utilisateur.
+
+## 6. Feuille de route de la version majeure
+- **V1-A — Fondations UX** : prompt et architecture cible, modes Création/Test visibles, composants mutualisés, navigation unique, sauvegarde/galerie et anti-régression.
+- **V1-B — Créateur 3D Atlas** : formes illustrées effectives, capacités réelles par modèle, morphologie et assets sous licence, personnalisation dynamique sur le même GLB, profils éditables.
+- **V1-C — Motion Validation** : six disciplines, référentiel de mouvements, validation appuis/contacts/transitions, caméra pédagogique et lecture reproductible.
+- **V1-D — Comparatif et sortie majeure** : protocole A/B, données sourcées, diagnostics Android, tests visuels, critères d'acceptation, version majeure publiée.
+
+## 7. Règles d'exécution et d'interaction
+Analyser chaque demande par UX, architecture, 3D, biomécanique, performance et QA ; appliquer le changement utile sans demander de confirmation superflue ; documenter, tester, fusionner, vérifier le déploiement ; distinguer « codé », « testé », « déployé », « vérifié sur Android ». Proposer toujours **Choix libre — prioritaire**, puis 2 à 3 suites concrètes avec recommandation. Réponses exclusivement en français. **Interdiction absolue de modifier Doorsofhell/combat-shadow-studio** : lecture seule autorisée.
+
+---
+
+# Historique consolidé — décisions précédentes préservées
+
 # CME-3D — PROMPT MAÎTRE CONSOLIDÉ (24/10/2026)
 
 ## Règle de continuité ABSOLUE
@@ -55,3 +243,136 @@ Toute nouvelle instruction complète le prompt maître sans effacer les précéd
 
 ## 24/10 — Anti-régression rig neutre
 La géométrie du rig neutre doit rester visible même lors des animations et du changement de pose : frustum culling désactivé sur les surfaces rattachées aux os, vérification du nombre de segments, tests pour homme et femme. Il s'agit toujours d'un proxy procédural, pas encore d'un mesh anatomique sculpté identique à la maquette. Validation visuelle Android, tests complets des six disciplines et qualité biomécanique à confirmer avant certification. Shadow reste intact.
+
+## 24/10 — Choix libre prioritaire et caméra pédagogique
+Conserver intégralement les consignes précédentes. Chaque proposition de suivi contient désormais un **choix libre prioritaire** en plus des options recommandées. Réponses, interfaces, libellés et documentation uniquement en français. Implémenter un cadrage pédagogique automatique contextualisé des gestes, avec bascule caméra libre. Corriger les surfaces neutres qui disparaissent à cause de la visibilité des ancêtres : masquer les matériaux sources sans masquer les os ni les surfaces de test. Le tableau de validation et ses modes de distance, comparaisons, retours visuels, sonores et haptiques sont décrits dans `docs/SPEC_TABLEAU_VALIDATION_MOUVEMENTS_3D.md` ; aucune captation vidéo, caméra utilisateur ou reconnaissance gestuelle n'est activée dans CME. Exiger validation UX, 3D, biomécanique, architecture, QA et déploiement ; Shadow demeure inchangé.
+
+## Ordre de travail validé : A → B → C (24/10/2026)
+A — stabilisation et non-régression d'abord ; B — personnalisation dynamique complète de Studio Coach ensuite ; C — biomécanique et caméra avancée enfin. Les choix libres restent prioritaires. Lot A : rendre testable séparément le masquage des matériaux sources sans supprimer les os descendants, vérifier les matériaux multiples et les deux sexes. Ne pas certifier un test visuel Android sans essai réel. Les PR brouillon antérieures nécessitent une revue de conflits avant toute fusion. Shadow reste en lecture seule.
+
+## 24/10/2026 — Retour Android et priorité ergonomique Studio Coach
+Capture réelle : boutons superposés, mannequin invisible, réglages non dynamiques, rashguard sélectionné sans être porté. Priorité à une interface claire et premium, aperçu 3D visible, actions contextuelles et aucun texte superflu. Ne jamais prétendre qu'une tenue est portée si le maillage correspondant n'est pas réellement rendu. Corriger les régressions avant de poursuivre B/C. Conserver le choix libre prioritaire et Shadow inchangé.
+
+## 24/10/2026 — Cohérence systématique des composants (décision validée)
+Toute fonction identique doit utiliser un composant partagé unique dans Laboratoire, Studio Coach et Comparatif 3D : plein écran natif, double-tap/double-clic, boutons, caméra, menus, états de chargement, navigation et retours utilisateur. Interdire les implémentations divergentes et l'accumulation de correctifs CSS locaux. Réutiliser les mêmes libellés français, cibles tactiles accessibles et conventions de mise en page. Le premier composant mutualisé est `src/lab/SceneFullscreen.tsx`. Préserver les humanoïdes GLB validés et ne pas modifier Shadow. Tester la cohérence sur Android avant de clore chaque lot.
+
+## 24/10/2026 — Audit global C validé, suivi additif
+- Référence avant intervention : `main` au commit `e9c32f5` (PR #83, déploiement GitHub Pages réussi). Audit croisé du parcours, moteur Three.js/R3F, gestion GPU, GLB, documentation et qualité.
+- 0.7.18 traite le rendu caché du Laboratoire et les chargements GLB prématurés ; la performance Android réelle reste à mesurer. Comparatif : suppression du texte parasite ; aucune mesure du moteur Shadow ajoutée artificiellement.
+- Trois espaces principaux + Plus déjà implémentés : conserver cette navigation. Ne pas réouvrir les anciens problèmes comme fonctionnalités manquantes sans vérification préalable.
+- Atlas : 306 gestes uniques, 43 combinaisons proposées, **aucune validation biomécanique certifiée** d'après `COUVERTURE.json`. P0 recette Android réelle ; P1 fixtures des six disciplines, humains neutres de qualité, morphs appliqués, A/B quantitatif ; P2 profils FPS et Naïra originale dépendante d'assets autorisés.
+- Mettre systématiquement à jour `docs/CME_FIL_CONDUCTEUR_UX_3D.md`, ne jamais prétendre que CI ou Pages certifient l'UX tactile ou l'anatomie, conserver Shadow strictement en lecture seule et les interdictions de capture/analyse vidéo.
+
+## Lot validé A — Instrumentation Android 0.7.19 (24/10/2026)
+La stabilité doit maintenant être **mesurable**, sans captation de l'utilisateur. Mutualiser les sondes FPS/GLB/WebGL du Laboratoire et du Studio Coach et exposer des rapports locaux exportables : chauffe de 5 s et 60 fenêtres FPS de 1 s, p05/p50/p95, p95 temps d'image, pertes et restaurations WebGL, latence de préparation GLB et changements homme/femme. Toute mesure interrompue est explicitement invalide pour la certification Android. Aucun chiffre de performance ne doit être inventé ; tests automatisés ≠ vérification physique. Conservations absolues : moteurs et GLB, Shadow Studio en lecture seule, trois onglets principaux + Plus, aucun upload/capture/analyse vidéo et suivi du fil conducteur.
+
+## Lot C — Personnalisation dynamique sécurisée 0.7.20 (24/10/2026)
+Studio Coach conserve le même squelette canonique et les humanoïdes GLB existants. Les couleurs ne doivent modifier que les sous-matériaux reconnus. Les curseurs morphologiques du torse peuvent déformer **seulement des géométries clonées** et associées aux os de poitrine/hanche, sans déplacer les os ni altérer les poids de skinning ou les bibliothèques de mouvement. Les morph targets du visage sont appliqués exclusivement s'ils sont détectés ; sinon les commandes doivent être désactivées et leur absence expliquée. Aucun équipement/coiffure/protection ne sera affiché ou annoncé sans asset réel. Mode Coach en entrée, mode Anatomie neutre indépendant. Tester l'idempotence et l'isolement des GLB, distinguer CI verte et recette tactile/visuelle Android. Shadow Studio reste inchangé. Ce lot s'ajoute aux exigences antérieures sans les effacer.
+
+## 24/10/2026 — Alignement des deux scènes (0.7.21)
+
+Les deux scènes CME utilisent désormais le **même adaptateur de personnalisation de géométrie** : hauteur, épaules, musculature, taille et morph targets faciaux reconnus, toujours sur clones skinnés. Le Laboratoire applique ces valeurs au coach enregistré tout en gardant son moteur de mouvements canonique. La peinture des matériaux Toon (Fitness/Comics) est autorisée uniquement pour les zones identifiées ; textures et matériaux inconnus sont préservés. Le mode Anatomie demeure indépendant du profil. Valider avec CI TypeScript/tests/build et déploiement Pages ; aucune certification Android réelle, anatomique ou de collision ne peut être déduite de la CI. Les besoins en véritables coiffures et équipements GLB restent ouverts. Le dépôt Combat Shadow Studio n'est pas modifié.
+
+## 24/10/2026 — Lot vêtements et rigging (0.7.22)
+
+Un renforcement local des tenues skinnées peut réduire les croisements avec le torse, uniquement sur les poids buste/bassin ; rester sous 1,2 %, sans prétendre à une simulation de tissus. Les clones de maillage propriétaires abandonnés sont libérés sans jamais détruire les géométries GLB partagées. Les deux corps et les 14 variantes de tenue doivent être vérifiés structurellement à chaque CI. Ces contrôles ne sont pas équivalents à des tests biomécaniques certifiés, ni à un test tactile Android ; conserver la priorité à la recette physique. Aucune modification des animations canoniques, des GLB sources ou de Shadow Studio.
+
+## 24/10/2026 — Priorité utilisateur : Studio Coach entièrement dynamique
+
+Priorité P0 UX/3D : aucune commande de personnalisation active ne doit être placebo. Tout réglage de peau, morphologie, tenue, cheveux, visage et protections doit modifier immédiatement la scène du vrai GLB si les sous-maillages, tissus, morph targets ou accessoires sont disponibles ; autrement désactiver explicitement avec motif précis. Le coach sélectionné doit rester cohérent entre Studio et Laboratoire. Préférer une palette de carnations naturelles, une fidélité aux textures source et une exposition lumineuse non saturante à des teintes unies artificielles. Charger et mapper les fichiers de tenue existants pour six disciplines plutôt que les ignorer ; inventorier les matériaux réellement fournis sur deux sexes. Ne jamais inventer une coupe de cheveux ou une protection sans géométrie disponible. Maintenir le style d'interface Android partagé, l'absence de chevauchement, le rendu 3D en plein écran, la QA automatisée et la recette physique avant toute certification visuelle. Interdiction permanente des outils de capture vidéo/computer vision/mocap/upload vidéo. Shadow Studio et mouvements canoniques sont intouchables. Fusion uniquement après CI verte et contrôle du déploiement Pages.
+
+## 24/10/2026 — Consigne nouvelle et permanente : caméra contextuelle + personnalisations féminines
+
+Tout choix de rubrique dans Studio Coach déclenche un zoom **fluide, stable et non intrusif** sur la région anatomique à modifier, déterminée à partir du **squelette GLB réel** et du réglage actif, jamais de coordonnées arbitraires immuables. Visage/cheveux -> tête ; peau -> visage et buste ; poitrine/épaules -> buste ; taille -> abdomen ; hanches/fessiers -> bassin ; cuisses/jambes -> membres inférieurs ; gants -> mains ; protège-tibias -> tibias. En portrait Android, ne jamais rogner la cible. L'utilisateur peut tourner/zoomer et la transition doit s'arrêter dès son geste ; une commande Vue entière réinitialise le cadrage ; la caméra pédagogique conserve son mode séparé. Mutualiser les fonctions caméra existantes.
+
+Priorité suivante : élargir **réellement** la personnalisation, surtout d'Amara : rondeurs, poitrine, hanches, taille, fessiers, cuisses, coiffures/longueur/volume. D'abord auditer les possibilités et limites des GLB existants, puis créer ou acquérir légalement des maillages ou morphs spécifiques avec autorisation. Contrôle visible = effet réel, sinon désactivation expliquée ; ne pas simuler un faux changement par recoloration. Séparer résultat technique CI, certification biomécanique, inspection visuelle Android et exigences non livrées. Préserver les animations, le dépôt Shadow Studio, toute interdiction d'analyse ou de capture vidéo/mocap et la fusion conditionnée à CI verte.
+
+**Audit GLB vérifié en CI :** consulter [`docs/CME_AUDIT_CAPACITES_PERSONNALISATION_3D.md`](CME_AUDIT_CAPACITES_PERSONNALISATION_3D.md) — 2 matériaux de peau par corps, 0 morph target sur les 2 corps, 0 coiffure distincte et 14 tenues catégorisées. Les nouvelles personnalisations féminines restent un chantier d'assets, non une fonctionnalité déjà active.
+
+## 24/10/2026 — Lot 0.7.25 : silhouette féminine et exigences non négociables
+
+Rendre la personnalisation féminine effective par des modifications réelles et mesurables du maillage GLB clone : rondeur globale, hanches et cuisses, à partir des poids de skinning pertinents. Les valeurs doivent être bornées, indépendantes, non cumulatives, réversibles ; les tenues suivent les mêmes transformations avec faible marge et sans destruction de la géométrie partagée. N'activer les curseurs que si le modèle possède des sommets réellement pondérés. Les nouveaux contrôles et la caméra focalisée sont exclusifs au modèle femme, avec cohérence des profils Studio/Laboratoire et migration des profils JSON précédents. **Ne pas prétendre** à une vraie poitrine sculptée, des fessiers dédiés, une coiffure distincte ni à l'absence de collisions sur Android avant livraison des vrais morph targets/GLB, validation UX et technique. Toute variante visage/cheveux et morphologie future devra avoir ses assets conformes et ses contrôles opérationnels. Shadow Studio et les animations canoniques demeurent strictement intouchables. Exiger CI verte, fusion et déploiement vérifiés.
+
+## 24/10/2026 — Correctif prioritaire permanent : boucle de personnalisation visible et Studio/Lab synchronisés
+
+Toute modification active du coach doit produire un changement **visible sur le même combattant** et rester visible lorsque l'on manipule le curseur Android : aperçu 3D sticky à côté ou au-dessus des commandes, sans défiler hors de vue, même en format portrait ; plein écran et barre d'onglets partagés préservés. Le rendu modifié doit conserver la texture et recalculer les normales nécessaires, sans accumulation ni modification du GLB source. Enregistrer un coach doit le faire apparaître au sein même du sélecteur Coach du Laboratoire, le sélectionner et fournir une navigation directe. Vérifier cohérence `CoachLook` Studio/Laboratoire et actualisation des sélections.
+
+Ajouter une variation féminine de **poitrine** réellement calculée sur les sommets skinnés thoraciques quand ils existent, sans prétendre disposer d'un morph sculpté ; garder les futures exigences d'anatomie détaillée et coiffures. La **vue Anatomie** n'a ni tenue GLB, ni texture d'habillement, ni protections ; vérifier et masquer toute pièce vestimentaire séparée, et ne pas annoncer d'anatomie nue parfaite si le modèle de base possède des vêtements fusionnés à la géométrie. Tester les gestes avec **menus déroulants complets** de techniques et enchaînements par discipline : n'exécuter que des mouvements présents dans la bibliothèque ; combinaisons avec lecteur séquentiel et désactivation explicite des manquants. Jamais de captation vidéo, caméra, mocap ou modification du dépôt Shadow Studio, ni altération du moteur canonique. Déploiement uniquement sur CI verte.
+
+## 25/10/2026 — Navigation premium validée et prochain workflow Comparatif
+
+**Structure principale obligatoire : quatre onglets Studio, Galerie Coachs, Comparatif et Plus**, fixes en bas sur Android. Ne pas supprimer Galerie Coachs : l’écran contient tous les profils enregistrés et leurs actions, avec synchronisation immédiate et accès à l’éditeur. Plus regroupe Nouveautés (notes de versions publiées, état de lecture à prévoir), Centre technique, incidents, paramètres et aide ; aucun diagnostic permanent dans l’écran principal. Fusion incrémentale Studio + test des techniques vers une scène WebGL commune, en gardant tous les personnages et anatomies homme/femme accessibles et les mêmes commandes de test. Le Comparatif reçoit les mesures traçables du Studio via un workflow reproductible, avec graphiques CME vs Shadow mais sans inventer de mesures Shadow : indiquer non concluant lorsque des données comparables manquent. Ne pas modifier le dépôt Shadow Studio ni les mouvements canoniques.
+
+## 25/10/2026 — Studio Creator Atlas
+
+Toute zone morphologique se choisit prioritairement via des **formes illustrées** propres à cette zone, et non via un simple curseur ; les curseurs fins sont secondaires. Chaque forme doit appliquer une transformation réelle à la géométrie via adaptateur Studio/Laboratoire commun, être désactivée quand les morphs/poids/skinned meshes sont absents. Le mode aléatoire ne choisit que les formes effectivement supportées, sans sauvegarde implicite. En création, **A-Pose de référence immobile** et zéro échantillonnage de garde/technique, même quand l’animation est en pause ; le mode test seul réactive le lecteur. Séparer la recette Android réelle de la vérification automatisée. Prévoir prochainement le schéma extensible des centaines de paramètres par région, assets indépendants et pipeline de validation sans simuler une capacité inexistante.
+
+## 25/10/2026 — Arbitrage utilisateur confirmé : exécution progressive CME-3D 1.0
+
+**Décision** : adopter intégralement la vision « un seul atelier : créer → tester → valider », tout en préservant les décisions précédentes. Les quatre destinations principales restent **Studio / Galerie Coachs / Comparatif / Plus**. Elles doivent être épurées sans suppression de capacités existantes : outils techniques exclusivement sous Plus, galerie centrée sur les profils, comparatif sur les mesures réellement disponibles, Studio sur un personnage et une scène WebGL partagés entre Création et Test.
+
+**Plan de livraison incrémental obligatoire** :
+1. **V1-A — Cohérence mobile** : vérifier les quatre écrans, accessibilité tactile 44 px, navigation basse unique, chargement GLB, gestes de caméra et plein écran ; consolider les composants et éliminer les règles CSS contradictoires par refactorisation mesurée. Aucun retrait du catalogue des six disciplines.
+2. **V1-B — Anatomie réelle** : conserver les GLB Kadir/Amara, leur squelette, poids de skinning, animations et tenues. Ajouter progressivement des variantes réellement observables de silhouette, poitrine, taille, hanches, cuisses et **fessiers féminins**. Les fessiers doivent être un **paramètre anatomique distinct** des hanches et des cuisses, avec variation du volume postérieur et contrôle des raccords au bassin ; aucune simple recoloration ni redimensionnement global présenté comme un morph de fessiers. Vérifier le maillage disponible et, si nécessaire, produire/intégrer des morph targets ou géométries autorisés avant d'activer la commande. Présentation sobre, sportive et non sexualisée.
+3. **V1-C — Validation des mouvements** : les six disciplines et les enchaînements restent pilotés par le moteur canonique ; contrôles de contact, amplitude, continuité et appuis reproductibles. Une animation fluide n'est pas une preuve de conformité biomécanique.
+4. **V1-D — Recette et publication** : Vitest, TypeScript, build, non-régression GLB/tenues/profils, benchmark Android traçable et revue visuelle réelle avant l'annonce de CME-3D 1.0. Continuer à publier des versions 0.7.x/0.x tant que les critères de sortie ne sont pas satisfaits.
+
+**Contrat qualité des nouveaux morphs féminins** : transformation non destructive sur clone, idempotente, bornée et réversible ; symétrie contrôlée, silhouettes avant/profil/dos, absence d'artefacts aux hanches, entrejambe et jonction cuisse-fessier, comportement avec les 14 tenues et les six disciplines, préservation des bind matrices et du rig. Tout curseur non supporté est désactivé et explique le manque d'asset. Aucun fichier GLB source ni dépôt Shadow modifié. Aucun outil de capture/analyse vidéo, mocap ou upload vidéo.
+
+## 25/10/2026 — Exigences de livraison 1.0 : portabilité Shadow, tests exhaustifs, galerie et télémétrie
+**Arbitrage utilisateur, cumulatif et prioritaire, sans effacer les décisions antérieures.**
+
+### Contrat d'export indépendant de l'interface
+- CME-3D est le laboratoire source du futur moteur Shadow, **sans modifier le dépôt Shadow avant autorisation explicite**. Le moteur doit être extrait en package autonome sans dépendance React, CSS, écran, localStorage ou GitHub Pages. API stable : charger combattant, appliquer apparence, charger technique/enchaînement, avancer simulation, récupérer état biomécanique et métriques, libérer ressources.
+- Chaque combattant doit pouvoir être exporté sous forme de **paquet versionné** (manifest JSON avec identifiant stable, nom, surnom, sexe, discipline d'origine, taille/poids déclarés, morphologie, apparence, tenue, rig canonique, références d'assets GLB, animations et licences, checksum et version du schéma). Le manifeste seul ne suffit pas : l'export final doit contenir ou référencer de façon vérifiable tous les assets nécessaires, avec contrôle de licence, compatibilité et import Shadow reproductible. Interdire les faux boutons « Export Shadow » tant que l'import de bout en bout n'est pas prouvé.
+- Compatibilité à vérifier sur Android avec au moins deux GLB historiques, leurs équipements et les six disciplines ; tests aller-retour export/import, comparaison pose de référence, morphs, poids de skinning et animations.
+
+### Couverture complète des mouvements et stress tests
+- Toutes les **techniques et combinaisons** du catalogue consolidé (six disciplines, techniques individuelles et enchaînements, y compris les importations Shadow en lecture seule) doivent être **listables, filtrables, testables et diagnostiquables**. Aucun mouvement non supporté ne doit être présenté comme validé. Prévoir un inventaire avec identifiant stable, origine, discipline, compatibilité rig, état supporté/non supporté, motif, erreurs, durée et résultat.
+- Stress test automatisé : matrice combattant × discipline × technique/combinaison × vitesse × qualité, cycles répétés, alternance H/F, changements de tenue, perte/récupération WebGL simulée et transitions. Mesurer FPS p50/p95, latence GLB, temps de transition, collisions, pénétrations, stabilité des appuis, angles hors bornes, erreurs JS/WebGL et fuites mémoire quand mesurables. Journal horodaté, export de rapport et seuils explicites, **jamais de métrique fictive**.
+- Aucun outil de capture de mouvement par caméra, computer vision ou upload vidéo.
+
+### Ergonomie et écran de diagnostics
+- Conserver **Studio, Galerie Coachs, Comparatif, Plus** en navigation principale unique. Ne pas polluer les écrans principaux par les outils de test. Un **bandeau discret cliquable** affiche un graphique de fluidité réelle (historique FPS mesuré) et le **nombre d'erreurs observées** ; si aucune donnée, afficher « Non mesuré ». Son clic ouvre l'écran **Tests et performances** accessible aussi depuis **Plus**. Tests détaillés, paramètres, journaux et stress tests résident exclusivement dans cet écran ; ne pas ouvrir un cinquième onglet permanent.
+- Les composants et métriques sont mutualisés entre écrans, adaptatifs Android, avec cible tactile ≥44 px et dégradation explicite en cas de perte WebGL.
+
+### Galerie et identité du combattant
+- Galerie : vignette **capturée du vrai combattant** dans sa **discipline initiale enregistrée**, nom, surnom, sexe, taille, poids, morphologie et caractéristiques clés. Afficher un état de portrait indisponible si aucune capture vérifiable ; ne pas substituer un dessin prétendument issu du GLB.
+- Créateur : champs nom, surnom modifiable, **générateur aléatoire de surnom** cohérent avec caractéristiques et discipline, discipline initiale, taille (cm), poids (kg). Valeurs initiales non inventées pour les anciens profils ; migration non destructive. Le surnom reste éditable, le bouton peut régénérer et n'enregistre rien sans action de sauvegarde.
+- Portrait de galerie cadré avec la tenue et la pose de référence de la discipline initiale ; persister avec le profil, versionner les données et gérer les profils historiques.
+- Morphologie féminine réaliste et sportive (dont volume fessier indépendant, hanches, cuisses et poitrine), uniquement lorsque l'adaptateur GLB dispose des déformations réellement supportées.
+
+### Critères de sortie
+- Contrats TypeScript et tests d'intégration du paquet moteur, inventaire exhaustif, stress test déterministe, export/import combattant, galerie enrichie, mesures vérifiées sur Android physique et CI/CD verte. **Ne pas annoncer CME-3D 1.0 avant validation effective de ces critères.**
+
+## 25/10/2026 — Décision : V1 progressive, onglet Feuille de route et versionnement
+Décision utilisateur cumulative : déployer progressivement une V1 du suivi avant la majeure 1.0. **Ne supprimer ni réinterpréter les exigences précédentes.** Conserver quatre destinations principales Studio, Galerie Coachs, Comparatif, Plus. Sous **Plus**, ajouter **Feuille de route** distincte de Nouveautés et Incidents : inventaire des points à traiter avec identifiant stable, statut (Livré, En cours, À vérifier, À faire, Bloqué), priorité, domaine, version cible, explication et filtres. Un statut est déclaratif et versionné avec le code, jamais présenté comme synchronisé en temps réel avec GitHub sans intégration réelle. Mettre à jour les états lors de chaque livraison et distinguer « intégré » de « validé physiquement sur Android ». Les versions futures sont des cibles prévisionnelles. **Première livraison V1 : v0.7.30** avec un maximum de fonctions sûres et rapides ; livraisons suivantes incrémentales, CI verte, fusion, Pages vérifié et notes de version. Garder les contraintes de morphologie anatomique réelle, dont fessiers féminins indépendants, biomécanique des six disciplines, export moteur indépendant, zéro modification Shadow, sans CV/capture vidéo. Ne déclarer 1.0 qu'après satisfaction des portes de validation déjà définies.
+
+## Décision UX prioritaire — 25/10/2026
+La navigation principale reste à cinq destinations : Studio, Mouvements, Technique, Versions, Autres. En Studio, aucun lecteur sportif parallèle : pose de création neutre et vignettes de formes, une sauvegarde, galerie intégrée. L'onglet Mouvements est l'unique interface pour sélectionner, exécuter, juger et commenter chaque technique et enchaînement réellement résolu, avec export ChatGPT. Technique réunit diagnostics, paramètres 3D avancés, expérimentation JSON et catalogues bruts. Tous les écrans et modules existants doivent partager la même palette de surfaces claires, éléments tactiles Android et états de focus ; mode automatique suit les préférences de thème du système. Ne pas inventer la compatibilité des rigs. Valider CI puis déploiement, sans toucher Shadow Studio.
+
+## Portrait-robot inclusif — 25/10/2026
+Parité de fonctionnalités homme/femme avec variation anatomique crédible et des contrôles communs, champs taille/poids/latéralité/discipline. Croquis SVG anatomiques cliquables, sous-choix de variantes, rendu immédiat sur géométries skinnées réelles et coloration texture-safe ; équipement multicouche conservé par profil. La création se fait en A-Pose de référence sans mouvement. Discipline et latéralité ne s’appliquent à la garde qu’en test. Pas de bouton trompeur : les coiffures, morphs faciaux et accessoires non présents nécessitent de nouveaux assets licenciés avant toute affirmation d’exécution. Éviter les classifications ethniques automatiques à partir de couleurs. Protéger profils historiques et code moteur/Shadow.
+
+## 25/10/2026 — mode Créateur neutre séparé de l'anatomie technique
+En Studio, l'humanoïde neutre est la source principale éditable de la morphologie et de la peau (textures GLB intactes) ; seul le mode Tenue charge les équipements. Ne jamais neutraliser les matériaux en gris pendant la création. Respecter les décisions précédentes de parité des catégories homme/femme et les profils JSON, mensurations, latéralité, vêtements/accessoires et palette humain/animation (#115). À l'ouverture de chaque rubrique, cadrer le corps complet; zoomer seulement sur une forme précise. Compatibilité ancienne des profils maintenue. Affichage de capacités réel, sans morphs faciaux ou coiffures imaginaires. Aucun changement des mouvements canoniques ou de Shadow.
+
+
+## Ajout impératif — 25/10/2026 · Référence anatomique premium
+Lire et appliquer `docs/ANATOMIE_MANNEQUINS_PREMIUM_0741.md` : deux bases H/F organiques inspirées des quatre vues utilisateur, morphs vrais et liés, modes mannequin gris/peau/tenue, caméra 360°, discipline et latéralité sans altération du rig, Android/CI/Pages. Priorités 0.7.41 à 0.7.43, portes de validation et communication en français. Toutes les décisions précédentes sont conservées.
+
+
+## 25/10/2026 — v0.7.42 : étalons anatomiques réellement skinnés
+Deux bases organiques MakeHuman/MPFB CC0, femme et homme, 163 os, chargées en 3D et vues sous quatre angles. Elles sont indépendantes du rig canonique d'animation et demeurent en lecture seule jusqu'à retargeting/morphs validés. Aucun faux slider ; Shadow et mouvements canoniques inchangés. Source et contrôle de licence consignés dans docs/ANATOMICAL_CC0_SOURCES.md. Critères de qualité esthétique des images utilisateur toujours contraignants.
+
+
+## 25/10/2026 — Exigence 0.7.43 : personnalisation cohérente selon le sexe
+Parité de richesse homme/femme, pas une identité de proportions. Pour une femme, poitrine, taille, hanches, bassin, fessiers et cuisses doivent dessiner une silhouette féminine naturelle et harmonieuse quelle que soit la corpulence choisie, sans caricature ni modèle unique. Pour l'homme, pectoraux, carrure, bassin et musculature sont adaptés aux proportions du corps masculin. Les volumes se compensent avec interpolation douce et limites raisonnables. Chaque forme reste modifiable ; les valeurs brutes sauvegardées restent intactes, les anciens profils restent compatibles. Les maillages GLB de référence (163 os) sont encore en lecture seule, tandis que la morphologie réelle des coachs utilise des sommets skinnés clonés et ne modifie jamais les mouvements canoniques ni Shadow.
+
+
+## 25/10/2026 — 0.7.44, audit qualité visuelle Android
+Les 4 vues face/dos/profil droit/gauche doivent préserver la même échelle de caméra pour comparer homme/femme. Le cadrage entier tient compte des volumes maillés (poitrine, fessiers, extrémités) et non des pivots osseux seuls ; ignorer les maillages cachés. Boutons de 44 px sur mobile, preview stable et lisible. Régression visuelle à contrôler sur les sources hommes/femmes réelles et sur smartphone Android ; ne pas confondre calcul caméra testé avec validation artistique réelle. Préserver les modèles, les profils et les mouvements canoniques ; ne pas modifier Shadow.
+
+
+## 25/10/2026 — 0.7.45, décision UX prioritaire
+Le Studio est conçu pour un utilisateur sans expertise 3D : (1) choisir le sexe / modèle, (2) personnaliser corps + visage + couleurs à effet visible, (3) exécuter une technique ou séquence par un seul geste. Les sept rubriques précédentes sont regroupées en trois étapes compréhensibles. Le panneau technique ne doit plus bloquer les actions courantes ; les réglages avancés et étalons restent accessibles sur demande. L'utilisateur exige que coupe/couleur de cheveux, peau, formes du visage, davantage de régions corporelles et lecture des enchaînements soient réellement actives, non stockées seulement. Le système doit n'afficher comme exécutable qu'une motion vérifiée par la bibliothèque 3D du rig actif. Toute fonction nécessitant encore un GLB spécifique doit le dire ; les coiffures simplifiées ne sont pas les assets finaux. Toutes les couches restent communes Studio/Laboratoire et ne touchent pas Shadow.

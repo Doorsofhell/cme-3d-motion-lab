@@ -1,0 +1,121 @@
+/* 0.7.52 : la palette est sur un rail distinct hors du Canvas, jamais devant l'avatar. */
+.labApp[data-cme-screen="studio"] .sculptorViewportFrame{
+ grid-template-columns:minmax(0,1fr) 44px minmax(86px,94px);
+ column-gap:2px;position:relative;
+}
+.labApp[data-cme-screen="studio"] .sculptorFloatingPresets{
+ background:#101418;border-left:1px solid #343d48;
+ display:flex;flex-direction:column;align-items:stretch;
+ min-height:0;min-width:0;max-height:100%;overflow:hidden;
+ color:#dae0e7;border-radius:10px 12px 12px 10px;
+}
+.labApp[data-cme-screen="studio"] .sculptorFloatingHead{
+ display:flex;flex-direction:column;align-items:center;text-align:center;
+ gap:1px;min-height:46px;padding:6px 3px 4px;
+ border-bottom:1px solid #38414c;background:#191d24;
+}
+.labApp[data-cme-screen="studio"] .sculptorFloatingHead strong{
+ font-size:11px;line-height:1.15;overflow-wrap:anywhere;
+}
+.labApp[data-cme-screen="studio"] .sculptorFloatingHead small{
+ font-size:9px;color:#a3aebc;
+}
+.labApp[data-cme-screen="studio"] .sculptorFloatingList{
+ display:flex;flex-direction:column;gap:6px;flex:1 1 auto;
+ min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;
+ scrollbar-width:thin;scrollbar-color:#535d66 #101418;
+ touch-action:pan-y;padding:6px 3px 14px;
+}
+.labApp[data-cme-screen="studio"] .sculptorFloatingPreset{
+ box-sizing:border-box;display:flex;flex-direction:column;
+ align-items:center;justify-content:center;flex:0 0 auto;
+ gap:3px;min-height:76px;width:100%;max-width:100%;
+ padding:6px 2px;color:#cbd3db;background:#252930;
+ border:1px solid #3b444f;border-radius:11px;
+ touch-action:manipulation;
+}
+.labApp[data-cme-screen="studio"] .sculptorFloatingPreset .coachMorphIllustration{
+ display:block;width:51px;height:49px;max-width:100%;flex:none;
+}
+.labApp[data-cme-screen="studio"] .sculptorFloatingPreset span{
+ font-size:10px;line-height:1.13;text-align:center;overflow-wrap:anywhere;
+}
+.labApp[data-cme-screen="studio"] .sculptorFloatingPreset.is-active{
+ background:#102b35;color:#81e6ff;
+ border-color:var(--sculpt-cyan);box-shadow:inset 0 0 0 1px #1d8396;
+}
+.labApp[data-cme-screen="studio"] .sculptorFloatingPreset:focus-visible{
+ outline:2px solid var(--sculpt-cyan);outline-offset:-2px;
+}
+.labApp[data-cme-screen="studio"] .sculptorFloatingUnavailable,
+.labApp[data-cme-screen="studio"] .sculptorFloatingHint{
+ padding:12px 5px;font-size:10px;line-height:1.35;
+ color:#abb4c2;text-align:center;overflow-wrap:anywhere;
+}
+.labApp[data-cme-screen="studio"] .sculptorPresetHeight{
+ display:grid;place-items:center;min-height:46px;width:46px;
+ color:#7fdcf1;font-size:34px;font-weight:bold;
+}
+.labApp[data-cme-screen="studio"] .sculptorDashboardWorkspace .coachShapeGroups{
+ display:none!important;
+}
+/* Les mesures restent internes ; aucun bouton statistiques dans le parcours. */
+.labApp[data-cme-screen="studio"] .coachPreviewLabel,
+.labApp[data-cme-screen="studio"] .coachLiveValues,
+.labApp[data-cme-screen="studio"] .coachCapability{display:none!important}
+@media(max-width:365px){
+ .labApp[data-cme-screen="studio"] .sculptorViewportFrame{
+  grid-template-columns:minmax(0,1fr) 44px 81px;
+ }
+ .labApp[data-cme-screen="studio"] .sculptorFloatingPreset{min-height:68px}
+ .labApp[data-cme-screen="studio"] .sculptorFloatingPreset .coachMorphIllustration{width:45px;height:42px}
+}
+@media(prefers-reduced-motion:reduce){
+ .labApp[data-cme-screen="studio"] .sculptorFloatingPreset{transition:none}
+}
+
+/* 0.7.53 : gestion compacte des avatars et bibliothèque de coupes non bloquantes. */
+.labApp[data-cme-screen="studio"] .sculptorCoachChooser{
+ display:flex;flex-wrap:nowrap;align-items:center;gap:5px;
+ min-width:0;min-height:50px;max-height:54px;
+ padding:3px 6px;background:#161a21;border-bottom:1px solid #313844;
+ overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;
+}
+.labApp[data-cme-screen="studio"] .sculptorCoachChooser label{
+ display:flex;flex:1 0 128px;min-width:128px;max-width:240px;
+ flex-direction:column;gap:2px;font-size:9px;color:#aab8c7;
+}
+.labApp[data-cme-screen="studio"] .sculptorCoachChooser select{
+ box-sizing:border-box;width:100%;min-height:32px;max-height:36px;
+ padding:3px 6px;border:1px solid #465160;border-radius:6px;
+ background:#232a34;color:#e6ebf2;font-size:11px;
+}
+.labApp[data-cme-screen="studio"] .sculptorCoachChooser button{
+ flex:0 0 auto;min-width:64px;min-height:44px;
+ padding:5px 7px;background:#28303b;color:#e4eaf3;
+ border:1px solid #495565;border-radius:9px;font-size:11px;
+}
+.labApp[data-cme-screen="studio"] .sculptorCoachChooser button:disabled{
+ opacity:.40;cursor:not-allowed;
+}
+.labApp[data-cme-screen="studio"] .sculptorHairStyles{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:7px;padding:4px 0;
+}
+.labApp[data-cme-screen="studio"] .sculptorHairStyles button{
+ box-sizing:border-box;min-width:0;min-height:48px;
+ padding:8px 5px;border-radius:10px;
+ background:#242a34;color:#d7e1ee;
+ border:1px solid #434e5d;font-size:12px;
+}
+.labApp[data-cme-screen="studio"] .sculptorHairStyles button[aria-pressed="true"]{
+ border-color:var(--sculpt-cyan);color:#8ce9ff;background:#16333d;
+}
+.labApp[data-cme-screen="studio"] .sculptorHairStyles button:disabled{opacity:.38}
+.labApp[data-cme-screen="studio"] .sculptorHairEditor .coachColorAtlas button{
+ min-height:44px;box-sizing:border-box;
+}
+@media(max-width:760px){
+ .labApp[data-cme-screen="studio"] .sculptorCoachChooser{flex:0 0 auto;min-height:50px}
+ .labApp[data-cme-screen="studio"] .sculptorHairStyles{grid-template-columns:repeat(2,minmax(0,1fr))}
+}

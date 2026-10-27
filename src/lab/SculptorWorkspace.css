@@ -1,0 +1,255 @@
+/* CME-3D 0.7.49 — Sculptor's Workspace.
+   Tokens partagés et structure mobile ; aucun faux maillage n'est affiché. */
+.labApp[data-cme-screen="studio"]{
+ --sculpt-noir:#000000;--sculpt-anthracite:#1a1a1a;--sculpt-surface:#22252a;
+ --sculpt-bord:#393d43;--sculpt-texte:#e8ebef;--sculpt-muted:#9ca5b1;
+ --sculpt-cyan:#39d5f5;--sculpt-rouge:#f42347;--sculpt-orange:#ffb24b;
+ --coach-fond:#000000;--coach-panneau:#1a1a1a;--coach-texte:#e8ebef;
+ background:var(--sculpt-noir);
+}
+.labApp[data-cme-screen="studio"] .coachStudio,
+.labApp[data-cme-screen="studio"] .sculptorWorkspace{background:var(--sculpt-noir)!important;}
+.labApp[data-cme-screen="studio"] .sculptorSceneArea{
+ flex:1 1 auto;min-height:0;max-height:none;overflow:hidden;
+}
+.labApp[data-cme-screen="studio"] .sculptorViewportFrame{
+ flex:1 1 auto;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 49px;
+ gap:4px;overflow:hidden;background:#03070c;border-radius:16px;
+}
+.labApp[data-cme-screen="studio"] .sculptorViewportFrame>.coachPreview:not(.cmeFullscreen):not(:fullscreen){
+ position:relative!important;inset:auto!important;width:100%;height:100%!important;
+ min-width:0;min-height:0!important;max-height:none!important;
+ border:1px solid #2d343d!important;border-radius:15px!important;
+ background:#04080b!important;
+}
+.labApp[data-cme-screen="studio"] .sculptorViewportTools{
+ display:flex;flex-direction:column;align-items:center;
+ gap:4px;justify-content:center;padding:4px 1px;min-height:0;
+ background:#080b10;border-left:1px solid #202a32;
+}
+.labApp[data-cme-screen="studio"] .sculptorViewportTools button{
+ display:grid;place-items:center;flex:0 0 auto;
+ min-width:44px;min-height:44px;width:44px;height:44px;
+ border:1px solid transparent;border-radius:11px;background:transparent;color:#aab6c3;
+ touch-action:manipulation;
+}
+.labApp[data-cme-screen="studio"] .sculptorViewportTools button[aria-pressed="true"]{
+ border-color:var(--sculpt-cyan);color:var(--sculpt-cyan);background:#113340;
+}
+.labApp[data-cme-screen="studio"] .sculptorViewportTools button:disabled{opacity:.32;cursor:not-allowed}
+.labApp[data-cme-screen="studio"] .sculptorDashboard{
+ background:var(--sculpt-anthracite)!important;color:var(--sculpt-texte);
+ border:1px solid var(--sculpt-bord)!important;
+ display:flex;flex-direction:column;min-height:0;overflow:hidden!important;
+ border-radius:17px;padding:0!important;gap:0!important;
+}
+.labApp[data-cme-screen="studio"] .sculptorXAxis{
+ display:flex!important;flex-wrap:nowrap;gap:0;flex:0 0 auto;
+ overflow-x:auto;overflow-y:hidden;scrollbar-width:none;
+ scroll-snap-type:x proximity;min-height:57px;padding:0 5px!important;margin:0;
+ border-bottom:1px solid #313a43;border-radius:0;
+ background:#151719!important;
+}
+.labApp[data-cme-screen="studio"] .sculptorXAxis::-webkit-scrollbar{display:none}
+.labApp[data-cme-screen="studio"] .sculptorXAxis button{
+ flex:1 0 65px;min-width:62px;max-width:125px;min-height:54px;
+ padding:5px 4px 7px;border:0!important;border-bottom:3px solid transparent!important;
+ border-radius:0!important;background:transparent!important;color:#9fa8b3;
+ scroll-snap-align:start;font-size:10px;
+}
+.labApp[data-cme-screen="studio"] .sculptorXAxis button.active{
+ color:var(--sculpt-cyan)!important;
+ border-bottom-color:var(--sculpt-cyan)!important;box-shadow:none!important;
+}
+.labApp[data-cme-screen="studio"] .sculptorXAxis .coachGroupeIcone{width:23px;height:23px}
+.labApp[data-cme-screen="studio"] .sculptorDashboardBody{
+ flex:1 1 auto;min-width:0;min-height:0;display:grid;
+ grid-template-columns:53px minmax(0,1fr);gap:0;overflow:hidden;
+}
+.labApp[data-cme-screen="studio"] .sculptorYAxis{
+ min-width:0;min-height:0;background:#171a1f;border-right:1px solid #323b46;
+ overflow-y:auto;overflow-x:hidden;scrollbar-width:none;
+}
+.labApp[data-cme-screen="studio"] .sculptorYAxis::-webkit-scrollbar{display:none}
+.labApp[data-cme-screen="studio"] .sculptorYAxis .coachCategories{
+ display:flex!important;flex-direction:column;grid-template-columns:none!important;
+ align-items:stretch;gap:5px;min-height:0;padding:5px 3px;background:transparent;
+}
+.labApp[data-cme-screen="studio"] .sculptorYAxis .coachCategories button{
+ flex:0 0 auto;display:flex!important;flex-direction:column;
+ align-items:center;justify-content:center;gap:2px;
+ box-sizing:border-box;min-width:0;width:100%;min-height:52px!important;
+ padding:4px 1px;border:1px solid transparent!important;
+ border-left:3px solid transparent!important;border-radius:8px!important;
+ background:transparent!important;color:#b1bac7;font-size:9px!important;
+}
+.labApp[data-cme-screen="studio"] .sculptorYAxis .coachCategories button.active{
+ color:var(--sculpt-cyan)!important;border-left-color:var(--sculpt-cyan)!important;
+ background:#10303b!important;
+}
+.labApp[data-cme-screen="studio"] .sculptorYAxis .coachCategories .coachCategoryIcon{
+ width:23px;height:23px;flex:none;
+}
+.labApp[data-cme-screen="studio"] .sculptorYAxis .coachCategories button span{
+ display:block;font-size:9px!important;white-space:normal;word-break:normal;
+}
+.labApp[data-cme-screen="studio"] .sculptorDashboardWorkspace{
+ display:flex;flex-direction:column;min-width:0;min-height:0;overflow:hidden;
+ background:var(--sculpt-anthracite);
+}
+.labApp[data-cme-screen="studio"] .sculptorDashboardWorkspace>.coachEditorScroll{
+ flex:1 1 auto;min-height:0;overflow-y:auto!important;overflow-x:hidden!important;
+ padding:6px 9px 8px;background:var(--sculpt-anthracite);
+ overscroll-behavior:contain;touch-action:pan-y;scrollbar-width:thin;
+}
+.labApp[data-cme-screen="studio"] .sculptorPrecisionPanel{
+ display:block;background:transparent!important;border:0!important;
+ padding:0!important;margin:0!important;flex:0 0 auto;
+}
+.labApp[data-cme-screen="studio"] .sculptorPrecisionPanel>summary{
+ color:#a8b5c2!important;font-size:11px;min-height:32px;
+ padding:4px!important;margin-bottom:4px;
+}
+.labApp[data-cme-screen="studio"] .sculptorPrecisionPanel>.coachFields{
+ display:flex;flex-direction:column;gap:8px;
+}
+.labApp[data-cme-screen="studio"] .sculptorPrecision{
+ display:flex;flex-direction:column;gap:2px;padding:2px 0;
+ min-height:54px;color:var(--sculpt-texte);
+}
+.labApp[data-cme-screen="studio"] .sculptorPrecisionTitle{
+ display:block;font-size:11px;font-weight:650;color:#c6d0db;
+ white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.labApp[data-cme-screen="studio"] .sculptorPrecisionRow{
+ display:grid;grid-template-columns:minmax(0,1fr) 62px;gap:8px;align-items:center;
+}
+.labApp[data-cme-screen="studio"] .sculptorPrecisionValue{
+ text-align:right;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+ font-size:11px;font-weight:700;color:#f0f3f8;font-variant-numeric:tabular-nums;
+ white-space:nowrap;
+}
+.labApp[data-cme-screen="studio"] .sculptorPrecision input[type="range"]{
+ --precision-color:var(--sculpt-cyan);
+ appearance:none;-webkit-appearance:none;outline:none;
+ display:block;width:100%;height:7px;min-height:36px!important;
+ border:0;border-radius:7px;padding:0!important;
+ background:linear-gradient(to right,var(--precision-color) 0%,var(--precision-color) var(--precision-progress),#333b45 var(--precision-progress),#333b45 100%)
+  center/100% 6px no-repeat!important;cursor:pointer;
+}
+.labApp[data-cme-screen="studio"] .sculptorPrecision--rouge input[type="range"]{--precision-color:var(--sculpt-rouge)}
+.labApp[data-cme-screen="studio"] .sculptorPrecision--orange input[type="range"]{--precision-color:var(--sculpt-orange)}
+.labApp[data-cme-screen="studio"] .sculptorPrecision input[type="range"]::-webkit-slider-thumb{
+ appearance:none;-webkit-appearance:none;
+ height:21px;width:21px;border-radius:50%;background:#9fa7b2;
+ box-shadow:inset 0 0 0 2px #c5cbd4,0 1px 5px #0009;border:1px solid #202631;
+}
+.labApp[data-cme-screen="studio"] .sculptorPrecision input[type="range"]::-moz-range-thumb{
+ height:21px;width:21px;border-radius:50%;background:#9fa7b2;
+ border:2px solid #c5cbd4;box-shadow:0 1px 5px #0009;
+}
+.labApp[data-cme-screen="studio"] .sculptorPrecision--inactive{opacity:.45}
+.labApp[data-cme-screen="studio"] .sculptorPrecisionUnavailable{
+ font-size:10px;color:var(--sculpt-muted);line-height:1.35;
+}
+.labApp[data-cme-screen="studio"] .sculptorDashboardWorkspace .coachShapeGroups{gap:5px}
+.labApp[data-cme-screen="studio"] .sculptorDashboardWorkspace .coachShapeGroup{gap:3px}
+.labApp[data-cme-screen="studio"] .sculptorDashboardWorkspace .coachShapeZoneCard{
+ min-height:52px!important;padding:5px 7px;
+ background:#23272c;color:#d5dce5;border:1px solid #373d46;
+}
+.labApp[data-cme-screen="studio"] .sculptorDashboardWorkspace .coachShapeZoneCard .coachMorphIllustration{
+ width:38px;height:39px;flex:0 0 38px;
+}
+.labApp[data-cme-screen="studio"] .sculptorDashboardWorkspace .coachShapePanel{
+ background:#1c2026;padding:5px 0;border:0;
+}
+.labApp[data-cme-screen="studio"] .sculptorDashboardWorkspace .coachShapeGrid{
+ display:flex!important;flex-direction:row;flex-wrap:nowrap;gap:6px;
+ overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;
+ scrollbar-width:thin;min-height:90px;padding:5px 2px 8px;
+}
+.labApp[data-cme-screen="studio"] .sculptorDashboardWorkspace .coachShapeOption{
+ box-sizing:border-box;flex:0 0 82px!important;min-width:82px;max-width:82px;
+ min-height:90px!important;border-radius:12px;padding:5px 3px;
+ background:#292f39!important;color:#c8d3e2!important;
+ scroll-snap-align:start;
+}
+.labApp[data-cme-screen="studio"] .sculptorDashboardWorkspace .coachShapeOption.active{
+ border-color:var(--sculpt-cyan)!important;background:#1b3643!important;
+}
+.labApp[data-cme-screen="studio"] .sculptorDashboardWorkspace .coachShapeOption .coachMorphIllustration{height:54px}
+.labApp[data-cme-screen="studio"] .sculptorDashboardWorkspace>.coachEditorFooter{
+ flex:0 0 auto;position:static!important;display:grid!important;
+ grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);
+ gap:7px;padding:6px!important;border-top:1px solid #353a43;
+ background:#171a20!important;margin:0;
+}
+.labApp[data-cme-screen="studio"] .sculptorDashboardWorkspace>.coachEditorFooter .sculptorCommit{
+ display:grid;place-items:center;grid-column:auto!important;
+ min-height:48px!important;order:0!important;margin:0;
+ border:0;border-radius:11px;background:var(--sculpt-rouge)!important;
+ color:#fff;font-size:28px;font-weight:800;line-height:1;
+}
+.labApp[data-cme-screen="studio"] .sculptorDashboardWorkspace>.coachEditorFooter .coachTest{
+ min-height:48px!important;font-size:11px;
+}
+.labApp[data-cme-screen="studio"] .sculptorDashboard .coachZoneCourante{
+ font-size:12px;min-height:26px;padding:1px 0 4px;
+}
+.labApp[data-cme-screen="studio"] .coachSceneControls{background:#000}
+.labApp[data-cme-screen="studio"] .coachSceneControls .coachSexeVue{
+ background:#1a1a1a!important;border-color:#444!important;
+}
+.labApp[data-cme-screen="studio"] .coachSceneControls .coachSexeVue button.active{
+ background:#123d4a!important;color:var(--sculpt-cyan)!important;
+ border-color:#267995!important;
+}
+.labApp[data-cme-screen="studio"] .sculptorViewportFrame>.coachPreview::before{inset:8% 7%}
+@media(max-width:760px){
+ .labApp[data-cme-screen="studio"] .sculptorWorkspace{
+  display:flex!important;flex-direction:column!important;
+  flex:1 1 auto;min-height:0!important;max-height:100%!important;gap:5px;
+ }
+ .labApp[data-cme-screen="studio"] .sculptorSceneArea{
+  flex:0 0 55%!important;min-height:0!important;max-height:55%!important;
+  display:flex!important;flex-direction:column;gap:4px;
+ }
+ .labApp[data-cme-screen="studio"] .sculptorViewportFrame{min-height:0;flex:1 1 auto}
+ .labApp[data-cme-screen="studio"] .sculptorDashboard{
+  flex:1 1 45%!important;min-height:0!important;max-height:45%!important;
+ }
+ .labApp[data-cme-screen="studio"] .sculptorDashboardBody{min-height:0}
+ .labApp[data-cme-screen="studio"] .sculptorDashboardWorkspace>.coachEditorScroll{
+  overflow-y:auto!important;overscroll-behavior:contain!important;
+ }
+}
+@media(max-height:650px) and (max-width:760px){
+ .labApp[data-cme-screen="studio"] .sculptorSceneArea{flex-basis:52%!important;max-height:52%!important}
+ .labApp[data-cme-screen="studio"] .sculptorDashboard{flex-basis:48%!important;max-height:48%!important}
+}
+@media(prefers-reduced-motion:reduce){
+ .labApp[data-cme-screen="studio"] .sculptorDashboard *,
+ .labApp[data-cme-screen="studio"] .sculptorViewportTools *{scroll-behavior:auto;transition:none}
+}
+
+/* CME-3D 0.7.50 — rail Y anatomique précis, sans masquage du modèle. */
+.labApp[data-cme-screen="studio"] .sculptorYAxis .sculptorRegionIcon{
+ display:block;width:24px;height:24px;flex:none;stroke:currentColor;
+}
+.labApp[data-cme-screen="studio"] .sculptorYAxis .coachCategories{
+ gap:5px;padding:6px 3px 10px;touch-action:pan-y;
+}
+.labApp[data-cme-screen="studio"] .sculptorYAxis .coachCategories button{
+ min-height:52px!important;box-sizing:border-box;gap:3px;
+ font-size:9px!important;line-height:1.12;touch-action:manipulation;
+}
+.labApp[data-cme-screen="studio"] .sculptorYAxis .coachCategories button span{
+ max-width:100%;overflow-wrap:anywhere;
+}
+.labApp[data-cme-screen="studio"] .sculptorYAxis .coachCategories button:focus-visible{
+ outline:2px solid var(--sculpt-cyan);outline-offset:-2px;
+}
+.labApp[data-cme-screen="studio"] .sculptorDashboardWorkspace .coachShapeGroups:empty{
+ display:none;
+}

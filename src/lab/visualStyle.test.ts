@@ -1,5 +1,8 @@
 import {describe,it,expect} from 'vitest';
-import {BoxGeometry,Group,Mesh,MeshStandardMaterial,MeshToonMaterial,Texture,Bone,Skeleton,SkinnedMesh} from 'three';
+import {BoxGeometry,Group,Mesh,MeshStandardMaterial,MeshToonMaterial,Texture,Bone,Skeleton,SkinnedMesh,Color} from 'three';
+import {applyNeutralAppearance} from './neutralAppearance';
+// @ts-ignore — la lecture des sources est exécutée par Vitest sous Node.
+import {readFileSync} from 'node:fs';
 import {applyFitnessStyle,applyComicStyle} from './Fighter';
 
 function makeCoachMaterial(name:string,textured=true){
@@ -61,7 +64,7 @@ describe('CME-3D toon costume detail and adult comics',()=>{
   const f=fitness.mesh.material as unknown as MeshToonMaterial;
   expect((c.gradientMap?.image as {width:number}).width).toBe(3);
   expect((f.gradientMap?.image as {width:number}).width).toBe(6);
-  expect(c.color.getHexString()).not.toBe(f.color.getHexString());
+  expect(c.color.getHexString()).toBe(f.color.getHexString()); // Uniformité textile, seule l'ombre change.
  });
  it('preserves facial textures and flat palette for untextured costumes',()=>{
   const face=makeCoachMaterial('f021_head');
@@ -71,5 +74,74 @@ describe('CME-3D toon costume detail and adult comics',()=>{
   applyComicStyle(plain.root,'balanced');
   expect((plain.mesh.material as unknown as MeshToonMaterial).map).toBeNull();
   expect((plain.mesh.material as unknown as MeshToonMaterial).gradientMap).not.toBeNull();
+ });
+});
+
+
+describe('0.7.51 : aucune tenue héroïque, mêmes habits pour les six disciplines et tous les rendus',()=>{
+ const sports=['haut-boxe','rash-kickboxing','brassiere-muaythai','short-mma','kimono-bjj','veste-judo'];
+ for(const nom of sports){
+  it('préserve les couleurs, les textures et les propriétés du vêtement '+nom,()=>{
+   for(const style of ['fitness','comic'] as const){
+    const map=new Texture(),normalMap=new Texture(),alphaMap=new Texture();
+    const mat=new MeshStandardMaterial({name:nom,color:'#217ad1',map,normalMap,alphaMap,opacity:.82,transparent:true,alphaTest:.15});
+    const origine=mat.color.clone();
+    const mesh=new Mesh(new BoxGeometry(),mat),root=new Group();
+    root.add(mesh);
+    if(style==='fitness')applyFitnessStyle(root);
+    else applyComicStyle(root,'performance');
+    const stylise=mesh.material as unknown as MeshToonMaterial;
+    expect(stylise.color.getHexString()).toBe(origine.getHexString());
+    expect(stylise.map).toBe(map);
+    expect(stylise.normalMap).toBe(normalMap);
+    expect(stylise.alphaMap).toBe(alphaMap);
+    expect(stylise.opacity).toBe(.82);
+    expect(stylise.transparent).toBe(true);
+    expect(stylise.alphaTest).toBe(.15);
+    expect(mesh.geometry.attributes.position).toBeDefined();
+   }
+  });
+ }
+ it('permet la même personnalisation chromatique des vêtements dans chaque rendu animé',()=>{
+  for(const style of ['ultra','fitness','comic'] as const){
+   const material=new MeshStandardMaterial({name:'haut-boxe',color:'#eeeeee'}),mesh=new Mesh(new BoxGeometry(),material),root=new Group();
+   root.add(mesh);
+   if(style==='fitness')applyFitnessStyle(root);
+   if(style==='comic')applyComicStyle(root,'performance');
+   expect(applyNeutralAppearance(root,{
+    skin:'#b18f70',hairColor:'#201713',topColor:'#26aacc',bottomColor:'#b21a34',gloveColor:'#7e1c29'
+   })).toBe(1);
+   expect((mesh.material as MeshStandardMaterial).color.getHexString()).toBe(new Color('#26aacc').getHexString());
+  }
+ });
+ it('ne modifie jamais les os, les poids de skinning ou le maillage canonique',()=>{
+  for(const style of ['fitness','comic'] as const){
+   const root=new Group(),bone=new Bone(),geometry=new BoxGeometry();
+   const mesh=new SkinnedMesh(geometry,new MeshStandardMaterial({name:'haut-boxe',color:'#334455'}));
+   mesh.add(bone);
+   mesh.bind(new Skeleton([bone]));
+   root.add(mesh);
+   const bones=mesh.skeleton.bones,bind=mesh.bindMatrix.clone(),position=geometry.getAttribute('position');
+   if(style==='fitness')applyFitnessStyle(root);else applyComicStyle(root,'balanced');
+   expect(mesh.skeleton.bones).toBe(bones);
+   expect(mesh.bindMatrix.equals(bind)).toBe(true);
+   expect(mesh.geometry).toBe(geometry);
+   expect(mesh.geometry.getAttribute('position')).toBe(position);
+   expect(mesh.children.some(child=>child.type==='Bone')).toBe(true);
+  }
+ });
+ it('charge les mêmes GLB sportifs et les mêmes motions, indépendamment du style',async()=>{
+  const source=readFileSync(new URL('./Fighter.tsx',import.meta.url),'utf8');
+  expect(source).toContain("clothes=useGLTF(base+'fighters/'+sourceActor+'/tenues/'+outfit+'.glb'");
+  expect(source).toContain("if(renderStyle==='fitness')applyFitnessStyle(s)");
+  expect(source).toContain("if(renderStyle==='comic')applyComicStyle(s,quality)");
+  expect(source.indexOf('applyNeutralAppearance(s,')).toBeGreaterThan(source.indexOf("if(renderStyle==='comic')"));
+  expect(source).toContain('new MotionSampler(rig,motion)');
+  expect(source).toContain('new SequenceSampler(rig,library,seq.motions)');
+  expect(source).toContain('new CoachPlanSampler(rig,library,coachPlan)');
+  expect(source).not.toContain('-hero-ink');
+  const app=readFileSync(new URL('./App.tsx',import.meta.url),'utf8');
+  expect(app).toContain('Comics · mêmes tenues');
+  expect(app).not.toContain('Héros comics');
  });
 });

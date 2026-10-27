@@ -4,8 +4,8 @@ import {releases,preparatoryWork} from './releases';
 const repo='https://github.com/Doorsofhell/cme-3d-motion-lab';
 export function VersionsPanel(){
  const [expanded,setExpanded]=useState<string|null>(CME_APP_VERSION);
- return <section className="versionsPanel" aria-label="Historique des versions CME-3D">
-  <header className="versionsHead"><h2>Historique des versions</h2><p>Version chargée : <strong>v{CME_APP_VERSION}</strong></p><p>Une fusion GitHub ne garantit pas que cette version soit déjà visible sur tous les navigateurs.</p>
+ return <section className="versionsPanel" aria-label="Nouveautés CME-3D">
+  <header className="versionsHead"><h2>Nouveautés et mises à jour</h2><p>Version chargée : <strong>v{CME_APP_VERSION}</strong></p><p>Une fusion GitHub ne garantit pas que cette version soit déjà visible sur tous les navigateurs.</p>
    <div className="versionsLinks"><a href={repo+'/actions'} target="_blank" rel="noopener noreferrer">Déploiements GitHub ↗</a><a href={repo+'/commits/main'} target="_blank" rel="noopener noreferrer">Historique du code ↗</a></div>
   </header>
   <section className="versionPending" aria-label="Avancement Naïra"><h3>Projet Naïra · suivi d'avancement</h3><p><strong>Étape 2/5 — cahier des charges et contrôle technique</strong></p><progress value={2} max={5} style={{width:'100%',height:12}} aria-label="Avancement du projet Naïra"/><ol><li>Direction artistique : définie</li><li>Identité et ressources indépendantes : définies</li><li>Deux prototypes simplifiés rejetés ; sculpture anatomique professionnelle : non réalisée</li><li>Rigging, vêtements et animation : à réaliser</li><li>Tests visuels des trois rendus et publication : à réaliser</li></ol><p>Le modèle jouable n'est pas encore disponible. Ce suivi reflète des jalons de développement, pas un statut GitHub temps réel.</p></section>

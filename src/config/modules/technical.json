@@ -1,0 +1,14 @@
+{
+  "id": "technical",
+  "version": 1,
+  "metrics": [
+    "fps",
+    "webgl",
+    "drawCalls",
+    "triangles",
+    "bones",
+    "dpr"
+  ],
+  "showUnmeasuredAs": "–",
+  "requiresRealMeasurements": true
+}

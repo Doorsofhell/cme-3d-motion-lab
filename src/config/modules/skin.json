@@ -1,0 +1,31 @@
+{
+  "id": "skin",
+  "version": 2,
+  "groups": [
+    {
+      "id": "skin",
+      "label": "Carnation",
+      "driver": "materialColor",
+      "type": "color_hex"
+    },
+    {
+      "id": "eyeColor",
+      "label": "Iris",
+      "driver": "materialColor",
+      "type": "color_hex"
+    },
+    {
+      "id": "hairColor",
+      "label": "Cheveux",
+      "driver": "materialColor",
+      "type": "color_hex"
+    }
+  ],
+  "paletteModes": [
+    "realiste",
+    "anime"
+  ],
+  "irisColors": true,
+  "hairColors": true,
+  "shaderCapabilitiesRequired": true
+}
