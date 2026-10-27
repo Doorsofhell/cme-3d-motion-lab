@@ -105,14 +105,29 @@ export function IncidentReporter({context,image,onCapture,onClose}:{context:Test
   </form>
  </div>;
 }
+const ISSUE_CACHE_KEY='cme3d:issues-cache';
+function readIssueCache():{etag:string;data:IssueData[]}|null{
+ try{const value=JSON.parse(localStorage.getItem(ISSUE_CACHE_KEY)??'null') as {etag?:unknown;data?:unknown}|null;return value&&typeof value.etag==='string'&&Array.isArray(value.data)?{etag:value.etag,data:value.data as IssueData[]}:null;}catch{return null;}
+}
+function writeIssueCache(etag:string|null,data:IssueData[]):void{
+ if(!etag)return;
+ try{localStorage.setItem(ISSUE_CACHE_KEY,JSON.stringify({etag,data}));}catch{/* Cache is optional. */}
+}
 export function useKnownIssues(){
  const [issues,setIssues]=useState<IssueData[]>([]),[loading,setLoading]=useState(false),[error,setError]=useState(''),[checked,setChecked]=useState('');
  const refresh=useCallback(async()=>{
   setLoading(true);
   try{
-   const res=await fetch(API+'?state=all&per_page=100&sort=updated&direction=desc&refresh='+Date.now(),{headers:{Accept:'application/vnd.github+json'},cache:'no-store'});
-   if(!res.ok)throw new Error('HTTP '+res.status+(res.status===403?' · quota de consultation GitHub':''));
-   const data=await res.json() as IssueData[];
+   // Conditional request: a 304 answer does not count against GitHub's 60 requests/hour anonymous quota.
+   const cached=readIssueCache();
+   const res=await fetch(API+'?state=all&per_page=100&sort=updated&direction=desc',{headers:{Accept:'application/vnd.github+json',...(cached?{'If-None-Match':cached.etag}:{})},cache:'no-store'});
+   let data:IssueData[];
+   if(res.status===304&&cached)data=cached.data;
+   else if(res.ok){data=await res.json() as IssueData[];writeIssueCache(res.headers.get('ETag'),data);}
+   else{
+    if(cached)setIssues(cached.data.filter(x=>!x.pull_request&&((x.body??'').includes(MARKER)||x.title.startsWith('[CME-3D]'))).sort((a,b)=>a.number-b.number));
+    throw new Error('HTTP '+res.status+(res.status===403||res.status===429?' · quota de consultation GitHub atteint, dernière liste connue affichée':''));
+   }
    setIssues(data.filter(x=>!x.pull_request&&((x.body??'').includes(MARKER)||x.title.startsWith('[CME-3D]'))).sort((a,b)=>a.number-b.number));
    setChecked(new Date().toLocaleTimeString('fr-FR'));setError('');
   }catch(e){setError(e instanceof Error?e.message:String(e));}finally{setLoading(false);}

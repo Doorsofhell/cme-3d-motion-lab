@@ -186,11 +186,12 @@
  background:#171a20!important;margin:0;
 }
 .labApp[data-cme-screen="studio"] .sculptorDashboardWorkspace>.coachEditorFooter .sculptorCommit{
- display:grid;place-items:center;grid-column:auto!important;
+ display:flex;align-items:center;justify-content:center;gap:6px;grid-column:auto!important;
  min-height:48px!important;order:0!important;margin:0;
  border:0;border-radius:11px;background:var(--sculpt-rouge)!important;
- color:#fff;font-size:28px;font-weight:800;line-height:1;
+ color:#fff;font-size:14px;font-weight:800;line-height:1;
 }
+.labApp[data-cme-screen="studio"] .sculptorDashboardWorkspace>.coachEditorFooter .sculptorCommit>span{font-size:22px}
 .labApp[data-cme-screen="studio"] .sculptorDashboardWorkspace>.coachEditorFooter .coachTest{
  min-height:48px!important;font-size:11px;
 }
@@ -245,7 +246,7 @@
  font-size:9px!important;line-height:1.12;touch-action:manipulation;
 }
 .labApp[data-cme-screen="studio"] .sculptorYAxis .coachCategories button span{
- max-width:100%;overflow-wrap:anywhere;
+ max-width:100%;overflow-wrap:break-word;hyphens:auto;
 }
 .labApp[data-cme-screen="studio"] .sculptorYAxis .coachCategories button:focus-visible{
  outline:2px solid var(--sculpt-cyan);outline-offset:-2px;

@@ -1,5 +1,6 @@
 import {LAB_DISCIPLINES,type LabDiscipline} from './NeutralRig';
 import type {Handedness} from './coachProportions';
+import './CoachProfileEditor.css';
 
 export type CoachIdentityInput={
  name:string;nickname:string;heightCm:string;weightKg:string;handedness:Handedness;nicknameVariant:number;

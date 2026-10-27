@@ -82,7 +82,7 @@
  overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;
 }
 .labApp[data-cme-screen="studio"] .sculptorCoachChooser label{
- display:flex;flex:1 0 128px;min-width:128px;max-width:240px;
+ display:flex;flex:1 1 112px;min-width:104px;max-width:240px;
  flex-direction:column;gap:2px;font-size:9px;color:#aab8c7;
 }
 .labApp[data-cme-screen="studio"] .sculptorCoachChooser select{
@@ -90,9 +90,13 @@
  padding:3px 6px;border:1px solid #465160;border-radius:6px;
  background:#232a34;color:#e6ebf2;font-size:11px;
 }
+.labApp[data-cme-screen="studio"] .sculptorCoachChooser .visuallyHidden{
+ position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;
+}
+.labApp[data-cme-screen="studio"] .sculptorCoachChooser select{min-height:44px;max-height:44px}
 .labApp[data-cme-screen="studio"] .sculptorCoachChooser button{
- flex:0 0 auto;min-width:64px;min-height:44px;
- padding:5px 7px;background:#28303b;color:#e4eaf3;
+ flex:0 1 auto;min-width:0;min-height:44px;
+ padding:5px 6px;background:#28303b;color:#e4eaf3;
  border:1px solid #495565;border-radius:9px;font-size:11px;
 }
 .labApp[data-cme-screen="studio"] .sculptorCoachChooser button:disabled{

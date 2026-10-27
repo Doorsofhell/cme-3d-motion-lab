@@ -11,7 +11,7 @@ import {NeutralRig,LAB_DISCIPLINES,type LabDiscipline,type NeutralRigReport} fro
 import './StudioCoach.css';
 import {SKIN_TONES,ANIME_SKIN_TONES} from './skinTones';
 import {focusForSection,focusForSetting,FOCUS_LABELS,type StudioFocusZone} from './studioFocus';
-import {addSavedCoach,readSavedCoaches,updateSavedCoach,deleteSavedCoach,suggestCoachNickname} from './savedCoaches';
+import {addSavedCoach,readSavedCoaches,updateSavedCoach,deleteSavedCoach,suggestCoachNickname,CoachStorageFullError} from './savedCoaches';
 import {studioTechniqueCatalog} from './studioTechniqueCatalog';
 import {activeShapeGroups,applyShapePreset,randomShapeLook,type ShapeGroup} from './visualShapePresets';
 import {MorphThumbnail} from './MorphThumbnail';
@@ -271,7 +271,7 @@ export function StudioCoach(){
   }
   // Une modification de l'apparence ne doit jamais réutiliser une ancienne image.
   if(existing&&JSON.stringify(existing.look)!==JSON.stringify(normalizeCoachLook(look))&&portrait===existing.portrait)portrait=undefined;
-  const profile={id,name:name.slice(0,60),createdAt:existing?.createdAt??new Date().toISOString(),look:normalizeCoachLook(look),portrait,nickname:identity.nickname.trim().slice(0,60)||undefined,initialDiscipline:discipline,handedness:identity.handedness,accessories,heightCm:identity.heightCm&&Number(identity.heightCm)>=100&&Number(identity.heightCm)<=250?Number(identity.heightCm):undefined,weightKg:identity.weightKg&&Number(identity.weightKg)>=25&&Number(identity.weightKg)<=300?Number(identity.weightKg):undefined};if(existing)updateSavedCoach(localStorage,profile);else addSavedCoach(localStorage,profile);setSavedList(readSavedCoaches(localStorage));localStorage.setItem('cme-selected-coach',id);localStorage.setItem('cme-lab-coach',id);setSelectedId(id);window.dispatchEvent(new Event('cme-coaches-changed'));setMessage(existing?'Coach mis à jour et sélectionné dans le Laboratoire.':'Coach enregistré et sélectionné dans le Laboratoire.');}catch{setMessage('Enregistrement impossible sur cet appareil.');}};
+  const profile={id,name:name.slice(0,60),createdAt:existing?.createdAt??new Date().toISOString(),look:normalizeCoachLook(look),portrait,nickname:identity.nickname.trim().slice(0,60)||undefined,initialDiscipline:discipline,handedness:identity.handedness,accessories,heightCm:identity.heightCm&&Number(identity.heightCm)>=100&&Number(identity.heightCm)<=250?Number(identity.heightCm):undefined,weightKg:identity.weightKg&&Number(identity.weightKg)>=25&&Number(identity.weightKg)<=300?Number(identity.weightKg):undefined};if(existing)updateSavedCoach(localStorage,profile);else addSavedCoach(localStorage,profile);setSavedList(readSavedCoaches(localStorage));localStorage.setItem('cme-selected-coach',id);localStorage.setItem('cme-lab-coach',id);setSelectedId(id);window.dispatchEvent(new Event('cme-coaches-changed'));setMessage(existing?'Coach mis à jour et sélectionné dans le Laboratoire.':'Coach enregistré et sélectionné dans le Laboratoire.');}catch(error){setMessage(error instanceof CoachStorageFullError?error.message:'Enregistrement impossible sur cet appareil.');}};
  const tryCoachInLab=()=>{try{
   // One-click preview: keep just one reusable profile instead of asking for
   // a name, and explicitly share the UNSAVED editor state with the lab.
@@ -355,7 +355,7 @@ export function StudioCoach(){
   
   <p className="coachCreationNote">Choisissez une zone à gauche, puis sa forme dans la barre verticale à droite du coach.</p>
     <div className="sculptorCoachChooser">
-      <label>Humanoïde ou coach enregistré
+      <label><span className="visuallyHidden">Humanoïde ou coach enregistré</span>
        <select aria-label="Choisir un humanoïde neutre ou un coach enregistré" value={selectedId??''} onChange={e=>chargerCoach(e.currentTarget.value)}>
         <option value="">Humanoïde neutre · {look.sex==='homme'?'Homme':'Femme'}</option>
         {savedList.map(c=><option key={c.id} value={c.id}>{c.name}{c.nickname?' · '+c.nickname:''}</option>)}
@@ -472,7 +472,7 @@ export function StudioCoach(){
      {message&&<p role="status" className="coachStatus">{message}</p>}
    </div>
      <footer className="coachCrud coachEditorFooter" aria-label="Validation et essai du coach">
-      <button type="button" className="coachSave sculptorCommit" aria-label={selectedId?'Enregistrer les modifications':'Créer et enregistrer le coach'} title="Valider" onClick={saveCoach}>✓</button>
+      <button type="button" className="coachSave sculptorCommit" aria-label={selectedId?'Enregistrer les modifications':'Créer et enregistrer le coach'} title={selectedId?'Enregistrer les modifications':'Créer et enregistrer le coach'} onClick={saveCoach}><span aria-hidden="true">✓</span> Enregistrer</button>
       <button type="button" className="coachTest" disabled={referenceMode} onClick={tryCoachInLab}>▶ Tester dans Mouvements</button>
      </footer>
       </div>
