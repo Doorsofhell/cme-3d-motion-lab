@@ -1,4 +1,4 @@
-import {Suspense,Component,useCallback,useEffect,useLayoutEffect,useMemo,useRef,useState,type ReactNode,type RefObject} from 'react';
+import {Suspense,Component,lazy,useCallback,useEffect,useLayoutEffect,useMemo,useRef,useState,type ReactNode,type RefObject} from 'react';
 import {Canvas,useThree,useFrame} from '@react-three/fiber';
 import {ACESFilmicToneMapping,NeutralToneMapping,SRGBColorSpace,CanvasTexture} from 'three';
 import {Fighter} from './Fighter';
@@ -10,7 +10,6 @@ import {SceneCameraControls,SceneToolbar,SceneLoadingIndicator} from './SceneCon
 import {shouldRenderLabFrames} from './sceneRuntime';
 import {AndroidTelemetry} from './androidTelemetry';
 import {AndroidDiagnostics,AndroidFrameProbe} from './AndroidDiagnostics';
-import {ShadowCatalogPanel} from './ShadowCatalogPanel';
 import {readSavedCoaches,findSavedCoach,coachSourceActor,type SavedCoach} from './savedCoaches';
 import type {CoachLook} from './StudioCoach';
 import {parseCoachPlan,type CoachPlan} from './coachProtocol';
@@ -20,12 +19,9 @@ import {watchWebGLContext} from './webglRecovery';
 import rawTechniques from './techniques.json';
 import rawSequences from './complexSequences.json';
 import shadowExercises from './shadowExercises.json';
-import {ComparisonPanel} from './ComparisonPanel';
 import {fighterRoster} from './fighterRoster';
-import {VersionsPanel} from './VersionsPanel';
-import {MotionReview,type ReviewMotion} from './MotionReview';
+import type {ReviewMotion} from './MotionReview';
 import {executionKey,recordExecutionSample,playbackWasObserved,type ExecutionEvidence} from './motionExecution';
-import {RoadmapPanel} from './RoadmapPanel';
 import {IncidentReporter,IssueTracker,useKnownIssues,type TestContext} from './Issues';
 import {unresolvedDrafts} from './IssueLinks';
 import {buildFullReport,useSessionJournal} from './SessionReport';
@@ -39,6 +35,12 @@ import './StudioSceneLibre.css';
 import './SculptorWorkspace.css';
 import './SculptorFloatingPresets.css';
 import {getConfigModule} from '../config/moduleRegistry';
+// Secondary screens load on demand to keep the first bundle small.
+const ShadowCatalogPanel=lazy(()=>import('./ShadowCatalogPanel').then(m=>({default:m.ShadowCatalogPanel})));
+const ComparisonPanel=lazy(()=>import('./ComparisonPanel').then(m=>({default:m.ComparisonPanel})));
+const VersionsPanel=lazy(()=>import('./VersionsPanel').then(m=>({default:m.VersionsPanel})));
+const MotionReview=lazy(()=>import('./MotionReview').then(m=>({default:m.MotionReview})));
+const RoadmapPanel=lazy(()=>import('./RoadmapPanel').then(m=>({default:m.RoadmapPanel})));
 
 function SavedCoachLibrary({openCoach,editCoach,selectedId}:{openCoach:(id:string)=>void;editCoach:(id:string)=>void;selectedId:string|null}){
  const [coaches,setCoaches]=useState<SavedCoach[]>(()=>{try{return readSavedCoaches(localStorage);}catch{return [];}});
@@ -380,11 +382,11 @@ export function App(){
   </section>
 
   </div>
-  {tab==='lab'&&<details className="cmeMotionExpert"><summary>Validation et rapport technique · avancé</summary><MotionReview entries={reviewEntries} discipline={discipline} coach={selectedCoach?.id??actor} selected={technique} onSelect={selectTechnique} availableIds={report?.availableMotions??[]} engineVersion={CME_APP_VERSION} metrics={{...metrics,bones:report?.bones??null,techniqueFound:report?.techniqueFound??false}} rigReady={!!report} rigTechniqueFound={!!report?.techniqueFound} executionEvidence={executionEvidence?.key===currentExecutionKey?executionEvidence:null} playbackObserved={playbackWasObserved(executionEvidence,currentExecutionKey)} onPlay={()=>{seek(0);setExecutionEvidence(null);setPlaying(true);document.querySelector('.cmeAppContent')?.scrollTo({top:0,behavior:'smooth'});}}/></details>}
+  {tab==='lab'&&<details className="cmeMotionExpert"><summary>Validation et rapport technique · avancé</summary><Suspense fallback={null}><MotionReview entries={reviewEntries} discipline={discipline} coach={selectedCoach?.id??actor} selected={technique} onSelect={selectTechnique} availableIds={report?.availableMotions??[]} engineVersion={CME_APP_VERSION} metrics={{...metrics,bones:report?.bones??null,techniqueFound:report?.techniqueFound??false}} rigReady={!!report} rigTechniqueFound={!!report?.techniqueFound} executionEvidence={executionEvidence?.key===currentExecutionKey?executionEvidence:null} playbackObserved={playbackWasObserved(executionEvidence,currentExecutionKey)} onPlay={()=>{seek(0);setExecutionEvidence(null);setPlaying(true);document.querySelector('.cmeAppContent')?.scrollTo({top:0,behavior:'smooth'});}}/></Suspense></details>}
 
   {tab==='gallery'&&<section className="cmeCoachGallery" aria-label="Galerie Coachs"><header><h2>Galerie Coachs</h2><p>Choisissez un combattant enregistré. Sa configuration est partagée avec Studio et le banc d'essai.</p></header><SavedCoachLibrary selectedId={selectedCoach?.id??null} openCoach={id=>{selectSavedCoach(id);setTab('lab');}} editCoach={id=>{try{localStorage.setItem('cme-selected-coach',id);sessionStorage.setItem('cme-edit-request',id);}catch{}setTab('studio');}}/><button className="galleryCreate" type="button" onClick={()=>setTab('studio')}>Créer un combattant dans Studio</button></section>}
   {tab==='studio'&&<div className="cmeStudioHub"><StudioCoach/></div>}
-  {tab==='versions'&&<VersionsPanel/>}
+  {tab==='versions'&&<Suspense fallback={null}><VersionsPanel/></Suspense>}
   {tab==='other'&&<section className="cmeOtherScreen" aria-label="Fonctions complémentaires"><h2>Plus</h2><p>Les outils spécialisés restent accessibles sans encombrer le Studio.</p>
     <div className="cmeOtherGrid">
       <button type="button" onClick={openComparison}>⇄ Comparatif CME / Shadow</button>
@@ -397,7 +399,7 @@ export function App(){
     </div>
     <label className="cmeThemeSetting">Apparence de l'application<select aria-label="Thème de CME-3D" value={theme} onChange={e=>setTheme(e.target.value as 'auto'|'light'|'dark')}><option value="auto">Automatique · selon le système (jour/nuit)</option><option value="light">Toujours clair</option><option value="dark">Toujours sombre</option></select></label>
    </section>}
-  {tab==='roadmap'&&<RoadmapPanel/>}
+  {tab==='roadmap'&&<Suspense fallback={null}><RoadmapPanel/></Suspense>}
   {tab==='technical'&&<section className="cmeTechnicalScreen" aria-label="Centre technique"><header className="cmePageHeader"><h2>Technique</h2><p>Vérifier les mesures réelles, inspecter le rig et exporter un rapport de diagnostic.</p></header><div className="cmeDiagnosticGrid"><span>FPS <strong>{metrics.fps>0?metrics.fps:'Non mesuré'}</strong></span><span>WebGL <strong>{metrics.webgl}</strong></span><span>Draw calls <strong>{metrics.drawCalls}</strong></span><span>Triangles <strong>{metrics.triangles}</strong></span><span>Rig <strong>{report?.bones??'–'} os</strong></span></div><div className="cmeTechnicalActions"><button type="button" onClick={exportReport}>Exporter le rapport de session</button><button type="button" onClick={()=>{journal.record('incident','Signalement manuel depuis Technique',{technique,discipline,actor});captureNow();setIncidentOpen(true);}}>Signaler un incident</button></div><AndroidDiagnostics telemetry={androidTelemetry} active={tab==='technical'} context={{coach:actor,discipline,technique,qualite:quality,rendu:renderStyle}}/><details className="cmeTechnicalFold"><summary>Prototype avancé · Exécuter un plan JSON</summary>   <details className="labTechnicalDetails"><summary>Outils techniques · Coach IA JSON</summary><section aria-label="Coach JSON Text-to-Animation" style={{padding:12,display:'grid',gap:8}}>
 <strong>Coach IA · Text-to-Animation (prototype local)</strong>
 <textarea aria-label="Plan JSON du coach" rows={4} value={coachJson} onChange={e=>setCoachJson(e.target.value)} style={{width:'100%',boxSizing:'border-box'}}/>
@@ -407,15 +409,15 @@ export function App(){
 </div>
 {coachError&&<span role="alert">{coachError}</span>}
 {coachPlan&&<span role="status">Plan actif : {coachPlan.sequence.length} étapes · TTS : {coachPlan.speech}</span>}
-</section></details></details><details className="cmeTechnicalFold"><summary>Référentiels et techniques historiques</summary><ShadowCatalogPanel/><div className="cmeTechnicalActions"><button onClick={()=>{setCatalogMode('techniques');setCatalogOpen(true);setQuery('');}}>Parcourir les techniques</button><button onClick={()=>{setCatalogMode('sequences');setCatalogOpen(true);setQuery('');}}>Parcourir les enchaînements</button></div></details></section>}
+</section></details></details><details className="cmeTechnicalFold"><summary>Référentiels et techniques historiques</summary><Suspense fallback={null}><ShadowCatalogPanel/></Suspense><div className="cmeTechnicalActions"><button onClick={()=>{setCatalogMode('techniques');setCatalogOpen(true);setQuery('');}}>Parcourir les techniques</button><button onClick={()=>{setCatalogMode('sequences');setCatalogOpen(true);setQuery('');}}>Parcourir les enchaînements</button></div></details></section>}
   {tab==='options'&&<section className="cmeOptions" aria-label="Options CME-3D">
    <h2>Options du laboratoire</h2>
-   <label className="cacheOption"><input type="checkbox" checked={clearCacheOnOpen} onChange={e=>{const enabled=e.target.checked;setClearCacheOnOpen(enabled);setAutoClearEnabled(enabled);setCacheMessage(enabled?'Vidage automatique activé pour chaque ouverture.':'Vidage automatique désactivé.');}}/><span><strong>Vider automatiquement le cache à chaque ouverture</strong><small>Activé par défaut. Supprime les caches CME-3D et désactive son service worker avant le chargement du moteur. Les préférences locales sont conservées.</small></span></label>
+   <label className="cacheOption"><input type="checkbox" checked={clearCacheOnOpen} onChange={e=>{const enabled=e.target.checked;setClearCacheOnOpen(enabled);setAutoClearEnabled(enabled);setCacheMessage(enabled?'Vidage automatique activé pour chaque ouverture.':'Vidage automatique désactivé.');}}/><span><strong>Vider automatiquement le cache à chaque ouverture</strong><small>Désactivé par défaut pour permettre l'usage hors ligne. Supprime les caches CME-3D et désactive son service worker à chaque ouverture. Les préférences locales sont conservées.</small></span></label>
    <button className="resetButton" onClick={()=>{void clearApplicationCache().then(({caches,workers})=>setCacheMessage(caches+' cache(s) supprimé(s), '+workers+' service worker(s) désenregistré(s).')).catch(()=>setCacheMessage('Nettoyage impossible dans ce navigateur.'));}}>Vider le cache maintenant</button>
    {cacheMessage&&<p role="status">{cacheMessage}</p>}
   </section>}
   {tab==='tracking'&&<IssueTracker drafts={pendingDrafts} onDismiss={autoDismiss} onClear={autoClear} onCopyReport={exportReport} {...known}/>}
-  {tab==='comparison'&&<ComparisonPanel metrics={metrics} report={report} snapshot={comparisonSnapshot} actor={actor==='mma-amara'?'Amara':'Kadir'} discipline={discipline} technique={techniqueLabel} renderStyle={renderStyle} onOpenLab={()=>setTab('lab')} onCopyReport={exportReport}/>}
+  {tab==='comparison'&&<Suspense fallback={null}><ComparisonPanel metrics={metrics} report={report} snapshot={comparisonSnapshot} actor={actor==='mma-amara'?'Amara':'Kadir'} discipline={discipline} technique={techniqueLabel} renderStyle={renderStyle} onOpenLab={()=>setTab('lab')} onCopyReport={exportReport}/></Suspense>}
   </div>
   {tab==='technical'&&catalogOpen&&<div className="paletteBackdrop" onClick={()=>setCatalogOpen(false)}>
     <section className="catalogPalette" role="dialog" aria-label="Catalogue complet des techniques" onClick={e=>e.stopPropagation()}>

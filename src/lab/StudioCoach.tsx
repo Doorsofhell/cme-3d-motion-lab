@@ -173,9 +173,9 @@ export function StudioCoach(){
    }
   });
  },[androidTelemetry]);
- // Ne pas charger les deux GLB au démarrage du Laboratoire. Précharger
- // l'autre silhouette seulement une fois le modèle courant effectivement prêt.
- useEffect(()=>{
+ // Ne pas charger les deux GLB au démarrage : l'autre silhouette (2,5 à 2,9 Mo)
+ // n'est préchargée que lorsque l'utilisateur approche du sélecteur Homme/Femme.
+ const preloadAlternate=useCallback(()=>{
   if(!report)return;
   const other=alternateRigAsset(report.sex);
   useGLTF.preload(import.meta.env.BASE_URL+'fighters/'+other+'/photo.glb',import.meta.env.BASE_URL+'draco/');
@@ -314,7 +314,7 @@ export function StudioCoach(){
   <div className="coachStudioLayout sculptorWorkspace">
    <div className="coachSceneStack sculptorSceneArea">
     <div className="coachSceneControls" role="group" aria-label="Sélection du modèle et commandes caméra">
-     <div className="coachQuickChoice coachSexeVue" role="group" aria-label="Choisir le modèle">
+     <div className="coachQuickChoice coachSexeVue" role="group" aria-label="Choisir le modèle" onPointerEnter={preloadAlternate} onFocus={preloadAlternate} onTouchStart={preloadAlternate}>
       <button type="button" className={look.sex==='homme'?'active':''} aria-pressed={look.sex==='homme'} onClick={()=>update('sex','homme')}>Homme</button>
       <button type="button" className={look.sex==='femme'?'active':''} aria-pressed={look.sex==='femme'} onClick={()=>update('sex','femme')}>Femme</button>
      </div>

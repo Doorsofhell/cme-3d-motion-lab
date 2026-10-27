@@ -2,6 +2,8 @@
 /* Escape a controlling legacy worker before loading any JS bundle. */
 (function(){
  if(!('serviceWorker' in navigator)||!navigator.serviceWorker.controller)return;
+ /* Versioned workers (cme-sw.js?v=...) are current: only legacy ones are removed. */
+ if(navigator.serviceWorker.controller.scriptURL.indexOf('?v=')!==-1)return;
  var marker='cme3d-recovery-039';
  try{if(sessionStorage.getItem(marker)==='done')return;sessionStorage.setItem(marker,'done');}catch(e){}
  var base=new URL('%BASE_URL%',location.origin).pathname;
