@@ -1,5 +1,5 @@
 import {describe,it,expect} from 'vitest';
-import {addSavedCoach,readSavedCoaches,COACH_STORAGE_KEY,coachSourceActor,findSavedCoach,updateSavedCoach,deleteSavedCoach,suggestCoachNickname,coachIdentityManifest} from './savedCoaches';
+import {addSavedCoach,readSavedCoaches,COACH_STORAGE_KEY,coachSourceActor,findSavedCoach,updateSavedCoach,deleteSavedCoach,suggestCoachNickname,coachIdentityManifest,CoachStorageFullError} from './savedCoaches';
 import {defaultCoachLook} from './StudioCoach';
 describe('linked coach library',()=>{
  it('persists coach profiles for the lab and studio with newest first',()=>{
@@ -64,5 +64,20 @@ describe('identité du coach et préparation export Shadow',()=>{
   expect(manifest.actor).toBe('mma-kadir');
   expect(manifest.heightCm).toBe(178);
   expect(manifest.nickname).toBe('Le Roc');
+ });
+});
+describe('quota de stockage des coachs',()=>{
+ const quota=()=>new DOMException('full','QuotaExceededError');
+ const coach=(id:string)=>({id,name:id,createdAt:'2026-10-27',look:{} as never,portrait:'data:image/jpeg;base64,AAAA'});
+ it('retire les portraits des anciens coachs puis réessaie',()=>{
+  let stored=JSON.stringify([coach('ancien')]),calls=0;
+  const storage={getItem:()=>stored,setItem:(_:string,v:string)=>{calls++;if(calls===1)throw quota();stored=v;}};
+  const result=addSavedCoach(storage,coach('nouveau'));
+  expect(result[0].portrait).toBeDefined();
+  expect(result[1].portrait).toBeUndefined();
+ });
+ it('signale un stockage plein avec une erreur explicite',()=>{
+  const storage={getItem:()=>'[]',setItem:()=>{throw quota();}};
+  expect(()=>addSavedCoach(storage,coach('x'))).toThrow(CoachStorageFullError);
  });
 });
