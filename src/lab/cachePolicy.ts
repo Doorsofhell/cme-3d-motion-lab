@@ -1,6 +1,6 @@
 const KEY='cme3d:auto-clear-cache';
 export function autoClearEnabled():boolean{
- try{return localStorage.getItem(KEY)!=='false';}catch{return true;}
+ try{return localStorage.getItem(KEY)==='true';}catch{return false;}
 }
 export function setAutoClearEnabled(value:boolean):void{
  try{localStorage.setItem(KEY,String(value));}catch{/* Storage may be disabled. */}

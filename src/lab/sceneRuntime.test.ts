@@ -31,6 +31,7 @@ describe('politique de ressources 3D — audit global',()=>{
   expect(componentStart).toBeGreaterThan(0);
   expect(preload).toBeGreaterThan(componentStart);
   expect(studio).toContain('if(!report)return;');
+  expect(studio).toContain('onPointerEnter={preloadAlternate}');
   expect(studio).toContain('alternateRigAsset(report.sex)');
  });
  it('ne laisse aucun littéral antislash-n dans le contenu du comparatif',()=>{

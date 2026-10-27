@@ -26,7 +26,7 @@ describe('CME 0.7.46 — quatre destinations mobiles sans fonctions perdues',()=
   for(const action of ["setTab('technical')","setTab('versions')","setTab('roadmap')","setTab('tracking')","setTab('options')","openComparison"])expect(app).toContain(action);
   expect(app).toContain('Atlas biomécanique · référentiel');
   expect(app).toContain('Retour à Plus');
-  expect(app).toContain("tab==='versions'&&<VersionsPanel/>");
+  expect(app).toContain("tab==='versions'&&<Suspense fallback={null}><VersionsPanel/></Suspense>");
   expect(app).toContain("tab==='technical'&&<section");
  });
 });
