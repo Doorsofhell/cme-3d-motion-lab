@@ -51,6 +51,12 @@ describe('CME-3D toon costume detail and adult comics',()=>{
  it('uses stronger silhouette in detail than balanced without touching source scale',()=>{
   const balanced=makeCoachMaterial('short-boxe',false);
   const detail=makeCoachMaterial('short-boxe',false);
+  // The ink shell is deliberately disabled for translucent garments.
+  // Make this fixture opaque so the test exercises silhouette thickness.
+  for(const {mesh} of [balanced,detail]){
+   mesh.material.transparent=false;
+   mesh.material.opacity=1;
+  }
   const b=applyComicStyle(balanced.root,'balanced');
   const d=applyComicStyle(detail.root,'detail');
   expect(b).toHaveLength(1);
