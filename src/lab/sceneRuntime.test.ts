@@ -1,7 +1,7 @@
 // @ts-ignore — Vitest s'exécute dans Node, sans nécessité d'ajouter les types Node à la PWA.
 import {readFileSync} from 'node:fs';
 import {describe,expect,it} from 'vitest';
-import {shouldRenderLabFrames,alternateRigAsset} from './sceneRuntime';
+import {shouldRenderLabFrames,alternateRigAsset,shouldMonitorLabLoading} from './sceneRuntime';
 const read=(file:string)=>readFileSync(new URL('./'+file,import.meta.url),'utf8');
 
 describe('politique de ressources 3D — audit global',()=>{
@@ -39,4 +39,20 @@ describe('politique de ressources 3D — audit global',()=>{
   expect(comparison).not.toContain('\\n  <div className="comparisonActions">');
   expect(comparison).toContain('<div className="comparisonActions">');
  });
+ it('n’active jamais le watchdog GLB lorsque le laboratoire est masqué',()=>{
+  expect(shouldMonitorLabLoading(false,false,null)).toBe(false);
+  expect(shouldMonitorLabLoading(false,true,null)).toBe(false);
+  expect(shouldMonitorLabLoading(true,true,null)).toBe(false);
+  expect(shouldMonitorLabLoading(true,false,'Erreur explicite')).toBe(false);
+  expect(shouldMonitorLabLoading(true,false,null)).toBe(true);
+ });
+ it('ne perd pas le signal de fin de chargement sur un changement de rendu',()=>{
+  const app=read('App.tsx');
+  expect(app).toContain('shouldMonitorLabLoading(active,ready,error)');
+  expect(app).toContain('[active,ready,error,retry,actor,discipline,onIncident]');
+  expect(app).not.toContain('useEffect(()=>{setReady(false);setSlow(false);},[renderStyle]);');
+  expect(app).toContain('setReady(true);setSlow(false);');
+  expect(app).toContain('telemetry.finishLoad(actor');
+ });
+
 });
