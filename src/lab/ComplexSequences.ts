@@ -1,4 +1,5 @@
 import {blendResolved,type ResolvedPose} from '../shadow-engine/pose';
+import techniques from './techniques.json';
 import {MotionSampler} from '../shadow-engine/motion';
 import type {CoachRig} from '../shadow-engine/rig';
 import type {MotionLibrary} from '../shadow-engine/library';
@@ -37,5 +38,6 @@ export class SequenceSampler {
  }
 }
 export function compatibleSequences<T extends Sequence>(input:T[],discipline:string,hasMotion:(motion:string)=>boolean):T[]{
- return input.filter(s=>s.discipline===discipline&&s.motions.length>=2&&s.motions.every(hasMotion));
+ const allowed=new Set(techniques.filter(t=>t.disciplines.includes(discipline)).map(t=>t.motion));
+ return input.filter(s=>s.discipline===discipline&&s.motions.length>=2&&s.motions.length<=20&&s.motions.every(id=>allowed.has(id)&&hasMotion(id)));
 }
