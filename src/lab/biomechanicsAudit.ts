@@ -55,7 +55,16 @@ export function auditMotion(m:Motion):MotionFinding[]{
   previous=k.t;
  }
  const duration=m.keys[m.keys.length-1].t;
- for(const t of m.impacts)if(!finite(t)||t<0||t>duration)add(-1,'IMPACT_TIME','Impact outside motion duration');
+ if(m.chainAt!==undefined&&(!finite(m.chainAt)||m.chainAt<0||m.chainAt>duration))
+  add(-1,'CHAIN_TIME','Chain transition outside motion duration');
+ if(m.travel&&![m.travel.x,m.travel.z,m.travel.yaw].every(finite))
+  add(-1,'TRAVEL_NONFINITE','Non-finite travel displacement or rotation');
+ let previousImpact=-Infinity;
+ for(const t of m.impacts){
+  if(!finite(t)||t<0||t>duration)add(-1,'IMPACT_TIME','Impact outside motion duration');
+  else if(t<=previousImpact)add(-1,'IMPACT_ORDER','Impacts must be strictly increasing');
+  previousImpact=t;
+ }
  return findings;
 }
 export function auditCatalog(motions:Iterable<Motion>):MotionFinding[]{
